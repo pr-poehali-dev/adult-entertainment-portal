@@ -31,9 +31,12 @@ const Navigation = ({
   <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
     <div className="container mx-auto px-4 py-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-primary bg-clip-text text-transparent cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
-          Magic
-        </h1>
+        <div className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
+          <Icon name="Sparkles" size={28} className="text-purple-500" />
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-primary bg-clip-text text-transparent">
+            Magic
+          </h1>
+        </div>
         
         <div className="hidden md:flex items-center space-x-6">
           <button onClick={() => setCurrentPage('home')} className="text-foreground/80 hover:text-primary transition-colors">
