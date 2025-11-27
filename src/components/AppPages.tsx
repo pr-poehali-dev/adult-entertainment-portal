@@ -5,10 +5,10 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
+import MessagesPage from '@/components/MessagesPage';
 import { Page, Profile, CatalogItem, Review, UserRole } from '@/types';
 
 interface AppPagesProps {
@@ -681,17 +681,7 @@ export const useAppPages = ({
     </div>
   );
 
-  const MessagesPage = () => (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
-      <Card className="bg-card border-border">
-        <CardContent className="p-12 text-center text-muted-foreground">
-          <Icon name="MessageCircle" size={64} className="mx-auto mb-4 opacity-50" />
-          <p>У вас пока нет сообщений</p>
-        </CardContent>
-      </Card>
-    </div>
-  );
+
 
   const RulesPage = () => (
     <div className="container mx-auto px-4 py-8 max-w-4xl animate-fade-in">

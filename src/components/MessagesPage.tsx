@@ -1,0 +1,310 @@
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import Icon from '@/components/ui/icon';
+
+interface Message {
+  id: number;
+  text: string;
+  sender: 'me' | 'other';
+  time: string;
+  read: boolean;
+}
+
+interface Chat {
+  id: number;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unread: number;
+  avatar: string;
+  online: boolean;
+}
+
+const MessagesPage = () => {
+  const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
+  const [messageText, setMessageText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [chats] = useState<Chat[]>([
+    {
+      id: 1,
+      name: 'Анна Смирнова',
+      lastMessage: 'Спасибо за интерес! Готова ответить на вопросы',
+      time: '14:23',
+      unread: 2,
+      avatar: 'АС',
+      online: true
+    },
+    {
+      id: 2,
+      name: 'Виктория Лебедева',
+      lastMessage: 'Да, это время мне подходит',
+      time: '12:45',
+      unread: 0,
+      avatar: 'ВЛ',
+      online: true
+    },
+    {
+      id: 3,
+      name: 'Елена Романова',
+      lastMessage: 'Встретимся завтра в 18:00?',
+      time: 'Вчера',
+      unread: 0,
+      avatar: 'ЕР',
+      online: false
+    },
+    {
+      id: 4,
+      name: 'Марина Волкова',
+      lastMessage: 'Отлично, жду подтверждения',
+      time: '25 ноя',
+      unread: 1,
+      avatar: 'МВ',
+      online: false
+    }
+  ]);
+
+  const [messages, setMessages] = useState<Record<number, Message[]>>({
+    1: [
+      { id: 1, text: 'Здравствуйте! Интересует ваша услуга VIP сопровождения', sender: 'me', time: '14:15', read: true },
+      { id: 2, text: 'Здравствуйте! Спасибо за интерес. Буду рада ответить на все вопросы', sender: 'other', time: '14:18', read: true },
+      { id: 3, text: 'Какие варианты встречи возможны?', sender: 'me', time: '14:20', read: true },
+      { id: 4, text: 'Предлагаю встречу в ресторане или приватную обстановку. Обсудим детали лично', sender: 'other', time: '14:23', read: false },
+      { id: 5, text: 'Спасибо за интерес! Готова ответить на вопросы', sender: 'other', time: '14:23', read: false }
+    ],
+    2: [
+      { id: 1, text: 'Добрый день! Хотел бы забронировать встречу', sender: 'me', time: '12:30', read: true },
+      { id: 2, text: 'Здравствуйте! Какое время вас интересует?', sender: 'other', time: '12:35', read: true },
+      { id: 3, text: 'Завтра вечером, около 19:00', sender: 'me', time: '12:40', read: true },
+      { id: 4, text: 'Да, это время мне подходит', sender: 'other', time: '12:45', read: true }
+    ],
+    3: [
+      { id: 1, text: 'Привет! Как твои дела?', sender: 'other', time: 'Вчера 18:00', read: true },
+      { id: 2, text: 'Отлично! Встретимся завтра в 18:00?', sender: 'other', time: 'Вчера 18:05', read: true }
+    ],
+    4: [
+      { id: 1, text: 'Подтверждаете бронирование?', sender: 'me', time: '25 ноя 16:30', read: true },
+      { id: 2, text: 'Отлично, жду подтверждения', sender: 'other', time: '25 ноя 16:45', read: true }
+    ]
+  });
+
+  const selectedChat = chats.find(chat => chat.id === selectedChatId);
+  const currentMessages = selectedChatId ? messages[selectedChatId] || [] : [];
+
+  const filteredChats = chats.filter(chat =>
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSendMessage = () => {
+    if (!messageText.trim() || !selectedChatId) return;
+
+    const newMessage: Message = {
+      id: Date.now(),
+      text: messageText,
+      sender: 'me',
+      time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+      read: true
+    };
+
+    setMessages(prev => ({
+      ...prev,
+      [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
+    }));
+
+    setMessageText('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8 animate-fade-in">
+      <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">
+        <Card className="lg:col-span-1 bg-card border-border flex flex-col">
+          <CardHeader className="pb-4">
+            <CardTitle>Чаты</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 flex flex-col p-0">
+            <div className="px-4 pb-4">
+              <div className="relative">
+                <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Поиск чатов..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-background border-border"
+                />
+              </div>
+            </div>
+            
+            <Separator />
+            
+            <div className="flex-1 overflow-y-auto">
+              {filteredChats.map((chat) => (
+                <div
+                  key={chat.id}
+                  onClick={() => setSelectedChatId(chat.id)}
+                  className={`p-4 cursor-pointer transition-colors hover:bg-muted/50 ${
+                    selectedChatId === chat.id ? 'bg-muted' : ''
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="relative">
+                      <Avatar className="w-12 h-12">
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {chat.avatar}
+                        </AvatarFallback>
+                      </Avatar>
+                      {chat.online && (
+                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-semibold truncate">{chat.name}</h3>
+                        <span className="text-xs text-muted-foreground">{chat.time}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{chat.lastMessage}</p>
+                    </div>
+                    
+                    {chat.unread > 0 && (
+                      <Badge className="bg-primary text-primary-foreground min-w-[20px] h-5 flex items-center justify-center">
+                        {chat.unread}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2 bg-card border-border flex flex-col">
+          {selectedChat ? (
+            <>
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <Avatar className="w-12 h-12">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {selectedChat.avatar}
+                      </AvatarFallback>
+                    </Avatar>
+                    {selectedChat.online && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg">{selectedChat.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedChat.online ? 'В сети' : 'Не в сети'}
+                    </p>
+                  </div>
+                  <Button variant="ghost" size="icon">
+                    <Icon name="MoreVertical" size={20} />
+                  </Button>
+                </div>
+              </CardHeader>
+              
+              <Separator />
+              
+              <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+                {currentMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+                        message.sender === 'me'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <p className="text-sm leading-relaxed">{message.text}</p>
+                      <div className="flex items-center justify-end gap-1 mt-1">
+                        <span className={`text-xs ${
+                          message.sender === 'me' ? 'text-primary-foreground/70' : 'text-muted-foreground'
+                        }`}>
+                          {message.time}
+                        </span>
+                        {message.sender === 'me' && (
+                          <Icon 
+                            name={message.read ? 'CheckCheck' : 'Check'} 
+                            size={14} 
+                            className={message.read ? 'text-primary-foreground' : 'text-primary-foreground/70'}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+              
+              <Separator />
+              
+              <div className="p-4">
+                <div className="flex items-end gap-2">
+                  <Button variant="ghost" size="icon" className="shrink-0">
+                    <Icon name="Paperclip" size={20} />
+                  </Button>
+                  
+                  <div className="flex-1 relative">
+                    <Input
+                      placeholder="Напишите сообщение..."
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      className="bg-background border-border pr-20"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="absolute right-1 top-1/2 -translate-y-1/2"
+                      onClick={handleSendMessage}
+                    >
+                      <Icon name="Send" size={18} className="text-primary" />
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4 mt-2 px-2">
+                  <button className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                    <Icon name="Shield" size={14} />
+                    Безопасный чат
+                  </button>
+                  <button className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                    <Icon name="Lock" size={14} />
+                    Шифрование E2E
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <CardContent className="flex-1 flex items-center justify-center p-12">
+              <div className="text-center space-y-4">
+                <Icon name="MessageCircle" size={64} className="mx-auto text-muted-foreground opacity-50" />
+                <h3 className="text-xl font-semibold">Выберите чат</h3>
+                <p className="text-muted-foreground">Выберите диалог из списка слева</p>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default MessagesPage;
