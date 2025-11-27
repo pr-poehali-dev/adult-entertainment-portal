@@ -38,41 +38,41 @@ const MessagesPage = () => {
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  const [chats] = useState<Chat[]>([
+  const [chats, setChats] = useState<Chat[]>([
     {
       id: 1,
-      name: 'Анна Смирнова',
+      name: 'Анна',
       lastMessage: 'Спасибо за интерес! Готова ответить на вопросы',
       time: '14:23',
       unread: 2,
-      avatar: 'АС',
+      avatar: 'А',
       online: true
     },
     {
       id: 2,
-      name: 'Виктория Лебедева',
+      name: 'Мария',
       lastMessage: 'Да, это время мне подходит',
       time: '12:45',
       unread: 0,
-      avatar: 'ВЛ',
+      avatar: 'М',
       online: true
     },
     {
       id: 3,
-      name: 'Елена Романова',
+      name: 'Виктория',
       lastMessage: 'Встретимся завтра в 18:00?',
       time: 'Вчера',
       unread: 0,
-      avatar: 'ЕР',
+      avatar: 'В',
       online: false
     },
     {
       id: 4,
-      name: 'Марина Волкова',
+      name: 'Диана',
       lastMessage: 'Отлично, жду подтверждения',
       time: '25 ноя',
       unread: 1,
-      avatar: 'МВ',
+      avatar: 'Д',
       online: false
     }
   ]);
@@ -131,6 +131,8 @@ const MessagesPage = () => {
   const handleSendMessage = () => {
     if ((!messageText.trim() && selectedFiles.length === 0) || !selectedChatId) return;
 
+    const currentTime = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
     if (selectedFiles.length > 0) {
       selectedFiles.forEach((file) => {
         const isImage = file.type.startsWith('image/');
@@ -138,7 +140,7 @@ const MessagesPage = () => {
           id: Date.now() + Math.random(),
           text: messageText || (isImage ? 'Изображение' : 'Файл'),
           sender: 'me',
-          time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+          time: currentTime,
           read: true,
           attachment: {
             type: isImage ? 'image' : 'file',
@@ -160,7 +162,7 @@ const MessagesPage = () => {
         id: Date.now(),
         text: messageText,
         sender: 'me',
-        time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+        time: currentTime,
         read: true
       };
 
@@ -169,6 +171,12 @@ const MessagesPage = () => {
         [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
       }));
     }
+
+    setChats(prev => prev.map(chat => 
+      chat.id === selectedChatId 
+        ? { ...chat, lastMessage: messageText || 'Вложение', time: currentTime }
+        : chat
+    ));
 
     setMessageText('');
     setShowAttachmentMenu(false);
