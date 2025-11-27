@@ -13,6 +13,12 @@ interface Message {
   sender: 'me' | 'other';
   time: string;
   read: boolean;
+  attachment?: {
+    type: 'image' | 'file';
+    name: string;
+    url: string;
+    size?: string;
+  };
 }
 
 interface Chat {
@@ -29,6 +35,8 @@ const MessagesPage = () => {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const [chats] = useState<Chat[]>([
     {
@@ -74,8 +82,21 @@ const MessagesPage = () => {
       { id: 1, text: 'Здравствуйте! Интересует ваша услуга VIP сопровождения', sender: 'me', time: '14:15', read: true },
       { id: 2, text: 'Здравствуйте! Спасибо за интерес. Буду рада ответить на все вопросы', sender: 'other', time: '14:18', read: true },
       { id: 3, text: 'Какие варианты встречи возможны?', sender: 'me', time: '14:20', read: true },
-      { id: 4, text: 'Предлагаю встречу в ресторане или приватную обстановку. Обсудим детали лично', sender: 'other', time: '14:23', read: false },
-      { id: 5, text: 'Спасибо за интерес! Готова ответить на вопросы', sender: 'other', time: '14:23', read: false }
+      { 
+        id: 4, 
+        text: 'Вот пример моего портфолио', 
+        sender: 'other', 
+        time: '14:22', 
+        read: false,
+        attachment: {
+          type: 'image',
+          name: 'portfolio.jpg',
+          url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
+          size: '2.4 MB'
+        }
+      },
+      { id: 5, text: 'Предлагаю встречу в ресторане или приватную обстановку. Обсудим детали лично', sender: 'other', time: '14:23', read: false },
+      { id: 6, text: 'Спасибо за интерес! Готова ответить на вопросы', sender: 'other', time: '14:23', read: false }
     ],
     2: [
       { id: 1, text: 'Добрый день! Хотел бы забронировать встречу', sender: 'me', time: '12:30', read: true },
@@ -100,23 +121,57 @@ const MessagesPage = () => {
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setSelectedFiles(Array.from(files));
+    }
+  };
+
   const handleSendMessage = () => {
-    if (!messageText.trim() || !selectedChatId) return;
+    if ((!messageText.trim() && selectedFiles.length === 0) || !selectedChatId) return;
 
-    const newMessage: Message = {
-      id: Date.now(),
-      text: messageText,
-      sender: 'me',
-      time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-      read: true
-    };
+    if (selectedFiles.length > 0) {
+      selectedFiles.forEach((file) => {
+        const isImage = file.type.startsWith('image/');
+        const newMessage: Message = {
+          id: Date.now() + Math.random(),
+          text: messageText || (isImage ? 'Изображение' : 'Файл'),
+          sender: 'me',
+          time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+          read: true,
+          attachment: {
+            type: isImage ? 'image' : 'file',
+            name: file.name,
+            url: URL.createObjectURL(file),
+            size: `${(file.size / 1024 / 1024).toFixed(2)} MB`
+          }
+        };
 
-    setMessages(prev => ({
-      ...prev,
-      [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
-    }));
+        setMessages(prev => ({
+          ...prev,
+          [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
+        }));
+      });
+      
+      setSelectedFiles([]);
+    } else {
+      const newMessage: Message = {
+        id: Date.now(),
+        text: messageText,
+        sender: 'me',
+        time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+        read: true
+      };
+
+      setMessages(prev => ({
+        ...prev,
+        [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
+      }));
+    }
 
     setMessageText('');
+    setShowAttachmentMenu(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -124,6 +179,10 @@ const MessagesPage = () => {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -233,7 +292,41 @@ const MessagesPage = () => {
                           : 'bg-muted'
                       }`}
                     >
-                      <p className="text-sm leading-relaxed">{message.text}</p>
+                      {message.attachment && message.attachment.type === 'image' && (
+                        <div className="mb-2 rounded-lg overflow-hidden">
+                          <img 
+                            src={message.attachment.url} 
+                            alt={message.attachment.name}
+                            className="max-w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => window.open(message.attachment!.url, '_blank')}
+                          />
+                        </div>
+                      )}
+                      
+                      {message.attachment && message.attachment.type === 'file' && (
+                        <div className="mb-2 p-3 rounded-lg bg-background/10 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-background/20 flex items-center justify-center">
+                            <Icon name="FileText" size={20} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{message.attachment.name}</p>
+                            <p className="text-xs opacity-70">{message.attachment.size}</p>
+                          </div>
+                          <Button 
+                            size="icon" 
+                            variant="ghost" 
+                            className="shrink-0"
+                            onClick={() => window.open(message.attachment!.url, '_blank')}
+                          >
+                            <Icon name="Download" size={16} />
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {message.text && (
+                        <p className="text-sm leading-relaxed">{message.text}</p>
+                      )}
+                      
                       <div className="flex items-center justify-end gap-1 mt-1">
                         <span className={`text-xs ${
                           message.sender === 'me' ? 'text-primary-foreground/70' : 'text-muted-foreground'
@@ -256,10 +349,76 @@ const MessagesPage = () => {
               <Separator />
               
               <div className="p-4">
+                {selectedFiles.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {selectedFiles.map((file, index) => (
+                      <div key={index} className="relative group">
+                        <div className="p-2 pr-8 rounded-lg bg-muted flex items-center gap-2 max-w-[200px]">
+                          <Icon name={file.type.startsWith('image/') ? 'Image' : 'FileText'} size={16} />
+                          <span className="text-xs truncate">{file.name}</span>
+                        </div>
+                        <button
+                          onClick={() => removeSelectedFile(index)}
+                          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          <Icon name="X" size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
                 <div className="flex items-end gap-2">
-                  <Button variant="ghost" size="icon" className="shrink-0">
-                    <Icon name="Paperclip" size={20} />
-                  </Button>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      multiple
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="shrink-0 relative"
+                      onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
+                    >
+                      <Icon name="Paperclip" size={20} />
+                    </Button>
+                    
+                    {showAttachmentMenu && (
+                      <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-10">
+                        <button
+                          onClick={() => {
+                            document.getElementById('file-upload')?.click();
+                            setShowAttachmentMenu(false);
+                          }}
+                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-colors text-left"
+                        >
+                          <Icon name="Image" size={20} className="text-primary" />
+                          <div>
+                            <p className="text-sm font-medium">Изображение</p>
+                            <p className="text-xs text-muted-foreground">JPG, PNG, GIF</p>
+                          </div>
+                        </button>
+                        <Separator />
+                        <button
+                          onClick={() => {
+                            document.getElementById('file-upload')?.click();
+                            setShowAttachmentMenu(false);
+                          }}
+                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-colors text-left"
+                        >
+                          <Icon name="FileText" size={20} className="text-primary" />
+                          <div>
+                            <p className="text-sm font-medium">Документ</p>
+                            <p className="text-xs text-muted-foreground">PDF, DOC, TXT</p>
+                          </div>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   
                   <div className="flex-1 relative">
                     <Input
@@ -274,8 +433,9 @@ const MessagesPage = () => {
                       variant="ghost"
                       className="absolute right-1 top-1/2 -translate-y-1/2"
                       onClick={handleSendMessage}
+                      disabled={!messageText.trim() && selectedFiles.length === 0}
                     >
-                      <Icon name="Send" size={18} className="text-primary" />
+                      <Icon name="Send" size={18} className={messageText.trim() || selectedFiles.length > 0 ? "text-primary" : "text-muted-foreground"} />
                     </Button>
                   </div>
                 </div>
