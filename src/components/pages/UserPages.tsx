@@ -12,6 +12,7 @@ import Icon from '@/components/ui/icon';
 import { Page, Profile, CatalogItem, UserRole, WorkSchedule } from '@/types';
 import { VerificationModal } from '@/components/VerificationModal';
 import { WorkScheduleManager } from '@/components/WorkScheduleManager';
+import { TipModal } from '@/components/TipModal';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -106,6 +107,29 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
   const [isVerified, setIsVerified] = useState(profile.verified);
   const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
   const [isActive, setIsActive] = useState(true);
+  const [showTipModal, setShowTipModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+
+  const mockBookings = [
+    {
+      id: 1,
+      serviceName: 'VIP сопровождение',
+      sellerName: 'Анастасия',
+      date: '2024-12-15',
+      time: '19:00',
+      status: 'completed',
+      price: 25000,
+    },
+    {
+      id: 2,
+      serviceName: 'Бизнес-встреча',
+      sellerName: 'Виктория',
+      date: '2024-12-10',
+      time: '14:00',
+      status: 'completed',
+      price: 30000,
+    },
+  ];
 
   return (
   <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -188,10 +212,58 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
             <CardTitle className="text-3xl">Мои бронирования</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-12 text-muted-foreground">
-              <Icon name="Calendar" size={64} className="mx-auto mb-4 opacity-50" />
-              <p>У вас пока нет бронирований</p>
-            </div>
+            {profile.role === 'buyer' && mockBookings.length > 0 ? (
+              <div className="space-y-4">
+                {mockBookings.map((booking) => (
+                  <Card key={booking.id} className="bg-muted/30 border-border">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2 flex-1">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-lg">{booking.serviceName}</h4>
+                            <Badge className="bg-green-500/20 text-green-500 border-green-500/30">
+                              Завершено
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Icon name="User" size={14} />
+                              {booking.sellerName}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Icon name="Calendar" size={14} />
+                              {new Date(booking.date).toLocaleDateString('ru-RU')}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Icon name="Clock" size={14} />
+                              {booking.time}
+                            </span>
+                          </div>
+                          <div className="text-base font-semibold text-primary">
+                            {booking.price.toLocaleString('ru-RU')} ₽
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setSelectedBooking(booking);
+                            setShowTipModal(true);
+                          }}
+                          className="bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600"
+                        >
+                          <Icon name="Heart" className="mr-2" size={16} />
+                          Чаевые
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <Icon name="Calendar" size={64} className="mx-auto mb-4 opacity-50" />
+                <p>У вас пока нет бронирований</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -201,6 +273,18 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
       onClose={() => setShowVerificationModal(false)}
       onVerify={() => setIsVerified(true)}
     />
+    {selectedBooking && (
+      <TipModal
+        isOpen={showTipModal}
+        onClose={() => {
+          setShowTipModal(false);
+          setSelectedBooking(null);
+        }}
+        sellerName={selectedBooking.sellerName}
+        serviceName={selectedBooking.serviceName}
+        bookingId={selectedBooking.id}
+      />
+    )}
   </div>
   );
 };
