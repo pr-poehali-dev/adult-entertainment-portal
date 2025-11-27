@@ -108,7 +108,11 @@ const Index = () => {
 
   const handleBookingSubmit = () => {
     if (!bookingDate || !bookingTime) {
-      alert('Пожалуйста, выберите дату и время');
+      toast({
+        title: 'Заполните все поля',
+        description: 'Пожалуйста, выберите дату и время встречи',
+        variant: 'destructive',
+      });
       return;
     }
     
@@ -224,6 +228,8 @@ const Index = () => {
         bookingNote={bookingNote}
         setBookingNote={setBookingNote}
         handleBookingSubmit={handleBookingSubmit}
+        servicePrice={selectedServiceId ? parseInt(catalogItems.find(item => item.id === selectedServiceId)?.price.replace(/\D/g, '') || '25000') : 25000}
+        serviceName={selectedServiceId ? catalogItems.find(item => item.id === selectedServiceId)?.title : 'Услуга'}
       />
 
       <ReviewModal
