@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { Page, CatalogItem } from '@/types';
 import { isCurrentlyActive, getNextAvailableTime } from '@/utils/scheduleChecker';
+import { serviceCategories } from '@/data/serviceCategories';
 
 interface HomeAndCatalogProps {
   setCurrentPage: (page: Page) => void;
@@ -58,18 +59,25 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
     <section className="py-20 px-4 bg-card/30">
       <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12 text-primary">Категории услуг</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {['VIP сопровождение', 'Бизнес-встречи', 'Приватные мероприятия'].map((category, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {serviceCategories.map((category, i) => (
             <Card 
-              key={i} 
+              key={category.id} 
               className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card border-border hover:border-primary animate-slide-in-left"
               style={{ animationDelay: `${i * 100}ms` }}
             >
               <CardHeader>
-                <div className="h-40 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
-                  <Icon name="Sparkles" size={64} className="text-primary" />
+                <div className="h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
+                  <Icon name="Sparkles" size={48} className="text-primary" />
                 </div>
-                <CardTitle className="text-2xl text-center">{category}</CardTitle>
+                <CardTitle className="text-xl text-center mb-3">{category.name}</CardTitle>
+                {category.subcategories.length > 0 && (
+                  <div className="text-sm text-muted-foreground text-center space-y-1">
+                    {category.subcategories.map(sub => (
+                      <div key={sub.id}>• {sub.name}</div>
+                    ))}
+                  </div>
+                )}
               </CardHeader>
             </Card>
           ))}
@@ -247,12 +255,20 @@ export const CatalogPage = ({
           <SelectTrigger className="w-[200px] bg-background border-border">
             <SelectValue placeholder="Категория" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Все категории</SelectItem>
-            <SelectItem value="VIP">VIP</SelectItem>
-            <SelectItem value="Премиум">Премиум</SelectItem>
-            <SelectItem value="Стандарт">Стандарт</SelectItem>
-            <SelectItem value="Бизнес">Бизнес</SelectItem>
+          <SelectContent className="max-h-[400px]">
+            <SelectItem value="all">Все услуги</SelectItem>
+            {serviceCategories.map(category => (
+              <div key={category.id}>
+                <SelectItem value={category.id} className="font-semibold">
+                  {category.name}
+                </SelectItem>
+                {category.subcategories.map(sub => (
+                  <SelectItem key={sub.id} value={sub.id} className="pl-6">
+                    {sub.name}
+                  </SelectItem>
+                ))}
+              </div>
+            ))}
           </SelectContent>
         </Select>
         
