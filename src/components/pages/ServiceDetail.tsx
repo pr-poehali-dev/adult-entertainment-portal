@@ -110,8 +110,12 @@ export const ServiceDetailPage = ({
               <div>
                 <h3 className="text-2xl font-semibold mb-4">Отзывы клиентов</h3>
                 <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <Card key={review.id} className="bg-muted/30 border-border">
+                  {reviews.map((review, index) => (
+                    <Card 
+                      key={review.id} 
+                      className="bg-muted/30 border-border animate-slide-in-right"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
                       <CardContent className="pt-6">
                         <div className="flex items-start gap-4">
                           <Avatar className="w-12 h-12">

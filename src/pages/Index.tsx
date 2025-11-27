@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import BookingModal from '@/components/BookingModal';
+import PageTransition from '@/components/PageTransition';
 import { useAppPages } from '@/components/AppPages';
 import { catalogItems, reviews } from '@/data/mockData';
 import { Page, UserRole, Profile, Notification } from '@/types';
@@ -142,7 +143,9 @@ const Index = () => {
       />
       
       <main>
-        {renderPage()}
+        <PageTransition pageKey={currentPage}>
+          {renderPage()}
+        </PageTransition>
       </main>
 
       <BookingModal 

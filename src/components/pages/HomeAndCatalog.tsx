@@ -27,17 +27,17 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
     <section className="relative py-32 px-4 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 to-transparent" />
       <div className="container mx-auto text-center relative z-10">
-        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-primary">
+        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-primary animate-fade-in">
           Мир элитных<br />развлечений
         </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '100ms' }}>
           Премиальная платформа для взрослых. Конфиденциальность, безопасность и высочайший уровень сервиса
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" onClick={() => setCurrentPage('catalog')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in" style={{ animationDelay: '200ms' }}>
+          <Button size="lg" onClick={() => setCurrentPage('catalog')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 transition-transform hover:scale-105">
             Посмотреть каталог
           </Button>
-          <Button size="lg" variant="outline" onClick={() => setCurrentPage('register')} className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Button size="lg" variant="outline" onClick={() => setCurrentPage('register')} className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-transform hover:scale-105">
             Регистрация
           </Button>
         </div>
@@ -49,7 +49,11 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
         <h2 className="text-4xl font-bold text-center mb-12 text-primary">Категории услуг</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {['VIP сопровождение', 'Бизнес-встречи', 'Приватные мероприятия'].map((category, i) => (
-            <Card key={i} className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card border-border hover:border-primary">
+            <Card 
+              key={i} 
+              className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card border-border hover:border-primary animate-slide-in-left"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
               <CardHeader>
                 <div className="h-40 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
                   <Icon name="Sparkles" size={64} className="text-primary" />
@@ -232,8 +236,12 @@ export const CatalogPage = ({
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
-            <Card key={item.id} className="group hover:scale-105 transition-all duration-300 bg-card border-border">
+          {filteredItems.map((item, index) => (
+            <Card 
+              key={item.id} 
+              className="group hover:scale-105 transition-all duration-300 bg-card border-border animate-scale-in"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
               <CardHeader>
                 <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
                   <Icon name="Image" size={64} className="text-muted-foreground" />
