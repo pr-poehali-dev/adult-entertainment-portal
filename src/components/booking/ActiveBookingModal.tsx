@@ -62,20 +62,27 @@ export const ActiveBookingModal = ({
   const totalSeconds = booking.duration * 3600;
   const progressPercent = (timeLeft / totalSeconds) * 100;
 
-  const canExtend = userBalance && userBalance.amount >= booking.pricePerHour;
-  const extendHours = [1, 2, 3];
+  const isVirtualSex = booking.serviceCategory === 'virtual';
+  const extendOptions = isVirtualSex ? [10, 20, 30] : [1, 2, 3];
+  const extendUnit = isVirtualSex ? 'мин' : 'ч';
 
-  const handleExtend = (hours: number) => {
-    const cost = hours * booking.pricePerHour;
+  const handleExtend = (amount: number) => {
+    let cost: number;
+    if (isVirtualSex) {
+      cost = (amount / 60) * booking.pricePerHour;
+    } else {
+      cost = amount * booking.pricePerHour;
+    }
+    
     if (userBalance && userBalance.amount < cost) {
       toast({
         title: "Недостаточно средств",
-        description: `Для продления на ${hours} ч нужно ${cost} ${booking.currency}`,
+        description: `Для продления на ${amount} ${extendUnit} нужно ${cost.toFixed(2)} ${booking.currency}`,
         variant: "destructive",
       });
       return;
     }
-    onExtend(hours);
+    onExtend(amount);
   };
 
   return (
@@ -179,14 +186,19 @@ export const ActiveBookingModal = ({
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {extendHours.map(hours => {
-                    const cost = hours * booking.pricePerHour;
+                  {extendOptions.map(amount => {
+                    let cost: number;
+                    if (isVirtualSex) {
+                      cost = (amount / 60) * booking.pricePerHour;
+                    } else {
+                      cost = amount * booking.pricePerHour;
+                    }
                     const canAfford = userBalance && userBalance.amount >= cost;
                     return (
                       <Button
-                        key={hours}
+                        key={amount}
                         variant="outline"
-                        onClick={() => handleExtend(hours)}
+                        onClick={() => handleExtend(amount)}
                         disabled={!canAfford}
                         className={`${
                           canAfford 
@@ -195,8 +207,8 @@ export const ActiveBookingModal = ({
                         }`}
                       >
                         <div className="text-center">
-                          <div className="font-bold">+{hours} ч</div>
-                          <div className="text-xs">{cost} {booking.currency}</div>
+                          <div className="font-bold">+{amount} {extendUnit}</div>
+                          <div className="text-xs">{cost.toFixed(2)} {booking.currency}</div>
                         </div>
                       </Button>
                     );

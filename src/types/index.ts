@@ -118,6 +118,7 @@ export interface Booking {
   id: number;
   serviceId: number;
   serviceName: string;
+  serviceCategory: string; // Категория услуги для логики продления
   sellerId: number;
   sellerName: string;
   buyerId: number;

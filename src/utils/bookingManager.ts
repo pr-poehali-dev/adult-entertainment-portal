@@ -3,6 +3,7 @@ import { Booking, BookingStatus, Currency } from '@/types';
 export const createBooking = (data: {
   serviceId: number;
   serviceName: string;
+  serviceCategory: string;
   sellerId: number;
   sellerName: string;
   buyerId: number;
@@ -21,6 +22,7 @@ export const createBooking = (data: {
     id: Date.now(),
     serviceId: data.serviceId,
     serviceName: data.serviceName,
+    serviceCategory: data.serviceCategory,
     sellerId: data.sellerId,
     sellerName: data.sellerName,
     buyerId: data.buyerId,
@@ -76,11 +78,23 @@ export const buyerReady = (booking: Booking): Booking => {
   };
 };
 
-export const extendBooking = (booking: Booking, additionalHours: number, pricePerHour: number): Booking => {
+export const extendBooking = (booking: Booking, amount: number, pricePerHour: number): Booking => {
   if (booking.status !== 'in_progress') return booking;
   
-  const additionalSeconds = additionalHours * 3600;
-  const additionalCost = additionalHours * pricePerHour;
+  const isVirtualSex = booking.serviceCategory === 'virtual';
+  let additionalSeconds: number;
+  let additionalCost: number;
+  let additionalHours: number;
+  
+  if (isVirtualSex) {
+    additionalSeconds = amount * 60;
+    additionalHours = amount / 60;
+    additionalCost = (amount / 60) * pricePerHour;
+  } else {
+    additionalSeconds = amount * 3600;
+    additionalHours = amount;
+    additionalCost = amount * pricePerHour;
+  }
   
   return {
     ...booking,

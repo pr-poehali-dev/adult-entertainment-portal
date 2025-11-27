@@ -13,11 +13,17 @@ import { useToast } from '@/hooks/use-toast';
 interface ImprovedBookingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  serviceId: number;
   serviceName: string;
+  serviceCategory: string;
+  sellerId: number;
   sellerName: string;
   pricePerHour: number;
   userBalances: WalletBalance[];
   onCreateBooking: (data: {
+    serviceId: number;
+    serviceCategory: string;
+    sellerId: number;
     date: string;
     time: string;
     duration: number;
@@ -29,7 +35,10 @@ interface ImprovedBookingModalProps {
 export const ImprovedBookingModal = ({
   isOpen,
   onClose,
+  serviceId,
   serviceName,
+  serviceCategory,
+  sellerId,
   sellerName,
   pricePerHour,
   userBalances,
@@ -66,6 +75,9 @@ export const ImprovedBookingModal = ({
     }
 
     onCreateBooking({
+      serviceId,
+      serviceCategory,
+      sellerId,
       date,
       time,
       duration,
