@@ -230,7 +230,12 @@ const Index = () => {
         handleBookingSubmit={handleBookingSubmit}
         servicePrice={selectedServiceId ? parseInt(catalogItems.find(item => item.id === selectedServiceId)?.price.replace(/\D/g, '') || '25000') : 25000}
         serviceName={selectedServiceId ? catalogItems.find(item => item.id === selectedServiceId)?.title : 'Услуга'}
-        isServiceActive={selectedServiceId ? catalogItems.find(item => item.id === selectedServiceId)?.isActive !== false : true}
+        isServiceActive={selectedServiceId ? (() => {
+          const item = catalogItems.find(item => item.id === selectedServiceId);
+          if (!item) return true;
+          const { isCurrentlyActive } = require('@/utils/scheduleChecker');
+          return item.isActive !== false && isCurrentlyActive(item.workSchedule);
+        })() : true}
       />
 
       <ReviewModal

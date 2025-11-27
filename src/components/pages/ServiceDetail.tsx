@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { Page, CatalogItem, Review } from '@/types';
+import { isCurrentlyActive, getNextAvailableTime, formatWorkSchedule } from '@/utils/scheduleChecker';
 
 interface ServiceDetailProps {
   catalogItems: CatalogItem[];
@@ -33,7 +34,8 @@ export const ServiceDetailPage = ({
     return null;
   }
 
-  const isServiceActive = service.isActive !== false;
+  const isServiceActive = service.isActive !== false && isCurrentlyActive(service.workSchedule);
+  const nextAvailable = getNextAvailableTime(service.workSchedule);
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -189,19 +191,38 @@ export const ServiceDetailPage = ({
             </CardHeader>
             <CardContent className="space-y-4">
               {!isServiceActive ? (
-                <Card className="bg-red-500/10 border-red-500/20">
-                  <CardContent className="pt-4">
-                    <div className="flex items-start gap-3">
-                      <Icon name="BanIcon" size={20} className="text-red-500 mt-0.5" />
-                      <div className="text-sm">
-                        <p className="font-semibold mb-1 text-red-500">Услуга недоступна</p>
-                        <p className="text-foreground/80">
-                          Данный продавец временно не принимает заказы. Бронирование и оплата недоступны.
-                        </p>
+                <>
+                  <Card className="bg-orange-500/10 border-orange-500/20">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-3">
+                        <Icon name="Clock" size={20} className="text-orange-500 mt-0.5" />
+                        <div className="text-sm">
+                          <p className="font-semibold mb-1 text-orange-500">Сейчас не работает</p>
+                          {nextAvailable ? (
+                            <p className="text-foreground/80">
+                              Следующий сеанс: {nextAvailable}
+                            </p>
+                          ) : (
+                            <p className="text-foreground/80">
+                              Продавец временно не принимает заказы
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-muted/30 border-border">
+                    <CardContent className="pt-4">
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <Icon name="Calendar" size={16} className="text-primary" />
+                        График работы
+                      </h4>
+                      <p className="text-sm text-foreground/70">
+                        {formatWorkSchedule(service.workSchedule)}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </>
               ) : (
                 <>
                   <Button 
@@ -242,16 +263,28 @@ export const ServiceDetailPage = ({
 
               <Separator />
 
-              <div className="bg-muted/30 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Icon name="Info" size={18} className="text-primary" />
-                  Важная информация
-                </h4>
-                <ul className="space-y-1 text-sm text-foreground/80">
-                  <li>• Минимальное бронирование: {service.duration?.replace('От ', '')}</li>
-                  <li>• Предоплата: 30%</li>
-                  <li>• Отмена за 24 часа без штрафа</li>
-                </ul>
+              <div className="space-y-4">
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <Icon name="Info" size={18} className="text-primary" />
+                    Важная информация
+                  </h4>
+                  <ul className="space-y-1 text-sm text-foreground/80">
+                    <li>• Минимальное бронирование: {service.duration?.replace('От ', '')}</li>
+                    <li>• Предоплата: 30%</li>
+                    <li>• Отмена за 24 часа без штрафа</li>
+                  </ul>
+                </div>
+                
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <Icon name="Clock" size={18} className="text-primary" />
+                    График работы
+                  </h4>
+                  <p className="text-sm text-foreground/80">
+                    {formatWorkSchedule(service.workSchedule)}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

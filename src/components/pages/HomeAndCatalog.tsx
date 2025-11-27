@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { Page, CatalogItem } from '@/types';
+import { isCurrentlyActive, getNextAvailableTime } from '@/utils/scheduleChecker';
 
 interface HomeAndCatalogProps {
   setCurrentPage: (page: Page) => void;
@@ -110,7 +111,7 @@ const getFilteredAndSortedItems = (
   selectedBodyType: string
 ) => {
   const filtered = catalogItems.filter(item => {
-    const isActive = item.isActive !== false;
+    const isActive = item.isActive !== false && isCurrentlyActive(item.workSchedule);
     if (!isActive) return false;
     
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -397,14 +398,22 @@ export const CatalogPage = ({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-primary">{item.price}</span>
-                  <Button 
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                    onClick={() => { setSelectedServiceId(item.id); setCurrentPage('service'); }}
-                  >
-                    Подробнее
-                  </Button>
+                <div className="space-y-3">
+                  {!isCurrentlyActive(item.workSchedule) && getNextAvailableTime(item.workSchedule) && (
+                    <Badge variant="outline" className="w-full justify-center border-orange-500/50 text-orange-500 text-xs py-1">
+                      <Icon name="Clock" size={12} className="mr-1" />
+                      {getNextAvailableTime(item.workSchedule)}
+                    </Badge>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-primary">{item.price}</span>
+                    <Button 
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
+                      onClick={() => { setSelectedServiceId(item.id); setCurrentPage('service'); }}
+                    >
+                      Подробнее
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { WorkSchedule, WorkScheduleType } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { isCurrentlyActive } from '@/utils/scheduleChecker';
 
 interface WorkScheduleManagerProps {
   workSchedule: WorkSchedule;
@@ -42,7 +43,17 @@ export const WorkScheduleManager = ({
     saturday: { start: '10:00', end: '16:00', enabled: false },
     sunday: { start: '10:00', end: '16:00', enabled: false },
   });
+  const [currentlyWorking, setCurrentlyWorking] = useState(isCurrentlyActive(workSchedule));
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newStatus = isCurrentlyActive(scheduleType === 'custom' ? { type: 'custom', customHours } : { type: scheduleType });
+      setCurrentlyWorking(newStatus);
+    }, 60000);
+    
+    return () => clearInterval(interval);
+  }, [scheduleType, customHours]);
 
   const handleScheduleTypeChange = (type: WorkScheduleType) => {
     if (type === 'inactive') {
@@ -109,19 +120,38 @@ export const WorkScheduleManager = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-          <div className="flex items-center gap-3">
-            <Icon name={isActive ? 'CheckCircle' : 'XCircle'} size={24} className={isActive ? 'text-green-500' : 'text-red-500'} />
-            <div>
-              <p className="font-semibold">Статус анкеты</p>
-              <p className="text-sm text-muted-foreground">
-                {isActive ? 'Активна и видна в поиске' : 'Деактивирована и скрыта из поиска'}
-              </p>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+            <div className="flex items-center gap-3">
+              <Icon name={isActive ? 'CheckCircle' : 'XCircle'} size={24} className={isActive ? 'text-green-500' : 'text-red-500'} />
+              <div>
+                <p className="font-semibold">Статус анкеты</p>
+                <p className="text-sm text-muted-foreground">
+                  {isActive ? 'Активна и видна в поиске' : 'Деактивирована и скрыта из поиска'}
+                </p>
+              </div>
             </div>
+            <Badge variant={isActive ? 'default' : 'destructive'} className="text-base px-4 py-2">
+              {isActive ? 'Активна' : 'Не активна'}
+            </Badge>
           </div>
-          <Badge variant={isActive ? 'default' : 'destructive'} className="text-base px-4 py-2">
-            {isActive ? 'Активна' : 'Не активна'}
-          </Badge>
+          
+          {isActive && scheduleType === 'custom' && (
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
+              <div className="flex items-center gap-3">
+                <Icon name="Clock" size={20} className={currentlyWorking ? 'text-green-500' : 'text-orange-500'} />
+                <div>
+                  <p className="text-sm font-semibold">Сейчас</p>
+                  <p className="text-xs text-muted-foreground">
+                    Автоматическое обновление
+                  </p>
+                </div>
+              </div>
+              <Badge variant={currentlyWorking ? 'default' : 'secondary'} className="text-sm px-3 py-1">
+                {currentlyWorking ? 'Работаю' : 'Не работаю'}
+              </Badge>
+            </div>
+          )}
         </div>
 
         <Separator />
