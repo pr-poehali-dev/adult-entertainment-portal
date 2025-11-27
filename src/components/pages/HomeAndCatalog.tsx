@@ -21,6 +21,8 @@ interface HomeAndCatalogProps {
   setPriceRange: (range: string) => void;
   sortBy: string;
   setSortBy: (sort: string) => void;
+  selectedCountry: string;
+  setSelectedCountry: (country: string) => void;
   selectedLocation: string;
   setSelectedLocation: (location: string) => void;
   selectedAge: string;
@@ -99,12 +101,45 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
   </div>
 );
 
+const getCitiesByCountry = (country: string): string[] => {
+  const cities: { [key: string]: string[] } = {
+    'Россия': [
+      'Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань',
+      'Нижний Новгород', 'Челябинск', 'Самара', 'Омск', 'Ростов-на-Дону',
+      'Уфа', 'Красноярск', 'Воронеж', 'Пермь', 'Волгоград',
+      'Краснодар', 'Саратов', 'Тюмень', 'Тольятти', 'Ижевск',
+      'Барнаул', 'Ульяновск', 'Иркутск', 'Хабаровск', 'Ярославль',
+      'Владивосток', 'Махачкала', 'Томск', 'Оренбург', 'Кемерово',
+      'Новокузнецк', 'Рязань', 'Набережные Челны', 'Астрахань', 'Пенза',
+      'Липецк', 'Киров', 'Чебоксары', 'Тула', 'Калининград',
+      'Курск', 'Сочи', 'Ставрополь', 'Улан-Удэ', 'Тверь',
+      'Магнитогорск', 'Брянск', 'Иваново', 'Белгород', 'Сургут',
+      'Владимир', 'Нижний Тагил', 'Архангельск', 'Чита', 'Калуга',
+      'Смоленск', 'Волжский', 'Курган', 'Орёл', 'Череповец',
+      'Владикавказ', 'Вологда', 'Мурманск', 'Саранск', 'Якутск',
+      'Тамбов', 'Грозный', 'Стерлитамак', 'Кострома', 'Петрозаводск',
+      'Нижневартовск', 'Йошкар-Ола', 'Новороссийск'
+    ],
+    'Казахстан': [
+      'Алматы', 'Астана', 'Шымкент', 'Караганда', 'Актобе',
+      'Тараз', 'Павлодар', 'Усть-Каменогорск', 'Семей', 'Атырау',
+      'Костанай', 'Кызылорда', 'Уральск', 'Петропавловск', 'Актау',
+      'Темиртау', 'Туркестан', 'Кокшетау', 'Талдыкорган', 'Экибастуз'
+    ],
+    'Беларусь': [
+      'Минск', 'Гомель', 'Могилёв', 'Витебск', 'Гродно', 'Брест'
+    ]
+  };
+  return cities[country] || [];
+};
+
 const getFilteredAndSortedItems = (
   catalogItems: CatalogItem[],
   searchQuery: string,
   selectedCategory: string,
   priceRange: string,
   sortBy: string,
+  selectedCountry: string,
   selectedLocation: string,
   selectedAge: string,
   selectedHeight: string,
@@ -119,6 +154,7 @@ const getFilteredAndSortedItems = (
     
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
     
+    const matchesCountry = selectedCountry === 'all' || true;
     const matchesLocation = selectedLocation === 'all' || item.location === selectedLocation;
     
     let matchesAge = true;
@@ -145,7 +181,7 @@ const getFilteredAndSortedItems = (
     else if (priceRange === 'mid') matchesPrice = price >= 15000 && price <= 25000;
     else if (priceRange === 'high') matchesPrice = price > 25000;
     
-    return matchesSearch && matchesCategory && matchesPrice && matchesLocation && matchesAge && matchesHeight && matchesBodyType;
+    return matchesSearch && matchesCategory && matchesPrice && matchesCountry && matchesLocation && matchesAge && matchesHeight && matchesBodyType;
   });
 
   filtered.sort((a, b) => {
@@ -180,6 +216,8 @@ export const CatalogPage = ({
   setPriceRange,
   sortBy,
   setSortBy,
+  selectedCountry,
+  setSelectedCountry,
   selectedLocation,
   setSelectedLocation,
   selectedAge,
@@ -189,7 +227,8 @@ export const CatalogPage = ({
   selectedBodyType,
   setSelectedBodyType,
 }: HomeAndCatalogProps) => {
-  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedLocation, selectedAge, selectedHeight, selectedBodyType);
+  const availableCities = selectedCountry === 'all' ? [] : getCitiesByCountry(selectedCountry);
+  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedCountry, selectedLocation, selectedAge, selectedHeight, selectedBodyType);
   
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -240,15 +279,30 @@ export const CatalogPage = ({
           </SelectContent>
         </Select>
 
-        <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+        <Select value={selectedCountry} onValueChange={(value) => {
+          setSelectedCountry(value);
+          setSelectedLocation('all');
+        }}>
+          <SelectTrigger className="w-[200px] bg-background border-border">
+            <SelectValue placeholder="Страна" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Все страны</SelectItem>
+            <SelectItem value="Россия">Россия</SelectItem>
+            <SelectItem value="Казахстан">Казахстан</SelectItem>
+            <SelectItem value="Беларусь">Беларусь</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedLocation} onValueChange={setSelectedLocation} disabled={selectedCountry === 'all'}>
           <SelectTrigger className="w-[200px] bg-background border-border">
             <SelectValue placeholder="Город" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[300px]">
             <SelectItem value="all">Все города</SelectItem>
-            <SelectItem value="Москва">Москва</SelectItem>
-            <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
-            <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
+            {availableCities.map((city) => (
+              <SelectItem key={city} value={city}>{city}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
@@ -298,6 +352,7 @@ export const CatalogPage = ({
             setPriceRange('all');
             setSortBy('rating');
             setSearchQuery('');
+            setSelectedCountry('all');
             setSelectedLocation('all');
             setSelectedAge('all');
             setSelectedHeight('all');

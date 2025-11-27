@@ -27,6 +27,8 @@ interface AppPagesProps {
   setPriceRange: (range: string) => void;
   sortBy: string;
   setSortBy: (sort: string) => void;
+  selectedCountry: string;
+  setSelectedCountry: (country: string) => void;
   selectedLocation: string;
   setSelectedLocation: (location: string) => void;
   selectedAge: string;
@@ -60,6 +62,8 @@ export const useAppPages = ({
   setPriceRange,
   sortBy,
   setSortBy,
+  selectedCountry,
+  setSelectedCountry,
   selectedLocation,
   setSelectedLocation,
   selectedAge,
@@ -93,6 +97,8 @@ export const useAppPages = ({
             setPriceRange={setPriceRange}
             sortBy={sortBy}
             setSortBy={setSortBy}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
             selectedLocation={selectedLocation}
             setSelectedLocation={setSelectedLocation}
             selectedAge={selectedAge}

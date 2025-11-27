@@ -23,6 +23,7 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [priceRange, setPriceRange] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('rating');
+  const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [selectedAge, setSelectedAge] = useState<string>('all');
   const [selectedHeight, setSelectedHeight] = useState<string>('all');
@@ -182,6 +183,8 @@ const Index = () => {
     setPriceRange,
     sortBy,
     setSortBy,
+    selectedCountry,
+    setSelectedCountry,
     selectedLocation,
     setSelectedLocation,
     selectedAge,
