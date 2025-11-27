@@ -56,6 +56,9 @@ const Index = () => {
   const [bookingTime, setBookingTime] = useState('');
   const [bookingDuration, setBookingDuration] = useState('1');
   const [bookingNote, setBookingNote] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [priceRange, setPriceRange] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('rating');
   const [profile] = useState<Profile>({
     name: 'Елена Романова',
     role: 'buyer',
@@ -247,42 +250,133 @@ const Index = () => {
     </div>
   );
 
-  const CatalogPage = () => (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      <h1 className="text-5xl font-bold mb-8 text-primary">Каталог услуг</h1>
+  const getFilteredAndSortedItems = () => {
+    const filtered = catalogItems.filter(item => {
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           item.seller.toLowerCase().includes(searchQuery.toLowerCase());
       
-      <div className="mb-8 flex flex-wrap gap-4">
-        <Select>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Категория" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="vip">VIP</SelectItem>
-            <SelectItem value="premium">Премиум</SelectItem>
-            <SelectItem value="business">Бизнес</SelectItem>
-          </SelectContent>
-        </Select>
-        
-        <Select>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Цена" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="low">До 15 000 ₽</SelectItem>
-            <SelectItem value="mid">15 000 - 25 000 ₽</SelectItem>
-            <SelectItem value="high">От 25 000 ₽</SelectItem>
-          </SelectContent>
-        </Select>
+      const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+      
+      const price = parseInt(item.price.replace(/\D/g, ''));
+      let matchesPrice = true;
+      if (priceRange === 'low') matchesPrice = price < 15000;
+      else if (priceRange === 'mid') matchesPrice = price >= 15000 && price <= 25000;
+      else if (priceRange === 'high') matchesPrice = price > 25000;
+      
+      return matchesSearch && matchesCategory && matchesPrice;
+    });
 
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-            Только проверенные
-          </Badge>
+    filtered.sort((a, b) => {
+      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === 'price-asc') {
+        const priceA = parseInt(a.price.replace(/\D/g, ''));
+        const priceB = parseInt(b.price.replace(/\D/g, ''));
+        return priceA - priceB;
+      }
+      if (sortBy === 'price-desc') {
+        const priceA = parseInt(a.price.replace(/\D/g, ''));
+        const priceB = parseInt(b.price.replace(/\D/g, ''));
+        return priceB - priceA;
+      }
+      return 0;
+    });
+
+    return filtered;
+  };
+
+  const CatalogPage = () => {
+    const filteredItems = getFilteredAndSortedItems();
+    
+    return (
+      <div className="container mx-auto px-4 py-8 animate-fade-in">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-5xl font-bold text-primary">Каталог услуг</h1>
+          <Input 
+            placeholder="Поиск..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-64 bg-background border-border"
+          />
         </div>
-      </div>
+        
+        <div className="mb-8 flex flex-wrap gap-4 items-center">
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[200px] bg-background border-border">
+              <SelectValue placeholder="Категория" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Все категории</SelectItem>
+              <SelectItem value="VIP">VIP</SelectItem>
+              <SelectItem value="Премиум">Премиум</SelectItem>
+              <SelectItem value="Стандарт">Стандарт</SelectItem>
+              <SelectItem value="Бизнес">Бизнес</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Select value={priceRange} onValueChange={setPriceRange}>
+            <SelectTrigger className="w-[200px] bg-background border-border">
+              <SelectValue placeholder="Цена" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Любая цена</SelectItem>
+              <SelectItem value="low">До 15 000 ₽</SelectItem>
+              <SelectItem value="mid">15 000 - 25 000 ₽</SelectItem>
+              <SelectItem value="high">От 25 000 ₽</SelectItem>
+            </SelectContent>
+          </Select>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {catalogItems.map((item) => (
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[200px] bg-background border-border">
+              <SelectValue placeholder="Сортировка" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="rating">По рейтингу</SelectItem>
+              <SelectItem value="price-asc">Цена: по возрастанию</SelectItem>
+              <SelectItem value="price-desc">Цена: по убыванию</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button 
+            variant="outline" 
+            className="border-border"
+            onClick={() => {
+              setSelectedCategory('all');
+              setPriceRange('all');
+              setSortBy('rating');
+              setSearchQuery('');
+            }}
+          >
+            <Icon name="RotateCcw" className="mr-2" size={18} />
+            Сбросить
+          </Button>
+
+          <div className="ml-auto text-sm text-muted-foreground">
+            Найдено: {filteredItems.length} {filteredItems.length === 1 ? 'услуга' : 'услуг'}
+          </div>
+        </div>
+
+        {filteredItems.length === 0 ? (
+          <Card className="bg-card border-border p-12">
+            <div className="text-center space-y-4">
+              <Icon name="SearchX" size={64} className="mx-auto text-muted-foreground" />
+              <h3 className="text-2xl font-semibold">Ничего не найдено</h3>
+              <p className="text-muted-foreground">Попробуйте изменить параметры поиска</p>
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  setSelectedCategory('all');
+                  setPriceRange('all');
+                  setSortBy('rating');
+                  setSearchQuery('');
+                }}
+              >
+                Сбросить фильтры
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map((item) => (
           <Card key={item.id} className="group hover:scale-105 transition-all duration-300 bg-card border-border">
             <CardHeader>
               <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
@@ -330,10 +424,12 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
+            ))}
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const RegisterPage = () => (
     <div className="container mx-auto px-4 py-16 max-w-2xl animate-fade-in">
