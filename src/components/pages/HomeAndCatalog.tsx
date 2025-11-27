@@ -20,6 +20,8 @@ interface HomeAndCatalogProps {
   setPriceRange: (range: string) => void;
   sortBy: string;
   setSortBy: (sort: string) => void;
+  selectedLocation: string;
+  setSelectedLocation: (location: string) => void;
 }
 
 export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) => (
@@ -95,7 +97,8 @@ const getFilteredAndSortedItems = (
   searchQuery: string,
   selectedCategory: string,
   priceRange: string,
-  sortBy: string
+  sortBy: string,
+  selectedLocation: string
 ) => {
   const filtered = catalogItems.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -103,13 +106,15 @@ const getFilteredAndSortedItems = (
     
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
     
+    const matchesLocation = selectedLocation === 'all' || item.location === selectedLocation;
+    
     const price = parseInt(item.price.replace(/\D/g, ''));
     let matchesPrice = true;
     if (priceRange === 'low') matchesPrice = price < 15000;
     else if (priceRange === 'mid') matchesPrice = price >= 15000 && price <= 25000;
     else if (priceRange === 'high') matchesPrice = price > 25000;
     
-    return matchesSearch && matchesCategory && matchesPrice;
+    return matchesSearch && matchesCategory && matchesPrice && matchesLocation;
   });
 
   filtered.sort((a, b) => {
@@ -144,8 +149,10 @@ export const CatalogPage = ({
   setPriceRange,
   sortBy,
   setSortBy,
+  selectedLocation,
+  setSelectedLocation,
 }: HomeAndCatalogProps) => {
-  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy);
+  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedLocation);
   
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -196,6 +203,18 @@ export const CatalogPage = ({
           </SelectContent>
         </Select>
 
+        <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+          <SelectTrigger className="w-[200px] bg-background border-border">
+            <SelectValue placeholder="Город" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Все города</SelectItem>
+            <SelectItem value="Москва">Москва</SelectItem>
+            <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
+            <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
+          </SelectContent>
+        </Select>
+
         <Button 
           variant="outline" 
           className="border-border"
@@ -204,6 +223,7 @@ export const CatalogPage = ({
             setPriceRange('all');
             setSortBy('rating');
             setSearchQuery('');
+            setSelectedLocation('all');
           }}
         >
           <Icon name="RotateCcw" className="mr-2" size={18} />
@@ -256,8 +276,16 @@ export const CatalogPage = ({
                     />
                   </button>
                 </div>
-                <div className="flex items-center justify-between mb-2">
-                  <CardTitle className="text-xl">{item.title}</CardTitle>
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <CardTitle className="text-xl mb-1">{item.title}</CardTitle>
+                    {item.location && (
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Icon name="MapPin" size={14} />
+                        {item.location}
+                      </div>
+                    )}
+                  </div>
                   {item.verified && (
                     <Badge className="bg-primary text-primary-foreground">
                       <Icon name="CheckCircle" size={14} className="mr-1" />

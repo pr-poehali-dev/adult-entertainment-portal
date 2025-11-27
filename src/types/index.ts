@@ -21,6 +21,7 @@ export interface CatalogItem {
   description?: string;
   features?: string[];
   duration?: string;
+  location?: string;
 }
 
 export interface Review {

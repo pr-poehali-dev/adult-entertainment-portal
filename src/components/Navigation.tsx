@@ -12,6 +12,8 @@ interface NavigationProps {
   setNotifications: (notifications: Notification[]) => void;
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
+  isDarkTheme: boolean;
+  setIsDarkTheme: (isDark: boolean) => void;
 }
 
 const Navigation = ({
@@ -23,6 +25,8 @@ const Navigation = ({
   setNotifications,
   showNotifications,
   setShowNotifications,
+  isDarkTheme,
+  setIsDarkTheme,
 }: NavigationProps) => (
   <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
     <div className="container mx-auto px-4 py-4">
@@ -65,6 +69,14 @@ const Navigation = ({
         </div>
 
         <div className="flex items-center space-x-4">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setIsDarkTheme(!isDarkTheme)}
+            className="text-foreground/80 hover:text-primary"
+          >
+            {isDarkTheme ? <Icon name="Sun" size={20} /> : <Icon name="Moon" size={20} />}
+          </Button>
           {userRole && (
             <div className="relative">
               <Button 

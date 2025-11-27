@@ -108,7 +108,16 @@ export const ServiceDetailPage = ({
               <Separator />
 
               <div>
-                <h3 className="text-2xl font-semibold mb-4">Отзывы клиентов</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-2xl font-semibold">Отзывы клиентов</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Icon name="Star" size={20} className="text-primary fill-primary" />
+                      <span className="text-xl font-bold">{service.rating}</span>
+                    </div>
+                    <span className="text-muted-foreground">({reviews.length} отзывов)</span>
+                  </div>
+                </div>
                 <div className="space-y-4">
                   {reviews.map((review, index) => (
                     <Card 
