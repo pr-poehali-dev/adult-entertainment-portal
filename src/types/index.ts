@@ -91,3 +91,51 @@ export interface VIPPlan {
   price: number;
   discount?: number;
 }
+
+export type Currency = 'RUB' | 'USD' | 'EUR' | 'BTC' | 'ETH' | 'USDT';
+
+export interface WalletBalance {
+  currency: Currency;
+  amount: number;
+  symbol: string;
+}
+
+export interface Wallet {
+  balances: WalletBalance[];
+}
+
+export type BookingStatus = 
+  | 'pending_seller_confirmation'  // Ожидает подтверждения продавца (15 мин)
+  | 'confirmed'                     // Подтверждено, деньги на эскроу
+  | 'seller_ready'                  // Продавец нажал "Готова"
+  | 'buyer_ready'                   // Покупатель нажал "Готов"
+  | 'in_progress'                   // Встреча идет, таймер
+  | 'completed'                     // Завершено
+  | 'cancelled'                     // Отменено
+  | 'rejected';                     // Отклонено продавцом
+
+export interface Booking {
+  id: number;
+  serviceId: number;
+  serviceName: string;
+  sellerId: number;
+  sellerName: string;
+  buyerId: number;
+  buyerName: string;
+  date: string;
+  time: string;
+  duration: number; // в часах
+  pricePerHour: number;
+  totalPrice: number;
+  currency: Currency;
+  status: BookingStatus;
+  createdAt: string;
+  confirmedAt?: string;
+  sellerReadyAt?: string;
+  buyerReadyAt?: string;
+  startedAt?: string;
+  completedAt?: string;
+  expiresAt?: string; // Для таймера подтверждения
+  remainingTime?: number; // Оставшееся оплаченное время в секундах
+  escrowAmount?: number; // Сумма на эскроу
+}

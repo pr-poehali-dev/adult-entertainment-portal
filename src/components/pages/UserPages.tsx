@@ -16,6 +16,10 @@ import { TipModal } from '@/components/TipModal';
 import { VIPStatus } from '@/components/vip/VIPStatus';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { VIPUpgradeModal } from '@/components/vip/VIPUpgradeModal';
+import { WalletCard } from '@/components/wallet/WalletCard';
+import { DepositModal } from '@/components/wallet/DepositModal';
+import { WithdrawModal } from '@/components/wallet/WithdrawModal';
+import { Wallet, Currency } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface UserPagesProps {
@@ -116,6 +120,20 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
   const [showTipModal, setShowTipModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [showVIPModal, setShowVIPModal] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
+  
+  const [wallet, setWallet] = useState<Wallet>({
+    balances: [
+      { currency: 'RUB', amount: 50000, symbol: '₽' },
+      { currency: 'USD', amount: 1200, symbol: '$' },
+      { currency: 'EUR', amount: 800, symbol: '€' },
+      { currency: 'BTC', amount: 0.05, symbol: 'BTC' },
+      { currency: 'ETH', amount: 2.5, symbol: 'ETH' },
+      { currency: 'USDT', amount: 5000, symbol: 'USDT' },
+    ]
+  });
 
   const handleVIPPurchase = (plan: VIPPlan) => {
     const newExpiry = new Date();
@@ -134,6 +152,36 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
       title: "VIP статус активирован!",
       description: `Ваш VIP статус действует до ${newExpiry.toLocaleDateString()}`,
     });
+  };
+
+  const handleDeposit = (currency: Currency, amount: number) => {
+    setWallet(prev => ({
+      balances: prev.balances.map(b => 
+        b.currency === currency 
+          ? { ...b, amount: b.amount + amount }
+          : b
+      )
+    }));
+  };
+
+  const handleWithdraw = (currency: Currency, amount: number, address: string) => {
+    setWallet(prev => ({
+      balances: prev.balances.map(b => 
+        b.currency === currency 
+          ? { ...b, amount: b.amount - amount }
+          : b
+      )
+    }));
+  };
+
+  const openDepositModal = (currency: Currency) => {
+    setSelectedCurrency(currency);
+    setShowDepositModal(true);
+  };
+
+  const openWithdrawModal = (currency: Currency) => {
+    setSelectedCurrency(currency);
+    setShowWithdrawModal(true);
   };
 
   const mockBookings = [
@@ -252,6 +300,12 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
       <div className="lg:col-span-2 space-y-6">
         <VIPStatus status={profile.vipStatus} expiry={profile.vipExpiry} />
         
+        <WalletCard 
+          wallet={wallet}
+          onDeposit={openDepositModal}
+          onWithdraw={openWithdrawModal}
+        />
+        
         {profile.role === 'seller' && (
           <WorkScheduleManager
             workSchedule={workSchedule}
@@ -344,6 +398,25 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
       onClose={() => setShowVIPModal(false)}
       currentVipExpiry={profile.vipExpiry}
       onPurchase={handleVIPPurchase}
+    />
+    <DepositModal
+      isOpen={showDepositModal}
+      onClose={() => {
+        setShowDepositModal(false);
+        setSelectedCurrency(null);
+      }}
+      currency={selectedCurrency}
+      onDeposit={handleDeposit}
+    />
+    <WithdrawModal
+      isOpen={showWithdrawModal}
+      onClose={() => {
+        setShowWithdrawModal(false);
+        setSelectedCurrency(null);
+      }}
+      currency={selectedCurrency}
+      balance={selectedCurrency ? wallet.balances.find(b => b.currency === selectedCurrency) || null : null}
+      onWithdraw={handleWithdraw}
     />
   </div>
   );
