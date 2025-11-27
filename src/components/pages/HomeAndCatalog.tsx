@@ -6,7 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { Page, CatalogItem } from '@/types';
 import { isCurrentlyActive, getNextAvailableTime } from '@/utils/scheduleChecker';
-import { serviceCategories } from '@/data/serviceCategories';
+import { serviceCategories, getCategoryName, getSubcategoryName } from '@/data/serviceCategories';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface HomeAndCatalogProps {
   setCurrentPage: (page: Page) => void;
@@ -34,23 +35,26 @@ interface HomeAndCatalogProps {
   setSelectedBodyType: (bodyType: string) => void;
 }
 
-export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) => (
+export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) => {
+  const { t, language } = useLanguage();
+  
+  return (
   <div className="animate-fade-in">
     <section className="relative py-32 px-4 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 to-transparent" />
       <div className="container mx-auto text-center relative z-10">
-        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-primary animate-fade-in">
-          Мир магических<br />встреч
+        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-primary animate-fade-in" style={{ whiteSpace: 'pre-line' }}>
+          {t.home.heroTitle}
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '100ms' }}>
-          Премиальная платформа для взрослых. Конфиденциальность, безопасность и высочайший уровень сервиса
+          {t.home.heroSubtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in" style={{ animationDelay: '200ms' }}>
           <Button size="lg" onClick={() => setCurrentPage('catalog')} className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 transition-transform hover:scale-105">
-            Посмотреть каталог
+            {t.home.viewCatalog}
           </Button>
           <Button size="lg" variant="outline" onClick={() => setCurrentPage('register')} className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-transform hover:scale-105">
-            Регистрация
+            {t.home.register}
           </Button>
         </div>
       </div>
@@ -58,7 +62,7 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
 
     <section className="py-20 px-4 bg-card/30">
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 text-primary">Категории услуг</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-primary">{t.home.categoriesTitle}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {serviceCategories.map((category, i) => (
             <Card 
@@ -70,13 +74,13 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
                 <div className="h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
                   <Icon name={category.icon as any} size={48} className="text-primary" />
                 </div>
-                <CardTitle className="text-xl text-center mb-3">{category.name}</CardTitle>
+                <CardTitle className="text-xl text-center mb-3">{getCategoryName(category.id, language)}</CardTitle>
                 {category.subcategories.length > 0 && (
                   <div className="text-sm text-muted-foreground text-center space-y-2">
                     {category.subcategories.map(sub => (
                       <div key={sub.id} className="flex items-center justify-center gap-2">
                         <Icon name={sub.icon as any} size={14} />
-                        <span>{sub.name}</span>
+                        <span>{getSubcategoryName(sub.id, language)}</span>
                       </div>
                     ))}
                   </div>
@@ -90,27 +94,28 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
 
     <section className="py-20 px-4">
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 text-primary">Преимущества платформы</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-primary">{t.home.advantagesTitle}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { icon: 'Shield', title: 'Безопасность', desc: 'Проверенные профили' },
-            { icon: 'Lock', title: 'Конфиденциальность', desc: 'Полная анонимность' },
-            { icon: 'Star', title: 'Премиум сервис', desc: 'Высочайший уровень' },
-            { icon: 'CheckCircle', title: 'Гарантии', desc: 'Защита сделок' }
+            { icon: 'Shield', data: t.home.advantages.security },
+            { icon: 'Lock', data: t.home.advantages.privacy },
+            { icon: 'Star', data: t.home.advantages.premium },
+            { icon: 'CheckCircle', data: t.home.advantages.guarantees }
           ].map((item, i) => (
             <div key={i} className="text-center animate-scale-in" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
                 <Icon name={item.icon as any} size={32} className="text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-muted-foreground">{item.desc}</p>
+              <h3 className="text-xl font-semibold mb-2">{item.data.title}</h3>
+              <p className="text-muted-foreground">{item.data.desc}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
   </div>
-);
+  );
+};
 
 const getCitiesByCountry = (country: string): string[] => {
   const cities: { [key: string]: string[] } = {
@@ -238,15 +243,16 @@ export const CatalogPage = ({
   selectedBodyType,
   setSelectedBodyType,
 }: HomeAndCatalogProps) => {
+  const { t, language } = useLanguage();
   const availableCities = selectedCountry === 'all' ? [] : getCitiesByCountry(selectedCountry);
   const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedCountry, selectedLocation, selectedAge, selectedHeight, selectedBodyType);
   
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-5xl font-bold text-primary">Каталог услуг</h1>
+        <h1 className="text-5xl font-bold text-primary">{t.catalog.title}</h1>
         <Input 
-          placeholder="Поиск..." 
+          placeholder={t.catalog.search} 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-64 bg-background border-border"

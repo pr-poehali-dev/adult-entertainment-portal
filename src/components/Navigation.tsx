@@ -2,6 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import { Page, Profile, Notification, UserRole } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Language } from '@/i18n/translations';
 
 interface NavigationProps {
   currentPage: Page;
@@ -27,7 +29,10 @@ const Navigation = ({
   setShowNotifications,
   isDarkTheme,
   setIsDarkTheme,
-}: NavigationProps) => (
+}: NavigationProps) => {
+  const { language, setLanguage, t } = useLanguage();
+  
+  return (
   <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
     <div className="container mx-auto px-4 py-4">
       <div className="flex items-center justify-between">
@@ -40,24 +45,21 @@ const Navigation = ({
         
         <div className="hidden md:flex items-center space-x-6">
           <button onClick={() => setCurrentPage('home')} className="text-foreground/80 hover:text-primary transition-colors">
-            Главная
+            {t.nav.home}
           </button>
           <button onClick={() => setCurrentPage('catalog')} className="text-foreground/80 hover:text-primary transition-colors">
-            Каталог
-          </button>
-          <button onClick={() => setCurrentPage('search')} className="text-foreground/80 hover:text-primary transition-colors">
-            Поиск
+            {t.nav.catalog}
           </button>
           {userRole && (
             <>
               <button onClick={() => setCurrentPage('favorites')} className="text-foreground/80 hover:text-primary transition-colors">
-                Избранное
+                {t.nav.favorites}
               </button>
               <button 
                 onClick={() => setCurrentPage('messages')} 
                 className="text-foreground/80 hover:text-primary transition-colors relative"
               >
-                Сообщения
+                {t.nav.messages}
                 {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
                   <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                     {notifications.filter(n => !n.read && n.type === 'message').length}
@@ -67,7 +69,7 @@ const Navigation = ({
             </>
           )}
           <button onClick={() => setCurrentPage('rules')} className="text-foreground/80 hover:text-primary transition-colors">
-            Правила
+            {t.nav.rules}
           </button>
         </div>
 
@@ -99,6 +101,26 @@ const Navigation = ({
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
+          <div className="flex items-center gap-1 border border-border rounded-lg p-1">
+            <Button
+              variant={language === 'ru' ? 'default' : 'ghost'}
+              size="icon"
+              onClick={() => setLanguage('ru')}
+              className="h-8 w-8 p-0 text-xl"
+              title="Русский"
+            >
+              🇷🇺
+            </Button>
+            <Button
+              variant={language === 'en' ? 'default' : 'ghost'}
+              size="icon"
+              onClick={() => setLanguage('en')}
+              className="h-8 w-8 p-0 text-xl"
+              title="English"
+            >
+              🇬🇧
+            </Button>
+          </div>
           <Button 
             variant="ghost" 
             size="icon"
@@ -209,17 +231,18 @@ const Navigation = ({
               <Avatar className="h-8 w-8 mr-2">
                 <AvatarFallback className="bg-primary text-primary-foreground">{profile.name[0]}</AvatarFallback>
               </Avatar>
-              <span className="hidden md:inline">Профиль</span>
+              <span className="hidden md:inline">{t.nav.profile}</span>
             </Button>
           ) : (
             <Button onClick={() => setCurrentPage('register')} className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Войти
+              {t.nav.login}
             </Button>
           )}
         </div>
       </div>
     </div>
   </nav>
-);
+  );
+};
 
 export default Navigation;
