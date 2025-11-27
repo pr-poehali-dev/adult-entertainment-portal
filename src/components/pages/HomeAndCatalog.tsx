@@ -37,7 +37,7 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 to-transparent" />
       <div className="container mx-auto text-center relative z-10">
         <h1 className="text-6xl md:text-8xl font-bold mb-6 text-primary animate-fade-in">
-          Мир элитных<br />развлечений
+          Мир магических<br />встреч
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '100ms' }}>
           Премиальная платформа для взрослых. Конфиденциальность, безопасность и высочайший уровень сервиса
