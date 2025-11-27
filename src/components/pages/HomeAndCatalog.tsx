@@ -22,6 +22,12 @@ interface HomeAndCatalogProps {
   setSortBy: (sort: string) => void;
   selectedLocation: string;
   setSelectedLocation: (location: string) => void;
+  selectedAge: string;
+  setSelectedAge: (age: string) => void;
+  selectedHeight: string;
+  setSelectedHeight: (height: string) => void;
+  selectedBodyType: string;
+  setSelectedBodyType: (bodyType: string) => void;
 }
 
 export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) => (
@@ -98,7 +104,10 @@ const getFilteredAndSortedItems = (
   selectedCategory: string,
   priceRange: string,
   sortBy: string,
-  selectedLocation: string
+  selectedLocation: string,
+  selectedAge: string,
+  selectedHeight: string,
+  selectedBodyType: string
 ) => {
   const filtered = catalogItems.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -108,13 +117,31 @@ const getFilteredAndSortedItems = (
     
     const matchesLocation = selectedLocation === 'all' || item.location === selectedLocation;
     
+    let matchesAge = true;
+    if (selectedAge !== 'all' && item.age) {
+      if (selectedAge === '18-25') matchesAge = item.age >= 18 && item.age <= 25;
+      else if (selectedAge === '26-30') matchesAge = item.age >= 26 && item.age <= 30;
+      else if (selectedAge === '31-35') matchesAge = item.age >= 31 && item.age <= 35;
+      else if (selectedAge === '36+') matchesAge = item.age >= 36;
+    }
+    
+    let matchesHeight = true;
+    if (selectedHeight !== 'all' && item.height) {
+      if (selectedHeight === '160-165') matchesHeight = item.height >= 160 && item.height <= 165;
+      else if (selectedHeight === '166-170') matchesHeight = item.height >= 166 && item.height <= 170;
+      else if (selectedHeight === '171-175') matchesHeight = item.height >= 171 && item.height <= 175;
+      else if (selectedHeight === '176+') matchesHeight = item.height >= 176;
+    }
+    
+    const matchesBodyType = selectedBodyType === 'all' || item.bodyType === selectedBodyType;
+    
     const price = parseInt(item.price.replace(/\D/g, ''));
     let matchesPrice = true;
     if (priceRange === 'low') matchesPrice = price < 15000;
     else if (priceRange === 'mid') matchesPrice = price >= 15000 && price <= 25000;
     else if (priceRange === 'high') matchesPrice = price > 25000;
     
-    return matchesSearch && matchesCategory && matchesPrice && matchesLocation;
+    return matchesSearch && matchesCategory && matchesPrice && matchesLocation && matchesAge && matchesHeight && matchesBodyType;
   });
 
   filtered.sort((a, b) => {
@@ -151,8 +178,14 @@ export const CatalogPage = ({
   setSortBy,
   selectedLocation,
   setSelectedLocation,
+  selectedAge,
+  setSelectedAge,
+  selectedHeight,
+  setSelectedHeight,
+  selectedBodyType,
+  setSelectedBodyType,
 }: HomeAndCatalogProps) => {
-  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedLocation);
+  const filteredItems = getFilteredAndSortedItems(catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedLocation, selectedAge, selectedHeight, selectedBodyType);
   
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -215,6 +248,44 @@ export const CatalogPage = ({
           </SelectContent>
         </Select>
 
+        <Select value={selectedAge} onValueChange={setSelectedAge}>
+          <SelectTrigger className="w-[200px] bg-background border-border">
+            <SelectValue placeholder="Возраст" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Любой возраст</SelectItem>
+            <SelectItem value="18-25">18-25 лет</SelectItem>
+            <SelectItem value="26-30">26-30 лет</SelectItem>
+            <SelectItem value="31-35">31-35 лет</SelectItem>
+            <SelectItem value="36+">36+ лет</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedHeight} onValueChange={setSelectedHeight}>
+          <SelectTrigger className="w-[200px] bg-background border-border">
+            <SelectValue placeholder="Рост" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Любой рост</SelectItem>
+            <SelectItem value="160-165">160-165 см</SelectItem>
+            <SelectItem value="166-170">166-170 см</SelectItem>
+            <SelectItem value="171-175">171-175 см</SelectItem>
+            <SelectItem value="176+">176+ см</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
+          <SelectTrigger className="w-[200px] bg-background border-border">
+            <SelectValue placeholder="Телосложение" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Любое</SelectItem>
+            <SelectItem value="Стройная">Стройная</SelectItem>
+            <SelectItem value="Спортивная">Спортивная</SelectItem>
+            <SelectItem value="Средняя">Средняя</SelectItem>
+          </SelectContent>
+        </Select>
+
         <Button 
           variant="outline" 
           className="border-border"
@@ -224,6 +295,9 @@ export const CatalogPage = ({
             setSortBy('rating');
             setSearchQuery('');
             setSelectedLocation('all');
+            setSelectedAge('all');
+            setSelectedHeight('all');
+            setSelectedBodyType('all');
           }}
         >
           <Icon name="RotateCcw" className="mr-2" size={18} />

@@ -29,6 +29,12 @@ interface AppPagesProps {
   setSortBy: (sort: string) => void;
   selectedLocation: string;
   setSelectedLocation: (location: string) => void;
+  selectedAge: string;
+  setSelectedAge: (age: string) => void;
+  selectedHeight: string;
+  setSelectedHeight: (height: string) => void;
+  selectedBodyType: string;
+  setSelectedBodyType: (bodyType: string) => void;
   selectedSellerId: number | null;
   setSelectedSellerId: (id: number | null) => void;
 }
@@ -56,6 +62,12 @@ export const useAppPages = ({
   setSortBy,
   selectedLocation,
   setSelectedLocation,
+  selectedAge,
+  setSelectedAge,
+  selectedHeight,
+  setSelectedHeight,
+  selectedBodyType,
+  setSelectedBodyType,
   selectedSellerId,
   setSelectedSellerId,
 }: AppPagesProps) => {
@@ -83,6 +95,12 @@ export const useAppPages = ({
             setSortBy={setSortBy}
             selectedLocation={selectedLocation}
             setSelectedLocation={setSelectedLocation}
+            selectedAge={selectedAge}
+            setSelectedAge={setSelectedAge}
+            selectedHeight={selectedHeight}
+            setSelectedHeight={setSelectedHeight}
+            selectedBodyType={selectedBodyType}
+            setSelectedBodyType={setSelectedBodyType}
           />
         );
       

@@ -23,6 +23,9 @@ export interface CatalogItem {
   duration?: string;
   location?: string;
   sellerId?: number;
+  age?: number;
+  height?: number;
+  bodyType?: string;
 }
 
 export interface SellerProfile {

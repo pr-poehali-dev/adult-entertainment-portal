@@ -14,7 +14,10 @@ export const catalogItems: CatalogItem[] = [
     features: ['Деловые встречи', 'Светские мероприятия', 'Ресторанное сопровождение', 'Конфиденциальность'],
     duration: 'От 3 часов',
     location: 'Москва',
-    sellerId: 1
+    sellerId: 1,
+    age: 28,
+    height: 172,
+    bodyType: 'Стройная'
   },
   { 
     id: 2, 
@@ -29,7 +32,10 @@ export const catalogItems: CatalogItem[] = [
     features: ['Приватность', 'Индивидуальный подход', 'Гибкий график', 'Профессионализм'],
     duration: 'От 2 часов',
     location: 'Санкт-Петербург',
-    sellerId: 2
+    sellerId: 2,
+    age: 26,
+    height: 168,
+    bodyType: 'Стройная'
   },
   { 
     id: 3, 

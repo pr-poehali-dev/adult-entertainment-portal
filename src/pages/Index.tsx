@@ -24,6 +24,9 @@ const Index = () => {
   const [priceRange, setPriceRange] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('rating');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
+  const [selectedAge, setSelectedAge] = useState<string>('all');
+  const [selectedHeight, setSelectedHeight] = useState<string>('all');
+  const [selectedBodyType, setSelectedBodyType] = useState<string>('all');
   const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -177,6 +180,12 @@ const Index = () => {
     setSortBy,
     selectedLocation,
     setSelectedLocation,
+    selectedAge,
+    setSelectedAge,
+    selectedHeight,
+    setSelectedHeight,
+    selectedBodyType,
+    setSelectedBodyType,
     selectedSellerId,
     setSelectedSellerId,
   });
