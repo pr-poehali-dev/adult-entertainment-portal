@@ -15,6 +15,8 @@ import { ProfileWalletTab } from './profile/ProfileWalletTab';
 import { ProfileSettingsTab } from './profile/ProfileSettingsTab';
 import { ProfileBookingsTab } from './profile/ProfileBookingsTab';
 import { FavoritesPage } from './favorites/FavoritesPage';
+import { SearchPage } from './search/SearchPage';
+import { RulesPage } from './rules/RulesPage';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -274,4 +276,4 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
   );
 };
 
-export { FavoritesPage };
+export { FavoritesPage, SearchPage, RulesPage };

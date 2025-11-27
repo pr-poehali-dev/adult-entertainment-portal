@@ -147,8 +147,6 @@ export const useAppPages = ({
             toggleFavorite={toggleFavorite}
             setSelectedServiceId={setSelectedServiceId}
             setCurrentPage={setCurrentPage}
-            profile={profile}
-            setUserRole={setUserRole}
           />
         );
       
