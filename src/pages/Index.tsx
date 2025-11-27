@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
-type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules';
+type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service';
 type UserRole = 'buyer' | 'seller' | null;
 
 interface Profile {
@@ -31,6 +31,18 @@ interface CatalogItem {
   category: string;
   image: string;
   verified: boolean;
+  description?: string;
+  features?: string[];
+  duration?: string;
+}
+
+interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  date: string;
+  text: string;
+  avatar: string;
 }
 
 const Index = () => {
@@ -38,6 +50,7 @@ const Index = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
   const [profile] = useState<Profile>({
     name: 'Елена Романова',
     role: 'buyer',
@@ -47,10 +60,64 @@ const Index = () => {
   });
 
   const catalogItems: CatalogItem[] = [
-    { id: 1, title: 'Премиум сопровождение', seller: 'Анна', rating: 4.9, price: '25 000 ₽/час', category: 'VIP', image: '', verified: true },
-    { id: 2, title: 'Индивидуальные встречи', seller: 'Мария', rating: 4.7, price: '15 000 ₽/час', category: 'Премиум', image: '', verified: true },
-    { id: 3, title: 'Деловое сопровождение', seller: 'Виктория', rating: 4.8, price: '20 000 ₽/час', category: 'Бизнес', image: '', verified: false },
-    { id: 4, title: 'Эксклюзивный сервис', seller: 'Диана', rating: 5.0, price: '30 000 ₽/час', category: 'VIP', image: '', verified: true },
+    { 
+      id: 1, 
+      title: 'Премиум сопровождение', 
+      seller: 'Анна', 
+      rating: 4.9, 
+      price: '25 000 ₽/час', 
+      category: 'VIP', 
+      image: '', 
+      verified: true,
+      description: 'Эксклюзивное VIP-сопровождение для деловых встреч и светских мероприятий. Элегантность, интеллект и безупречный стиль.',
+      features: ['Деловые встречи', 'Светские мероприятия', 'Ресторанное сопровождение', 'Конфиденциальность'],
+      duration: 'От 3 часов'
+    },
+    { 
+      id: 2, 
+      title: 'Индивидуальные встречи', 
+      seller: 'Мария', 
+      rating: 4.7, 
+      price: '15 000 ₽/час', 
+      category: 'Премиум', 
+      image: '', 
+      verified: true,
+      description: 'Приватные встречи в комфортной обстановке. Индивидуальный подход и внимание к деталям.',
+      features: ['Приватность', 'Индивидуальный подход', 'Гибкий график', 'Профессионализм'],
+      duration: 'От 2 часов'
+    },
+    { 
+      id: 3, 
+      title: 'Деловое сопровождение', 
+      seller: 'Виктория', 
+      rating: 4.8, 
+      price: '20 000 ₽/час', 
+      category: 'Бизнес', 
+      image: '', 
+      verified: false,
+      description: 'Профессиональное сопровождение на бизнес-мероприятиях. Знание делового этикета и протокола.',
+      features: ['Бизнес-этикет', 'Презентации', 'Переговоры', 'Networking'],
+      duration: 'От 4 часов'
+    },
+    { 
+      id: 4, 
+      title: 'Эксклюзивный сервис', 
+      seller: 'Диана', 
+      rating: 5.0, 
+      price: '30 000 ₽/час', 
+      category: 'VIP', 
+      image: '', 
+      verified: true,
+      description: 'Элитный сервис высочайшего уровня для самых взыскательных клиентов. Полная конфиденциальность.',
+      features: ['VIP-уровень', 'Полная конфиденциальность', 'Международные стандарты', 'Персональный подход'],
+      duration: 'От 5 часов'
+    },
+  ];
+
+  const reviews: Review[] = [
+    { id: 1, author: 'Александр М.', rating: 5, date: '15 ноября 2024', text: 'Превосходный сервис, высокий профессионализм. Все на высшем уровне, рекомендую!', avatar: '' },
+    { id: 2, author: 'Дмитрий К.', rating: 5, date: '8 ноября 2024', text: 'Отличное сопровождение на деловом ужине. Элегантность и интеллект - именно то, что нужно.', avatar: '' },
+    { id: 3, author: 'Михаил П.', rating: 4, date: '2 ноября 2024', text: 'Хороший уровень сервиса, приятное общение. Все прошло отлично.', avatar: '' },
   ];
 
   const toggleFavorite = (id: number) => {
@@ -249,7 +316,10 @@ const Index = () => {
             <CardContent>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-bold text-primary">{item.price}</span>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button 
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={() => { setSelectedServiceId(item.id); setCurrentPage('service'); }}
+                >
                   Подробнее
                 </Button>
               </div>
@@ -557,6 +627,180 @@ const Index = () => {
     </div>
   );
 
+  const ServiceDetailPage = () => {
+    const service = catalogItems.find(item => item.id === selectedServiceId);
+    
+    if (!service) return <HomePage />;
+
+    return (
+      <div className="container mx-auto px-4 py-8 animate-fade-in">
+        <Button 
+          variant="ghost" 
+          onClick={() => setCurrentPage('catalog')}
+          className="mb-6 text-primary hover:text-primary/80"
+        >
+          <Icon name="ArrowLeft" className="mr-2" size={20} />
+          Назад к каталогу
+        </Button>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="bg-card border-border">
+              <CardHeader>
+                <div className="relative h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
+                  <Icon name="Image" size={120} className="text-muted-foreground" />
+                  <button 
+                    onClick={() => toggleFavorite(service.id)}
+                    className="absolute top-4 right-4 p-3 bg-background/80 rounded-full hover:bg-background transition-colors"
+                  >
+                    <Icon 
+                      name="Heart"
+                      size={24} 
+                      className={favorites.includes(service.id) ? "fill-red-500 text-red-500" : "text-foreground"}
+                    />
+                  </button>
+                </div>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle className="text-4xl mb-2">{service.title}</CardTitle>
+                    <div className="flex items-center gap-4 text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Icon name="User" size={20} />
+                        {service.seller}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Icon name="Star" size={20} className="text-primary fill-primary" />
+                        {service.rating}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Icon name="Clock" size={20} />
+                        {service.duration}
+                      </span>
+                    </div>
+                  </div>
+                  {service.verified && (
+                    <Badge className="bg-primary text-primary-foreground text-base px-4 py-2">
+                      <Icon name="CheckCircle" size={18} className="mr-2" />
+                      Проверено
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3">Описание</h3>
+                  <p className="text-foreground/80 leading-relaxed text-lg">{service.description}</p>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-2xl font-semibold mb-3">Что входит в услугу</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {service.features?.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2 text-foreground/80">
+                        <Icon name="CheckCircle" size={20} className="text-primary" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4">Отзывы клиентов</h3>
+                  <div className="space-y-4">
+                    {reviews.map((review) => (
+                      <Card key={review.id} className="bg-muted/30 border-border">
+                        <CardContent className="pt-6">
+                          <div className="flex items-start gap-4">
+                            <Avatar className="w-12 h-12">
+                              <AvatarFallback className="bg-primary text-primary-foreground">
+                                {review.author[0]}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="font-semibold">{review.author}</h4>
+                                <div className="flex items-center gap-1">
+                                  {Array.from({ length: review.rating }).map((_, i) => (
+                                    <Icon key={i} name="Star" size={16} className="text-primary fill-primary" />
+                                  ))}
+                                </div>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">{review.date}</p>
+                              <p className="text-foreground/80">{review.text}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="lg:col-span-1">
+            <Card className="bg-card border-border sticky top-24">
+              <CardHeader>
+                <CardTitle className="text-3xl text-primary">{service.price}</CardTitle>
+                <CardDescription>За час услуг</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6">
+                  <Icon name="Calendar" className="mr-2" size={20} />
+                  Забронировать
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground text-lg py-6"
+                  onClick={() => setCurrentPage('messages')}
+                >
+                  <Icon name="MessageCircle" className="mr-2" size={20} />
+                  Написать
+                </Button>
+
+                <Separator />
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2 text-foreground/80">
+                    <Icon name="Shield" size={18} className="text-primary" />
+                    <span>Защита платежей</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-foreground/80">
+                    <Icon name="Lock" size={18} className="text-primary" />
+                    <span>Конфиденциальность</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-foreground/80">
+                    <Icon name="RefreshCw" size={18} className="text-primary" />
+                    <span>Гибкая отмена</span>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <Icon name="Info" size={18} className="text-primary" />
+                    Важная информация
+                  </h4>
+                  <ul className="space-y-1 text-sm text-foreground/80">
+                    <li>• Минимальное бронирование: {service.duration?.replace('От ', '')}</li>
+                    <li>• Предоплата: 30%</li>
+                    <li>• Отмена за 24 часа без штрафа</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'home': return <HomePage />;
@@ -567,6 +811,7 @@ const Index = () => {
       case 'favorites': return <FavoritesPage />;
       case 'messages': return <MessagesPage />;
       case 'rules': return <RulesPage />;
+      case 'service': return <ServiceDetailPage />;
       default: return <HomePage />;
     }
   };
