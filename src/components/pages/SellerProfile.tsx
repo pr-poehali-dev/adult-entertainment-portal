@@ -42,10 +42,15 @@ export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageP
             <div className="text-white mb-2">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-4xl font-bold">{seller.name}</h1>
-                {seller.verified && (
-                  <Badge className="bg-primary text-primary-foreground">
-                    <Icon name="CheckCircle" size={16} className="mr-1" />
+                {seller.verified ? (
+                  <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-0 shadow-lg animate-pulse">
+                    <Icon name="ShieldCheck" size={16} className="mr-1" />
                     Проверено
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="border-white/50 text-white/80">
+                    <Icon name="Shield" size={16} className="mr-1" />
+                    Не верифицирован
                   </Badge>
                 )}
               </div>

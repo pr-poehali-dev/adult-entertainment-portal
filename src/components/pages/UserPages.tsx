@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { Page, Profile, CatalogItem, UserRole } from '@/types';
+import { VerificationModal } from '@/components/VerificationModal';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -98,7 +100,11 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
   </div>
 );
 
-export const ProfilePage = ({ profile }: { profile: Profile }) => (
+export const ProfilePage = ({ profile }: { profile: Profile }) => {
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [isVerified, setIsVerified] = useState(profile.verified);
+
+  return (
   <div className="container mx-auto px-4 py-8 animate-fade-in">
     <h1 className="text-5xl font-bold mb-8 text-primary">Профиль</h1>
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -115,16 +121,43 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => (
               <Icon name="Star" size={20} className="text-primary fill-primary" />
               <span className="text-xl font-semibold">{profile.rating}</span>
             </div>
-            {profile.verified && (
-              <Badge className="bg-primary text-primary-foreground">
-                <Icon name="CheckCircle" size={16} className="mr-1" />
+            {isVerified ? (
+              <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-amber-500 shadow-lg">
+                <Icon name="ShieldCheck" size={16} className="mr-1" />
                 Верифицирован
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
+                <Icon name="Shield" size={16} className="mr-1" />
+                Не верифицирован
               </Badge>
             )}
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {!isVerified && (
+              <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 border-amber-500/20">
+                <CardContent className="pt-4">
+                  <div className="flex items-start gap-3 mb-3">
+                    <Icon name="Star" size={20} className="text-amber-500 mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-semibold mb-1">Пройдите верификацию</p>
+                      <p className="text-muted-foreground text-xs">
+                        Получите приоритет в поиске и больше доверия клиентов
+                      </p>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700"
+                    onClick={() => setShowVerificationModal(true)}
+                  >
+                    <Icon name="ShieldCheck" className="mr-2" size={18} />
+                    Верифицировать профиль
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
             <Button variant="outline" className="w-full border-border">
               <Icon name="Settings" className="mr-2" size={18} />
               Настройки
@@ -149,8 +182,14 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => (
         </CardContent>
       </Card>
     </div>
+    <VerificationModal 
+      isOpen={showVerificationModal}
+      onClose={() => setShowVerificationModal(false)}
+      onVerify={() => setIsVerified(true)}
+    />
   </div>
-);
+  );
+};
 
 export const SearchPage = () => (
   <div className="container mx-auto px-4 py-8 animate-fade-in">

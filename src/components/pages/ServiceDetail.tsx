@@ -97,10 +97,15 @@ export const ServiceDetailPage = ({
                     </span>
                   </div>
                 </div>
-                {service.verified && (
-                  <Badge className="bg-primary text-primary-foreground text-base px-4 py-2">
-                    <Icon name="CheckCircle" size={18} className="mr-2" />
+                {service.verified ? (
+                  <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-0 shadow-lg text-base px-4 py-2">
+                    <Icon name="ShieldCheck" size={18} className="mr-2" />
                     Проверено
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground text-base px-4 py-2">
+                    <Icon name="Shield" size={18} className="mr-2" />
+                    Не проверено
                   </Badge>
                 )}
               </div>

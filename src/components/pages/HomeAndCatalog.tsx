@@ -370,10 +370,15 @@ export const CatalogPage = ({
                       </div>
                     )}
                   </div>
-                  {item.verified && (
-                    <Badge className="bg-primary text-primary-foreground">
-                      <Icon name="CheckCircle" size={14} className="mr-1" />
+                  {item.verified ? (
+                    <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-0 shadow-md">
+                      <Icon name="ShieldCheck" size={14} className="mr-1" />
                       Проверено
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="border-muted-foreground/20 text-muted-foreground/70 text-xs">
+                      <Icon name="Shield" size={12} className="mr-1" />
+                      Не проверено
                     </Badge>
                   )}
                 </div>
