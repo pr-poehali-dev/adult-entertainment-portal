@@ -139,3 +139,35 @@ export interface Booking {
   remainingTime?: number; // Оставшееся оплаченное время в секундах
   escrowAmount?: number; // Сумма на эскроу
 }
+
+export type TransactionType = 
+  | 'deposit'           // Пополнение
+  | 'withdraw'          // Вывод
+  | 'booking_payment'   // Оплата бронирования
+  | 'booking_refund'    // Возврат за отмененное бронирование
+  | 'booking_received'  // Получение оплаты (продавец)
+  | 'booking_extend'    // Продление встречи
+  | 'vip_payment'       // Оплата VIP
+  | 'tip_sent'          // Отправленные чаевые
+  | 'tip_received';     // Полученные чаевые
+
+export type TransactionStatus = 
+  | 'pending'     // В обработке
+  | 'completed'   // Завершено
+  | 'failed'      // Не удалось
+  | 'cancelled';  // Отменено
+
+export interface Transaction {
+  id: number;
+  type: TransactionType;
+  amount: number;
+  currency: Currency;
+  status: TransactionStatus;
+  createdAt: string;
+  completedAt?: string;
+  description: string;
+  relatedBookingId?: number;
+  fromUser?: string;
+  toUser?: string;
+  fee?: number;
+}

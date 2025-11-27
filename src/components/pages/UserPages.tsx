@@ -19,7 +19,9 @@ import { VIPUpgradeModal } from '@/components/vip/VIPUpgradeModal';
 import { WalletCard } from '@/components/wallet/WalletCard';
 import { DepositModal } from '@/components/wallet/DepositModal';
 import { WithdrawModal } from '@/components/wallet/WithdrawModal';
-import { Wallet, Currency } from '@/types';
+import { TransactionHistory } from '@/components/wallet/TransactionHistory';
+import { Wallet, Currency, Transaction } from '@/types';
+import { createDepositTransaction, createWithdrawTransaction } from '@/utils/transactionManager';
 import { useToast } from '@/hooks/use-toast';
 
 interface UserPagesProps {
@@ -135,6 +137,63 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
     ]
   });
 
+  const [transactions, setTransactions] = useState<Transaction[]>([
+    {
+      id: 1,
+      type: 'deposit',
+      amount: 50000,
+      currency: 'RUB',
+      status: 'completed',
+      createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+      completedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+      description: 'Пополнение счета RUB',
+    },
+    {
+      id: 2,
+      type: 'booking_payment',
+      amount: 25000,
+      currency: 'RUB',
+      status: 'completed',
+      createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+      completedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+      description: 'Оплата встречи с Анастасия',
+      relatedBookingId: 1,
+      toUser: 'Анастасия',
+    },
+    {
+      id: 3,
+      type: 'booking_received',
+      amount: 22500,
+      currency: 'RUB',
+      status: 'completed',
+      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+      completedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+      description: 'Получение оплаты от Михаил',
+      relatedBookingId: 2,
+      fromUser: 'Михаил',
+      fee: 2500,
+    },
+    {
+      id: 4,
+      type: 'withdraw',
+      amount: 10000,
+      currency: 'RUB',
+      status: 'pending',
+      createdAt: new Date(Date.now() - 86400000).toISOString(),
+      description: 'Вывод средств на 1234 5678 9012 3456...',
+    },
+    {
+      id: 5,
+      type: 'vip_payment',
+      amount: 999,
+      currency: 'RUB',
+      status: 'completed',
+      createdAt: new Date(Date.now() - 3600000).toISOString(),
+      completedAt: new Date(Date.now() - 3600000).toISOString(),
+      description: 'Оплата VIP статуса: 1 месяц',
+    },
+  ]);
+
   const handleVIPPurchase = (plan: VIPPlan) => {
     const newExpiry = new Date();
     newExpiry.setDate(newExpiry.getDate() + plan.duration);
@@ -155,6 +214,9 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
   };
 
   const handleDeposit = (currency: Currency, amount: number) => {
+    const transaction = createDepositTransaction(amount, currency);
+    setTransactions(prev => [transaction, ...prev]);
+    
     setWallet(prev => ({
       balances: prev.balances.map(b => 
         b.currency === currency 
@@ -165,6 +227,9 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
   };
 
   const handleWithdraw = (currency: Currency, amount: number, address: string) => {
+    const transaction = createWithdrawTransaction(amount, currency, address);
+    setTransactions(prev => [transaction, ...prev]);
+    
     setWallet(prev => ({
       balances: prev.balances.map(b => 
         b.currency === currency 
@@ -300,22 +365,45 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
       <div className="lg:col-span-2 space-y-6">
         <VIPStatus status={profile.vipStatus} expiry={profile.vipExpiry} />
         
-        <WalletCard 
-          wallet={wallet}
-          onDeposit={openDepositModal}
-          onWithdraw={openWithdrawModal}
-        />
-        
-        {profile.role === 'seller' && (
-          <WorkScheduleManager
-            workSchedule={workSchedule}
-            isActive={isActive}
-            onScheduleChange={setWorkSchedule}
-            onActiveChange={setIsActive}
-          />
-        )}
-        
-        <Card className="bg-card border-border">
+        <Tabs defaultValue="wallet" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="wallet">
+              <Icon name="Wallet" size={16} className="mr-2" />
+              Кошелек
+            </TabsTrigger>
+            <TabsTrigger value="transactions">
+              <Icon name="History" size={16} className="mr-2" />
+              Транзакции
+            </TabsTrigger>
+            <TabsTrigger value="bookings">
+              <Icon name="Calendar" size={16} className="mr-2" />
+              Бронирования
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="wallet" className="space-y-6">
+            <WalletCard 
+              wallet={wallet}
+              onDeposit={openDepositModal}
+              onWithdraw={openWithdrawModal}
+            />
+            
+            {profile.role === 'seller' && (
+              <WorkScheduleManager
+                workSchedule={workSchedule}
+                isActive={isActive}
+                onScheduleChange={setWorkSchedule}
+                onActiveChange={setIsActive}
+              />
+            )}
+          </TabsContent>
+
+          <TabsContent value="transactions">
+            <TransactionHistory transactions={transactions} />
+          </TabsContent>
+
+          <TabsContent value="bookings">
+            <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="text-3xl">Мои бронирования</CardTitle>
           </CardHeader>
@@ -374,6 +462,8 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
     <VerificationModal 
