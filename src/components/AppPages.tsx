@@ -1,8 +1,10 @@
 import MessagesPage from '@/components/MessagesPage';
 import { HomePage, CatalogPage } from '@/components/pages/HomeAndCatalog';
 import { ServiceDetailPage } from '@/components/pages/ServiceDetail';
+import { SellerProfilePage } from '@/components/pages/SellerProfile';
 import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
 import { Page, Profile, CatalogItem, Review, UserRole } from '@/types';
+import { sellerProfiles } from '@/data/sellerProfiles';
 
 interface AppPagesProps {
   currentPage: Page;
@@ -27,6 +29,8 @@ interface AppPagesProps {
   setSortBy: (sort: string) => void;
   selectedLocation: string;
   setSelectedLocation: (location: string) => void;
+  selectedSellerId: number | null;
+  setSelectedSellerId: (id: number | null) => void;
 }
 
 export const useAppPages = ({
@@ -52,6 +56,8 @@ export const useAppPages = ({
   setSortBy,
   selectedLocation,
   setSelectedLocation,
+  selectedSellerId,
+  setSelectedSellerId,
 }: AppPagesProps) => {
   
   const renderPage = () => {
@@ -90,6 +96,7 @@ export const useAppPages = ({
             selectedServiceId={selectedServiceId}
             setCurrentPage={setCurrentPage}
             setShowBookingModal={setShowBookingModal}
+            setSelectedSellerId={setSelectedSellerId}
           />
         );
       
@@ -124,6 +131,14 @@ export const useAppPages = ({
       
       case 'rules':
         return <RulesPage />;
+      
+      case 'seller-profile':
+        const seller = sellerProfiles.find(s => s.id === selectedSellerId);
+        return seller ? (
+          <SellerProfilePage seller={seller} setCurrentPage={setCurrentPage} />
+        ) : (
+          <HomePage setCurrentPage={setCurrentPage} />
+        );
       
       default:
         return <HomePage setCurrentPage={setCurrentPage} />;

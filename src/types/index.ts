@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile';
 export type UserRole = 'buyer' | 'seller' | null;
 
 export interface Profile {
@@ -22,6 +22,28 @@ export interface CatalogItem {
   features?: string[];
   duration?: string;
   location?: string;
+  sellerId?: number;
+}
+
+export interface SellerProfile {
+  id: number;
+  name: string;
+  rating: number;
+  verified: boolean;
+  avatar: string;
+  coverImage: string;
+  age: number;
+  location: string;
+  languages: string[];
+  about: string;
+  services: string[];
+  portfolio: { id: number; image: string; title: string; }[];
+  stats: {
+    bookings: number;
+    responseTime: string;
+    repeatClients: number;
+  };
+  availability: string[];
 }
 
 export interface Review {

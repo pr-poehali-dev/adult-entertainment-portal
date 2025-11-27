@@ -31,7 +31,7 @@ const Navigation = ({
   <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
     <div className="container mx-auto px-4 py-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-primary cursor-pointer" onClick={() => setCurrentPage('home')}>
+        <h1 className="text-2xl md:text-3xl font-bold text-primary cursor-pointer" onClick={() => setCurrentPage('home')}>
           ÉLITE
         </h1>
         
@@ -68,7 +68,34 @@ const Navigation = ({
           </button>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="md:hidden flex items-center space-x-2">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setIsDarkTheme(!isDarkTheme)}
+            className="text-foreground/80 hover:text-primary"
+          >
+            {isDarkTheme ? <Icon name="Sun" size={20} /> : <Icon name="Moon" size={20} />}
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setCurrentPage('catalog')}
+            className="text-foreground/80 hover:text-primary"
+          >
+            <Icon name="Search" size={20} />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setCurrentPage('catalog')}
+            className="text-foreground/80 hover:text-primary"
+          >
+            <Icon name="Menu" size={20} />
+          </Button>
+        </div>
+
+        <div className="hidden md:flex items-center space-x-4">
           <Button 
             variant="ghost" 
             size="icon"

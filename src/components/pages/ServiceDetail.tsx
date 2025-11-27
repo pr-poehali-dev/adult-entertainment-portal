@@ -14,6 +14,7 @@ interface ServiceDetailProps {
   selectedServiceId: number | null;
   setCurrentPage: (page: Page) => void;
   setShowBookingModal: (show: boolean) => void;
+  setSelectedSellerId?: (id: number | null) => void;
 }
 
 export const ServiceDetailPage = ({
@@ -24,6 +25,7 @@ export const ServiceDetailPage = ({
   selectedServiceId,
   setCurrentPage,
   setShowBookingModal,
+  setSelectedSellerId,
 }: ServiceDetailProps) => {
   const service = catalogItems.find(item => item.id === selectedServiceId);
   
@@ -46,8 +48,18 @@ export const ServiceDetailPage = ({
         <div className="lg:col-span-2 space-y-6">
           <Card className="bg-card border-border">
             <CardHeader>
-              <div className="relative h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
-                <Icon name="Image" size={120} className="text-muted-foreground" />
+              <div className="relative h-96 rounded-lg mb-4 overflow-hidden">
+                {service.image ? (
+                  <img 
+                    src={service.image} 
+                    alt={service.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                    <Icon name="Image" size={120} className="text-muted-foreground" />
+                  </div>
+                )}
                 <button 
                   onClick={() => toggleFavorite(service.id)}
                   className="absolute top-4 right-4 p-3 bg-background/80 rounded-full hover:bg-background transition-colors"
@@ -63,10 +75,18 @@ export const ServiceDetailPage = ({
                 <div>
                   <CardTitle className="text-4xl mb-2">{service.title}</CardTitle>
                   <div className="flex items-center gap-4 text-muted-foreground">
-                    <span className="flex items-center gap-1">
+                    <button 
+                      onClick={() => {
+                        if (setSelectedSellerId && service.sellerId) {
+                          setSelectedSellerId(service.sellerId);
+                          setCurrentPage('seller-profile');
+                        }
+                      }}
+                      className="flex items-center gap-1 hover:text-primary transition-colors cursor-pointer"
+                    >
                       <Icon name="User" size={20} />
                       {service.seller}
-                    </span>
+                    </button>
                     <span className="flex items-center gap-1">
                       <Icon name="Star" size={20} className="text-primary fill-primary" />
                       {service.rating}

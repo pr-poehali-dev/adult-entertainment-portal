@@ -24,6 +24,7 @@ const Index = () => {
   const [priceRange, setPriceRange] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('rating');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
+  const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
@@ -176,6 +177,8 @@ const Index = () => {
     setSortBy,
     selectedLocation,
     setSelectedLocation,
+    selectedSellerId,
+    setSelectedSellerId,
   });
 
   return (

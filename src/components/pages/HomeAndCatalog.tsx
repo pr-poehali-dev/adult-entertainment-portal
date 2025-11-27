@@ -263,8 +263,18 @@ export const CatalogPage = ({
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <CardHeader>
-                <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
-                  <Icon name="Image" size={64} className="text-muted-foreground" />
+                <div className="relative h-48 rounded-lg mb-4 overflow-hidden">
+                  {item.image ? (
+                    <img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                      <Icon name="Image" size={64} className="text-muted-foreground" />
+                    </div>
+                  )}
                   <button 
                     onClick={() => toggleFavorite(item.id)}
                     className="absolute top-2 right-2 p-2 bg-background/80 rounded-full hover:bg-background transition-colors"

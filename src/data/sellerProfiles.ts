@@ -1,0 +1,55 @@
+import { SellerProfile } from '@/types';
+
+export const sellerProfiles: SellerProfile[] = [
+  {
+    id: 1,
+    name: 'Анна',
+    rating: 4.9,
+    verified: true,
+    avatar: '',
+    coverImage: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/851337ba-172a-4000-8f7c-8e4644062368.jpg',
+    age: 28,
+    location: 'Москва',
+    languages: ['Русский', 'Английский', 'Французский'],
+    about: 'Добро пожаловать в мой профиль! Я предлагаю эксклюзивное VIP-сопровождение для деловых встреч и светских мероприятий. Имею высшее образование, свободно владею тремя языками. Моя специализация - сопровождение на бизнес-мероприятиях, где требуется элегантность, интеллект и безупречные манеры. Я ценю конфиденциальность и профессионализм в работе.',
+    services: ['VIP сопровождение', 'Деловые встречи', 'Светские мероприятия', 'Ресторанное сопровождение'],
+    portfolio: [
+      { id: 1, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg', title: 'Вечернее мероприятие' },
+      { id: 2, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/2027abc7-c23f-49e7-9181-e88a68144742.jpg', title: 'Светский раут' },
+      { id: 3, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/bba3e1a2-7e5c-4175-b9f5-ea68e981db8e.jpg', title: 'Театральная премьера' },
+      { id: 4, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ee4dcec3-a7ea-4f1a-8b04-0e6c5cdeaf71.jpg', title: 'Вечерний отдых' },
+      { id: 5, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/de33f0a1-c479-48f5-94cb-1cf8c7ea86a4.jpg', title: 'Отельная встреча' },
+      { id: 6, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/2f5bfbb6-2bb5-443e-9ca8-c57169cb6a16.jpg', title: 'VIP мероприятие' },
+    ],
+    stats: {
+      bookings: 145,
+      responseTime: '< 1 часа',
+      repeatClients: 78,
+    },
+    availability: ['Пн-Пт: 18:00 - 02:00', 'Сб-Вс: 14:00 - 03:00', 'Бронирование за 24 часа'],
+  },
+  {
+    id: 2,
+    name: 'Мария',
+    rating: 4.7,
+    verified: true,
+    avatar: '',
+    coverImage: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/851337ba-172a-4000-8f7c-8e4644062368.jpg',
+    age: 26,
+    location: 'Санкт-Петербург',
+    languages: ['Русский', 'Английский'],
+    about: 'Приветствую! Специализируюсь на индивидуальных встречах в комфортной обстановке. Ценю искренность, внимание к деталям и приватность. Имею опыт работы с VIP-клиентами. Предлагаю качественный сервис и индивидуальный подход к каждому клиенту.',
+    services: ['Индивидуальные встречи', 'Приватные мероприятия', 'Вечерний досуг'],
+    portfolio: [
+      { id: 1, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/cf786e95-b283-46c8-bd07-da6faa13ebcf.jpg', title: 'Профессиональное фото' },
+      { id: 2, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/50ad9bf6-1608-4a54-8b46-3fb525001570.jpg', title: 'Дневная встреча' },
+      { id: 3, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/de33f0a1-c479-48f5-94cb-1cf8c7ea86a4.jpg', title: 'Элегантный образ' },
+    ],
+    stats: {
+      bookings: 98,
+      responseTime: '< 2 часов',
+      repeatClients: 65,
+    },
+    availability: ['Вт-Вс: 16:00 - 01:00', 'Выходные по договоренности'],
+  },
+];
