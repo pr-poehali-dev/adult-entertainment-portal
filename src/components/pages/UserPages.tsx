@@ -9,10 +9,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { Page, Profile, CatalogItem, UserRole, WorkSchedule } from '@/types';
+import { Page, Profile, CatalogItem, UserRole, WorkSchedule, VIPPlan } from '@/types';
 import { VerificationModal } from '@/components/VerificationModal';
 import { WorkScheduleManager } from '@/components/WorkScheduleManager';
 import { TipModal } from '@/components/TipModal';
+import { VIPStatus } from '@/components/vip/VIPStatus';
+import { VIPBadge } from '@/components/vip/VIPBadge';
+import { VIPUpgradeModal } from '@/components/vip/VIPUpgradeModal';
+import { useToast } from '@/hooks/use-toast';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -22,6 +26,7 @@ interface UserPagesProps {
   favorites: number[];
   toggleFavorite: (id: number) => void;
   setSelectedServiceId: (id: number | null) => void;
+  onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
 }
 
 export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (role: UserRole) => void; setCurrentPage: (page: Page) => void }) => (
@@ -102,13 +107,34 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
   </div>
 );
 
-export const ProfilePage = ({ profile }: { profile: Profile }) => {
+export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; onProfileUpdate?: (updatedProfile: Partial<Profile>) => void }) => {
+  const { toast } = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [isVerified, setIsVerified] = useState(profile.verified);
   const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
   const [isActive, setIsActive] = useState(true);
   const [showTipModal, setShowTipModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [showVIPModal, setShowVIPModal] = useState(false);
+
+  const handleVIPPurchase = (plan: VIPPlan) => {
+    const newExpiry = new Date();
+    newExpiry.setDate(newExpiry.getDate() + plan.duration);
+    
+    const vipUpdate = {
+      vipStatus: 'vip' as const,
+      vipExpiry: newExpiry.toISOString(),
+    };
+    
+    if (onProfileUpdate) {
+      onProfileUpdate(vipUpdate);
+    }
+    
+    toast({
+      title: "VIP статус активирован!",
+      description: `Ваш VIP статус действует до ${newExpiry.toLocaleDateString()}`,
+    });
+  };
 
   const mockBookings = [
     {
@@ -143,22 +169,28 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
                 {profile.name[0]}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl text-center mb-2">{profile.name}</CardTitle>
+            <CardTitle className="text-2xl text-center mb-2 flex items-center gap-2 justify-center">
+              {profile.name}
+              {profile.vipStatus === 'vip' && <VIPBadge size="sm" showText={false} />}
+            </CardTitle>
             <div className="flex items-center gap-2 mb-4">
               <Icon name="Star" size={20} className="text-primary fill-primary" />
               <span className="text-xl font-semibold">{profile.rating}</span>
             </div>
-            {isVerified ? (
-              <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-amber-500 shadow-lg">
-                <Icon name="ShieldCheck" size={16} className="mr-1" />
-                Верифицирован
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
-                <Icon name="Shield" size={16} className="mr-1" />
-                Не верифицирован
-              </Badge>
-            )}
+            <div className="flex flex-col items-center gap-2">
+              {isVerified ? (
+                <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-amber-500 shadow-lg">
+                  <Icon name="ShieldCheck" size={16} className="mr-1" />
+                  Верифицирован
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
+                  <Icon name="Shield" size={16} className="mr-1" />
+                  Не верифицирован
+                </Badge>
+              )}
+              {profile.vipStatus === 'vip' && <VIPBadge size="md" />}
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -185,6 +217,26 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
                 </CardContent>
               </Card>
             )}
+            
+            {profile.vipStatus === 'none' ? (
+              <Button 
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black hover:from-yellow-500 hover:to-yellow-700 font-bold"
+                onClick={() => setShowVIPModal(true)}
+              >
+                <Icon name="Crown" className="mr-2 fill-current" size={18} />
+                Улучшить до VIP
+              </Button>
+            ) : (
+              <Button 
+                variant="outline"
+                className="w-full border-yellow-500 text-yellow-600 hover:bg-yellow-500/10"
+                onClick={() => setShowVIPModal(true)}
+              >
+                <Icon name="Crown" className="mr-2 fill-current" size={18} />
+                Продлить VIP
+              </Button>
+            )}
+            
             <Button variant="outline" className="w-full border-border">
               <Icon name="Settings" className="mr-2" size={18} />
               Настройки
@@ -198,6 +250,8 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
       </Card>
 
       <div className="lg:col-span-2 space-y-6">
+        <VIPStatus status={profile.vipStatus} expiry={profile.vipExpiry} />
+        
         {profile.role === 'seller' && (
           <WorkScheduleManager
             workSchedule={workSchedule}
@@ -285,6 +339,12 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
         bookingId={selectedBooking.id}
       />
     )}
+    <VIPUpgradeModal
+      isOpen={showVIPModal}
+      onClose={() => setShowVIPModal(false)}
+      currentVipExpiry={profile.vipExpiry}
+      onPurchase={handleVIPPurchase}
+    />
   </div>
   );
 };

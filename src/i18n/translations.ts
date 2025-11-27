@@ -90,6 +90,32 @@ export interface Translations {
     confirm: string;
     close: string;
   };
+
+  // VIP
+  vip: {
+    title: string;
+    badge: string;
+    upgrade: string;
+    extend: string;
+    benefits: string;
+    expiresOn: string;
+    expired: string;
+    daysLeft: string;
+    plans: {
+      month: string;
+      threeMonths: string;
+      sixMonths: string;
+      year: string;
+    };
+    features: {
+      priority: string;
+      badge: string;
+      visibility: string;
+      analytics: string;
+      support: string;
+      noAds: string;
+    };
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -174,6 +200,30 @@ export const translations: Record<Language, Translations> = {
       confirm: 'Подтвердить',
       close: 'Закрыть',
     },
+    vip: {
+      title: 'VIP статус',
+      badge: 'VIP',
+      upgrade: 'Улучшить до VIP',
+      extend: 'Продлить VIP',
+      benefits: 'Преимущества VIP',
+      expiresOn: 'Действует до',
+      expired: 'VIP истёк',
+      daysLeft: 'дней осталось',
+      plans: {
+        month: '1 месяц',
+        threeMonths: '3 месяца',
+        sixMonths: '6 месяцев',
+        year: '1 год',
+      },
+      features: {
+        priority: 'Приоритетная поддержка',
+        badge: 'VIP бейдж в профиле',
+        visibility: 'Повышенная видимость',
+        analytics: 'Расширенная аналитика',
+        support: 'Персональный менеджер',
+        noAds: 'Без рекламы',
+      },
+    },
   },
   en: {
     nav: {
@@ -255,6 +305,30 @@ export const translations: Record<Language, Translations> = {
       delete: 'Delete',
       confirm: 'Confirm',
       close: 'Close',
+    },
+    vip: {
+      title: 'VIP Status',
+      badge: 'VIP',
+      upgrade: 'Upgrade to VIP',
+      extend: 'Extend VIP',
+      benefits: 'VIP Benefits',
+      expiresOn: 'Valid until',
+      expired: 'VIP expired',
+      daysLeft: 'days left',
+      plans: {
+        month: '1 month',
+        threeMonths: '3 months',
+        sixMonths: '6 months',
+        year: '1 year',
+      },
+      features: {
+        priority: 'Priority support',
+        badge: 'VIP badge in profile',
+        visibility: 'Increased visibility',
+        analytics: 'Advanced analytics',
+        support: 'Personal manager',
+        noAds: 'No ads',
+      },
     },
   },
 };

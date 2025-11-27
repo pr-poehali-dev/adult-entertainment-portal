@@ -1,5 +1,6 @@
 export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile';
 export type UserRole = 'buyer' | 'seller' | null;
+export type VIPStatus = 'none' | 'vip';
 
 export interface Profile {
   name: string;
@@ -7,6 +8,8 @@ export interface Profile {
   avatar: string;
   rating: number;
   verified: boolean;
+  vipStatus: VIPStatus;
+  vipExpiry: string | null;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
@@ -60,6 +63,8 @@ export interface SellerProfile {
   availability: string[];
   workSchedule?: WorkSchedule;
   isActive?: boolean;
+  vipStatus: VIPStatus;
+  vipExpiry: string | null;
 }
 
 export interface Review {
@@ -78,4 +83,11 @@ export interface Notification {
   text: string;
   time: string;
   read: boolean;
+}
+
+export interface VIPPlan {
+  id: string;
+  duration: number;
+  price: number;
+  discount?: number;
 }

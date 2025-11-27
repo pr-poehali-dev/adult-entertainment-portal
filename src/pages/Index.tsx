@@ -68,12 +68,14 @@ const Index = () => {
       read: true
     }
   ]);
-  const [profile] = useState<Profile>({
+  const [profile, setProfile] = useState<Profile>({
     name: 'Елена Романова',
     role: 'buyer',
     avatar: '',
     rating: 4.8,
-    verified: true
+    verified: true,
+    vipStatus: 'none',
+    vipExpiry: null
   });
 
   const toggleFavorite = (id: number) => {
@@ -162,6 +164,10 @@ const Index = () => {
     });
   };
 
+  const handleProfileUpdate = (updatedProfile: Partial<Profile>) => {
+    setProfile(prev => ({ ...prev, ...updatedProfile }));
+  };
+
   const { renderPage } = useAppPages({
     currentPage,
     setCurrentPage,
@@ -195,6 +201,7 @@ const Index = () => {
     setSelectedBodyType,
     selectedSellerId,
     setSelectedSellerId,
+    onProfileUpdate: handleProfileUpdate,
   });
 
   return (

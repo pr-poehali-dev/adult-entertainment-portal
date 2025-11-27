@@ -39,6 +39,7 @@ interface AppPagesProps {
   setSelectedBodyType: (bodyType: string) => void;
   selectedSellerId: number | null;
   setSelectedSellerId: (id: number | null) => void;
+  onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
 }
 
 export const useAppPages = ({
@@ -74,6 +75,7 @@ export const useAppPages = ({
   setSelectedBodyType,
   selectedSellerId,
   setSelectedSellerId,
+  onProfileUpdate,
 }: AppPagesProps) => {
   
   const renderPage = () => {
@@ -126,7 +128,7 @@ export const useAppPages = ({
       
       case 'profile':
         return userRole ? (
-          <ProfilePage profile={profile} />
+          <ProfilePage profile={profile} onProfileUpdate={onProfileUpdate} />
         ) : (
           <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
         );

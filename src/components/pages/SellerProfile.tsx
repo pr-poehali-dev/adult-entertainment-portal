@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { Page, SellerProfile } from '@/types';
+import { VIPBadge } from '@/components/vip/VIPBadge';
 
 interface SellerProfilePageProps {
   seller: SellerProfile;
@@ -42,6 +43,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageP
             <div className="text-white mb-2">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-4xl font-bold">{seller.name}</h1>
+                {seller.vipStatus === 'vip' && <VIPBadge size="md" />}
                 {seller.verified ? (
                   <Badge className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-0 shadow-lg animate-pulse">
                     <Icon name="ShieldCheck" size={16} className="mr-1" />

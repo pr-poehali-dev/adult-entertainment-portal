@@ -29,6 +29,8 @@ export const sellerProfiles: SellerProfile[] = [
     availability: ['Пн-Пт: 18:00 - 02:00', 'Сб-Вс: 14:00 - 03:00', 'Бронирование за 24 часа'],
     workSchedule: { type: '24/7' },
     isActive: true,
+    vipStatus: 'vip',
+    vipExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: 2,
@@ -55,5 +57,7 @@ export const sellerProfiles: SellerProfile[] = [
     availability: ['Вт-Вс: 16:00 - 01:00', 'Выходные по договоренности'],
     workSchedule: { type: '24/7' },
     isActive: true,
+    vipStatus: 'none',
+    vipExpiry: null,
   },
 ];
