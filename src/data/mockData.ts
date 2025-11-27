@@ -1,4 +1,4 @@
-import { CatalogItem, Review } from '@/types';
+import { CatalogItem, Review, WorkSchedule } from '@/types';
 
 export const catalogItems: CatalogItem[] = [
   { 
@@ -17,7 +17,9 @@ export const catalogItems: CatalogItem[] = [
     sellerId: 1,
     age: 28,
     height: 172,
-    bodyType: 'Стройная'
+    bodyType: 'Стройная',
+    workSchedule: { type: '24/7' },
+    isActive: true
   },
   { 
     id: 2, 
@@ -35,7 +37,9 @@ export const catalogItems: CatalogItem[] = [
     sellerId: 2,
     age: 26,
     height: 168,
-    bodyType: 'Стройная'
+    bodyType: 'Стройная',
+    workSchedule: { type: '24/7' },
+    isActive: true
   },
   { 
     id: 3, 

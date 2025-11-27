@@ -23,6 +23,7 @@ interface BookingModalProps {
   handleBookingSubmit: () => void;
   servicePrice?: number;
   serviceName?: string;
+  isServiceActive?: boolean;
 }
 
 const BookingModal = ({
@@ -38,7 +39,8 @@ const BookingModal = ({
   setBookingNote,
   handleBookingSubmit,
   servicePrice = 25000,
-  serviceName = 'Услуга',
+  serviceName = 'услуга',
+  isServiceActive = true,
 }: BookingModalProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('');
   const [location, setLocation] = useState<string>('');
@@ -65,6 +67,21 @@ const BookingModal = ({
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in">
       <Card className="w-full max-w-2xl bg-card border-border max-h-[90vh] overflow-y-auto">
+        {!isServiceActive && (
+          <Card className="m-4 bg-red-500/10 border-red-500/20">
+            <CardContent className="pt-4">
+              <div className="flex items-start gap-3">
+                <Icon name="BanIcon" size={20} className="text-red-500 mt-0.5" />
+                <div className="text-sm">
+                  <p className="font-semibold mb-1 text-red-500">Услуга недоступна</p>
+                  <p className="text-foreground/80">
+                    Данный продавец временно не принимает заказы. Бронирование и оплата недоступны.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -320,10 +337,10 @@ const BookingModal = ({
             <Button 
               className="flex-1 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground hover:from-primary/90 hover:to-primary/80 text-lg py-6 shadow-lg"
               onClick={handleBookingSubmit}
-              disabled={!bookingDate || !bookingTime || !location}
+              disabled={!bookingDate || !bookingTime || !location || !isServiceActive}
             >
               <Icon name="CreditCard" className="mr-2" size={20} />
-              Оплатить {prepayment.toLocaleString('ru-RU')} ₽
+              {isServiceActive ? `Оплатить ${prepayment.toLocaleString('ru-RU')} ₽` : 'Услуга недоступна'}
             </Button>
           </div>
         </CardContent>

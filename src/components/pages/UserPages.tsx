@@ -9,8 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { Page, Profile, CatalogItem, UserRole } from '@/types';
+import { Page, Profile, CatalogItem, UserRole, WorkSchedule } from '@/types';
 import { VerificationModal } from '@/components/VerificationModal';
+import { WorkScheduleManager } from '@/components/WorkScheduleManager';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -103,6 +104,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
 export const ProfilePage = ({ profile }: { profile: Profile }) => {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [isVerified, setIsVerified] = useState(profile.verified);
+  const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
+  const [isActive, setIsActive] = useState(true);
 
   return (
   <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -170,17 +173,28 @@ export const ProfilePage = ({ profile }: { profile: Profile }) => {
         </CardContent>
       </Card>
 
-      <Card className="lg:col-span-2 bg-card border-border">
-        <CardHeader>
-          <CardTitle className="text-3xl">Мои бронирования</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-12 text-muted-foreground">
-            <Icon name="Calendar" size={64} className="mx-auto mb-4 opacity-50" />
-            <p>У вас пока нет бронирований</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="lg:col-span-2 space-y-6">
+        {profile.role === 'seller' && (
+          <WorkScheduleManager
+            workSchedule={workSchedule}
+            isActive={isActive}
+            onScheduleChange={setWorkSchedule}
+            onActiveChange={setIsActive}
+          />
+        )}
+        
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle className="text-3xl">Мои бронирования</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-12 text-muted-foreground">
+              <Icon name="Calendar" size={64} className="mx-auto mb-4 opacity-50" />
+              <p>У вас пока нет бронирований</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
     <VerificationModal 
       isOpen={showVerificationModal}

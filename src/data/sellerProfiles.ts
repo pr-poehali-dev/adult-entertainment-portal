@@ -27,6 +27,8 @@ export const sellerProfiles: SellerProfile[] = [
       repeatClients: 78,
     },
     availability: ['Пн-Пт: 18:00 - 02:00', 'Сб-Вс: 14:00 - 03:00', 'Бронирование за 24 часа'],
+    workSchedule: { type: '24/7' },
+    isActive: true,
   },
   {
     id: 2,
@@ -51,5 +53,7 @@ export const sellerProfiles: SellerProfile[] = [
       repeatClients: 65,
     },
     availability: ['Вт-Вс: 16:00 - 01:00', 'Выходные по договоренности'],
+    workSchedule: { type: '24/7' },
+    isActive: true,
   },
 ];

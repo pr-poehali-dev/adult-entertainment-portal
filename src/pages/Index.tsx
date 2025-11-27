@@ -230,6 +230,7 @@ const Index = () => {
         handleBookingSubmit={handleBookingSubmit}
         servicePrice={selectedServiceId ? parseInt(catalogItems.find(item => item.id === selectedServiceId)?.price.replace(/\D/g, '') || '25000') : 25000}
         serviceName={selectedServiceId ? catalogItems.find(item => item.id === selectedServiceId)?.title : 'Услуга'}
+        isServiceActive={selectedServiceId ? catalogItems.find(item => item.id === selectedServiceId)?.isActive !== false : true}
       />
 
       <ReviewModal

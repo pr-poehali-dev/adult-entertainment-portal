@@ -110,6 +110,9 @@ const getFilteredAndSortedItems = (
   selectedBodyType: string
 ) => {
   const filtered = catalogItems.filter(item => {
+    const isActive = item.isActive !== false;
+    if (!isActive) return false;
+    
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.seller.toLowerCase().includes(searchQuery.toLowerCase());
     

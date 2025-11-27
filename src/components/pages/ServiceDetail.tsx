@@ -33,6 +33,8 @@ export const ServiceDetailPage = ({
     return null;
   }
 
+  const isServiceActive = service.isActive !== false;
+
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <Button 
@@ -186,22 +188,40 @@ export const ServiceDetailPage = ({
               <p className="text-muted-foreground">За час услуг</p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button 
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6"
-                onClick={() => setShowBookingModal(true)}
-              >
-                <Icon name="Calendar" className="mr-2" size={20} />
-                Забронировать
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground text-lg py-6"
-                onClick={() => setCurrentPage('messages')}
-              >
-                <Icon name="MessageCircle" className="mr-2" size={20} />
-                Написать
-              </Button>
+              {!isServiceActive ? (
+                <Card className="bg-red-500/10 border-red-500/20">
+                  <CardContent className="pt-4">
+                    <div className="flex items-start gap-3">
+                      <Icon name="BanIcon" size={20} className="text-red-500 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold mb-1 text-red-500">Услуга недоступна</p>
+                        <p className="text-foreground/80">
+                          Данный продавец временно не принимает заказы. Бронирование и оплата недоступны.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  <Button 
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6"
+                    onClick={() => setShowBookingModal(true)}
+                  >
+                    <Icon name="Calendar" className="mr-2" size={20} />
+                    Забронировать
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground text-lg py-6"
+                    onClick={() => setCurrentPage('messages')}
+                  >
+                    <Icon name="MessageCircle" className="mr-2" size={20} />
+                    Написать
+                  </Button>
+                </>
+              )}
 
               <Separator />
 

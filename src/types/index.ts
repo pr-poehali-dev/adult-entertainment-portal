@@ -9,6 +9,15 @@ export interface Profile {
   verified: boolean;
 }
 
+export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
+
+export interface WorkSchedule {
+  type: WorkScheduleType;
+  customHours?: {
+    [key: string]: { start: string; end: string; enabled: boolean };
+  };
+}
+
 export interface CatalogItem {
   id: number;
   title: string;
@@ -26,6 +35,8 @@ export interface CatalogItem {
   age?: number;
   height?: number;
   bodyType?: string;
+  workSchedule?: WorkSchedule;
+  isActive?: boolean;
 }
 
 export interface SellerProfile {
@@ -47,6 +58,8 @@ export interface SellerProfile {
     repeatClients: number;
   };
   availability: string[];
+  workSchedule?: WorkSchedule;
+  isActive?: boolean;
 }
 
 export interface Review {
