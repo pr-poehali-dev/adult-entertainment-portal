@@ -45,6 +45,8 @@ const BookingModal = ({
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [guests, setGuests] = useState<string>('1');
+  const [tipAmount, setTipAmount] = useState<number>(0);
+  const [customTip, setCustomTip] = useState<string>('');
   
   if (!showBookingModal) return null;
 
@@ -62,7 +64,8 @@ const BookingModal = ({
   const timeSlots = generateTimeSlots();
   const duration = parseInt(bookingDuration) || 1;
   const totalPrice = servicePrice * duration;
-  const prepayment = totalPrice * 0.3;
+  const finalTotal = totalPrice + tipAmount;
+  const prepayment = finalTotal * 0.3;
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in">
@@ -271,9 +274,69 @@ const BookingModal = ({
                   <span className="font-semibold text-primary">{prepayment.toLocaleString('ru-RU')} ₽</span>
                 </div>
                 <Separator className="bg-primary/20" />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Icon name="Heart" size={18} className="text-pink-500" />
+                    <span className="font-semibold">Чаевые продавцу</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[500, 1000, 2000, 5000].map((amount) => (
+                      <button
+                        key={amount}
+                        type="button"
+                        onClick={() => {
+                          setTipAmount(amount);
+                          setCustomTip('');
+                        }}
+                        className={`py-2 px-3 rounded-md text-sm transition-all ${
+                          tipAmount === amount && !customTip
+                            ? 'bg-pink-500 text-white shadow-md scale-105'
+                            : 'bg-muted hover:bg-muted/80 text-foreground'
+                        }`}
+                      >
+                        {amount.toLocaleString('ru-RU')} ₽
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      placeholder="Своя сумма"
+                      value={customTip}
+                      onChange={(e) => {
+                        setCustomTip(e.target.value);
+                        setTipAmount(parseInt(e.target.value) || 0);
+                      }}
+                      className="bg-background border-border"
+                      min="0"
+                    />
+                    {tipAmount > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setTipAmount(0);
+                          setCustomTip('');
+                        }}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <Icon name="X" size={16} />
+                      </Button>
+                    )}
+                  </div>
+                  {tipAmount > 0 && (
+                    <div className="flex items-center gap-2 p-3 bg-pink-500/10 rounded-lg border border-pink-500/20">
+                      <Icon name="Sparkles" size={16} className="text-pink-500" />
+                      <span className="text-sm text-foreground/80">
+                        Вы добавили <span className="font-semibold text-pink-500">{tipAmount.toLocaleString('ru-RU')} ₽</span> чаевых
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <Separator className="bg-primary/20" />
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold">Итого к оплате:</span>
-                  <span className="text-2xl font-bold text-primary">{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                  <span className="text-2xl font-bold text-primary">{finalTotal.toLocaleString('ru-RU')} ₽</span>
                 </div>
               </div>
 
