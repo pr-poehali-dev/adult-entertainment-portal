@@ -68,13 +68,16 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
             >
               <CardHeader>
                 <div className="h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
-                  <Icon name="Sparkles" size={48} className="text-primary" />
+                  <Icon name={category.icon as any} size={48} className="text-primary" />
                 </div>
                 <CardTitle className="text-xl text-center mb-3">{category.name}</CardTitle>
                 {category.subcategories.length > 0 && (
-                  <div className="text-sm text-muted-foreground text-center space-y-1">
+                  <div className="text-sm text-muted-foreground text-center space-y-2">
                     {category.subcategories.map(sub => (
-                      <div key={sub.id}>• {sub.name}</div>
+                      <div key={sub.id} className="flex items-center justify-center gap-2">
+                        <Icon name={sub.icon as any} size={14} />
+                        <span>{sub.name}</span>
+                      </div>
                     ))}
                   </div>
                 )}
