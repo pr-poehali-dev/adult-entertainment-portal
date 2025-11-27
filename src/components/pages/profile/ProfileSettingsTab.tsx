@@ -11,6 +11,9 @@ import { WorkScheduleManager } from '@/components/WorkScheduleManager';
 import { VIPStatus } from '@/components/vip/VIPStatus';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { VIPUpgradeModal } from '@/components/vip/VIPUpgradeModal';
+import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
+import { HealthCertificateStatus } from '@/components/health/HealthCertificateStatus';
+import { HealthCertificateUploadModal } from '@/components/health/HealthCertificateUploadModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProfileSettingsTabProps {
@@ -37,6 +40,7 @@ export const ProfileSettingsTab = ({
   const { toast } = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showVIPModal, setShowVIPModal] = useState(false);
+  const [showHealthCertModal, setShowHealthCertModal] = useState(false);
 
   const handleVerificationSubmit = (files: File[]) => {
     setIsVerified(true);
@@ -69,6 +73,50 @@ export const ProfileSettingsTab = ({
 
   const isVIP = profile.vipStatus === 'vip';
   const isVIPExpired = profile.vipExpiry ? new Date(profile.vipExpiry) < new Date() : true;
+  
+  const canUploadHealthCert = () => {
+    if (!profile.lastHealthCertificateUpload) return true;
+    const lastUpload = new Date(profile.lastHealthCertificateUpload);
+    const now = new Date();
+    const threeMonthsInMs = 90 * 24 * 60 * 60 * 1000;
+    return (now.getTime() - lastUpload.getTime()) >= threeMonthsInMs;
+  };
+  
+  const getNextAvailableUpload = () => {
+    if (!profile.lastHealthCertificateUpload) return null;
+    const lastUpload = new Date(profile.lastHealthCertificateUpload);
+    const nextDate = new Date(lastUpload);
+    nextDate.setMonth(nextDate.getMonth() + 3);
+    return nextDate.toISOString();
+  };
+  
+  const handleHealthCertUpload = (file: File) => {
+    const now = new Date();
+    const expiry = new Date(now);
+    expiry.setMonth(expiry.getMonth() + 3);
+    
+    const vipExpiry = new Date(now);
+    vipExpiry.setMonth(vipExpiry.getMonth() + 3);
+    
+    onProfileUpdate?.({
+      healthCertified: true,
+      healthCertificateExpiry: expiry.toISOString(),
+      lastHealthCertificateUpload: now.toISOString(),
+      vipStatus: 'vip',
+      vipExpiry: vipExpiry.toISOString(),
+    });
+    
+    toast({
+      title: "Справка загружена успешно!",
+      description: "Вы получили статус 'Здоровый продавец' и бесплатный VIP на 3 месяца",
+    });
+    
+    setShowHealthCertModal(false);
+  };
+  
+  const isHealthCertExpired = profile.healthCertificateExpiry 
+    ? new Date(profile.healthCertificateExpiry) < new Date() 
+    : true;
 
   return (
     <>
@@ -141,6 +189,55 @@ export const ProfileSettingsTab = ({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
+                  <Icon name="Heart" size={24} className="text-green-500" />
+                  Медицинская справка "СЕКС НА ПЛЯЖЕ"
+                  {profile.healthCertified && !isHealthCertExpired && <HealthCertificateBadge size="sm" />}
+                </CardTitle>
+                <CardDescription>
+                  Подтвердите здоровье и получите особый статус + бесплатный VIP на 3 месяца
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {profile.healthCertified && profile.healthCertificateExpiry && (
+                  <HealthCertificateStatus expiry={profile.healthCertificateExpiry} />
+                )}
+                
+                <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                  <div className="flex items-center gap-2 text-sm font-semibold">
+                    <Icon name="Info" size={16} className="text-primary" />
+                    Что даёт справка:
+                  </div>
+                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside ml-4">
+                    <li>Статус "Здоровый продавец" на 3 месяца</li>
+                    <li>Бесплатный VIP статус на 3 месяца</li>
+                    <li>Повышенное доверие клиентов</li>
+                    <li>Можно загружать раз в 3 месяца</li>
+                  </ul>
+                </div>
+                
+                <Button 
+                  onClick={() => setShowHealthCertModal(true)} 
+                  variant={profile.healthCertified && !isHealthCertExpired ? "outline" : "default"}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white"
+                  disabled={!canUploadHealthCert()}
+                >
+                  <Icon name="Upload" size={16} />
+                  {profile.healthCertified && !isHealthCertExpired 
+                    ? 'Обновить справку' 
+                    : 'Загрузить справку'}
+                </Button>
+                
+                {!canUploadHealthCert() && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    Следующая загрузка доступна {new Date(getNextAvailableUpload()!).toLocaleDateString('ru-RU')}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
                   <Icon name="Clock" size={24} className="text-primary" />
                   График работы
                 </CardTitle>
@@ -198,6 +295,14 @@ export const ProfileSettingsTab = ({
         currentStatus={profile.vipStatus}
         currentExpiry={profile.vipExpiry}
         onPurchase={handleVIPPurchase}
+      />
+
+      <HealthCertificateUploadModal
+        isOpen={showHealthCertModal}
+        onClose={() => setShowHealthCertModal(false)}
+        onSubmit={handleHealthCertUpload}
+        canUpload={canUploadHealthCert()}
+        nextAvailableUpload={getNextAvailableUpload()}
       />
     </>
   );

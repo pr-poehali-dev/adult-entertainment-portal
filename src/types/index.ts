@@ -10,6 +10,9 @@ export interface Profile {
   verified: boolean;
   vipStatus: VIPStatus;
   vipExpiry: string | null;
+  healthCertified?: boolean;
+  healthCertificateExpiry?: string | null;
+  lastHealthCertificateUpload?: string | null;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
@@ -65,6 +68,9 @@ export interface SellerProfile {
   isActive?: boolean;
   vipStatus: VIPStatus;
   vipExpiry: string | null;
+  healthCertified?: boolean;
+  healthCertificateExpiry?: string | null;
+  lastHealthCertificateUpload?: string | null;
 }
 
 export interface Review {

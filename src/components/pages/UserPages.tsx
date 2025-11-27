@@ -10,6 +10,7 @@ import Icon from '@/components/ui/icon';
 import { Page, Profile, CatalogItem, UserRole, WorkSchedule } from '@/types';
 import { TipModal } from '@/components/TipModal';
 import { VIPBadge } from '@/components/vip/VIPBadge';
+import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
 import { Wallet, Transaction } from '@/types';
 import { ProfileWalletTab } from './profile/ProfileWalletTab';
 import { ProfileSettingsTab } from './profile/ProfileSettingsTab';
@@ -208,6 +209,9 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-3xl font-bold">{profile.name}</h2>
                 {isVIP && !isVIPExpired && <VIPBadge size="md" />}
+                {profile.healthCertified && profile.healthCertificateExpiry && new Date(profile.healthCertificateExpiry) > new Date() && profile.role === 'seller' && (
+                  <HealthCertificateBadge size="md" />
+                )}
               </div>
               <div className="flex items-center gap-4 text-muted-foreground">
                 {isVerified && (
