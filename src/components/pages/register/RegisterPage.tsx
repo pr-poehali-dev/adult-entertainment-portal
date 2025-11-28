@@ -24,6 +24,17 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [showVerification, setShowVerification] = useState(false);
   const [pendingRole, setPendingRole] = useState<UserRole>(null);
   
+  const handleOneClickRegister = (role: UserRole) => {
+    setUserRole(role);
+    setCurrentPage('home');
+    
+    toast({
+      title: "Регистрация завершена!",
+      description: `Вы зарегистрированы как ${role === 'buyer' ? 'покупатель' : 'продавец'}. Заполните профиль для полного доступа.`,
+      duration: 5000,
+    });
+  };
+  
   const handleRegister = (role: UserRole) => {
     if (!contactValue) {
       toast({
@@ -103,6 +114,41 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         <CardDescription className="text-center text-lg">Выберите тип аккаунта для продолжения</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-8 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg border-2 border-primary/20">
+          <div className="text-center mb-4">
+            <Icon name="Zap" size={32} className="text-primary mx-auto mb-2" />
+            <h3 className="text-xl font-bold text-foreground mb-1">Регистрация в 1 клик</h3>
+            <p className="text-sm text-muted-foreground">Быстрый старт без заполнения формы. Профиль можно заполнить позже.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              variant="outline"
+              className="h-14 border-2 border-primary/40 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105"
+              onClick={() => handleOneClickRegister('buyer')}
+            >
+              <Icon name="ShoppingBag" size={20} className="mr-2" />
+              Покупатель
+            </Button>
+            <Button
+              variant="outline"
+              className="h-14 border-2 border-primary/40 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105"
+              onClick={() => handleOneClickRegister('seller')}
+            >
+              <Icon name="Briefcase" size={20} className="mr-2" />
+              Продавец
+            </Button>
+          </div>
+        </div>
+
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-sm uppercase">
+            <span className="bg-card px-4 text-muted-foreground font-medium">или полная регистрация</span>
+          </div>
+        </div>
+
         <Tabs defaultValue="buyer" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="buyer">Покупатель</TabsTrigger>
@@ -302,6 +348,19 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             </Button>
           </TabsContent>
         </Tabs>
+        
+        <div className="text-center mt-6 pt-4 border-t border-border">
+          <p className="text-sm text-muted-foreground mb-2">
+            Уже есть аккаунт?
+          </p>
+          <Button
+            variant="link"
+            className="text-primary hover:text-primary/80 font-semibold"
+            onClick={() => setCurrentPage('login')}
+          >
+            Войти в систему →
+          </Button>
+        </div>
       </CardContent>
     </Card>
     

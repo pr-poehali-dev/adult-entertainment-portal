@@ -15,13 +15,17 @@ interface LoginPageProps {
 
 export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   const { toast } = useToast();
+  const [loginMethod, setLoginMethod] = useState<'email' | 'username'>('email');
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    const loginValue = loginMethod === 'email' ? email : username;
+    
+    if (!loginValue || !password) {
       toast({
         title: "Ошибка",
         description: "Заполните все поля",
@@ -33,7 +37,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
     setIsLoading(true);
 
     setTimeout(() => {
-      const isSeller = email.includes('seller') || email.includes('продавец');
+      const isSeller = loginValue.includes('seller') || loginValue.includes('продавец');
       const role: UserRole = isSeller ? 'seller' : 'buyer';
       
       setUserRole(role);
@@ -75,19 +79,56 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="bg-background border-border h-12"
+          <div className="flex gap-2 p-1 bg-muted rounded-lg">
+            <Button
+              variant={loginMethod === 'email' ? 'default' : 'ghost'}
+              className="flex-1"
+              onClick={() => setLoginMethod('email')}
               disabled={isLoading}
-            />
+            >
+              <Icon name="Mail" size={16} className="mr-2" />
+              Email
+            </Button>
+            <Button
+              variant={loginMethod === 'username' ? 'default' : 'ghost'}
+              className="flex-1"
+              onClick={() => setLoginMethod('username')}
+              disabled={isLoading}
+            >
+              <Icon name="User" size={16} className="mr-2" />
+              Логин
+            </Button>
           </div>
+
+          {loginMethod === 'email' ? (
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="bg-background border-border h-12"
+                disabled={isLoading}
+              />
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Label htmlFor="username">Логин</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="bg-background border-border h-12"
+                disabled={isLoading}
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
