@@ -104,16 +104,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Купите билет за 100 ₽ и выигрывайте новенький iPhone 17 каждое воскресенье
           </p>
-          {!userLogin && (
-            <Button
-              onClick={() => setShowQuickReg(true)}
-              size="lg"
-              className="shadow-xl"
-            >
-              <Icon name="Zap" size={20} className="mr-2" />
-              Быстрая регистрация за 1 клик
-            </Button>
-          )}
+
           {userLogin && (
             <div className="flex items-center justify-center gap-3">
               <Badge variant="outline" className="px-4 py-2 text-base">
