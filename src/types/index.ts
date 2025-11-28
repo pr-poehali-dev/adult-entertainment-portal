@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -232,4 +232,47 @@ export interface Transaction {
   fromUser?: string;
   toUser?: string;
   fee?: number;
+}
+
+export type WorkOpportunityType = 
+  | 'photo_shoot'
+  | 'video_shoot'
+  | 'nude_photoshoot'
+  | 'porn_casting'
+  | 'first_time';
+
+export interface WorkOpportunity {
+  id: number;
+  type: WorkOpportunityType;
+  title: string;
+  description: string;
+  payment: string;
+  paymentAmount: number;
+  currency: Currency;
+  requirements: string[];
+  location: string;
+  duration: string;
+  image: string;
+  contactInfo: string;
+  isVerified: boolean;
+  postedDate: string;
+  company?: string;
+}
+
+export interface PaidAd {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  currency: Currency;
+  category: string;
+  images: string[];
+  sellerName: string;
+  sellerRating: number;
+  sellerVerified: boolean;
+  location: string;
+  postedDate: string;
+  views: number;
+  isPremium: boolean;
+  contactInfo: string;
 }

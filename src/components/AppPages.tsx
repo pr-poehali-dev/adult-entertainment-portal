@@ -3,6 +3,7 @@ import { HomePage, CatalogPage } from '@/components/pages/HomeAndCatalog';
 import { ServiceDetailPage } from '@/components/pages/ServiceDetail';
 import { SellerProfilePage } from '@/components/pages/SellerProfile';
 import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
+import { WorkPage } from '@/components/pages/work/WorkPage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -157,6 +158,9 @@ export const useAppPages = ({
       
       case 'rules':
         return <RulesPage />;
+      
+      case 'work':
+        return <WorkPage />;
       
       case 'seller-profile':
         const seller = sellerProfiles.find(s => s.id === selectedSellerId);

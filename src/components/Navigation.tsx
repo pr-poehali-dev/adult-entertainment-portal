@@ -50,6 +50,9 @@ const Navigation = ({
           <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             {t.nav.catalog}
           </button>
+          <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+            Работа
+          </button>
           {userRole && (
             <>
               <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
