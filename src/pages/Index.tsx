@@ -13,7 +13,7 @@ import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [userRole, setUserRole] = useState<UserRole>(null);
+  const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [searchQuery, setSearchQuery] = useState('');
   const [favorites, setFavorites] = useState<number[]>([]);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
