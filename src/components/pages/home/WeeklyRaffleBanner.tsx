@@ -87,7 +87,7 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
               
               <p className="text-white/90 text-lg leading-relaxed">
                 Каждое воскресенье в 12:00 МСК мы разыгрываем новый iPhone 17 среди участников. 
-                Билет всего 100 ₽!
+                Билет всего 100 ₽. Один аккаунт = один билет.
               </p>
 
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30">
@@ -112,6 +112,16 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                 </div>
               </div>
               
+              <div className="bg-yellow-500/20 backdrop-blur-sm border-2 border-yellow-400/40 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <Icon name="Info" size={20} className="text-yellow-300 mt-0.5 flex-shrink-0" />
+                  <p className="text-white/95 text-sm">
+                    <span className="font-bold">Честная игра:</span> Один аккаунт может купить только 1 билет. 
+                    Это гарантирует равные шансы для всех участников.
+                  </p>
+                </div>
+              </div>
+
               <div className="flex flex-wrap gap-4 items-center">
                 <Button
                   onClick={() => setCurrentPage('raffle')}

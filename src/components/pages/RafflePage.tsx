@@ -23,7 +23,6 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [ticketCount, setTicketCount] = useState(1);
   const [isParticipating, setIsParticipating] = useState(false);
 
   const winners: Winner[] = [
@@ -45,10 +44,9 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
     }
 
     setIsParticipating(true);
-    const totalPrice = ticketCount * 100;
     toast({
       title: `Билет куплен! 🎉`,
-      description: `Вы купили ${ticketCount} билет(ов) на сумму ${totalPrice} ₽. Розыгрыш в воскресенье в 12:00 МСК. Уведомление придёт на email.`,
+      description: `Вы купили 1 билет за 100 ₽. Розыгрыш в воскресенье в 12:00 МСК. Уведомление придёт на email.`,
       duration: 6000,
     });
   };
@@ -132,25 +130,15 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                       className="h-12 bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50"
                     />
                   </div>
-                  <div>
-                    <label className="text-white text-sm mb-2 block">Количество билетов</label>
-                    <div className="flex items-center gap-3">
-                      <Button
-                        onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
-                        className="h-12 w-12 bg-white/20 hover:bg-white/30 text-white"
-                      >
-                        <Icon name="Minus" size={20} />
-                      </Button>
-                      <div className="flex-1 text-center">
-                        <p className="text-3xl font-bold text-white">{ticketCount}</p>
-                        <p className="text-sm text-white/70">× 100 ₽ = {ticketCount * 100} ₽</p>
+                  <div className="bg-yellow-500/20 backdrop-blur-sm border-2 border-yellow-400/50 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <Icon name="Info" size={20} className="text-yellow-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-white font-semibold text-sm mb-1">Ограничение</p>
+                        <p className="text-white/90 text-xs">
+                          Один аккаунт может купить только 1 билет. Это делает розыгрыш честным для всех участников.
+                        </p>
                       </div>
-                      <Button
-                        onClick={() => setTicketCount(Math.min(100, ticketCount + 1))}
-                        className="h-12 w-12 bg-white/20 hover:bg-white/30 text-white"
-                      >
-                        <Icon name="Plus" size={20} />
-                      </Button>
                     </div>
                   </div>
                   <Button
@@ -158,7 +146,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                     className="w-full h-14 bg-white text-primary hover:bg-white/90 font-bold text-lg"
                   >
                     <Icon name="Ticket" size={20} className="mr-2" />
-                    Купить {ticketCount} билет(ов) за {ticketCount * 100} ₽
+                    Купить билет за 100 ₽
                   </Button>
                   <p className="text-white/70 text-xs text-center">
                     Нажимая кнопку, вы соглашаетесь с правилами розыгрыша
@@ -169,7 +157,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                   <Icon name="CheckCircle2" size={48} className="text-green-400 mx-auto mb-3" />
                   <p className="text-white font-bold text-xl mb-2">Билет куплен!</p>
                   <p className="text-white/80 text-sm">
-                    Вы купили {ticketCount} билет(ов) на сумму {ticketCount * 100} ₽. Розыгрыш в воскресенье в 12:00 МСК!
+                    Вы купили 1 билет за 100 ₽. Розыгрыш в воскресенье в 12:00 МСК!
                   </p>
                 </div>
               )}
@@ -192,7 +180,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                   <div>
                     <h4 className="font-bold mb-1">Покупка билета</h4>
                     <p className="text-sm text-muted-foreground">
-                      Заполните форму и купите билет за 100 ₽. Можно купить несколько билетов
+                      Заполните форму и купите билет за 100 ₽. Один аккаунт = один билет
                     </p>
                   </div>
                 </div>
