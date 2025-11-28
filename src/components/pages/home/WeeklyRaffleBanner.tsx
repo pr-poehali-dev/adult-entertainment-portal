@@ -16,7 +16,24 @@ interface TimeLeft {
 
 export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [ticketsSold, setTicketsSold] = useState(1247);
+  const [ticketsSold, setTicketsSold] = useState(47);
+  const [isQuickDraw, setIsQuickDraw] = useState(false);
+  const [quickDrawSeconds, setQuickDrawSeconds] = useState(60);
+
+  useEffect(() => {
+    if (ticketsSold < 100) {
+      setIsQuickDraw(true);
+    }
+  }, [ticketsSold]);
+
+  useEffect(() => {
+    if (isQuickDraw && quickDrawSeconds > 0) {
+      const timer = setInterval(() => {
+        setQuickDrawSeconds(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isQuickDraw, quickDrawSeconds]);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -59,7 +76,10 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTicketsSold(prev => prev + Math.floor(Math.random() * 3));
+      setTicketsSold(prev => {
+        const newValue = prev + Math.floor(Math.random() * 3);
+        return newValue > 100 ? 100 : newValue;
+      });
     }, 5000);
 
     return () => clearInterval(interval);
@@ -90,34 +110,56 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                 Билет всего 100 ₽. Один аккаунт = один билет.
               </p>
 
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30">
-                <p className="text-white/90 text-sm mb-3 text-center">До следующего розыгрыша:</p>
-                <div className="grid grid-cols-4 gap-3">
-                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                    <p className="text-3xl font-bold text-white">{timeLeft.days}</p>
-                    <p className="text-xs text-white/80 mt-1">дней</p>
+              {isQuickDraw ? (
+                <div className="bg-red-500/30 backdrop-blur-sm rounded-2xl p-6 border-2 border-red-400/50">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <Icon name="Zap" size={20} className="text-yellow-300 animate-pulse" />
+                    <p className="text-white font-bold text-lg">БЫСТРЫЙ РОЗЫГРЫШ!</p>
+                    <Icon name="Zap" size={20} className="text-yellow-300 animate-pulse" />
                   </div>
-                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                    <p className="text-3xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</p>
-                    <p className="text-xs text-white/80 mt-1">часов</p>
+                  <p className="text-white/90 text-sm mb-3 text-center">
+                    Участников меньше 100! Розыгрыш через:
+                  </p>
+                  <div className="flex justify-center">
+                    <div className="bg-white/20 rounded-2xl p-6 text-center backdrop-blur-sm min-w-[120px]">
+                      <p className="text-6xl font-bold text-white animate-pulse">{quickDrawSeconds}</p>
+                      <p className="text-sm text-white/90 mt-2">секунд</p>
+                    </div>
                   </div>
-                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                    <p className="text-3xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</p>
-                    <p className="text-xs text-white/80 mt-1">минут</p>
-                  </div>
-                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                    <p className="text-3xl font-bold text-white animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</p>
-                    <p className="text-xs text-white/80 mt-1">секунд</p>
+                  <p className="text-white/80 text-xs text-center mt-4">
+                    Успейте купить билет и получить VIP!
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30">
+                  <p className="text-white/90 text-sm mb-3 text-center">До следующего розыгрыша:</p>
+                  <div className="grid grid-cols-4 gap-3">
+                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                      <p className="text-3xl font-bold text-white">{timeLeft.days}</p>
+                      <p className="text-xs text-white/80 mt-1">дней</p>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                      <p className="text-3xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</p>
+                      <p className="text-xs text-white/80 mt-1">часов</p>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                      <p className="text-3xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</p>
+                      <p className="text-xs text-white/80 mt-1">минут</p>
+                    </div>
+                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                      <p className="text-3xl font-bold text-white animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</p>
+                      <p className="text-xs text-white/80 mt-1">секунд</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               
               <div className="bg-yellow-500/20 backdrop-blur-sm border-2 border-yellow-400/40 rounded-xl p-4">
                 <div className="flex items-start gap-3">
                   <Icon name="Info" size={20} className="text-yellow-300 mt-0.5 flex-shrink-0" />
                   <p className="text-white/95 text-sm">
-                    <span className="font-bold">Честная игра:</span> Один аккаунт может купить только 1 билет. 
-                    Это гарантирует равные шансы для всех участников.
+                    <span className="font-bold">Правила участия:</span> Один аккаунт = один билет. 
+                    В розыгрыше участвуют только VIP-пользователи с купленным билетом.
                   </p>
                 </div>
               </div>
