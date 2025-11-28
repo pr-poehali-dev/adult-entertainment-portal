@@ -375,6 +375,18 @@ export interface DinnerSchedule {
   description?: string;
 }
 
+export interface TravelDestination {
+  id: number;
+  resort: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  pricePerDay: number;
+  currency: Currency;
+  description?: string;
+  amenities?: string[];
+}
+
 export interface ServiceProvider {
   id: number;
   name: string;
@@ -392,6 +404,7 @@ export interface ServiceProvider {
   currency: Currency;
   location: string;
   dinnerSchedules?: DinnerSchedule[];
+  travelDestinations?: TravelDestination[];
 }
 
 export type InvitationStatus = 'pending' | 'accepted' | 'rejected' | 'expired';
@@ -413,4 +426,36 @@ export interface DinnerInvitation {
   createdAt: string;
   expiresAt: string;
   message?: string;
+}
+
+export interface ChatMessage {
+  id: number;
+  senderId: number;
+  senderName: string;
+  senderAvatar?: string;
+  text: string;
+  timestamp: string;
+  read: boolean;
+}
+
+export interface TravelInvitation {
+  id: number;
+  providerId: number;
+  providerName: string;
+  providerAvatar: string;
+  buyerId: number;
+  buyerName: string;
+  buyerAvatar?: string;
+  destinationId: number;
+  resort: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  pricePerDay: number;
+  totalPrice: number;
+  currency: Currency;
+  status: InvitationStatus;
+  createdAt: string;
+  messages: ChatMessage[];
+  initialMessage?: string;
 }

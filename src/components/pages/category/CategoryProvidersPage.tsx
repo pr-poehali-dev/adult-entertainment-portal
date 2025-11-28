@@ -7,6 +7,7 @@ import { ServiceProvider, Page, DinnerSchedule } from '@/types';
 import { getCategoryName } from '@/data/serviceCategories';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
+import { AbroadProvidersPage } from './AbroadProvidersPage';
 
 interface CategoryProvidersPageProps {
   categoryId: string;
@@ -24,6 +25,10 @@ const dayNames: Record<string, string> = {
 };
 
 export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryProvidersPageProps) => {
+  if (categoryId === 'abroad') {
+    return <AbroadProvidersPage setCurrentPage={setCurrentPage} />;
+  }
+
   const { language } = useLanguage();
   const { toast } = useToast();
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
