@@ -41,19 +41,19 @@ export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => v
       <HomeCategoriesSection />
       <HomeAdvantagesSection />
       
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:right-8 md:translate-x-0 z-50">
         <button
           onClick={() => setCurrentPage('admin')}
-          className="group relative bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white px-6 py-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-110 flex items-center gap-3"
+          className="group relative bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white px-4 md:px-6 py-3 md:py-4 rounded-full shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-110 flex items-center gap-2 md:gap-3"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-6 md:h-6">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
           </svg>
-          <span className="font-semibold">Админ-панель</span>
+          <span className="font-semibold text-sm md:text-base">Админ-панель</span>
           <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
         </button>
         
-        <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 md:left-auto md:right-0 md:translate-x-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
           <div className="bg-card border border-border rounded-lg shadow-xl p-3 whitespace-nowrap">
             <p className="text-sm font-medium">Быстрый доступ к управлению</p>
           </div>

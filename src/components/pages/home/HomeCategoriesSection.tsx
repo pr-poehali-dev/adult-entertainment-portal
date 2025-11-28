@@ -9,11 +9,11 @@ export const HomeCategoriesSection = () => {
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold mb-4">
+        <div className="text-center mb-16 px-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             <span className="gold-shimmer">{t.home.categoriesTitle}</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
             Выберите категорию премиум-услуг для незабываемого опыта
           </p>
         </div>
