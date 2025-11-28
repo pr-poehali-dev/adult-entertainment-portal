@@ -10,6 +10,7 @@ import { ReferralPage } from '@/components/pages/referral/ReferralPage';
 import { CategoryProvidersPage } from '@/components/pages/category/CategoryProvidersPage';
 import { InvitationsPage } from '@/components/pages/invitations/InvitationsPage';
 import { RafflePage } from '@/components/pages/RafflePage';
+import { DatingPage } from '@/components/pages/DatingPage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -179,6 +180,9 @@ export const useAppPages = ({
       
       case 'raffle':
         return <RafflePage setCurrentPage={setCurrentPage} />;
+      
+      case 'dating':
+        return <DatingPage setCurrentPage={setCurrentPage} />;
       
       case 'category':
         return <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />;
