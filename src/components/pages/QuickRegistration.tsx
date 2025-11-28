@@ -84,62 +84,74 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
 
   if (generatedCredentials) {
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <Card className="max-w-md w-full shadow-2xl">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <Icon name="CheckCircle2" size={32} className="text-green-600" />
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+        <Card className="max-w-2xl w-full shadow-2xl border-4 border-primary/30 animate-in zoom-in duration-500">
+          <CardHeader className="text-center pb-4">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-6 shadow-xl animate-pulse">
+              <Icon name="CheckCircle2" size={48} className="text-white" />
             </div>
-            <CardTitle className="text-2xl">Регистрация завершена!</CardTitle>
-            <CardDescription className="text-base mt-2">
-              Сохраните эти данные для следующих входов
+            <CardTitle className="text-4xl font-extrabold mb-3 bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent">
+              🎉 Регистрация завершена!
+            </CardTitle>
+            <CardDescription className="text-lg mt-3 font-medium">
+              Ваши данные для входа готовы
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-muted/50 rounded-xl p-6 space-y-4 border-2 border-primary/20">
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Ваш логин:</Label>
-                <div className="bg-background rounded-lg p-3 font-mono text-lg font-semibold break-all border border-border">
+          <CardContent className="space-y-6 pb-8">
+            <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 space-y-6 border-4 border-primary/40 shadow-xl">
+              <div className="space-y-3">
+                <Label className="text-base font-bold text-foreground flex items-center gap-2">
+                  <Icon name="User" size={20} className="text-primary" />
+                  Ваш логин:
+                </Label>
+                <div className="bg-white dark:bg-background rounded-xl p-5 font-mono text-2xl font-bold break-all border-4 border-primary/30 shadow-lg text-center">
                   {generatedCredentials.login}
                 </div>
               </div>
               
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Ваш пароль:</Label>
-                <div className="bg-background rounded-lg p-3 font-mono text-lg font-semibold break-all border border-border">
+              <div className="space-y-3">
+                <Label className="text-base font-bold text-foreground flex items-center gap-2">
+                  <Icon name="Lock" size={20} className="text-primary" />
+                  Ваш пароль:
+                </Label>
+                <div className="bg-white dark:bg-background rounded-xl p-5 font-mono text-2xl font-bold break-all border-4 border-primary/30 shadow-lg text-center">
                   {generatedCredentials.password}
                 </div>
               </div>
             </div>
 
-            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <Icon name="AlertTriangle" size={20} className="text-yellow-600 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-foreground">
-                  <span className="font-bold">Важно:</span> Сохраните эти данные в безопасном месте. 
-                  Они понадобятся для входа в аккаунт.
-                </p>
+            <div className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-4 border-yellow-500/40 rounded-xl p-6 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="bg-yellow-500 rounded-full p-2">
+                  <Icon name="AlertTriangle" size={24} className="text-white flex-shrink-0" />
+                </div>
+                <div>
+                  <p className="text-base font-bold text-foreground mb-2">⚠️ ВАЖНО! Сохраните эти данные!</p>
+                  <p className="text-sm text-foreground/90">
+                    Запишите логин и пароль в надёжное место. Они понадобятся для входа в аккаунт при следующих посещениях.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4">
               <Button
                 onClick={handleCopyCredentials}
                 variant="outline"
                 size="lg"
-                className="w-full"
+                className="w-full h-16 text-lg font-bold border-2 hover:border-primary hover:bg-primary/10"
               >
-                <Icon name="Copy" size={20} className="mr-2" />
-                Скопировать данные
+                <Icon name="Copy" size={24} className="mr-3" />
+                📋 Скопировать логин и пароль
               </Button>
               
               <Button
                 onClick={handleContinue}
                 size="lg"
-                className="w-full"
+                className="w-full h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-xl"
               >
                 Продолжить
-                <Icon name="ArrowRight" size={20} className="ml-2" />
+                <Icon name="ArrowRight" size={24} className="ml-3" />
               </Button>
             </div>
           </CardContent>
