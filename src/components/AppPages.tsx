@@ -9,6 +9,7 @@ import { AdminPage } from '@/components/pages/admin/AdminPage';
 import { ReferralPage } from '@/components/pages/referral/ReferralPage';
 import { CategoryProvidersPage } from '@/components/pages/category/CategoryProvidersPage';
 import { InvitationsPage } from '@/components/pages/invitations/InvitationsPage';
+import { RafflePage } from '@/components/pages/RafflePage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -175,6 +176,9 @@ export const useAppPages = ({
       
       case 'referral':
         return <ReferralPage />;
+      
+      case 'raffle':
+        return <RafflePage setCurrentPage={setCurrentPage} />;
       
       case 'category':
         return <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />;

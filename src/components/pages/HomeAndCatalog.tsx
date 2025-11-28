@@ -4,6 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeAdvantagesSection } from './home/HomeAdvantagesSection';
+import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { CatalogFilters } from './catalog/CatalogFilters';
 import { CatalogGrid } from './catalog/CatalogGrid';
 import { getFilteredAndSortedItems } from './catalog/catalogUtils';
@@ -39,6 +40,7 @@ export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory }: { se
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
+      <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeAdvantagesSection />
       
