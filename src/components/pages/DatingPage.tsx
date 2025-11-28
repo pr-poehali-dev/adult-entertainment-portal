@@ -578,7 +578,9 @@ export const DatingPage = ({ setCurrentPage }: DatingPageProps) => {
               </Card>
             ))}
           </div>
-        ) : (
+        )}
+
+        {selectedProfile && (
           <Card className="max-w-5xl mx-auto">
             <CardContent className="p-0">
               <div className="relative">
