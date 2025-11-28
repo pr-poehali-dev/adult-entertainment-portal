@@ -10,6 +10,7 @@ import { catalogItems, reviews } from '@/data/mockData';
 import { Page, UserRole, Profile, Notification, Wallet } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -434,6 +435,7 @@ const Index = () => {
       </footer>
       
       <Toaster />
+      <InstallPrompt />
     </div>
     </div>
   );

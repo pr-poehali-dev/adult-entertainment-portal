@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .icon-container { display: flex; flex-wrap: wrap; gap: 20px; }
+        .icon-item { text-align: center; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator</h1>
+    <p>Icons will be generated from the crown symbol</p>
+    <div class="icon-container" id="icons"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 167, 180, 192, 384, 512];
+        const container = document.getElementById('icons');
+        
+        sizes.forEach(size => {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Black background
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Gold crown
+            ctx.fillStyle = '#D4AF37';
+            const scale = size / 512;
+            
+            // Simple crown shape
+            ctx.beginPath();
+            ctx.moveTo(256 * scale, 80 * scale);
+            ctx.lineTo(220 * scale, 180 * scale);
+            ctx.lineTo(180 * scale, 180 * scale);
+            ctx.lineTo(215 * scale, 240 * scale);
+            ctx.lineTo(190 * scale, 340 * scale);
+            ctx.lineTo(256 * scale, 290 * scale);
+            ctx.lineTo(322 * scale, 340 * scale);
+            ctx.lineTo(297 * scale, 240 * scale);
+            ctx.lineTo(332 * scale, 180 * scale);
+            ctx.lineTo(292 * scale, 180 * scale);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Circle on top
+            ctx.beginPath();
+            ctx.arc(256 * scale, 150 * scale, 30 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            const item = document.createElement('div');
+            item.className = 'icon-item';
+            item.innerHTML = `<h3>${size}x${size}</h3>`;
+            item.appendChild(canvas);
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = 'Download';
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.download = `icon-${size}x${size}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            item.appendChild(downloadBtn);
+            
+            container.appendChild(item);
+        });
+    </script>
+</body>
+</html>
