@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import BookingModal from '@/components/BookingModal';
 import ReviewModal from '@/components/ReviewModal';
@@ -9,6 +9,7 @@ import { useAppPages } from '@/components/AppPages';
 import { catalogItems, reviews } from '@/data/mockData';
 import { Page, UserRole, Profile, Notification, Wallet } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -34,6 +35,7 @@ const Index = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const { toast } = useToast();
+  const { playNotificationSound } = useNotificationSound();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -119,6 +121,7 @@ const Index = () => {
       read: false
     };
     setNotifications([newNotif, ...notifications]);
+    playNotificationSound(type);
   };
 
   const handleBookingSubmit = () => {
@@ -179,6 +182,29 @@ const Index = () => {
   const handleProfileUpdate = (updatedProfile: Partial<Profile>) => {
     setProfile(prev => ({ ...prev, ...updatedProfile }));
   };
+
+  useEffect(() => {
+    if (!userRole) return;
+
+    const simulateNotifications = () => {
+      const notificationTypes: Array<'message' | 'booking' | 'review' | 'system'> = ['message', 'booking', 'review', 'system'];
+      const messages = {
+        message: ['У вас новое сообщение от клиента', 'Продавец ответил на ваш вопрос', 'Новое сообщение в чате'],
+        booking: ['Новое бронирование получено', 'Бронирование подтверждено', 'Изменение в расписании'],
+        review: ['Вы получили новый отзыв', 'Клиент оставил 5 звёзд', 'Новая оценка вашего сервиса'],
+        system: ['Обновление системы', 'Ваш профиль просмотрели', 'Новые функции доступны']
+      };
+
+      const randomType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+      const randomMessage = messages[randomType][Math.floor(Math.random() * messages[randomType].length)];
+      
+      addNotification(randomType, randomType === 'message' ? 'Новое сообщение' : randomType === 'booking' ? 'Бронирование' : randomType === 'review' ? 'Новый отзыв' : 'Системное уведомление', randomMessage);
+    };
+
+    const intervalId = setInterval(simulateNotifications, 30000);
+
+    return () => clearInterval(intervalId);
+  }, [userRole, notifications]);
 
   const { renderPage } = useAppPages({
     currentPage,
