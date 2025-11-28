@@ -33,42 +33,42 @@ const Navigation = ({
   const { language, setLanguage, t } = useLanguage();
   
   return (
-  <nav className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-    <div className="container mx-auto px-4 py-4">
+  <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
+    <div className="container mx-auto px-4 py-5">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
-          <Icon name="Sparkles" size={28} className="text-purple-500" />
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-primary bg-clip-text text-transparent">
-            Magic
+        <div className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
+          <Icon name="Crown" size={32} className="text-primary" />
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+            <span className="gold-shimmer">Elite</span>
           </h1>
         </div>
         
-        <div className="hidden md:flex items-center space-x-6">
-          <button onClick={() => setCurrentPage('home')} className="text-foreground/80 hover:text-primary transition-colors">
+        <div className="hidden md:flex items-center space-x-8">
+          <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             {t.nav.home}
           </button>
-          <button onClick={() => setCurrentPage('catalog')} className="text-foreground/80 hover:text-primary transition-colors">
+          <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             {t.nav.catalog}
           </button>
           {userRole && (
             <>
-              <button onClick={() => setCurrentPage('favorites')} className="text-foreground/80 hover:text-primary transition-colors">
+              <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
                 {t.nav.favorites}
               </button>
               <button 
                 onClick={() => setCurrentPage('messages')} 
-                className="text-foreground/80 hover:text-primary transition-colors relative"
+                className="text-foreground font-medium hover:text-primary transition-colors relative tracking-wide"
               >
                 {t.nav.messages}
                 {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
-                  <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-2 w-5 h-5 bg-gradient-to-r from-secondary to-secondary/90 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg">
                     {notifications.filter(n => !n.read && n.type === 'message').length}
                   </span>
                 )}
               </button>
             </>
           )}
-          <button onClick={() => setCurrentPage('rules')} className="text-foreground/80 hover:text-primary transition-colors">
+          <button onClick={() => setCurrentPage('rules')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             {t.nav.rules}
           </button>
         </div>

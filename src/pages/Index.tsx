@@ -4,6 +4,7 @@ import BookingModal from '@/components/BookingModal';
 import ReviewModal from '@/components/ReviewModal';
 import PageTransition from '@/components/PageTransition';
 import { Toaster } from '@/components/ui/toaster';
+import Icon from '@/components/ui/icon';
 import { useAppPages } from '@/components/AppPages';
 import { catalogItems, reviews } from '@/data/mockData';
 import { Page, UserRole, Profile, Notification } from '@/types';
@@ -29,7 +30,7 @@ const Index = () => {
   const [selectedHeight, setSelectedHeight] = useState<string>('all');
   const [selectedBodyType, setSelectedBodyType] = useState<string>('all');
   const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const { toast } = useToast();
@@ -255,20 +256,33 @@ const Index = () => {
         onSubmitReview={handleSubmitReview}
       />
 
-      <footer className="border-t border-border mt-20 py-12 bg-card/30">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-primary mb-4">ÉLITE</h2>
-          <p className="text-muted-foreground mb-6">Премиальная платформа для взрослых</p>
-          <div className="flex justify-center gap-6 text-sm text-muted-foreground">
-            <button onClick={() => setCurrentPage('rules')} className="hover:text-primary transition-colors">
-              Правила
-            </button>
-            <span>•</span>
-            <a href="#" className="hover:text-primary transition-colors">Конфиденциальность</a>
-            <span>•</span>
-            <a href="#" className="hover:text-primary transition-colors">Поддержка</a>
+      <footer className="border-t border-border/50 mt-20 py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Icon name="Crown" size={40} className="text-primary" />
+              <h2 className="text-5xl font-bold gold-shimmer">Elite</h2>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Премиальная платформа эскорт-услуг для взыскательных клиентов
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-6">© 2024 ÉLITE. Все права защищены.</p>
+          
+          <div className="flex justify-center gap-8 mb-8 text-foreground/80">
+            <button onClick={() => setCurrentPage('rules')} className="hover:text-primary transition-colors font-medium">
+              Правила платформы
+            </button>
+            <span className="text-muted-foreground">•</span>
+            <a href="#" className="hover:text-primary transition-colors font-medium">Конфиденциальность</a>
+            <span className="text-muted-foreground">•</span>
+            <a href="#" className="hover:text-primary transition-colors font-medium">Поддержка 24/7</a>
+          </div>
+          
+          <div className="pt-8 border-t border-border/30">
+            <p className="text-center text-sm text-muted-foreground">
+              © 2024 <span className="font-semibold text-primary">Elite</span>. Все права защищены. 18+
+            </p>
+          </div>
         </div>
       </footer>
       

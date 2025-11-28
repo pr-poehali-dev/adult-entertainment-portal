@@ -84,16 +84,19 @@ export const CatalogPage = ({
   );
   
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-5xl font-bold text-primary">{t.catalog.title}</h1>
-        <Input 
-          placeholder={t.catalog.search} 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-64 bg-background border-border"
-        />
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
+      <div className="container mx-auto px-4 py-12 animate-fade-in">
+        <div className="flex items-center justify-between mb-12">
+          <h1 className="text-6xl font-bold">
+            <span className="gold-shimmer">{t.catalog.title}</span>
+          </h1>
+          <Input 
+            placeholder={t.catalog.search} 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-80 h-12 bg-card/80 backdrop-blur-sm border-border focus:border-primary shadow-lg"
+          />
+        </div>
       
       <CatalogFilters
         selectedCategory={selectedCategory}

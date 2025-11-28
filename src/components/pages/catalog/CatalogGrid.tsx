@@ -41,7 +41,7 @@ export const CatalogGrid = ({
             return (
               <Card 
                 key={item.id} 
-                className="group hover:scale-[1.02] transition-all duration-300 cursor-pointer bg-card border-border hover:border-primary animate-fade-in relative overflow-hidden"
+                className="group hover:scale-[1.02] transition-all duration-300 cursor-pointer bg-card border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-fade-in relative overflow-hidden backdrop-blur-sm"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="absolute top-4 right-4 z-10">
@@ -66,23 +66,23 @@ export const CatalogGrid = ({
                     setCurrentPage('service-detail');
                   }}
                 >
-                  <div className="relative h-72 overflow-hidden">
+                  <div className="relative h-80 overflow-hidden">
                     <img 
                       src={item.image} 
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                     
                     <div className="absolute top-4 left-4 flex flex-col gap-2">
-                      <Badge className="bg-primary text-primary-foreground w-fit">{item.category}</Badge>
+                      <Badge className="bg-gradient-to-r from-primary to-primary/90 text-white border-0 shadow-lg w-fit font-semibold">{item.category}</Badge>
                       {isActive ? (
-                        <Badge className="bg-green-500 text-white w-fit flex items-center gap-1">
+                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 shadow-lg w-fit flex items-center gap-1">
                           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                           {t.catalog.available}
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="w-fit">
+                        <Badge variant="secondary" className="glass-effect w-fit">
                           {t.catalog.availableFrom} {getNextAvailableTime(item.workSchedule)}
                         </Badge>
                       )}
@@ -90,50 +90,52 @@ export const CatalogGrid = ({
 
                     <div className="absolute bottom-0 left-0 right-0 p-6">
                       <div className="flex items-center gap-2 mb-2">
-                        <Icon name="MapPin" size={16} className="text-primary" />
-                        <span className="text-sm text-muted-foreground">{item.location}</span>
+                        <Icon name="MapPin" size={18} className="text-primary" />
+                        <span className="text-sm text-white/90 font-medium">{item.location}</span>
                       </div>
                     </div>
                   </div>
                   
-                  <CardHeader>
+                  <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-2xl mb-1">{item.seller}</CardTitle>
-                        <CardDescription className="text-base">{item.title}</CardDescription>
+                        <CardTitle className="text-2xl mb-2 font-bold tracking-tight">{item.seller}</CardTitle>
+                        <CardDescription className="text-base text-muted-foreground/80">{item.title}</CardDescription>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-1 mt-2">
-                      <Icon name="Star" size={18} className="fill-yellow-500 text-yellow-500" />
-                      <span className="font-semibold">{item.rating}</span>
+                    <div className="flex items-center gap-2 mt-3 bg-gradient-to-r from-primary/10 to-transparent px-3 py-2 rounded-lg w-fit">
+                      <Icon name="Star" size={18} className="fill-primary text-primary" />
+                      <span className="font-bold text-lg">{item.rating}</span>
                       <span className="text-sm text-muted-foreground">({item.reviews} {t.catalog.reviews})</span>
                     </div>
                   </CardHeader>
 
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="space-y-3">
-                      {item.age && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Icon name="Calendar" size={16} className="text-muted-foreground" />
-                          <span>{item.age} лет</span>
-                        </div>
-                      )}
-                      {item.height && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Icon name="Ruler" size={16} className="text-muted-foreground" />
-                          <span>{item.height} см</span>
-                        </div>
-                      )}
-                      {item.bodyType && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Icon name="User" size={16} className="text-muted-foreground" />
-                          <span>{item.bodyType}</span>
-                        </div>
-                      )}
-                      <div className="flex items-baseline gap-2 pt-4 border-t border-border">
-                        <span className="text-3xl font-bold text-primary">{item.price}</span>
-                        <span className="text-sm text-muted-foreground">{t.catalog.perHour}</span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {item.age && (
+                          <div className="flex flex-col items-center p-3 bg-muted/50 rounded-lg">
+                            <Icon name="Calendar" size={18} className="text-primary mb-1" />
+                            <span className="text-sm font-semibold">{item.age} лет</span>
+                          </div>
+                        )}
+                        {item.height && (
+                          <div className="flex flex-col items-center p-3 bg-muted/50 rounded-lg">
+                            <Icon name="Ruler" size={18} className="text-primary mb-1" />
+                            <span className="text-sm font-semibold">{item.height} см</span>
+                          </div>
+                        )}
+                        {item.bodyType && (
+                          <div className="flex flex-col items-center p-3 bg-muted/50 rounded-lg">
+                            <Icon name="User" size={18} className="text-primary mb-1" />
+                            <span className="text-sm font-semibold">{item.bodyType}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-2 pt-4 border-t-2 border-primary/20">
+                        <span className="text-4xl font-bold gold-shimmer">{item.price}</span>
+                        <span className="text-sm text-muted-foreground font-medium">{t.catalog.perHour}</span>
                       </div>
                     </div>
                   </CardContent>
