@@ -13,6 +13,9 @@ export interface Profile {
   healthCertified?: boolean;
   healthCertificateExpiry?: string | null;
   lastHealthCertificateUpload?: string | null;
+  audioGreeting?: string | null;
+  promoVideo?: string | null;
+  profilePhotos?: string[];
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
@@ -71,6 +74,9 @@ export interface SellerProfile {
   healthCertified?: boolean;
   healthCertificateExpiry?: string | null;
   lastHealthCertificateUpload?: string | null;
+  audioGreeting?: string | null;
+  promoVideo?: string | null;
+  profilePhotos?: string[];
 }
 
 export interface Review {

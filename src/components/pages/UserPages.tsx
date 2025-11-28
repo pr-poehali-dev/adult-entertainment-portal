@@ -15,6 +15,7 @@ import { Wallet, Transaction } from '@/types';
 import { ProfileWalletTab } from './profile/ProfileWalletTab';
 import { ProfileSettingsTab } from './profile/ProfileSettingsTab';
 import { ProfileBookingsTab } from './profile/ProfileBookingsTab';
+import { ProfileMediaTab } from './profile/ProfileMediaTab';
 import { FavoritesPage } from './favorites/FavoritesPage';
 import { SearchPage } from './search/SearchPage';
 import { RulesPage } from './rules/RulesPage';
@@ -237,9 +238,12 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
       </Card>
 
       <Tabs defaultValue="wallet" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className={`grid w-full ${profile.role === 'seller' ? 'grid-cols-4' : 'grid-cols-3'}`}>
           <TabsTrigger value="wallet">Кошелек</TabsTrigger>
           <TabsTrigger value="bookings">Бронирования</TabsTrigger>
+          {profile.role === 'seller' && (
+            <TabsTrigger value="media">Медиа</TabsTrigger>
+          )}
           <TabsTrigger value="settings">Настройки</TabsTrigger>
         </TabsList>
 
@@ -255,6 +259,12 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
         <TabsContent value="bookings">
           <ProfileBookingsTab onShowTipModal={handleShowTipModal} />
         </TabsContent>
+
+        {profile.role === 'seller' && (
+          <TabsContent value="media">
+            <ProfileMediaTab profile={profile} onProfileUpdate={onProfileUpdate} />
+          </TabsContent>
+        )}
 
         <TabsContent value="settings">
           <ProfileSettingsTab

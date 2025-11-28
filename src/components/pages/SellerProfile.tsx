@@ -80,6 +80,61 @@ export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageP
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
+            {(seller.audioGreeting || seller.promoVideo || (seller.profilePhotos && seller.profilePhotos.length > 0)) && (
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Play" size={24} className="text-primary" />
+                    Медиа-контент
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {seller.audioGreeting && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        <Icon name="Mic" size={16} className="text-primary" />
+                        Аудио приветствие
+                      </div>
+                      <audio controls className="w-full">
+                        <source src={seller.audioGreeting} />
+                      </audio>
+                    </div>
+                  )}
+                  
+                  {seller.promoVideo && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        <Icon name="Video" size={16} className="text-primary" />
+                        Промо-видео
+                      </div>
+                      <video controls className="w-full rounded-lg max-h-96">
+                        <source src={seller.promoVideo} />
+                      </video>
+                    </div>
+                  )}
+                  
+                  {seller.profilePhotos && seller.profilePhotos.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        <Icon name="Image" size={16} className="text-primary" />
+                        Фото профиля ({seller.profilePhotos.length})
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        {seller.profilePhotos.map((photo, index) => (
+                          <img 
+                            key={index}
+                            src={photo} 
+                            alt={`Фото ${index + 1}`}
+                            className="w-full aspect-square object-cover rounded-lg"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle>О себе</CardTitle>

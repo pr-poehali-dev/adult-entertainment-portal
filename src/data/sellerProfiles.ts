@@ -31,6 +31,13 @@ export const sellerProfiles: SellerProfile[] = [
     isActive: true,
     vipStatus: 'vip',
     vipExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    audioGreeting: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    promoVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    profilePhotos: [
+      'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg',
+      'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/2027abc7-c23f-49e7-9181-e88a68144742.jpg',
+      'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/bba3e1a2-7e5c-4175-b9f5-ea68e981db8e.jpg',
+    ],
   },
   {
     id: 2,
