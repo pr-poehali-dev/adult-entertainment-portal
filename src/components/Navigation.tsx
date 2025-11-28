@@ -333,6 +333,22 @@ const Navigation = ({
           
           {userRole && (
             <>
+              <Button
+                onClick={() => { setCurrentPage('wallet'); setShowMobileMenu(false); }}
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-6 shadow-lg"
+                size="lg"
+              >
+                <Icon name="Wallet" size={24} className="mr-3" />
+                <div className="flex flex-col items-start flex-1">
+                  <span className="text-lg leading-none">
+                    {rubBalance.toLocaleString('ru-RU')} ₽
+                  </span>
+                  <span className="text-xs text-white/80 mt-1">
+                    {rubInBtc.toFixed(6)} ₿
+                  </span>
+                </div>
+              </Button>
+              
               <button 
                 onClick={() => { setCurrentPage('favorites'); setShowMobileMenu(false); }}
                 className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
