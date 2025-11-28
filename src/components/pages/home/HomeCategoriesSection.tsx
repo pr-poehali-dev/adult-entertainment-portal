@@ -22,25 +22,34 @@ export const HomeCategoriesSection = () => {
           {serviceCategories.map((category, i) => (
             <Card 
               key={category.id} 
-              className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left"
+              className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
               style={{ animationDelay: `${i * 100}ms` }}
             >
-              <CardHeader>
-                <div className="h-40 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-xl mb-6 flex items-center justify-center group-hover:from-primary/20 group-hover:to-secondary/20 transition-all duration-300">
-                  <Icon name={category.icon as any} size={64} className="text-primary group-hover:scale-110 transition-transform duration-300" />
+              <div className="relative h-56 overflow-hidden">
+                <img 
+                  src={category.image} 
+                  alt={getCategoryName(category.id, language)}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <CardTitle className="text-2xl text-white font-bold tracking-tight drop-shadow-lg">
+                    {getCategoryName(category.id, language)}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-2xl text-center mb-4 font-bold tracking-tight">{getCategoryName(category.id, language)}</CardTitle>
-                {category.subcategories.length > 0 && (
-                  <div className="text-sm text-muted-foreground text-center space-y-2">
+              </div>
+              {category.subcategories.length > 0 && (
+                <CardHeader>
+                  <div className="text-sm text-muted-foreground space-y-2">
                     {category.subcategories.map(sub => (
-                      <div key={sub.id} className="flex items-center justify-center gap-2 py-1">
+                      <div key={sub.id} className="flex items-center gap-2 py-1">
                         <Icon name={sub.icon as any} size={16} className="text-primary" />
                         <span className="font-medium">{getSubcategoryName(sub.id, language)}</span>
                       </div>
                     ))}
                   </div>
-                )}
-              </CardHeader>
+                </CardHeader>
+              )}
             </Card>
           ))}
         </div>

@@ -18,6 +18,7 @@ export const sellerProfiles: SellerProfile[] = [
       { id: 2, title: 'Светское мероприятие', description: 'Сопровождение на светских мероприятиях и премьерах', duration: 4, price: 100000, currency: 'RUB', category: 'VIP' },
       { id: 3, title: 'Деловая встреча', description: 'Сопровождение на бизнес-встречах', duration: 2, price: 50000, currency: 'RUB', category: 'Бизнес' },
       { id: 4, title: 'Ресторанное сопровождение', description: 'Вечер в ресторане премиум-класса', duration: 3, price: 75000, currency: 'RUB', category: 'Досуг' },
+      { id: 8, title: 'Поездка за границу', description: 'Сопровождение в международной поездке на несколько дней', duration: 24, price: 1200000, currency: 'RUB', category: 'Заграница' },
     ],
     privateAlbums: [
       {
