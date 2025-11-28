@@ -2,9 +2,20 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { serviceCategories, getCategoryName, getSubcategoryName } from '@/data/serviceCategories';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Page } from '@/types';
 
-export const HomeCategoriesSection = () => {
+interface HomeCategoriesSectionProps {
+  setCurrentPage: (page: Page) => void;
+  setSelectedCategory: (categoryId: string) => void;
+}
+
+export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: HomeCategoriesSectionProps) => {
   const { t, language } = useLanguage();
+  
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setCurrentPage('category');
+  };
   
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-background to-muted/30">
@@ -22,6 +33,7 @@ export const HomeCategoriesSection = () => {
           {serviceCategories.map((category, i) => (
             <Card 
               key={category.id} 
+              onClick={() => handleCategoryClick(category.id)}
               className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
               style={{ animationDelay: `${i * 100}ms` }}
             >

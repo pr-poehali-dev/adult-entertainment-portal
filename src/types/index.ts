@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -361,4 +361,56 @@ export interface ReferralTransaction {
   commission: number;
   level: 1 | 2 | 3;
   type: string;
+}
+
+export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+
+export interface DinnerSchedule {
+  dayOfWeek: DayOfWeek;
+  time: string;
+  restaurant: string;
+  location: string;
+  price: number;
+  currency: Currency;
+  description?: string;
+}
+
+export interface ServiceProvider {
+  id: number;
+  name: string;
+  age: number;
+  avatar: string;
+  rating: number;
+  verified: boolean;
+  vipStatus: VIPStatus;
+  categoryId: string;
+  subcategoryId?: string;
+  photos: string[];
+  about: string;
+  languages: string[];
+  price: number;
+  currency: Currency;
+  location: string;
+  dinnerSchedules?: DinnerSchedule[];
+}
+
+export type InvitationStatus = 'pending' | 'accepted' | 'rejected' | 'expired';
+
+export interface DinnerInvitation {
+  id: number;
+  providerId: number;
+  providerName: string;
+  providerAvatar: string;
+  buyerId: number;
+  buyerName: string;
+  buyerAvatar?: string;
+  scheduleId: number;
+  date: string;
+  time: string;
+  restaurant: string;
+  location: string;
+  status: InvitationStatus;
+  createdAt: string;
+  expiresAt: string;
+  message?: string;
 }

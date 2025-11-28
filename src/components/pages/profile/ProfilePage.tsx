@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
-import { Profile, WorkSchedule, Wallet, Transaction } from '@/types';
+import { Profile, WorkSchedule, Wallet, Transaction, Page } from '@/types';
 import { TipModal } from '@/components/TipModal';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
@@ -15,9 +15,10 @@ import { ProfileMediaTab } from './ProfileMediaTab';
 interface ProfilePageProps {
   profile: Profile;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
+  setCurrentPage?: (page: Page) => void;
 }
 
-export const ProfilePage = ({ profile, onProfileUpdate }: ProfilePageProps) => {
+export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: ProfilePageProps) => {
   const [isVerified, setIsVerified] = useState(profile.verified);
   const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
   const [isActive, setIsActive] = useState(true);
@@ -86,6 +87,20 @@ export const ProfilePage = ({ profile, onProfileUpdate }: ProfilePageProps) => {
                 )}
               </div>
             </div>
+            {profile.role === 'seller' && setCurrentPage && (
+              <div className="ml-auto">
+                <button
+                  onClick={() => setCurrentPage('invitations')}
+                  className="relative bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+                >
+                  <Icon name="Mail" size={20} />
+                  <span className="font-medium">Приглашения</span>
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                    5
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         </CardHeader>
       </Card>

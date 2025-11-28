@@ -35,11 +35,11 @@ interface HomeAndCatalogProps {
   userRole?: UserRole;
 }
 
-export const HomePage = ({ setCurrentPage, userRole }: { setCurrentPage: (page: Page) => void; userRole?: UserRole }) => {
+export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void }) => {
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
-      <HomeCategoriesSection />
+      <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeAdvantagesSection />
       
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:right-8 md:translate-x-0 z-50">
