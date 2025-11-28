@@ -5,11 +5,14 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { Page, SellerProfile, PriceListItem, Wallet } from '@/types';
+import { Page, SellerProfile, PriceListItem, Wallet, Currency, CustomMediaOrder } from '@/types';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
 import PriceList from '@/components/pages/seller-profile/PriceList';
 import BookingModal from '@/components/pages/seller-profile/BookingModal';
+import PrivateAlbums from '@/components/pages/seller-profile/PrivateAlbums';
+import CustomMediaOrders from '@/components/pages/seller-profile/CustomMediaOrders';
+import { useToast } from '@/hooks/use-toast';
 
 interface SellerProfilePageProps {
   seller: SellerProfile;
@@ -19,6 +22,7 @@ interface SellerProfilePageProps {
 
 export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProfilePageProps) => {
   const [selectedPriceItem, setSelectedPriceItem] = useState<PriceListItem | null>(null);
+  const { toast } = useToast();
 
   const handlePriceItemClick = (item: PriceListItem) => {
     setSelectedPriceItem(item);
@@ -26,7 +30,27 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
 
   const handleBookingConfirm = (item: PriceListItem, duration: number, totalPrice: number) => {
     console.log('Booking confirmed:', { item, duration, totalPrice });
+    toast({
+      title: 'Бронирование создано',
+      description: `Заказ на ${duration} ч оформлен на сумму ${totalPrice.toLocaleString()}`,
+    });
     setSelectedPriceItem(null);
+  };
+
+  const handleAlbumPurchase = (albumId: number, price: number, currency: Currency) => {
+    console.log('Album purchased:', { albumId, price, currency });
+    toast({
+      title: 'Альбом куплен',
+      description: 'PIN-код отправлен в сообщения',
+    });
+  };
+
+  const handleCustomOrderSubmit = (order: CustomMediaOrder, requirements: string) => {
+    console.log('Custom order submitted:', { order, requirements });
+    toast({
+      title: 'Заказ оформлен',
+      description: `Ваш заказ на ${order.price.toLocaleString()} отправлен продавцу`,
+    });
   };
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -192,6 +216,31 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
                   <PriceList 
                     items={seller.priceList} 
                     onItemClick={handlePriceItemClick}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
+            {seller.privateAlbums && seller.privateAlbums.length > 0 && (
+              <Card className="bg-card border-border">
+                <CardContent className="pt-6">
+                  <PrivateAlbums 
+                    albums={seller.privateAlbums}
+                    wallet={wallet}
+                    onPurchase={handleAlbumPurchase}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
+            {seller.customMediaOrders && seller.customMediaOrders.length > 0 && (
+              <Card className="bg-card border-border">
+                <CardContent className="pt-6">
+                  <CustomMediaOrders 
+                    orders={seller.customMediaOrders}
+                    wallet={wallet}
+                    sellerName={seller.name}
+                    onOrderSubmit={handleCustomOrderSubmit}
                   />
                 </CardContent>
               </Card>

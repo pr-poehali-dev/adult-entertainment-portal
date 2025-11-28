@@ -58,6 +58,42 @@ export interface PriceListItem {
   category: string;
 }
 
+export type MediaType = 'photo' | 'video' | 'audio';
+export type MediaItemType = 'existing' | 'custom_order';
+
+export interface MediaItem {
+  id: number;
+  type: MediaType;
+  thumbnail: string;
+  url?: string;
+  duration?: string;
+  locked: boolean;
+}
+
+export interface PrivateAlbum {
+  id: number;
+  title: string;
+  description?: string;
+  coverImage: string;
+  price: number;
+  currency: Currency;
+  pinCode: string;
+  mediaCount: number;
+  mediaItems: MediaItem[];
+  isPurchased?: boolean;
+}
+
+export interface CustomMediaOrder {
+  id: number;
+  type: MediaType;
+  title: string;
+  description: string;
+  price: number;
+  currency: Currency;
+  deliveryTime: string;
+  exampleImage?: string;
+}
+
 export interface SellerProfile {
   id: number;
   name: string;
@@ -71,6 +107,8 @@ export interface SellerProfile {
   about: string;
   services: string[];
   priceList?: PriceListItem[];
+  privateAlbums?: PrivateAlbum[];
+  customMediaOrders?: CustomMediaOrder[];
   portfolio: { id: number; image: string; title: string; }[];
   stats: {
     bookings: number;
