@@ -263,6 +263,14 @@ const Index = () => {
           const amounts = [100, 250, 500, 800, 1200, 1500, 2000];
           const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
           const commission = referralData.level === 1 ? '10%' : referralData.level === 2 ? '5%' : '1%';
+          
+          setWallet(prev => ({
+            ...prev,
+            balances: prev.balances.map(b => 
+              b.currency === 'RUB' ? { ...b, amount: b.amount + randomAmount } : b
+            )
+          }));
+          
           addNotification(
             'referral',
             `Комиссия ${commission}`,

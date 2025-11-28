@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
@@ -35,11 +35,22 @@ const Navigation = ({
 }: NavigationProps) => {
   const { language, setLanguage, t } = useLanguage();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [balanceAnimation, setBalanceAnimation] = useState(false);
+  const prevBalanceRef = useRef<number>(0);
   
   const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
   const btcBalance = wallet.balances.find(b => b.currency === 'BTC')?.amount || 0;
   const rubToBtcRate = 0.000015;
   const rubInBtc = rubBalance * rubToBtcRate;
+
+  useEffect(() => {
+    if (prevBalanceRef.current !== 0 && prevBalanceRef.current !== rubBalance) {
+      setBalanceAnimation(true);
+      const timer = setTimeout(() => setBalanceAnimation(false), 1000);
+      return () => clearTimeout(timer);
+    }
+    prevBalanceRef.current = rubBalance;
+  }, [rubBalance]);
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
@@ -105,12 +116,12 @@ const Navigation = ({
             <>
               <Button
                 onClick={() => setCurrentPage('wallet')}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-6 py-6 shadow-lg hover:shadow-xl transition-all"
+                className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-6 py-6 shadow-lg hover:shadow-xl transition-all ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
                 size="lg"
               >
-                <Icon name="Wallet" size={24} className="mr-3" />
+                <Icon name="Wallet" size={24} className={`mr-3 ${balanceAnimation ? 'animate-bounce' : ''}`} />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg leading-none">
+                  <span className={`text-lg leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
                     {rubBalance.toLocaleString('ru-RU')} ₽
                   </span>
                   <span className="text-xs text-white/80 mt-1">
@@ -335,12 +346,12 @@ const Navigation = ({
             <>
               <Button
                 onClick={() => { setCurrentPage('wallet'); setShowMobileMenu(false); }}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-6 shadow-lg"
+                className={`w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-6 shadow-lg ${balanceAnimation ? 'animate-pulse scale-105' : ''}`}
                 size="lg"
               >
-                <Icon name="Wallet" size={24} className="mr-3" />
+                <Icon name="Wallet" size={24} className={`mr-3 ${balanceAnimation ? 'animate-bounce' : ''}`} />
                 <div className="flex flex-col items-start flex-1">
-                  <span className="text-lg leading-none">
+                  <span className={`text-lg leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
                     {rubBalance.toLocaleString('ru-RU')} ₽
                   </span>
                   <span className="text-xs text-white/80 mt-1">
