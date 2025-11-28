@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { WorkOpportunity } from '@/types';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { ApplyModal, ApplicationData } from './ApplyModal';
 
 interface WorkOpportunityModalProps {
   work: WorkOpportunity;
@@ -20,6 +22,7 @@ const getCurrencySymbol = (currency: string): string => {
 
 export const WorkOpportunityModal = ({ work, onClose }: WorkOpportunityModalProps) => {
   const { toast } = useToast();
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   const handleContact = () => {
     toast({
@@ -27,6 +30,16 @@ export const WorkOpportunityModal = ({ work, onClose }: WorkOpportunityModalProp
       description: `${work.contactInfo} скопирован в буфер обмена`,
     });
     navigator.clipboard.writeText(work.contactInfo);
+  };
+
+  const handleApply = (applicationData: ApplicationData) => {
+    console.log('Application submitted:', applicationData);
+    toast({
+      title: 'Отклик отправлен!',
+      description: 'Ваша заявка отправлена работодателю',
+    });
+    setShowApplyModal(false);
+    onClose();
   };
 
   return (
@@ -112,7 +125,7 @@ export const WorkOpportunityModal = ({ work, onClose }: WorkOpportunityModalProp
             </ul>
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex flex-col gap-3 pt-4 border-t border-border">
             <div className="text-sm text-muted-foreground">
               Опубликовано {new Date(work.postedDate).toLocaleDateString('ru-RU', { 
                 day: 'numeric', 
@@ -120,13 +133,27 @@ export const WorkOpportunityModal = ({ work, onClose }: WorkOpportunityModalProp
                 year: 'numeric' 
               })}
             </div>
-            <Button onClick={handleContact} className="gap-2">
-              <Icon name="MessageCircle" size={18} />
-              {work.contactInfo}
-            </Button>
+            <div className="flex gap-3">
+              <Button onClick={() => setShowApplyModal(true)} className="flex-1 gap-2" size="lg">
+                <Icon name="Send" size={18} />
+                Откликнуться на вакансию
+              </Button>
+              <Button onClick={handleContact} variant="outline" size="lg" className="gap-2">
+                <Icon name="MessageCircle" size={18} />
+                {work.contactInfo}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+
+      {showApplyModal && (
+        <ApplyModal
+          work={work}
+          onClose={() => setShowApplyModal(false)}
+          onSubmit={handleApply}
+        />
+      )}
     </div>
   );
 };

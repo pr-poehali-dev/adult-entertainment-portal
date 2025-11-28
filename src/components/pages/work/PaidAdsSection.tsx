@@ -3,15 +3,28 @@ import { PaidAd } from '@/types';
 import { paidAds } from '@/data/workOpportunities';
 import { PaidAdCard } from './PaidAdCard';
 import { PaidAdModal } from './PaidAdModal';
+import { CreateAdModal, AdFormData } from './CreateAdModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 export const PaidAdsSection = () => {
+  const { toast } = useToast();
   const [selectedAd, setSelectedAd] = useState<PaidAd | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'price' | 'views'>('date');
+
+  const handleCreateAd = (adData: AdFormData) => {
+    console.log('New ad created:', adData);
+    toast({
+      title: 'Объявление создано!',
+      description: adData.isPremium ? 'Ваше Premium объявление опубликовано' : 'Ваше объявление опубликовано',
+    });
+    setShowCreateModal(false);
+  };
 
   const filteredAds = paidAds
     .filter(ad => 
@@ -37,7 +50,7 @@ export const PaidAdsSection = () => {
             <p className="text-muted-foreground mb-4">
               Предлагаете услуги или товары? Разместите платное объявление и получайте больше клиентов!
             </p>
-            <Button className="gap-2">
+            <Button onClick={() => setShowCreateModal(true)} className="gap-2">
               <Icon name="Plus" size={18} />
               Создать объявление
             </Button>
@@ -90,6 +103,13 @@ export const PaidAdsSection = () => {
         <PaidAdModal
           ad={selectedAd}
           onClose={() => setSelectedAd(null)}
+        />
+      )}
+
+      {showCreateModal && (
+        <CreateAdModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateAd}
         />
       )}
     </div>
