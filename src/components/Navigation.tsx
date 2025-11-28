@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
@@ -31,6 +32,7 @@ const Navigation = ({
   setIsDarkTheme,
 }: NavigationProps) => {
   const { language, setLanguage, t } = useLanguage();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
@@ -80,26 +82,10 @@ const Navigation = ({
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => setIsDarkTheme(!isDarkTheme)}
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
             className="text-foreground/80 hover:text-primary"
           >
-            {isDarkTheme ? <Icon name="Sun" size={20} /> : <Icon name="Moon" size={20} />}
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setCurrentPage('catalog')}
-            className="text-foreground/80 hover:text-primary"
-          >
-            <Icon name="Search" size={20} />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setCurrentPage('catalog')}
-            className="text-foreground/80 hover:text-primary"
-          >
-            <Icon name="Menu" size={20} />
+            <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
           </Button>
         </div>
 
@@ -253,6 +239,133 @@ const Navigation = ({
         </div>
       </div>
     </div>
+
+    {showMobileMenu && (
+      <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-2xl z-50 animate-fade-in">
+        <div className="container mx-auto px-4 py-6 space-y-4">
+          <button 
+            onClick={() => { setCurrentPage('home'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="Home" size={20} className="text-primary" />
+            <span className="font-medium">{t.nav.home}</span>
+          </button>
+          
+          <button 
+            onClick={() => { setCurrentPage('catalog'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="Search" size={20} className="text-primary" />
+            <span className="font-medium">{t.nav.catalog}</span>
+          </button>
+          
+          <button 
+            onClick={() => { setCurrentPage('work'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="Briefcase" size={20} className="text-primary" />
+            <span className="font-medium">Работа</span>
+          </button>
+          
+          {userRole && (
+            <>
+              <button 
+                onClick={() => { setCurrentPage('favorites'); setShowMobileMenu(false); }}
+                className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+              >
+                <Icon name="Heart" size={20} className="text-primary" />
+                <span className="font-medium">{t.nav.favorites}</span>
+              </button>
+              
+              <button 
+                onClick={() => { setCurrentPage('messages'); setShowMobileMenu(false); }}
+                className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 relative"
+              >
+                <Icon name="MessageCircle" size={20} className="text-primary" />
+                <span className="font-medium">{t.nav.messages}</span>
+                {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
+                  <span className="ml-auto w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {notifications.filter(n => !n.read && n.type === 'message').length}
+                  </span>
+                )}
+              </button>
+            </>
+          )}
+          
+          <button 
+            onClick={() => { setCurrentPage('rules'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="FileText" size={20} className="text-primary" />
+            <span className="font-medium">{t.nav.rules}</span>
+          </button>
+          
+          <button 
+            onClick={() => { setCurrentPage('admin'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="Shield" size={20} className="text-primary" />
+            <span className="font-medium">Админ-панель</span>
+          </button>
+          
+          <div className="border-t border-border pt-4 mt-4">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium text-muted-foreground">Язык / Language</span>
+              <div className="flex items-center gap-2 border border-border rounded-lg p-1">
+                <Button
+                  variant={language === 'ru' ? 'default' : 'ghost'}
+                  size="icon"
+                  onClick={() => setLanguage('ru')}
+                  className="h-8 w-8 p-0 text-lg"
+                >
+                  🇷🇺
+                </Button>
+                <Button
+                  variant={language === 'en' ? 'default' : 'ghost'}
+                  size="icon"
+                  onClick={() => setLanguage('en')}
+                  className="h-8 w-8 p-0 text-lg"
+                >
+                  🇬🇧
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">Тема</span>
+              <Button 
+                variant="outline"
+                size="sm"
+                onClick={() => setIsDarkTheme(!isDarkTheme)}
+                className="flex items-center gap-2"
+              >
+                {isDarkTheme ? <Icon name="Sun" size={16} /> : <Icon name="Moon" size={16} />}
+                <span>{isDarkTheme ? 'Светлая' : 'Тёмная'}</span>
+              </Button>
+            </div>
+          </div>
+          
+          {userRole ? (
+            <button 
+              onClick={() => { setCurrentPage('profile'); setShowMobileMenu(false); }}
+              className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-3 justify-center font-semibold"
+            >
+              <Avatar className="h-6 w-6">
+                <AvatarFallback className="bg-primary-foreground text-primary text-sm">{profile.name[0]}</AvatarFallback>
+              </Avatar>
+              <span>{t.nav.profile}</span>
+            </button>
+          ) : (
+            <button 
+              onClick={() => { setCurrentPage('register'); setShowMobileMenu(false); }}
+              className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-semibold text-center"
+            >
+              {t.nav.login}
+            </button>
+          )}
+        </div>
+      </div>
+    )}
   </nav>
   );
 };
