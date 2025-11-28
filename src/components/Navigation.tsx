@@ -62,10 +62,6 @@ const Navigation = ({
           <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             Работа
           </button>
-          <button onClick={() => setCurrentPage('dating')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
-            <Icon name="Heart" size={16} />
-            Знакомства
-          </button>
           <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
             <Icon name="Users" size={16} />
             Партнёрка
