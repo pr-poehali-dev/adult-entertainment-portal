@@ -3,6 +3,7 @@ import { HomePage, CatalogPage } from '@/components/pages/HomeAndCatalog';
 import { ServiceDetailPage } from '@/components/pages/ServiceDetail';
 import { SellerProfilePage } from '@/components/pages/SellerProfile';
 import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
+import { LoginPage } from '@/components/pages/LoginPage';
 import { WorkPage } from '@/components/pages/work/WorkPage';
 import { AdminPage } from '@/components/pages/admin/AdminPage';
 import { ReferralPage } from '@/components/pages/referral/ReferralPage';
@@ -140,6 +141,9 @@ export const useAppPages = ({
       
       case 'register':
         return <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />;
+      
+      case 'login':
+        return <LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />;
       
       case 'search':
         return <SearchPage />;

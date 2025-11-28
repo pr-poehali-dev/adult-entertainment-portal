@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
