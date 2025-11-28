@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Icon from '@/components/ui/icon';
 import { useAppPages } from '@/components/AppPages';
 import { catalogItems, reviews } from '@/data/mockData';
-import { Page, UserRole, Profile, Notification } from '@/types';
+import { Page, UserRole, Profile, Notification, Wallet } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
@@ -77,6 +77,17 @@ const Index = () => {
     verified: true,
     vipStatus: 'none',
     vipExpiry: null
+  });
+
+  const [wallet, setWallet] = useState<Wallet>({
+    balances: [
+      { currency: 'RUB', amount: 150000, symbol: '₽' },
+      { currency: 'USD', amount: 5000, symbol: '$' },
+      { currency: 'EUR', amount: 3000, symbol: '€' },
+      { currency: 'BTC', amount: 0.5, symbol: '₿' },
+      { currency: 'ETH', amount: 2, symbol: 'Ξ' },
+      { currency: 'USDT', amount: 10000, symbol: '₮' },
+    ]
   });
 
   const toggleFavorite = (id: number) => {
@@ -203,6 +214,7 @@ const Index = () => {
     selectedSellerId,
     setSelectedSellerId,
     onProfileUpdate: handleProfileUpdate,
+    wallet,
   });
 
   return (

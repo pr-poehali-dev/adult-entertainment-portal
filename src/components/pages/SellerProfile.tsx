@@ -1,19 +1,33 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { Page, SellerProfile } from '@/types';
+import { Page, SellerProfile, PriceListItem, Wallet } from '@/types';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
+import PriceList from '@/components/pages/seller-profile/PriceList';
+import BookingModal from '@/components/pages/seller-profile/BookingModal';
 
 interface SellerProfilePageProps {
   seller: SellerProfile;
   setCurrentPage: (page: Page) => void;
+  wallet: Wallet;
 }
 
-export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageProps) => {
+export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProfilePageProps) => {
+  const [selectedPriceItem, setSelectedPriceItem] = useState<PriceListItem | null>(null);
+
+  const handlePriceItemClick = (item: PriceListItem) => {
+    setSelectedPriceItem(item);
+  };
+
+  const handleBookingConfirm = (item: PriceListItem, duration: number, totalPrice: number) => {
+    console.log('Booking confirmed:', { item, duration, totalPrice });
+    setSelectedPriceItem(null);
+  };
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <Button 
@@ -172,6 +186,17 @@ export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageP
               </CardContent>
             </Card>
 
+            {seller.priceList && seller.priceList.length > 0 && (
+              <Card className="bg-card border-border">
+                <CardContent className="pt-6">
+                  <PriceList 
+                    items={seller.priceList} 
+                    onItemClick={handlePriceItemClick}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle>Портфолио</CardTitle>
@@ -265,6 +290,17 @@ export const SellerProfilePage = ({ seller, setCurrentPage }: SellerProfilePageP
           </div>
         </div>
       </div>
+
+      {selectedPriceItem && (
+        <BookingModal
+          item={selectedPriceItem}
+          sellerName={seller.name}
+          sellerAvatar={seller.avatar}
+          wallet={wallet}
+          onClose={() => setSelectedPriceItem(null)}
+          onConfirm={handleBookingConfirm}
+        />
+      )}
     </div>
   );
 };

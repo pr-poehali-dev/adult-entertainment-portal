@@ -13,6 +13,12 @@ export const sellerProfiles: SellerProfile[] = [
     languages: ['Русский', 'Английский', 'Французский'],
     about: 'Добро пожаловать в мой профиль! Я предлагаю эксклюзивное VIP-сопровождение для деловых встреч и светских мероприятий. Имею высшее образование, свободно владею тремя языками. Моя специализация - сопровождение на бизнес-мероприятиях, где требуется элегантность, интеллект и безупречные манеры. Я ценю конфиденциальность и профессионализм в работе.',
     services: ['VIP сопровождение', 'Деловые встречи', 'Светские мероприятия', 'Ресторанное сопровождение'],
+    priceList: [
+      { id: 1, title: 'VIP сопровождение', description: 'Эксклюзивное сопровождение на деловых встречах', duration: 3, price: 75000, currency: 'RUB', category: 'VIP' },
+      { id: 2, title: 'Светское мероприятие', description: 'Сопровождение на светских мероприятиях и премьерах', duration: 4, price: 100000, currency: 'RUB', category: 'VIP' },
+      { id: 3, title: 'Деловая встреча', description: 'Сопровождение на бизнес-встречах', duration: 2, price: 50000, currency: 'RUB', category: 'Бизнес' },
+      { id: 4, title: 'Ресторанное сопровождение', description: 'Вечер в ресторане премиум-класса', duration: 3, price: 75000, currency: 'RUB', category: 'Досуг' },
+    ],
     portfolio: [
       { id: 1, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg', title: 'Вечернее мероприятие' },
       { id: 2, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/2027abc7-c23f-49e7-9181-e88a68144742.jpg', title: 'Светский раут' },
@@ -51,6 +57,11 @@ export const sellerProfiles: SellerProfile[] = [
     languages: ['Русский', 'Английский'],
     about: 'Приветствую! Специализируюсь на индивидуальных встречах в комфортной обстановке. Ценю искренность, внимание к деталям и приватность. Имею опыт работы с VIP-клиентами. Предлагаю качественный сервис и индивидуальный подход к каждому клиенту.',
     services: ['Индивидуальные встречи', 'Приватные мероприятия', 'Вечерний досуг'],
+    priceList: [
+      { id: 5, title: 'Индивидуальная встреча', description: 'Приватная встреча в комфортной обстановке', duration: 2, price: 30000, currency: 'RUB', category: 'Индивидуальные' },
+      { id: 6, title: 'Вечерний досуг', description: 'Приятный вечер в компании', duration: 3, price: 45000, currency: 'RUB', category: 'Досуг' },
+      { id: 7, title: 'Приватное мероприятие', description: 'Сопровождение на приватных встречах', duration: 4, price: 60000, currency: 'RUB', category: 'Мероприятия' },
+    ],
     portfolio: [
       { id: 1, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/cf786e95-b283-46c8-bd07-da6faa13ebcf.jpg', title: 'Профессиональное фото' },
       { id: 2, image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/50ad9bf6-1608-4a54-8b46-3fb525001570.jpg', title: 'Дневная встреча' },

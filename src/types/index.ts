@@ -48,6 +48,16 @@ export interface CatalogItem {
   isActive?: boolean;
 }
 
+export interface PriceListItem {
+  id: number;
+  title: string;
+  description?: string;
+  duration: number;
+  price: number;
+  currency: Currency;
+  category: string;
+}
+
 export interface SellerProfile {
   id: number;
   name: string;
@@ -60,6 +70,7 @@ export interface SellerProfile {
   languages: string[];
   about: string;
   services: string[];
+  priceList?: PriceListItem[];
   portfolio: { id: number; image: string; title: string; }[];
   stats: {
     bookings: number;

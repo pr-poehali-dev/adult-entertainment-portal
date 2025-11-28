@@ -3,7 +3,7 @@ import { HomePage, CatalogPage } from '@/components/pages/HomeAndCatalog';
 import { ServiceDetailPage } from '@/components/pages/ServiceDetail';
 import { SellerProfilePage } from '@/components/pages/SellerProfile';
 import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
-import { Page, Profile, CatalogItem, Review, UserRole } from '@/types';
+import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
 interface AppPagesProps {
@@ -40,6 +40,7 @@ interface AppPagesProps {
   selectedSellerId: number | null;
   setSelectedSellerId: (id: number | null) => void;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
+  wallet: Wallet;
 }
 
 export const useAppPages = ({
@@ -76,6 +77,7 @@ export const useAppPages = ({
   selectedSellerId,
   setSelectedSellerId,
   onProfileUpdate,
+  wallet,
 }: AppPagesProps) => {
   
   const renderPage = () => {
@@ -159,7 +161,7 @@ export const useAppPages = ({
       case 'seller-profile':
         const seller = sellerProfiles.find(s => s.id === selectedSellerId);
         return seller ? (
-          <SellerProfilePage seller={seller} setCurrentPage={setCurrentPage} />
+          <SellerProfilePage seller={seller} setCurrentPage={setCurrentPage} wallet={wallet} />
         ) : (
           <HomePage setCurrentPage={setCurrentPage} />
         );
