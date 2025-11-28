@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WalletCard } from '@/components/wallet/WalletCard';
 import { DepositModal } from '@/components/wallet/DepositModal';
 import { WithdrawModal } from '@/components/wallet/WithdrawModal';
@@ -10,6 +10,7 @@ import { Wallet, Currency, Transaction } from '@/types';
 import { createDepositTransaction, createWithdrawTransaction } from '@/utils/transactionManager';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { testTransactions } from '@/data/testDatabase';
 
 interface ProfileWalletTabProps {
   wallet: Wallet;
@@ -28,6 +29,12 @@ export const ProfileWalletTab = ({
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
+
+  useEffect(() => {
+    if (transactions.length === 0) {
+      setTransactions(testTransactions);
+    }
+  }, []);
 
   const handleDeposit = (currency: Currency, amount: number) => {
     const transaction = createDepositTransaction(amount, currency);

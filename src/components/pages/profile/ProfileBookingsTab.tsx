@@ -1,32 +1,22 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { testBookings } from '@/data/testDatabase';
 
 interface ProfileBookingsTabProps {
   onShowTipModal?: (booking: any) => void;
 }
 
 export const ProfileBookingsTab = ({ onShowTipModal }: ProfileBookingsTabProps) => {
-  const mockBookings = [
-    {
-      id: 1,
-      serviceName: 'VIP сопровождение',
-      sellerName: 'Анастасия',
-      date: '2024-11-25',
-      time: '18:00',
-      duration: 3,
-      status: 'completed',
-    },
-    {
-      id: 2,
-      serviceName: 'Бизнес встреча',
-      sellerName: 'Виктория',
-      date: '2024-11-28',
-      time: '20:00',
-      duration: 2,
-      status: 'confirmed',
-    },
-  ];
+  const mockBookings = testBookings.slice(0, 5).map(b => ({
+    id: b.id,
+    serviceName: b.serviceName,
+    sellerName: b.sellerName,
+    date: b.date,
+    time: b.time,
+    duration: b.duration,
+    status: b.status,
+  }));
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { label: string; className: string }> = {

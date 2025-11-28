@@ -1,15 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import { testBookings } from '@/data/testDatabase';
 
 export const AdminBookings = () => {
-  const bookings = [
-    { id: 1, user: 'Дмитрий С.', seller: 'Анна', service: 'VIP сопровождение', date: '2024-11-28', time: '18:00', price: 75000, status: 'confirmed' },
-    { id: 2, user: 'Александр В.', seller: 'Мария', service: 'Индивидуальная встреча', date: '2024-11-29', time: '20:00', price: 30000, status: 'pending_seller_confirmation' },
-    { id: 3, user: 'Игорь М.', seller: 'Елена', service: 'Деловая встреча', date: '2024-11-28', time: '14:00', price: 50000, status: 'in_progress' },
-    { id: 4, user: 'Сергей К.', seller: 'Анна', service: 'Светское мероприятие', date: '2024-11-30', time: '19:00', price: 100000, status: 'confirmed' },
-    { id: 5, user: 'Михаил П.', seller: 'Мария', service: 'Вечерний досуг', date: '2024-11-27', time: '21:00', price: 45000, status: 'completed' }
-  ];
+  const bookings = testBookings.map(b => ({
+    id: b.id,
+    user: b.buyerName,
+    seller: b.sellerName,
+    service: b.serviceName,
+    date: b.date,
+    time: b.time,
+    price: b.totalPrice,
+    status: b.status
+  }));
 
   const getStatusInfo = (status: string) => {
     const statuses: Record<string, { label: string; variant: any; icon: string }> = {

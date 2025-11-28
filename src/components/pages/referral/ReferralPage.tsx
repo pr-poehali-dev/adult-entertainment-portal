@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { ReferralStats, ReferralUser, ReferralTransaction } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { testReferrals, testReferralTransactions, getReferralStats } from '@/data/testDatabase';
 
 export const ReferralPage = () => {
   const { toast } = useToast();
@@ -13,33 +14,11 @@ export const ReferralPage = () => {
   const referralCode = 'ELITE2024XYZ';
   const referralLink = `https://elite.app/ref/${referralCode}`;
   
-  const stats: ReferralStats = {
-    totalReferrals: 47,
-    activeReferrals: 38,
-    totalEarned: 125000,
-    level1Count: 23,
-    level2Count: 18,
-    level3Count: 6,
-    level1Earned: 85000,
-    level2Earned: 32000,
-    level3Earned: 8000,
-  };
+  const stats: ReferralStats = getReferralStats();
   
-  const referralUsers: ReferralUser[] = [
-    { id: 1, name: 'Анна Смирнова', registeredDate: '2024-11-15', level: 1, totalSpent: 45000, yourEarnings: 4500, isActive: true },
-    { id: 2, name: 'Мария Петрова', registeredDate: '2024-11-20', level: 1, totalSpent: 32000, yourEarnings: 3200, isActive: true },
-    { id: 3, name: 'Елена Иванова', registeredDate: '2024-11-18', level: 2, totalSpent: 28000, yourEarnings: 1400, isActive: true },
-    { id: 4, name: 'Ольга Козлова', registeredDate: '2024-11-22', level: 2, totalSpent: 25000, yourEarnings: 1250, isActive: true },
-    { id: 5, name: 'Дарья Новикова', registeredDate: '2024-11-25', level: 3, totalSpent: 18000, yourEarnings: 180, isActive: true },
-  ];
+  const referralUsers: ReferralUser[] = testReferrals;
   
-  const transactions: ReferralTransaction[] = [
-    { id: 1, date: '2024-11-28', fromUser: 'Анна Смирнова', amount: 5000, currency: 'RUB', commission: 500, level: 1, type: 'Бронирование' },
-    { id: 2, date: '2024-11-27', fromUser: 'Мария Петрова', amount: 8000, currency: 'RUB', commission: 800, level: 1, type: 'Бронирование' },
-    { id: 3, date: '2024-11-26', fromUser: 'Елена Иванова', amount: 6000, currency: 'RUB', commission: 300, level: 2, type: 'Бронирование' },
-    { id: 4, date: '2024-11-25', fromUser: 'Ольга Козлова', amount: 4500, currency: 'RUB', commission: 225, level: 2, type: 'VIP подписка' },
-    { id: 5, date: '2024-11-24', fromUser: 'Дарья Новикова', amount: 3000, currency: 'RUB', commission: 30, level: 3, type: 'Бронирование' },
-  ];
+  const transactions: ReferralTransaction[] = testReferralTransactions;
   
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

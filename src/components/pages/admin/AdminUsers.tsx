@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { adminUsers } from '@/data/adminData';
+import { testUsers } from '@/data/testDatabase';
 import { AdminUser } from '@/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export const AdminUsers = () => {
   const { toast } = useToast();
-  const [users] = useState<AdminUser[]>(adminUsers);
+  const [users] = useState<AdminUser[]>(testUsers);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<'all' | 'seller' | 'buyer'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'suspended' | 'banned'>('all');

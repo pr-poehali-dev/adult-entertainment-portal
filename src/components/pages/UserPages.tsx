@@ -127,62 +127,7 @@ export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; on
     ]
   });
 
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    {
-      id: 1,
-      type: 'deposit',
-      amount: 50000,
-      currency: 'RUB',
-      status: 'completed',
-      createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-      completedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-      description: 'Пополнение счета RUB',
-    },
-    {
-      id: 2,
-      type: 'booking_payment',
-      amount: 25000,
-      currency: 'RUB',
-      status: 'completed',
-      createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-      completedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-      description: 'Оплата встречи с Анастасия',
-      relatedBookingId: 1,
-      toUser: 'Анастасия',
-    },
-    {
-      id: 3,
-      type: 'booking_received',
-      amount: 22500,
-      currency: 'RUB',
-      status: 'completed',
-      createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      completedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-      description: 'Получение оплаты от Михаил',
-      relatedBookingId: 2,
-      fromUser: 'Михаил',
-      fee: 2500,
-    },
-    {
-      id: 4,
-      type: 'withdraw',
-      amount: 10000,
-      currency: 'RUB',
-      status: 'pending',
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      description: 'Вывод средств на 1234 5678 9012 3456...',
-    },
-    {
-      id: 5,
-      type: 'vip_payment',
-      amount: 999,
-      currency: 'RUB',
-      status: 'completed',
-      createdAt: new Date(Date.now() - 3600000).toISOString(),
-      completedAt: new Date(Date.now() - 3600000).toISOString(),
-      description: 'Оплата VIP статуса: 1 месяц',
-    },
-  ]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const handleShowTipModal = (booking: any) => {
     setSelectedBooking(booking);
