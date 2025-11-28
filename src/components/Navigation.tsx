@@ -102,22 +102,22 @@ const Navigation = ({
 
         <div className="hidden md:flex items-center space-x-4">
           {userRole && (
-            <div className="flex items-center gap-2">
-              <div 
-                className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/30 hover:border-green-500/50 transition-all cursor-pointer group"
+            <>
+              <Button
                 onClick={() => setCurrentPage('wallet')}
-                title="Открыть кошелёк"
+                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-6 py-6 shadow-lg hover:shadow-xl transition-all"
+                size="lg"
               >
-                <Icon name="Wallet" size={18} className="text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-green-600 dark:text-green-400 leading-none">
+                <Icon name="Wallet" size={24} className="mr-3" />
+                <div className="flex flex-col items-start">
+                  <span className="text-lg leading-none">
                     {rubBalance.toLocaleString('ru-RU')} ₽
                   </span>
-                  <span className="text-[10px] text-muted-foreground mt-0.5">
+                  <span className="text-xs text-white/80 mt-1">
                     {rubInBtc.toFixed(6)} ₿
                   </span>
                 </div>
-              </div>
+              </Button>
               
               <div 
                 className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
@@ -130,7 +130,7 @@ const Navigation = ({
                 </Avatar>
                 <span className="text-sm font-medium leading-none">{profile.name}</span>
               </div>
-            </div>
+            </>
           )}
           <div className="flex items-center gap-1 border border-border rounded-lg p-1">
             <Button
