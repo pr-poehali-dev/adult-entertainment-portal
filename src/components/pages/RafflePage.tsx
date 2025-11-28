@@ -26,11 +26,11 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   const [isParticipating, setIsParticipating] = useState(false);
 
   const winners: Winner[] = [
-    { id: 1, name: 'Дмитрий К.', date: '22 ноября 2024', prize: 'Встреча с Викторией Diamond', amount: 200000 },
-    { id: 2, name: 'Александр М.', date: '15 ноября 2024', prize: 'Встреча с Анастасией Королевой', amount: 150000 },
-    { id: 3, name: 'Сергей П.', date: '8 ноября 2024', prize: 'Встреча с Елизаветой Platinum', amount: 180000 },
-    { id: 4, name: 'Михаил В.', date: '1 ноября 2024', prize: 'Встреча с Марией Exclusive', amount: 120000 },
-    { id: 5, name: 'Артём Н.', date: '25 октября 2024', prize: 'Встреча с Александрой Imperial', amount: 250000 },
+    { id: 1, name: 'Дмитрий К.', date: '22 ноября 2024', prize: 'iPhone 17 Pro Max (1TB)', amount: 150000 },
+    { id: 2, name: 'Александр М.', date: '15 ноября 2024', prize: 'iPhone 17 (256GB)', amount: 120000 },
+    { id: 3, name: 'Сергей П.', date: '8 ноября 2024', prize: 'iPhone 17 Plus (512GB)', amount: 135000 },
+    { id: 4, name: 'Михаил В.', date: '1 ноября 2024', prize: 'iPhone 17 (256GB)', amount: 120000 },
+    { id: 5, name: 'Артём Н.', date: '25 октября 2024', prize: 'iPhone 17 Pro (512GB)', amount: 140000 },
   ];
 
   const handleParticipate = () => {
@@ -65,13 +65,13 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
 
         <div className="text-center space-y-6 mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Icon name="Trophy" size={48} className="text-primary animate-bounce" />
+            <Icon name="Smartphone" size={48} className="text-primary animate-bounce" />
           </div>
           <h1 className="text-5xl font-bold mb-4">
             <span className="gold-shimmer">Еженедельный розыгрыш</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Участвуйте бесплатно и выигрывайте встречу с VIP-спутницей на сумму до 200,000 ₽
+            Участвуйте бесплатно и выигрывайте новенький iPhone 17
           </p>
         </div>
 
@@ -95,8 +95,8 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                   <span className="text-white font-bold text-lg">1 декабря, 20:00</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-white/90">Призовой фонд</span>
-                  <span className="text-white font-bold text-lg">до 200,000 ₽</span>
+                  <span className="text-white/90">Приз</span>
+                  <span className="text-white font-bold text-lg">iPhone 17 (256GB)</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-white/90">Участников</span>
@@ -202,7 +202,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                   <div>
                     <h4 className="font-bold mb-1">Получение приза</h4>
                     <p className="text-sm text-muted-foreground">
-                      Победитель выбирает любую VIP-спутницу и получает встречу бесплатно
+                      Победитель получает новенький iPhone 17 с доставкой в любой город России
                     </p>
                   </div>
                 </div>

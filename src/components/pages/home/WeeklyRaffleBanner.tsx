@@ -24,11 +24,11 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
               </div>
               
               <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                Выиграй встречу с VIP-спутницей
+                Выиграй новенький iPhone 17
               </h2>
               
               <p className="text-white/90 text-lg leading-relaxed">
-                Каждую неделю мы разыгрываем встречу с любой VIP-спутницей на выбор победителя. 
+                Каждую неделю мы разыгрываем новый iPhone 17 среди участников. 
                 Участвуйте абсолютно бесплатно!
               </p>
               
@@ -51,8 +51,8 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
             
             <div className="relative">
               <div className="relative bg-white/10 backdrop-blur-md rounded-2xl border-2 border-white/30 p-8 shadow-2xl">
-                <div className="absolute -top-4 -right-4 bg-yellow-400 text-primary rounded-full p-4 shadow-xl animate-bounce">
-                  <Icon name="Trophy" size={32} />
+                <div className="absolute -top-4 -right-4 bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-2xl p-4 shadow-xl animate-bounce border-2 border-white/20">
+                  <Icon name="Smartphone" size={32} />
                 </div>
                 
                 <div className="space-y-6">
@@ -72,7 +72,7 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                     </div>
                     <div className="text-white">
                       <p className="text-sm opacity-80">Приз</p>
-                      <p className="text-xl font-bold">Встреча на сумму до 200,000 ₽</p>
+                      <p className="text-xl font-bold">iPhone 17 (256GB)</p>
                     </div>
                   </div>
                   
@@ -116,8 +116,8 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                 </div>
                 <div className="w-px h-12 bg-white/20"></div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-white">2.8M ₽</p>
-                  <p className="text-sm text-white/80">разыграно</p>
+                  <p className="text-3xl font-bold text-white">23</p>
+                  <p className="text-sm text-white/80">iPhone разыграно</p>
                 </div>
                 <div className="w-px h-12 bg-white/20"></div>
                 <div className="text-center">
