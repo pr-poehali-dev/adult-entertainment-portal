@@ -11,6 +11,7 @@ import { Page, UserRole, Profile, Notification, Wallet } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { SplashScreen } from '@/components/SplashScreen';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -354,6 +355,7 @@ const Index = () => {
 
   return (
     <div className={isDarkTheme ? 'dark' : ''} data-theme={isDarkTheme ? 'dark' : 'light'}>
+    <SplashScreen />
     <div className="min-h-screen bg-background text-foreground">
       <Navigation 
         currentPage={currentPage}

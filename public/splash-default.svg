@@ -1,0 +1,22 @@
+<svg width="1170" height="2532" viewBox="0 0 1170 2532" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="1170" height="2532" fill="#000000"/>
+  
+  <!-- Crown -->
+  <g transform="translate(585, 1266)">
+    <!-- Crown body -->
+    <path d="M0,-100 L-60,0 L-100,0 L-40,60 L-60,120 L0,80 L60,120 L40,60 L100,0 L60,0 Z" fill="#D4AF37"/>
+    <!-- Crown jewel -->
+    <circle cx="0" cy="-40" r="30" fill="#D4AF37"/>
+    <!-- Crown base -->
+    <rect x="-52" y="0" width="104" height="120" rx="10" fill="#D4AF37"/>
+    <!-- Crown highlight -->
+    <path d="M0,-80 L40,0 L-40,0 L-60,40 L0,80 L60,40 L40,0 L60,0 Z" fill="#FFD700"/>
+  </g>
+  
+  <!-- Elite text -->
+  <text x="585" y="1500" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif" font-size="80" font-weight="700" fill="#D4AF37" text-anchor="middle">Elite</text>
+  
+  <!-- Subtitle -->
+  <text x="585" y="1580" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif" font-size="32" font-weight="400" fill="#666666" text-anchor="middle">Premium Services</text>
+</svg>
