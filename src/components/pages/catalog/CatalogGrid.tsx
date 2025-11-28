@@ -63,7 +63,7 @@ export const CatalogGrid = ({
                 <div 
                   onClick={() => {
                     setSelectedServiceId(item.id);
-                    setCurrentPage('service-detail');
+                    setCurrentPage('service');
                   }}
                 >
                   <div className="relative h-80 overflow-hidden">
