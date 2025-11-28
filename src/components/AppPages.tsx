@@ -11,6 +11,7 @@ import { CategoryProvidersPage } from '@/components/pages/category/CategoryProvi
 import { InvitationsPage } from '@/components/pages/invitations/InvitationsPage';
 import { RafflePage } from '@/components/pages/RafflePage';
 import { DatingPage } from '@/components/pages/DatingPage';
+import { WalletPage } from '@/components/pages/WalletPage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -183,6 +184,9 @@ export const useAppPages = ({
       
       case 'dating':
         return <DatingPage setCurrentPage={setCurrentPage} />;
+      
+      case 'wallet':
+        return <WalletPage setCurrentPage={setCurrentPage} wallet={wallet} />;
       
       case 'category':
         return <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />;

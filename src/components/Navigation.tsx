@@ -102,17 +102,33 @@ const Navigation = ({
 
         <div className="hidden md:flex items-center space-x-4">
           {userRole && (
-            <div className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => setCurrentPage('profile')}>
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
-                  {profile.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <div 
+                className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-lg border border-green-500/30 hover:border-green-500/50 transition-all cursor-pointer group"
+                onClick={() => setCurrentPage('wallet')}
+                title="Открыть кошелёк"
+              >
+                <Icon name="Wallet" size={18} className="text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-green-600 dark:text-green-400 leading-none">
+                    {rubBalance.toLocaleString('ru-RU')} ₽
+                  </span>
+                  <span className="text-[10px] text-muted-foreground mt-0.5">
+                    {rubInBtc.toFixed(6)} ₿
+                  </span>
+                </div>
+              </div>
+              
+              <div 
+                className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
+                onClick={() => setCurrentPage('profile')}
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                    {profile.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
                 <span className="text-sm font-medium leading-none">{profile.name}</span>
-                <span className="text-xs text-muted-foreground mt-0.5">
-                  {rubBalance.toLocaleString('ru-RU')} ₽ <span className="text-muted-foreground/70">({rubInBtc.toFixed(6)} ₿)</span>
-                </span>
               </div>
             </div>
           )}
