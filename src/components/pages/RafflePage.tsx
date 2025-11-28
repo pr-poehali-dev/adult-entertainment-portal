@@ -23,6 +23,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [ticketCount, setTicketCount] = useState(1);
   const [isParticipating, setIsParticipating] = useState(false);
 
   const winners: Winner[] = [
@@ -33,20 +34,21 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
     { id: 5, name: 'Артём Н.', date: '25 октября 2024', prize: 'iPhone 17 Pro (512GB)', amount: 140000 },
   ];
 
-  const handleParticipate = () => {
+  const handleBuyTicket = () => {
     if (!email || !phone) {
       toast({
         title: 'Заполните все поля',
-        description: 'Укажите email и телефон для участия в розыгрыше',
+        description: 'Укажите email и телефон для покупки билета',
         variant: 'destructive',
       });
       return;
     }
 
     setIsParticipating(true);
+    const totalPrice = ticketCount * 100;
     toast({
-      title: 'Вы участвуете в розыгрыше! 🎉',
-      description: 'Результаты будут объявлены 1 декабря в 20:00 в прямом эфире. Мы отправим уведомление на ваш email.',
+      title: `Билет куплен! 🎉`,
+      description: `Вы купили ${ticketCount} билет(ов) на сумму ${totalPrice} ₽. Розыгрыш в воскресенье в 12:00 МСК. Уведомление придёт на email.`,
       duration: 6000,
     });
   };
@@ -71,7 +73,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
             <span className="gold-shimmer">Еженедельный розыгрыш</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Участвуйте бесплатно и выигрывайте новенький iPhone 17
+            Купите билет за 100 ₽ и выигрывайте новенький iPhone 17 каждое воскресенье
           </p>
         </div>
 
@@ -92,19 +94,19 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
               <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-white/90">Дата розыгрыша</span>
-                  <span className="text-white font-bold text-lg">1 декабря, 20:00</span>
+                  <span className="text-white font-bold text-lg">Воскресенье, 12:00 МСК</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-white/90">Приз</span>
                   <span className="text-white font-bold text-lg">iPhone 17 (256GB)</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-white/90">Участников</span>
-                  <span className="text-white font-bold text-lg">1,247 человек</span>
+                  <span className="text-white/90">Стоимость билета</span>
+                  <span className="text-white font-bold text-lg">100 ₽</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-white/90">Ваш шанс</span>
-                  <span className="text-white font-bold text-lg">1 : 1,247</span>
+                  <span className="text-white/90">Билетов продано</span>
+                  <span className="text-white font-bold text-lg">1,247 шт</span>
                 </div>
               </div>
 
@@ -130,12 +132,33 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                       className="h-12 bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50"
                     />
                   </div>
+                  <div>
+                    <label className="text-white text-sm mb-2 block">Количество билетов</label>
+                    <div className="flex items-center gap-3">
+                      <Button
+                        onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+                        className="h-12 w-12 bg-white/20 hover:bg-white/30 text-white"
+                      >
+                        <Icon name="Minus" size={20} />
+                      </Button>
+                      <div className="flex-1 text-center">
+                        <p className="text-3xl font-bold text-white">{ticketCount}</p>
+                        <p className="text-sm text-white/70">× 100 ₽ = {ticketCount * 100} ₽</p>
+                      </div>
+                      <Button
+                        onClick={() => setTicketCount(Math.min(100, ticketCount + 1))}
+                        className="h-12 w-12 bg-white/20 hover:bg-white/30 text-white"
+                      >
+                        <Icon name="Plus" size={20} />
+                      </Button>
+                    </div>
+                  </div>
                   <Button
-                    onClick={handleParticipate}
+                    onClick={handleBuyTicket}
                     className="w-full h-14 bg-white text-primary hover:bg-white/90 font-bold text-lg"
                   >
-                    <Icon name="Sparkles" size={20} className="mr-2" />
-                    Участвовать бесплатно
+                    <Icon name="Ticket" size={20} className="mr-2" />
+                    Купить {ticketCount} билет(ов) за {ticketCount * 100} ₽
                   </Button>
                   <p className="text-white/70 text-xs text-center">
                     Нажимая кнопку, вы соглашаетесь с правилами розыгрыша
@@ -144,9 +167,9 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
               ) : (
                 <div className="bg-green-500/20 backdrop-blur-sm border-2 border-green-400/50 rounded-xl p-6 text-center">
                   <Icon name="CheckCircle2" size={48} className="text-green-400 mx-auto mb-3" />
-                  <p className="text-white font-bold text-xl mb-2">Вы участвуете!</p>
+                  <p className="text-white font-bold text-xl mb-2">Билет куплен!</p>
                   <p className="text-white/80 text-sm">
-                    Результаты будут объявлены 1 декабря в 20:00. Следите за уведомлениями!
+                    Вы купили {ticketCount} билет(ов) на сумму {ticketCount * 100} ₽. Розыгрыш в воскресенье в 12:00 МСК!
                   </p>
                 </div>
               )}
@@ -167,9 +190,9 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                     <span className="font-bold text-primary">1</span>
                   </div>
                   <div>
-                    <h4 className="font-bold mb-1">Регистрация</h4>
+                    <h4 className="font-bold mb-1">Покупка билета</h4>
                     <p className="text-sm text-muted-foreground">
-                      Заполните форму участия с email и телефоном
+                      Заполните форму и купите билет за 100 ₽. Можно купить несколько билетов
                     </p>
                   </div>
                 </div>
@@ -180,7 +203,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                   <div>
                     <h4 className="font-bold mb-1">Ожидание</h4>
                     <p className="text-sm text-muted-foreground">
-                      Розыгрыш проходит каждое воскресенье в 20:00 по МСК
+                      Розыгрыш проходит каждое воскресенье в 12:00 по МСК
                     </p>
                   </div>
                 </div>
@@ -238,7 +261,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
                 <div className="flex items-start gap-3">
                   <Icon name="CheckCircle2" size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-foreground">Бесплатно:</span> Никаких скрытых платежей или подписок
+                    <span className="font-semibold text-foreground">Честная цена:</span> Билет стоит всего 100 ₽, никаких скрытых платежей
                   </p>
                 </div>
               </CardContent>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
@@ -6,7 +7,64 @@ interface WeeklyRaffleBannerProps {
   setCurrentPage: (page: Page) => void;
 }
 
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) => {
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [ticketsSold, setTicketsSold] = useState(1247);
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      
+      const moscowOffset = 3 * 60;
+      const localOffset = now.getTimezoneOffset();
+      const moscowTime = new Date(now.getTime() + (moscowOffset + localOffset) * 60 * 1000);
+      
+      const nextDraw = new Date(moscowTime);
+      nextDraw.setHours(12, 0, 0, 0);
+      
+      const currentDay = moscowTime.getDay();
+      const daysUntilSunday = currentDay === 0 ? 0 : 7 - currentDay;
+      nextDraw.setDate(moscowTime.getDate() + daysUntilSunday);
+      
+      if (currentDay === 0 && moscowTime.getHours() >= 12) {
+        nextDraw.setDate(nextDraw.getDate() + 7);
+      }
+      
+      const difference = nextDraw.getTime() - moscowTime.getTime();
+      
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        
+        setTimeLeft({ days, hours, minutes, seconds });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTicketsSold(prev => prev + Math.floor(Math.random() * 3));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 shadow-2xl">
@@ -28,9 +86,31 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
               </h2>
               
               <p className="text-white/90 text-lg leading-relaxed">
-                Каждую неделю мы разыгрываем новый iPhone 17 среди участников. 
-                Участвуйте абсолютно бесплатно!
+                Каждое воскресенье в 12:00 МСК мы разыгрываем новый iPhone 17 среди участников. 
+                Билет всего 100 ₽!
               </p>
+
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30">
+                <p className="text-white/90 text-sm mb-3 text-center">До следующего розыгрыша:</p>
+                <div className="grid grid-cols-4 gap-3">
+                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                    <p className="text-3xl font-bold text-white">{timeLeft.days}</p>
+                    <p className="text-xs text-white/80 mt-1">дней</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                    <p className="text-3xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</p>
+                    <p className="text-xs text-white/80 mt-1">часов</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                    <p className="text-3xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</p>
+                    <p className="text-xs text-white/80 mt-1">минут</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
+                    <p className="text-3xl font-bold text-white animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</p>
+                    <p className="text-xs text-white/80 mt-1">секунд</p>
+                  </div>
+                </div>
+              </div>
               
               <div className="flex flex-wrap gap-4 items-center">
                 <Button
@@ -38,13 +118,13 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                   size="lg"
                   className="bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold text-lg px-8 py-6 h-auto"
                 >
-                  <Icon name="Gift" size={20} className="mr-2" />
-                  Участвовать бесплатно
+                  <Icon name="Ticket" size={20} className="mr-2" />
+                  Купить билет 100 ₽
                 </Button>
                 
                 <div className="flex items-center gap-2 text-white/80 text-sm">
                   <Icon name="Users" size={16} />
-                  <span>Уже <span className="font-bold text-white">1,247</span> участников</span>
+                  <span>Куплено <span className="font-bold text-white">{ticketsSold.toLocaleString('ru-RU')}</span> билетов</span>
                 </div>
               </div>
             </div>
@@ -62,7 +142,7 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                     </div>
                     <div className="text-white">
                       <p className="text-sm opacity-80">Следующий розыгрыш</p>
-                      <p className="text-xl font-bold">1 декабря, 20:00</p>
+                      <p className="text-xl font-bold">Воскресенье, 12:00 МСК</p>
                     </div>
                   </div>
                   
@@ -78,26 +158,36 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                   
                   <div className="flex items-center gap-4">
                     <div className="bg-white/20 rounded-full p-3">
+                      <Icon name="Ticket" size={24} className="text-white" />
+                    </div>
+                    <div className="text-white">
+                      <p className="text-sm opacity-80">Стоимость билета</p>
+                      <p className="text-xl font-bold">100 ₽</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="bg-white/20 rounded-full p-3">
                       <Icon name="Zap" size={24} className="text-white" />
                     </div>
                     <div className="text-white">
                       <p className="text-sm opacity-80">Шанс победы</p>
-                      <p className="text-xl font-bold">1 из 1,247</p>
+                      <p className="text-xl font-bold">1 из {ticketsSold.toLocaleString('ru-RU')}</p>
                     </div>
                   </div>
                   
                   <div className="pt-4 border-t border-white/20">
                     <div className="flex items-center gap-2 text-white/90 text-sm">
                       <Icon name="CheckCircle2" size={16} className="text-green-300" />
-                      <span>Полностью бесплатно</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-white/90 text-sm mt-2">
-                      <Icon name="CheckCircle2" size={16} className="text-green-300" />
                       <span>Честный и прозрачный розыгрыш</span>
                     </div>
                     <div className="flex items-center gap-2 text-white/90 text-sm mt-2">
                       <Icon name="CheckCircle2" size={16} className="text-green-300" />
                       <span>Результаты в прямом эфире</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-white/90 text-sm mt-2">
+                      <Icon name="CheckCircle2" size={16} className="text-green-300" />
+                      <span>Доставка по всей России</span>
                     </div>
                   </div>
                 </div>
@@ -116,8 +206,8 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                 </div>
                 <div className="w-px h-12 bg-white/20"></div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-white">23</p>
-                  <p className="text-sm text-white/80">iPhone разыграно</p>
+                  <p className="text-3xl font-bold text-white">{ticketsSold.toLocaleString('ru-RU')}</p>
+                  <p className="text-sm text-white/80">билетов продано</p>
                 </div>
                 <div className="w-px h-12 bg-white/20"></div>
                 <div className="text-center">
