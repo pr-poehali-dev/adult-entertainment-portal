@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -275,4 +275,39 @@ export interface PaidAd {
   views: number;
   isPremium: boolean;
   contactInfo: string;
+}
+
+export type AdminStatsPeriod = 'today' | 'week' | 'month' | 'year';
+
+export interface AdminStats {
+  totalUsers: number;
+  totalSellers: number;
+  totalBuyers: number;
+  totalBookings: number;
+  totalRevenue: number;
+  totalAds: number;
+  totalWorkApplications: number;
+  newUsersToday: number;
+  activeBookings: number;
+  premiumUsers: number;
+}
+
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  verified: boolean;
+  vipStatus: VIPStatus;
+  registeredDate: string;
+  lastActive: string;
+  totalBookings: number;
+  totalSpent: number;
+  status: 'active' | 'suspended' | 'banned';
+}
+
+export interface AdminBooking extends Booking {
+  userName: string;
+  userEmail: string;
+  sellerEmail: string;
 }

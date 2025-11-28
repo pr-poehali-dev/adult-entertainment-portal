@@ -132,6 +132,15 @@ const Navigation = ({
           >
             {isDarkTheme ? <Icon name="Sun" size={20} /> : <Icon name="Moon" size={20} />}
           </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setCurrentPage('admin')}
+            className="text-foreground/80 hover:text-primary"
+            title="Админ-панель"
+          >
+            <Icon name="Shield" size={20} />
+          </Button>
           {userRole && (
             <div className="relative">
               <Button 
