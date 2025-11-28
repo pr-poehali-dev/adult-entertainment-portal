@@ -90,7 +90,7 @@ export const DatingPage = ({ setCurrentPage }: DatingPageProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-pink-50/30 dark:via-pink-950/10 to-background">
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <Button
           variant="ghost"
           onClick={() => setCurrentPage('home')}
