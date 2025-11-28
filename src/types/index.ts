@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -310,4 +310,38 @@ export interface AdminBooking extends Booking {
   userName: string;
   userEmail: string;
   sellerEmail: string;
+}
+
+export interface ReferralStats {
+  totalReferrals: number;
+  activeReferrals: number;
+  totalEarned: number;
+  level1Count: number;
+  level2Count: number;
+  level3Count: number;
+  level1Earned: number;
+  level2Earned: number;
+  level3Earned: number;
+}
+
+export interface ReferralUser {
+  id: number;
+  name: string;
+  registeredDate: string;
+  level: 1 | 2 | 3;
+  totalSpent: number;
+  yourEarnings: number;
+  isActive: boolean;
+  avatar?: string;
+}
+
+export interface ReferralTransaction {
+  id: number;
+  date: string;
+  fromUser: string;
+  amount: number;
+  currency: Currency;
+  commission: number;
+  level: 1 | 2 | 3;
+  type: string;
 }

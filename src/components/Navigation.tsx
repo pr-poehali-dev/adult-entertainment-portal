@@ -55,6 +55,10 @@ const Navigation = ({
           <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             Работа
           </button>
+          <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
+            <Icon name="Users" size={16} />
+            Партнёрка
+          </button>
           {userRole && (
             <>
               <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
@@ -265,6 +269,14 @@ const Navigation = ({
           >
             <Icon name="Briefcase" size={20} className="text-primary" />
             <span className="font-medium">Работа</span>
+          </button>
+          
+          <button 
+            onClick={() => { setCurrentPage('referral'); setShowMobileMenu(false); }}
+            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          >
+            <Icon name="Users" size={20} className="text-primary" />
+            <span className="font-medium">Партнёрская программа</span>
           </button>
           
           {userRole && (

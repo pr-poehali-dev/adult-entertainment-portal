@@ -5,6 +5,7 @@ import { SellerProfilePage } from '@/components/pages/SellerProfile';
 import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
 import { WorkPage } from '@/components/pages/work/WorkPage';
 import { AdminPage } from '@/components/pages/admin/AdminPage';
+import { ReferralPage } from '@/components/pages/referral/ReferralPage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -165,6 +166,9 @@ export const useAppPages = ({
       
       case 'admin':
         return <AdminPage setCurrentPage={setCurrentPage} />;
+      
+      case 'referral':
+        return <ReferralPage />;
       
       case 'seller-profile':
         const seller = sellerProfiles.find(s => s.id === selectedSellerId);

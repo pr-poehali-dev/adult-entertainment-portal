@@ -1,0 +1,367 @@
+import { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import Icon from '@/components/ui/icon';
+import { ReferralStats, ReferralUser, ReferralTransaction } from '@/types';
+import { useToast } from '@/hooks/use-toast';
+
+export const ReferralPage = () => {
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<'overview' | 'referrals' | 'transactions'>('overview');
+  
+  const referralCode = 'ELITE2024XYZ';
+  const referralLink = `https://elite.app/ref/${referralCode}`;
+  
+  const stats: ReferralStats = {
+    totalReferrals: 47,
+    activeReferrals: 38,
+    totalEarned: 125000,
+    level1Count: 23,
+    level2Count: 18,
+    level3Count: 6,
+    level1Earned: 85000,
+    level2Earned: 32000,
+    level3Earned: 8000,
+  };
+  
+  const referralUsers: ReferralUser[] = [
+    { id: 1, name: 'Анна Смирнова', registeredDate: '2024-11-15', level: 1, totalSpent: 45000, yourEarnings: 4500, isActive: true },
+    { id: 2, name: 'Мария Петрова', registeredDate: '2024-11-20', level: 1, totalSpent: 32000, yourEarnings: 3200, isActive: true },
+    { id: 3, name: 'Елена Иванова', registeredDate: '2024-11-18', level: 2, totalSpent: 28000, yourEarnings: 1400, isActive: true },
+    { id: 4, name: 'Ольга Козлова', registeredDate: '2024-11-22', level: 2, totalSpent: 25000, yourEarnings: 1250, isActive: true },
+    { id: 5, name: 'Дарья Новикова', registeredDate: '2024-11-25', level: 3, totalSpent: 18000, yourEarnings: 180, isActive: true },
+  ];
+  
+  const transactions: ReferralTransaction[] = [
+    { id: 1, date: '2024-11-28', fromUser: 'Анна Смирнова', amount: 5000, currency: 'RUB', commission: 500, level: 1, type: 'Бронирование' },
+    { id: 2, date: '2024-11-27', fromUser: 'Мария Петрова', amount: 8000, currency: 'RUB', commission: 800, level: 1, type: 'Бронирование' },
+    { id: 3, date: '2024-11-26', fromUser: 'Елена Иванова', amount: 6000, currency: 'RUB', commission: 300, level: 2, type: 'Бронирование' },
+    { id: 4, date: '2024-11-25', fromUser: 'Ольга Козлова', amount: 4500, currency: 'RUB', commission: 225, level: 2, type: 'VIP подписка' },
+    { id: 5, date: '2024-11-24', fromUser: 'Дарья Новикова', amount: 3000, currency: 'RUB', commission: 30, level: 3, type: 'Бронирование' },
+  ];
+  
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: 'Скопировано!',
+      description: 'Реферальная ссылка скопирована в буфер обмена',
+    });
+  };
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background py-12 px-4 animate-fade-in">
+      <div className="container mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <span className="gold-shimmer">Партнёрская программа</span>
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Приглашайте друзей и получайте до 10% с каждой их транзакции
+          </p>
+        </div>
+        
+        <Card className="mb-8 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
+          <CardContent className="p-6 md:p-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl md:text-2xl font-bold mb-2">Ваша реферальная ссылка</h3>
+                <p className="text-muted-foreground mb-4">Поделитесь ссылкой и зарабатывайте</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Input 
+                    value={referralLink} 
+                    readOnly 
+                    className="flex-1 bg-card/80 backdrop-blur-sm text-center md:text-left"
+                  />
+                  <Button 
+                    onClick={() => copyToClipboard(referralLink)}
+                    className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
+                  >
+                    <Icon name="Copy" size={20} className="mr-2" />
+                    Копировать
+                  </Button>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=Присоединяйся к Elite!`, '_blank')}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="MessageCircle" size={20} />
+                  Telegram
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent('Присоединяйся к Elite! ' + referralLink)}`, '_blank')}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="MessageSquare" size={20} />
+                  WhatsApp
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="bg-gradient-to-br from-green-500/10 to-emerald-600/10 border-green-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <Icon name="Users" size={32} className="text-white" />
+              </div>
+              <h3 className="text-3xl font-bold mb-1">{stats.totalReferrals}</h3>
+              <p className="text-muted-foreground">Всего рефералов</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-600/10 border-blue-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                <Icon name="UserCheck" size={32} className="text-white" />
+              </div>
+              <h3 className="text-3xl font-bold mb-1">{stats.activeReferrals}</h3>
+              <p className="text-muted-foreground">Активных</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-br from-primary/10 to-yellow-500/10 border-primary/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-yellow-500 flex items-center justify-center">
+                <Icon name="Wallet" size={32} className="text-white" />
+              </div>
+              <h3 className="text-3xl font-bold mb-1">{stats.totalEarned.toLocaleString()} ₽</h3>
+              <p className="text-muted-foreground">Всего заработано</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-600/10 border-purple-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                <Icon name="TrendingUp" size={32} className="text-white" />
+              </div>
+              <h3 className="text-3xl font-bold mb-1">10%</h3>
+              <p className="text-muted-foreground">Макс. комиссия</p>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-2xl">Уровни комиссии</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                <div className="text-5xl font-bold text-primary mb-2">10%</div>
+                <h4 className="text-xl font-semibold mb-2">1 линия</h4>
+                <p className="text-muted-foreground mb-4">Ваши прямые рефералы</p>
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <Icon name="Users" size={16} className="text-primary" />
+                  <span className="font-medium">{stats.level1Count} человек</span>
+                </div>
+                <div className="mt-2 text-lg font-bold text-primary">
+                  {stats.level1Earned.toLocaleString()} ₽
+                </div>
+              </div>
+              
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20">
+                <div className="text-5xl font-bold text-blue-500 mb-2">5%</div>
+                <h4 className="text-xl font-semibold mb-2">2 линия</h4>
+                <p className="text-muted-foreground mb-4">Рефералы ваших рефералов</p>
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <Icon name="Users" size={16} className="text-blue-500" />
+                  <span className="font-medium">{stats.level2Count} человек</span>
+                </div>
+                <div className="mt-2 text-lg font-bold text-blue-500">
+                  {stats.level2Earned.toLocaleString()} ₽
+                </div>
+              </div>
+              
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20">
+                <div className="text-5xl font-bold text-purple-500 mb-2">1%</div>
+                <h4 className="text-xl font-semibold mb-2">3 линия</h4>
+                <p className="text-muted-foreground mb-4">Третий уровень рефералов</p>
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <Icon name="Users" size={16} className="text-purple-500" />
+                  <span className="font-medium">{stats.level3Count} человек</span>
+                </div>
+                <div className="mt-2 text-lg font-bold text-purple-500">
+                  {stats.level3Earned.toLocaleString()} ₽
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <CardTitle className="text-2xl">Детализация</CardTitle>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <Button 
+                  variant={activeTab === 'overview' ? 'default' : 'outline'}
+                  onClick={() => setActiveTab('overview')}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Icon name="BarChart3" size={16} className="mr-2" />
+                  Обзор
+                </Button>
+                <Button 
+                  variant={activeTab === 'referrals' ? 'default' : 'outline'}
+                  onClick={() => setActiveTab('referrals')}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Icon name="Users" size={16} className="mr-2" />
+                  Рефералы
+                </Button>
+                <Button 
+                  variant={activeTab === 'transactions' ? 'default' : 'outline'}
+                  onClick={() => setActiveTab('transactions')}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Icon name="Receipt" size={16} className="mr-2" />
+                  История
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-6 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Icon name="TrendingUp" size={20} className="text-primary" />
+                      Последние 7 дней
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Новых рефералов:</span>
+                        <span className="font-bold">12</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Заработано:</span>
+                        <span className="font-bold text-primary">8,500 ₽</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Конверсия:</span>
+                        <span className="font-bold">68%</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6 rounded-lg bg-muted/30">
+                    <h4 className="font-semibold mb-4 flex items-center gap-2">
+                      <Icon name="Award" size={20} className="text-primary" />
+                      Топ реферал
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Имя:</span>
+                        <span className="font-bold">Анна Смирнова</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Потрачено:</span>
+                        <span className="font-bold">45,000 ₽</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Ваш доход:</span>
+                        <span className="font-bold text-primary">4,500 ₽</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'referrals' && (
+              <div className="space-y-4">
+                {referralUsers.map((user) => (
+                  <div 
+                    key={user.id} 
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors gap-4"
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white font-bold">
+                        {user.name[0]}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">{user.name}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Регистрация: {new Date(user.registeredDate).toLocaleDateString('ru-RU')}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+                      <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        user.level === 1 ? 'bg-primary/20 text-primary' :
+                        user.level === 2 ? 'bg-blue-500/20 text-blue-500' :
+                        'bg-purple-500/20 text-purple-500'
+                      }`}>
+                        {user.level} линия ({user.level === 1 ? '10%' : user.level === 2 ? '5%' : '1%'})
+                      </div>
+                      
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Потрачено</p>
+                        <p className="font-bold">{user.totalSpent.toLocaleString()} ₽</p>
+                      </div>
+                      
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Ваш доход</p>
+                        <p className="font-bold text-primary">{user.yourEarnings.toLocaleString()} ₽</p>
+                      </div>
+                      
+                      {user.isActive && (
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" title="Активен" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {activeTab === 'transactions' && (
+              <div className="space-y-3">
+                {transactions.map((transaction) => (
+                  <div 
+                    key={transaction.id} 
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors gap-3"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Icon name="ArrowDownLeft" size={16} className="text-primary" />
+                        <span className="font-semibold">{transaction.fromUser}</span>
+                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          transaction.level === 1 ? 'bg-primary/20 text-primary' :
+                          transaction.level === 2 ? 'bg-blue-500/20 text-blue-500' :
+                          'bg-purple-500/20 text-purple-500'
+                        }`}>
+                          {transaction.level} линия
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{transaction.type} • {new Date(transaction.date).toLocaleDateString('ru-RU')}</p>
+                    </div>
+                    
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Сумма транзакции</p>
+                      <p className="font-medium">{transaction.amount.toLocaleString()} ₽</p>
+                    </div>
+                    
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Ваш доход</p>
+                      <p className="font-bold text-primary text-lg">+{transaction.commission.toLocaleString()} ₽</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};

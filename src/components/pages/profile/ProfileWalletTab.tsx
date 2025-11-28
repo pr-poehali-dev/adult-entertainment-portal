@@ -3,9 +3,13 @@ import { WalletCard } from '@/components/wallet/WalletCard';
 import { DepositModal } from '@/components/wallet/DepositModal';
 import { WithdrawModal } from '@/components/wallet/WithdrawModal';
 import { TransactionHistory } from '@/components/wallet/TransactionHistory';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import Icon from '@/components/ui/icon';
 import { Wallet, Currency, Transaction } from '@/types';
 import { createDepositTransaction, createWithdrawTransaction } from '@/utils/transactionManager';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileWalletTabProps {
   wallet: Wallet;
