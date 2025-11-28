@@ -194,7 +194,7 @@ const MessagesPage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
+    <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">

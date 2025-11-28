@@ -54,7 +54,7 @@ const Navigation = ({
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
-    <div className="max-w-7xl mx-auto px-4 py-5">
+    <div className="max-w-wide mx-auto px-4 py-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
           <Icon name="Crown" size={32} className="text-primary" />
@@ -309,7 +309,7 @@ const Navigation = ({
 
     {showMobileMenu && (
       <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-2xl z-50 animate-fade-in">
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
+        <div className="max-w-wide mx-auto px-4 py-6 space-y-4">
           <button 
             onClick={() => { setCurrentPage('home'); setShowMobileMenu(false); }}
             className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"

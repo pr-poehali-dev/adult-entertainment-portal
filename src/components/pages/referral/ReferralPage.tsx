@@ -30,7 +30,7 @@ export const ReferralPage = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background py-12 px-4 animate-fade-in">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-wide mx-auto">
         <div className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             <span className="gold-shimmer">Партнёрская программа</span>

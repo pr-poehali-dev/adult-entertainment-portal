@@ -8,7 +8,7 @@ export const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
+    <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       <Card>
         <CardHeader>
           <CardTitle className="text-4xl text-primary flex items-center gap-3">

@@ -22,7 +22,7 @@ export const FavoritesPage = ({
   const favoriteItems = catalogItems.filter(item => favorites.includes(item.id));
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
+    <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       <h1 className="text-5xl font-bold mb-8 text-primary">Избранное</h1>
       
       {favoriteItems.length === 0 ? (

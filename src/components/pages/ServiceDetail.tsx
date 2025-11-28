@@ -38,7 +38,7 @@ export const ServiceDetailPage = ({
   const nextAvailable = getNextAvailableTime(service.workSchedule);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
+    <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       <Button 
         variant="ghost" 
         onClick={() => setCurrentPage('catalog')}

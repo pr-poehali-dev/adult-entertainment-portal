@@ -407,7 +407,7 @@ const Index = () => {
       />
 
       <footer className="border-t border-border/50 mt-20 py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-wide mx-auto px-4">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Icon name="Crown" size={40} className="text-primary" />

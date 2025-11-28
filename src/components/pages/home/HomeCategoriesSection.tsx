@@ -19,7 +19,7 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
   
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-background to-muted/30">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-wide mx-auto">
         <div className="text-center mb-16 px-4">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             <span className="gold-shimmer">{t.home.categoriesTitle}</span>

@@ -84,7 +84,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-wide mx-auto px-4 py-8">
         <Button
           variant="ghost"
           onClick={() => setCurrentPage('home')}
