@@ -14,6 +14,7 @@ interface QuickRegistrationProps {
 export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistrationProps) => {
   const { toast } = useToast();
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [generatedCredentials, setGeneratedCredentials] = useState<{ login: string; password: string } | null>(null);
 
@@ -35,7 +36,7 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
     return password;
   };
 
-  const handleQuickRegister = () => {
+  const handleQuickRegister = async () => {
     if (!phone || phone.length < 10) {
       toast({
         title: 'Укажите телефон',
@@ -45,19 +46,38 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
       return;
     }
 
+    if (!email || !email.includes('@')) {
+      toast({
+        title: 'Укажите email',
+        description: 'Введите корректный адрес электронной почты',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
 
+    const login = generateLogin();
+    const password = generatePassword();
+    
+    try {
+      await fetch('https://functions.poehali.dev/cf4df0ab-f212-4000-82d6-438f1b03472b', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, login, password, phone })
+      });
+    } catch (error) {
+      console.error('Failed to send email:', error);
+    }
+
     setTimeout(() => {
-      const login = generateLogin();
-      const password = generatePassword();
-      
       setGeneratedCredentials({ login, password });
       
-      localStorage.setItem('user_credentials', JSON.stringify({ login, password, phone }));
+      localStorage.setItem('user_credentials', JSON.stringify({ login, password, phone, email }));
       
       toast({
         title: 'Регистрация успешна! 🎉',
-        description: 'Сохраните логин и пароль для следующих входов',
+        description: `Данные отправлены на ${email}`,
         duration: 5000,
       });
       
@@ -174,6 +194,21 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="text-lg"
+            />
+            <p className="text-xs text-muted-foreground">
+              На этот email придут логин и пароль
+            </p>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="phone">Номер телефона</Label>
             <Input
               id="phone"
@@ -184,7 +219,7 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
               className="text-lg"
             />
             <p className="text-xs text-muted-foreground">
-              Нужен для восстановления доступа к аккаунту
+              Для восстановления доступа
             </p>
           </div>
 
@@ -196,7 +231,8 @@ export const QuickRegistration = ({ onRegisterSuccess, onCancel }: QuickRegistra
                 <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                   <li>Создастся уникальный логин</li>
                   <li>Сгенерируется безопасный пароль</li>
-                  <li>Вы сможете сразу участвовать в розыгрыше</li>
+                  <li>Данные отправятся на ваш email</li>
+                  <li>Вы сразу сможете участвовать в розыгрыше</li>
                 </ul>
               </div>
             </div>
