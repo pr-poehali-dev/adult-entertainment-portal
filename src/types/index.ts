@@ -2,6 +2,16 @@ export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'sear
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
+export type RegistrationMethod = 'email' | 'phone' | 'telegram';
+
+export interface VerificationCode {
+  code: string;
+  method: RegistrationMethod;
+  contact: string;
+  expiresAt: number;
+  attempts: number;
+}
+
 export interface Profile {
   name: string;
   role: UserRole;

@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { Page, Profile, CatalogItem, UserRole, WorkSchedule } from '@/types';
+import { Page, Profile, CatalogItem, UserRole, WorkSchedule, RegistrationMethod } from '@/types';
 import { TipModal } from '@/components/TipModal';
 import { VIPBadge } from '@/components/vip/VIPBadge';
 import { HealthCertificateBadge } from '@/components/health/HealthCertificateBadge';
@@ -21,6 +21,7 @@ import { SearchPage } from './search/SearchPage';
 import { RulesPage } from './rules/RulesPage';
 import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
 import { useToast } from '@/hooks/use-toast';
+import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -36,28 +37,80 @@ interface UserPagesProps {
 export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (role: UserRole) => void; setCurrentPage: (page: Page) => void }) => {
   const { toast } = useToast();
   const [referralInput, setReferralInput] = useState('');
+  const [registrationMethod, setRegistrationMethod] = useState<RegistrationMethod>('email');
+  const [contactValue, setContactValue] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
+  const [pendingRole, setPendingRole] = useState<UserRole>(null);
   
   const handleRegister = (role: UserRole) => {
+    if (!contactValue) {
+      toast({
+        title: "Ошибка",
+        description: "Заполните контактные данные",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setPendingRole(role);
+    setShowVerification(true);
+    
+    toast({
+      title: "Код отправлен!",
+      description: getVerificationMessage(),
+    });
+  };
+  
+  const handleVerificationSuccess = (code: string) => {
+    setShowVerification(false);
+    
     if (referralInput) {
       const refCode = parseReferralCode(referralInput) || referralInput;
       
-      if (!validateReferralCode(refCode)) {
+      if (validateReferralCode(refCode)) {
         toast({
-          title: "Неверная реферальная ссылка",
-          description: "Проверьте правильность реферальной ссылки",
-          variant: "destructive",
+          title: "Успешная регистрация!",
+          description: `Вы присоединились к партнёрской сети`,
         });
-        return;
       }
-      
-      toast({
-        title: "Успешная регистрация!",
-        description: `Вы присоединились к партнёрской сети через реферала`,
-      });
     }
     
-    setUserRole(role);
+    setUserRole(pendingRole);
     setCurrentPage('home');
+  };
+  
+  const handleResendCode = () => {
+    toast({
+      title: "Код отправлен повторно",
+      description: getVerificationMessage(),
+    });
+  };
+  
+  const getVerificationMessage = (): string => {
+    switch (registrationMethod) {
+      case 'email':
+        return `Код отправлен на ${contactValue}`;
+      case 'phone':
+        return `SMS с кодом отправлен на ${contactValue}`;
+      case 'telegram':
+        return `Код отправлен в Telegram @${contactValue}`;
+    }
+  };
+  
+  const getContactPlaceholder = (): string => {
+    switch (registrationMethod) {
+      case 'email': return 'your@email.com';
+      case 'phone': return '+7 (999) 123-45-67';
+      case 'telegram': return 'username';
+    }
+  };
+  
+  const getContactLabel = (): string => {
+    switch (registrationMethod) {
+      case 'email': return 'Email';
+      case 'phone': return 'Номер телефона';
+      case 'telegram': return 'Telegram логин';
+    }
   };
   
   return (
@@ -78,10 +131,52 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
               <Label htmlFor="buyer-name">Имя</Label>
               <Input id="buyer-name" placeholder="Введите ваше имя" className="bg-background border-border" />
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="buyer-email">Email</Label>
-              <Input id="buyer-email" type="email" placeholder="your@email.com" className="bg-background border-border" />
+              <Label>Способ регистрации</Label>
+              <div className="grid grid-cols-3 gap-2">
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'email' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('email'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="Mail" size={16} />
+                  Email
+                </Button>
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'phone' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('phone'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="Phone" size={16} />
+                  Телефон
+                </Button>
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'telegram' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('telegram'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="MessageCircle" size={16} />
+                  Telegram
+                </Button>
+              </div>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="buyer-contact">{getContactLabel()}</Label>
+              <Input 
+                id="buyer-contact" 
+                type={registrationMethod === 'email' ? 'email' : registrationMethod === 'phone' ? 'tel' : 'text'}
+                placeholder={getContactPlaceholder()}
+                value={contactValue}
+                onChange={(e) => setContactValue(e.target.value)}
+                className="bg-background border-border" 
+              />
+            </div>
+            
             <div className="space-y-2">
               <Label htmlFor="buyer-password">Пароль</Label>
               <Input id="buyer-password" type="password" placeholder="••••••••" className="bg-background border-border" />
@@ -126,10 +221,52 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
               <Label htmlFor="seller-name">Имя</Label>
               <Input id="seller-name" placeholder="Введите ваше имя" className="bg-background border-border" />
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="seller-email">Email</Label>
-              <Input id="seller-email" type="email" placeholder="your@email.com" className="bg-background border-border" />
+              <Label>Способ регистрации</Label>
+              <div className="grid grid-cols-3 gap-2">
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'email' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('email'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="Mail" size={16} />
+                  Email
+                </Button>
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'phone' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('phone'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="Phone" size={16} />
+                  Телефон
+                </Button>
+                <Button
+                  type="button"
+                  variant={registrationMethod === 'telegram' ? 'default' : 'outline'}
+                  onClick={() => { setRegistrationMethod('telegram'); setContactValue(''); }}
+                  className="flex items-center gap-2"
+                >
+                  <Icon name="MessageCircle" size={16} />
+                  Telegram
+                </Button>
+              </div>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="seller-contact">{getContactLabel()}</Label>
+              <Input 
+                id="seller-contact" 
+                type={registrationMethod === 'email' ? 'email' : registrationMethod === 'phone' ? 'tel' : 'text'}
+                placeholder={getContactPlaceholder()}
+                value={contactValue}
+                onChange={(e) => setContactValue(e.target.value)}
+                className="bg-background border-border" 
+              />
+            </div>
+            
             <div className="space-y-2">
               <Label htmlFor="seller-password">Пароль</Label>
               <Input id="seller-password" type="password" placeholder="••••••••" className="bg-background border-border" />
@@ -185,6 +322,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
         </Tabs>
       </CardContent>
     </Card>
+    
+    <VerificationCodeModal
+      isOpen={showVerification}
+      onClose={() => setShowVerification(false)}
+      onVerify={handleVerificationSuccess}
+      method={registrationMethod}
+      contact={contactValue}
+      onResend={handleResendCode}
+    />
   </div>
   );
 };
