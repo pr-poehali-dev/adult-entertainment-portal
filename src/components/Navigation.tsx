@@ -70,6 +70,10 @@ const Navigation = ({
           <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             {t.nav.catalog}
           </button>
+          <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
+            <Icon name="Radio" size={16} />
+            Онлайн
+          </button>
           <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
             Работа
           </button>

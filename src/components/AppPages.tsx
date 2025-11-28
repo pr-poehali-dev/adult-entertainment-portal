@@ -12,6 +12,7 @@ import { InvitationsPage } from '@/components/pages/invitations/InvitationsPage'
 import { RafflePage } from '@/components/pages/RafflePage';
 import { DatingPage } from '@/components/pages/DatingPage';
 import { WalletPage } from '@/components/pages/WalletPage';
+import { OnlineSearchPage } from '@/components/pages/OnlineSearchPage';
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -201,6 +202,9 @@ export const useAppPages = ({
         ) : (
           <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
         );
+      
+      case 'online-search':
+        return <OnlineSearchPage />;
       
       default:
         return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />;

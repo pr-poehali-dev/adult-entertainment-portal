@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
+import { EnhancedMessageInput } from '@/components/messages/EnhancedMessageInput';
 
 interface Message {
   id: number;
@@ -14,10 +13,12 @@ interface Message {
   time: string;
   read: boolean;
   attachment?: {
-    type: 'image' | 'file';
+    type: 'image' | 'file' | 'audio' | 'location';
     name: string;
     url: string;
     size?: string;
+    duration?: string;
+    location?: { lat: number; lng: number };
   };
 }
 
@@ -35,7 +36,6 @@ const MessagesPage = () => {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const [chats, setChats] = useState<Chat[]>([
@@ -121,11 +121,67 @@ const MessagesPage = () => {
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      setSelectedFiles(Array.from(files));
-    }
+  const handleFileSelect = (files: FileList) => {
+    setSelectedFiles(Array.from(files));
+  };
+
+  const handleAddAudio = (audioBlob: Blob) => {
+    if (!selectedChatId) return;
+    const currentTime = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    const newMessage: Message = {
+      id: Date.now(),
+      text: 'Аудиосообщение',
+      sender: 'me',
+      time: currentTime,
+      read: true,
+      attachment: {
+        type: 'audio',
+        name: 'audio.webm',
+        url: URL.createObjectURL(audioBlob),
+      }
+    };
+
+    setMessages(prev => ({
+      ...prev,
+      [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
+    }));
+
+    setChats(prev => prev.map(chat => 
+      chat.id === selectedChatId 
+        ? { ...chat, lastMessage: '🎤 Аудиосообщение', time: currentTime }
+        : chat
+    ));
+  };
+
+  const handleAddLocation = (location: { lat: number; lng: number }) => {
+    if (!selectedChatId) return;
+    const currentTime = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    const newMessage: Message = {
+      id: Date.now(),
+      text: 'Геопозиция',
+      sender: 'me',
+      time: currentTime,
+      read: true,
+      attachment: {
+        type: 'location',
+        name: 'location',
+        url: `https://www.google.com/maps?q=${location.lat},${location.lng}`,
+        location: location,
+      }
+    };
+
+    setMessages(prev => ({
+      ...prev,
+      [selectedChatId]: [...(prev[selectedChatId] || []), newMessage]
+    }));
+
+    setChats(prev => prev.map(chat => 
+      chat.id === selectedChatId 
+        ? { ...chat, lastMessage: '📍 Геопозиция', time: currentTime }
+        : chat
+    ));
   };
 
   const handleSendMessage = () => {
@@ -179,14 +235,6 @@ const MessagesPage = () => {
     ));
 
     setMessageText('');
-    setShowAttachmentMenu(false);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
   };
 
   const removeSelectedFile = (index: number) => {
@@ -330,6 +378,37 @@ const MessagesPage = () => {
                           </Button>
                         </div>
                       )}
+
+                      {message.attachment && message.attachment.type === 'audio' && (
+                        <div className="mb-2 p-3 rounded-lg bg-background/10">
+                          <audio controls className="w-full">
+                            <source src={message.attachment.url} type="audio/webm" />
+                          </audio>
+                        </div>
+                      )}
+
+                      {message.attachment && message.attachment.type === 'location' && message.attachment.location && (
+                        <div className="mb-2 p-3 rounded-lg bg-background/10">
+                          <div className="flex items-center gap-3 mb-2">
+                            <Icon name="MapPin" size={20} className="text-primary" />
+                            <div>
+                              <p className="text-sm font-medium">Геопозиция</p>
+                              <p className="text-xs opacity-70">
+                                {message.attachment.location.lat.toFixed(6)}, {message.attachment.location.lng.toFixed(6)}
+                              </p>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="w-full"
+                            onClick={() => window.open(message.attachment!.url, '_blank')}
+                          >
+                            <Icon name="ExternalLink" size={14} className="mr-2" />
+                            Открыть на карте
+                          </Button>
+                        </div>
+                      )}
                       
                       {message.text && (
                         <p className="text-sm leading-relaxed">{message.text}</p>
@@ -356,109 +435,16 @@ const MessagesPage = () => {
               
               <Separator />
               
-              <div className="p-4">
-                {selectedFiles.length > 0 && (
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    {selectedFiles.map((file, index) => (
-                      <div key={index} className="relative group">
-                        <div className="p-2 pr-8 rounded-lg bg-muted flex items-center gap-2 max-w-[200px]">
-                          <Icon name={file.type.startsWith('image/') ? 'Image' : 'FileText'} size={16} />
-                          <span className="text-xs truncate">{file.name}</span>
-                        </div>
-                        <button
-                          onClick={() => removeSelectedFile(index)}
-                          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
-                        >
-                          <Icon name="X" size={12} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                <div className="flex items-end gap-2">
-                  <div className="relative">
-                    <input
-                      type="file"
-                      id="file-upload"
-                      multiple
-                      accept="image/*,.pdf,.doc,.docx,.txt"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="shrink-0 relative"
-                      onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
-                    >
-                      <Icon name="Paperclip" size={20} />
-                    </Button>
-                    
-                    {showAttachmentMenu && (
-                      <div className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-10">
-                        <button
-                          onClick={() => {
-                            document.getElementById('file-upload')?.click();
-                            setShowAttachmentMenu(false);
-                          }}
-                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-colors text-left"
-                        >
-                          <Icon name="Image" size={20} className="text-primary" />
-                          <div>
-                            <p className="text-sm font-medium">Изображение</p>
-                            <p className="text-xs text-muted-foreground">JPG, PNG, GIF</p>
-                          </div>
-                        </button>
-                        <Separator />
-                        <button
-                          onClick={() => {
-                            document.getElementById('file-upload')?.click();
-                            setShowAttachmentMenu(false);
-                          }}
-                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-colors text-left"
-                        >
-                          <Icon name="FileText" size={20} className="text-primary" />
-                          <div>
-                            <p className="text-sm font-medium">Документ</p>
-                            <p className="text-xs text-muted-foreground">PDF, DOC, TXT</p>
-                          </div>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 relative">
-                    <Input
-                      placeholder="Напишите сообщение..."
-                      value={messageText}
-                      onChange={(e) => setMessageText(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      className="bg-background border-border pr-20"
-                    />
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="absolute right-1 top-1/2 -translate-y-1/2"
-                      onClick={handleSendMessage}
-                      disabled={!messageText.trim() && selectedFiles.length === 0}
-                    >
-                      <Icon name="Send" size={18} className={messageText.trim() || selectedFiles.length > 0 ? "text-primary" : "text-muted-foreground"} />
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4 mt-2 px-2">
-                  <button className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                    <Icon name="Shield" size={14} />
-                    Безопасный чат
-                  </button>
-                  <button className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                    <Icon name="Lock" size={14} />
-                    Шифрование E2E
-                  </button>
-                </div>
-              </div>
+              <EnhancedMessageInput
+                messageText={messageText}
+                setMessageText={setMessageText}
+                onSendMessage={handleSendMessage}
+                onFileSelect={handleFileSelect}
+                selectedFiles={selectedFiles}
+                onRemoveFile={removeSelectedFile}
+                onAddAudio={handleAddAudio}
+                onAddLocation={handleAddLocation}
+              />
             </>
           ) : (
             <CardContent className="flex-1 flex items-center justify-center p-12">

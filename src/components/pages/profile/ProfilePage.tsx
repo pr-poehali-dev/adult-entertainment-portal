@@ -11,6 +11,8 @@ import { ProfileWalletTab } from './ProfileWalletTab';
 import { ProfileSettingsTab } from './ProfileSettingsTab';
 import { ProfileBookingsTab } from './ProfileBookingsTab';
 import { ProfileMediaTab } from './ProfileMediaTab';
+import { ProfileEditTab } from './ProfileEditTab';
+import { PrivateFoldersTab } from './PrivateFoldersTab';
 
 interface ProfilePageProps {
   profile: Profile;
@@ -105,8 +107,10 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
         </CardHeader>
       </Card>
 
-      <Tabs defaultValue="wallet" className="space-y-6">
-        <TabsList className={`grid w-full ${profile.role === 'seller' ? 'grid-cols-5' : 'grid-cols-4'}`}>
+      <Tabs defaultValue="profile" className="space-y-6">
+        <TabsList className={`grid w-full ${profile.role === 'seller' ? 'grid-cols-7' : 'grid-cols-6'}`}>
+          <TabsTrigger value="profile">Профиль</TabsTrigger>
+          <TabsTrigger value="folders">Папки</TabsTrigger>
           <TabsTrigger value="wallet">Кошелек</TabsTrigger>
           <TabsTrigger value="referral">Партнёрка</TabsTrigger>
           <TabsTrigger value="bookings">Бронирования</TabsTrigger>
@@ -115,6 +119,17 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
           )}
           <TabsTrigger value="settings">Настройки</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="profile">
+          <ProfileEditTab profile={profile} onProfileUpdate={onProfileUpdate} />
+        </TabsContent>
+
+        <TabsContent value="folders">
+          <PrivateFoldersTab 
+            folders={profile.privateFolders || []}
+            onFolderUpdate={(folders) => onProfileUpdate?.({ privateFolders: folders })}
+          />
+        </TabsContent>
 
         <TabsContent value="wallet">
           <ProfileWalletTab

@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -10,6 +10,28 @@ export interface VerificationCode {
   contact: string;
   expiresAt: number;
   attempts: number;
+}
+
+export type Orientation = 'hetero' | 'gay' | 'lesbian' | 'bi' | 'pan' | 'other';
+export type SexualPreference = 'classic' | 'oral' | 'anal' | 'group' | 'toys' | 'bdsm' | 'dirty' | 'cuckold' | 'extreme' | 'other';
+
+export interface ProfilePreferences {
+  orientation: Orientation;
+  lookingFor: string; // Что нравится в партнере
+  aboutMe: string; // О себе
+  sexualPreferences: SexualPreference[];
+  city: string;
+  searchOnline: boolean; // Поиск онлайн собеседников
+}
+
+export interface PrivateMediaFolder {
+  id: number;
+  name: string;
+  password: string;
+  coverImage: string;
+  itemCount: number;
+  items: MediaItem[];
+  isUnlocked?: boolean;
 }
 
 export interface Profile {
@@ -30,6 +52,8 @@ export interface Profile {
   age?: number;
   referrerId?: number | null;
   referralCode?: string;
+  preferences?: ProfilePreferences;
+  privateFolders?: PrivateMediaFolder[];
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
