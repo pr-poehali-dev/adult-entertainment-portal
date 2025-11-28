@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Page, UserRole } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
+import { ForgotPasswordModal } from '@/components/auth/ForgotPasswordModal';
 
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
@@ -17,6 +18,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -88,7 +90,17 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Пароль</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Пароль</Label>
+              <Button
+                variant="link"
+                className="text-xs text-primary hover:text-primary/80 p-0 h-auto"
+                onClick={() => setShowForgotPassword(true)}
+                disabled={isLoading}
+              >
+                Забыли пароль?
+              </Button>
+            </div>
             <Input
               id="password"
               type="password"
@@ -145,6 +157,11 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
           </div>
         </CardContent>
       </Card>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+      />
     </div>
   );
 };
