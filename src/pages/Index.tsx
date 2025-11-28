@@ -35,7 +35,7 @@ const Index = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const { toast } = useToast();
-  const { playNotificationSound } = useNotificationSound();
+  const { playNotificationSound, playBalanceSound } = useNotificationSound();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -131,6 +131,8 @@ const Index = () => {
       { currency: 'USDT', amount: 10000, symbol: '₮' },
     ]
   });
+
+  const [walletTransactions, setWalletTransactions] = useState<any[]>([]);
 
   const toggleFavorite = (id: number) => {
     const isAdding = !favorites.includes(id);
@@ -270,6 +272,21 @@ const Index = () => {
               b.currency === 'RUB' ? { ...b, amount: b.amount + randomAmount } : b
             )
           }));
+
+          const newTransaction = {
+            id: Date.now(),
+            type: 'referral_commission',
+            amount: randomAmount,
+            currency: 'RUB',
+            status: 'completed',
+            createdAt: new Date().toISOString(),
+            completedAt: new Date().toISOString(),
+            description: `Комиссия ${commission} с реферала ${referralData.level} линии`,
+            referralLevel: referralData.level
+          };
+          setWalletTransactions(prev => [newTransaction, ...prev]);
+          
+          playBalanceSound();
           
           addNotification(
             'referral',

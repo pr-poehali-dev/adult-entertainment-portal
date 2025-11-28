@@ -228,7 +228,8 @@ export type TransactionType =
   | 'booking_extend'    // Продление встречи
   | 'vip_payment'       // Оплата VIP
   | 'tip_sent'          // Отправленные чаевые
-  | 'tip_received';     // Полученные чаевые
+  | 'tip_received'      // Полученные чаевые
+  | 'referral_commission'; // Реферальная комиссия
 
 export type TransactionStatus = 
   | 'pending'     // В обработке
@@ -249,6 +250,7 @@ export interface Transaction {
   fromUser?: string;
   toUser?: string;
   fee?: number;
+  referralLevel?: 1 | 2 | 3;
 }
 
 export type WorkOpportunityType = 

@@ -15,6 +15,28 @@ export const useNotificationSound = () => {
     };
   }, []);
 
+  const playBalanceSound = () => {
+    if (!audioContextRef.current) return;
+
+    const ctx = audioContextRef.current;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+
+    oscillator.frequency.setValueAtTime(523, now);
+    oscillator.frequency.setValueAtTime(659, now + 0.08);
+    oscillator.frequency.setValueAtTime(784, now + 0.16);
+    oscillator.frequency.setValueAtTime(1047, now + 0.24);
+    gainNode.gain.setValueAtTime(0.3, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+    oscillator.start(now);
+    oscillator.stop(now + 0.35);
+  };
+
   const playNotificationSound = (type: 'message' | 'booking' | 'review' | 'system' | 'referral' = 'message') => {
     if (!audioContextRef.current) return;
 
@@ -77,5 +99,5 @@ export const useNotificationSound = () => {
     }
   };
 
-  return { playNotificationSound };
+  return { playNotificationSound, playBalanceSound };
 };
