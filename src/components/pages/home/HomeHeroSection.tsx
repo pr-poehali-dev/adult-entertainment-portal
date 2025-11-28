@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Page } from '@/types';
+import { Page, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface HomeHeroSectionProps {
   setCurrentPage: (page: Page) => void;
+  userRole?: UserRole;
 }
 
-export const HomeHeroSection = ({ setCurrentPage }: HomeHeroSectionProps) => {
+export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionProps) => {
   const { t } = useLanguage();
   
   return (
@@ -40,14 +41,26 @@ export const HomeHeroSection = ({ setCurrentPage }: HomeHeroSectionProps) => {
           >
             {t.home.viewCatalog}
           </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            onClick={() => setCurrentPage('register')} 
-            className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
-          >
-            {t.home.register}
-          </Button>
+          {!userRole && (
+            <>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={() => setCurrentPage('login')} 
+                className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
+              >
+                Войти
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={() => setCurrentPage('register')} 
+                className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
+              >
+                {t.home.register}
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </section>

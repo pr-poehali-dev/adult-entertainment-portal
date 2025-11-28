@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input';
-import { Page, CatalogItem } from '@/types';
+import { Page, CatalogItem, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
@@ -32,12 +32,13 @@ interface HomeAndCatalogProps {
   setSelectedHeight: (height: string) => void;
   selectedBodyType: string;
   setSelectedBodyType: (bodyType: string) => void;
+  userRole?: UserRole;
 }
 
-export const HomePage = ({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) => {
+export const HomePage = ({ setCurrentPage, userRole }: { setCurrentPage: (page: Page) => void; userRole?: UserRole }) => {
   return (
     <div className="animate-fade-in">
-      <HomeHeroSection setCurrentPage={setCurrentPage} />
+      <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <HomeCategoriesSection />
       <HomeAdvantagesSection />
       

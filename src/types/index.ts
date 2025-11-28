@@ -16,6 +16,10 @@ export interface Profile {
   audioGreeting?: string | null;
   promoVideo?: string | null;
   profilePhotos?: string[];
+  gender?: 'male' | 'female' | 'other';
+  age?: number;
+  referrerId?: number | null;
+  referralCode?: string;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';

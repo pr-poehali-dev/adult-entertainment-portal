@@ -86,7 +86,7 @@ export const useAppPages = ({
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} />;
+        return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} />;
       
       case 'catalog':
         return (

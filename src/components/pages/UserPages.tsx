@@ -19,6 +19,8 @@ import { ProfileMediaTab } from './profile/ProfileMediaTab';
 import { FavoritesPage } from './favorites/FavoritesPage';
 import { SearchPage } from './search/SearchPage';
 import { RulesPage } from './rules/RulesPage';
+import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
+import { useToast } from '@/hooks/use-toast';
 
 interface UserPagesProps {
   setCurrentPage: (page: Page) => void;
@@ -31,7 +33,34 @@ interface UserPagesProps {
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
 }
 
-export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (role: UserRole) => void; setCurrentPage: (page: Page) => void }) => (
+export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (role: UserRole) => void; setCurrentPage: (page: Page) => void }) => {
+  const { toast } = useToast();
+  const [referralInput, setReferralInput] = useState('');
+  
+  const handleRegister = (role: UserRole) => {
+    if (referralInput) {
+      const refCode = parseReferralCode(referralInput) || referralInput;
+      
+      if (!validateReferralCode(refCode)) {
+        toast({
+          title: "Неверная реферальная ссылка",
+          description: "Проверьте правильность реферальной ссылки",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "Успешная регистрация!",
+        description: `Вы присоединились к партнёрской сети через реферала`,
+      });
+    }
+    
+    setUserRole(role);
+    setCurrentPage('home');
+  };
+  
+  return (
   <div className="container mx-auto px-4 py-16 max-w-2xl animate-fade-in">
     <Card className="bg-card border-border">
       <CardHeader>
@@ -57,12 +86,37 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
               <Label htmlFor="buyer-password">Пароль</Label>
               <Input id="buyer-password" type="password" placeholder="••••••••" className="bg-background border-border" />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyer-gender">Гендер</Label>
+              <Select>
+                <SelectTrigger id="buyer-gender" className="bg-background border-border">
+                  <SelectValue placeholder="Выберите гендер" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Мужской</SelectItem>
+                  <SelectItem value="female">Женский</SelectItem>
+                  <SelectItem value="other">Другое</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyer-age">Возраст</Label>
+              <Input id="buyer-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyer-referral">Реферальная ссылка (необязательно)</Label>
+              <Input 
+                id="buyer-referral" 
+                value={referralInput}
+                onChange={(e) => setReferralInput(e.target.value)}
+                placeholder="Вставьте реферальную ссылку" 
+                className="bg-background border-border" 
+              />
+              <p className="text-xs text-muted-foreground">Если у вас есть приглашение от партнёра, вставьте ссылку сюда</p>
+            </div>
             <Button 
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
-              onClick={() => {
-                setUserRole('buyer');
-                setCurrentPage('home');
-              }}
+              onClick={() => handleRegister('buyer')}
             >
               Зарегистрироваться как покупатель
             </Button>
@@ -81,6 +135,23 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
               <Input id="seller-password" type="password" placeholder="••••••••" className="bg-background border-border" />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="seller-gender">Гендер</Label>
+              <Select>
+                <SelectTrigger id="seller-gender" className="bg-background border-border">
+                  <SelectValue placeholder="Выберите гендер" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Мужской</SelectItem>
+                  <SelectItem value="female">Женский</SelectItem>
+                  <SelectItem value="other">Другое</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="seller-age">Возраст</Label>
+              <Input id="seller-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="seller-category">Категория услуг</Label>
               <Select>
                 <SelectTrigger id="seller-category" className="bg-background border-border">
@@ -93,12 +164,20 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="seller-referral">Реферальная ссылка (необязательно)</Label>
+              <Input 
+                id="seller-referral" 
+                value={referralInput}
+                onChange={(e) => setReferralInput(e.target.value)}
+                placeholder="Вставьте реферальную ссылку" 
+                className="bg-background border-border" 
+              />
+              <p className="text-xs text-muted-foreground">Присоединитесь к партнёрской сети и зарабатывайте на рефералах</p>
+            </div>
             <Button 
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
-              onClick={() => {
-                setUserRole('seller');
-                setCurrentPage('home');
-              }}
+              onClick={() => handleRegister('seller')}
             >
               Зарегистрироваться как продавец
             </Button>
@@ -107,7 +186,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: { setUserRole: (ro
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 export const ProfilePage = ({ profile, onProfileUpdate }: { profile: Profile; onProfileUpdate?: (updatedProfile: Partial<Profile>) => void }) => {
   const [isVerified, setIsVerified] = useState(profile.verified);
