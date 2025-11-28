@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
-import { Page, Profile, Notification, UserRole } from '@/types';
+import { Page, Profile, Notification, UserRole, Wallet } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n/translations';
 
@@ -17,6 +17,7 @@ interface NavigationProps {
   setShowNotifications: (show: boolean) => void;
   isDarkTheme: boolean;
   setIsDarkTheme: (isDark: boolean) => void;
+  wallet: Wallet;
 }
 
 const Navigation = ({
@@ -30,9 +31,15 @@ const Navigation = ({
   setShowNotifications,
   isDarkTheme,
   setIsDarkTheme,
+  wallet,
 }: NavigationProps) => {
   const { language, setLanguage, t } = useLanguage();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  
+  const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
+  const btcBalance = wallet.balances.find(b => b.currency === 'BTC')?.amount || 0;
+  const rubToBtcRate = 0.000015;
+  const rubInBtc = rubBalance * rubToBtcRate;
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
@@ -94,6 +101,21 @@ const Navigation = ({
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
+          {userRole && (
+            <div className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => setCurrentPage('profile')}>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                  {profile.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium leading-none">{profile.name}</span>
+                <span className="text-xs text-muted-foreground mt-0.5">
+                  {rubBalance.toLocaleString('ru-RU')} ₽ <span className="text-muted-foreground/70">({rubInBtc.toFixed(6)} ₿)</span>
+                </span>
+              </div>
+            </div>
+          )}
           <div className="flex items-center gap-1 border border-border rounded-lg p-1">
             <Button
               variant={language === 'ru' ? 'default' : 'ghost'}

@@ -340,6 +340,7 @@ const Index = () => {
         setShowNotifications={setShowNotifications}
         isDarkTheme={isDarkTheme}
         setIsDarkTheme={setIsDarkTheme}
+        wallet={wallet}
       />
       
       <main>
