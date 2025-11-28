@@ -124,6 +124,7 @@ export const CatalogPage = ({
         setSelectedServiceId={setSelectedServiceId}
         setCurrentPage={setCurrentPage}
       />
+      </div>
     </div>
   );
 };
