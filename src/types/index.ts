@@ -139,11 +139,14 @@ export interface Review {
 
 export interface Notification {
   id: number;
-  type: 'message' | 'booking' | 'review' | 'system';
+  type: 'message' | 'booking' | 'review' | 'system' | 'referral';
   title: string;
   text: string;
   time: string;
   read: boolean;
+  amount?: number;
+  currency?: Currency;
+  referralLevel?: 1 | 2 | 3;
 }
 
 export interface VIPPlan {

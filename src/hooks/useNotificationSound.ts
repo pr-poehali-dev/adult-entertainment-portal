@@ -15,7 +15,7 @@ export const useNotificationSound = () => {
     };
   }, []);
 
-  const playNotificationSound = (type: 'message' | 'booking' | 'review' | 'system' = 'message') => {
+  const playNotificationSound = (type: 'message' | 'booking' | 'review' | 'system' | 'referral' = 'message') => {
     if (!audioContextRef.current) return;
 
     const ctx = audioContextRef.current;
@@ -63,6 +63,16 @@ export const useNotificationSound = () => {
         gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
         oscillator.start(now);
         oscillator.stop(now + 0.1);
+        break;
+
+      case 'referral':
+        oscillator.frequency.setValueAtTime(700, now);
+        oscillator.frequency.setValueAtTime(900, now + 0.08);
+        oscillator.frequency.setValueAtTime(1100, now + 0.16);
+        gainNode.gain.setValueAtTime(0.3, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        oscillator.start(now);
+        oscillator.stop(now + 0.25);
         break;
     }
   };

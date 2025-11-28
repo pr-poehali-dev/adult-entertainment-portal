@@ -40,30 +40,70 @@ const Index = () => {
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: 1,
-      type: 'message',
-      title: 'Новое сообщение',
-      text: 'Анна ответила на ваш запрос',
-      time: '5 мин назад',
-      read: false
+      type: 'referral',
+      title: 'Новый реферал!',
+      text: 'Мария зарегистрировалась по вашей ссылке (1 линия)',
+      time: '2 мин назад',
+      read: false,
+      referralLevel: 1
     },
     {
       id: 2,
-      type: 'booking',
-      title: 'Бронирование подтверждено',
-      text: 'Встреча 28 ноября в 18:00',
+      type: 'referral',
+      title: 'Комиссия получена',
+      text: 'Вы заработали 500 ₽ с транзакции реферала',
+      time: '15 мин назад',
+      read: false,
+      amount: 500,
+      currency: 'RUB',
+      referralLevel: 1
+    },
+    {
+      id: 3,
+      type: 'message',
+      title: 'Новое сообщение',
+      text: 'Анна ответила на ваш запрос',
       time: '1 час назад',
       read: false
     },
     {
-      id: 3,
+      id: 4,
+      type: 'booking',
+      title: 'Бронирование подтверждено',
+      text: 'Встреча 28 ноября в 18:00',
+      time: '2 часа назад',
+      read: false
+    },
+    {
+      id: 5,
+      type: 'referral',
+      title: 'Реферал 2 линии',
+      text: 'Елена присоединилась через вашего реферала (2 линия)',
+      time: '3 часа назад',
+      read: true,
+      referralLevel: 2
+    },
+    {
+      id: 6,
       type: 'review',
       title: 'Новый отзыв',
       text: 'Вы получили 5 звёзд от клиента',
-      time: '3 часа назад',
+      time: '5 часов назад',
       read: true
     },
     {
-      id: 4,
+      id: 7,
+      type: 'referral',
+      title: 'Комиссия 5%',
+      text: 'Заработано 250 ₽ с реферала 2 линии',
+      time: '6 часов назад',
+      read: true,
+      amount: 250,
+      currency: 'RUB',
+      referralLevel: 2
+    },
+    {
+      id: 8,
       type: 'system',
       title: 'Верификация завершена',
       text: 'Ваш профиль успешно проверен',
@@ -111,17 +151,28 @@ const Index = () => {
     }
   };
 
-  const addNotification = (type: 'message' | 'booking' | 'review' | 'system', title: string, text: string) => {
+  const addNotification = (type: 'message' | 'booking' | 'review' | 'system' | 'referral', title: string, text: string, options?: { amount?: number; currency?: string; referralLevel?: 1 | 2 | 3 }) => {
     const newNotif: Notification = {
       id: Date.now(),
       type,
       title,
       text,
       time: 'Только что',
-      read: false
+      read: false,
+      amount: options?.amount,
+      currency: options?.currency as any,
+      referralLevel: options?.referralLevel
     };
     setNotifications([newNotif, ...notifications]);
     playNotificationSound(type);
+    
+    if (type === 'referral' && options?.amount) {
+      toast({
+        title: title,
+        description: text,
+        duration: 5000,
+      });
+    }
   };
 
   const handleBookingSubmit = () => {
@@ -187,18 +238,50 @@ const Index = () => {
     if (!userRole) return;
 
     const simulateNotifications = () => {
-      const notificationTypes: Array<'message' | 'booking' | 'review' | 'system'> = ['message', 'booking', 'review', 'system'];
+      const notificationTypes: Array<'message' | 'booking' | 'review' | 'system' | 'referral'> = ['message', 'booking', 'review', 'system', 'referral'];
       const messages = {
         message: ['У вас новое сообщение от клиента', 'Продавец ответил на ваш вопрос', 'Новое сообщение в чате'],
         booking: ['Новое бронирование получено', 'Бронирование подтверждено', 'Изменение в расписании'],
         review: ['Вы получили новый отзыв', 'Клиент оставил 5 звёзд', 'Новая оценка вашего сервиса'],
-        system: ['Обновление системы', 'Ваш профиль просмотрели', 'Новые функции доступны']
+        system: ['Обновление системы', 'Ваш профиль просмотрели', 'Новые функции доступны'],
+        referral: [
+          { text: 'зарегистрировался по вашей ссылке', level: 1, hasAmount: false },
+          { text: 'присоединился через вашего реферала', level: 2, hasAmount: false },
+          { text: 'стал вашим рефералом 3 линии', level: 3, hasAmount: false }
+        ]
       };
 
       const randomType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
-      const randomMessage = messages[randomType][Math.floor(Math.random() * messages[randomType].length)];
       
-      addNotification(randomType, randomType === 'message' ? 'Новое сообщение' : randomType === 'booking' ? 'Бронирование' : randomType === 'review' ? 'Новый отзыв' : 'Системное уведомление', randomMessage);
+      if (randomType === 'referral') {
+        const referralData = messages.referral[Math.floor(Math.random() * messages.referral.length)];
+        const names = ['Анна', 'Мария', 'Елена', 'Ольга', 'Дарья', 'Алексей', 'Дмитрий'];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const hasCommission = Math.random() > 0.5;
+        
+        if (hasCommission) {
+          const amounts = [100, 250, 500, 800, 1200, 1500, 2000];
+          const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
+          const commission = referralData.level === 1 ? '10%' : referralData.level === 2 ? '5%' : '1%';
+          addNotification(
+            'referral',
+            `Комиссия ${commission}`,
+            `Заработано ${randomAmount} ₽ с реферала ${referralData.level} линии`,
+            { amount: randomAmount, currency: 'RUB', referralLevel: referralData.level }
+          );
+        } else {
+          const title = referralData.level === 1 ? 'Новый реферал!' : `Реферал ${referralData.level} линии`;
+          addNotification(
+            'referral',
+            title,
+            `${randomName} ${referralData.text} (${referralData.level} линия)`,
+            { referralLevel: referralData.level }
+          );
+        }
+      } else {
+        const randomMessage = messages[randomType][Math.floor(Math.random() * messages[randomType].length)];
+        addNotification(randomType, randomType === 'message' ? 'Новое сообщение' : randomType === 'booking' ? 'Бронирование' : randomType === 'review' ? 'Новый отзыв' : 'Системное уведомление', randomMessage);
+      }
     };
 
     const intervalId = setInterval(simulateNotifications, 30000);

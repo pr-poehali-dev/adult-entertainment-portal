@@ -216,6 +216,20 @@ const Navigation = ({
                                 )}
                               </div>
                               <p className="text-sm text-muted-foreground mt-1">{notif.text}</p>
+                              {notif.type === 'referral' && notif.amount && (
+                                <div className="flex items-center gap-2 mt-2">
+                                  <div className="px-2 py-0.5 rounded-full text-xs font-semibold bg-primary/20 text-primary">
+                                    +{notif.amount} {notif.currency}
+                                  </div>
+                                  <div className={`px-2 py-0.5 rounded text-xs ${
+                                    notif.referralLevel === 1 ? 'bg-primary/10 text-primary' :
+                                    notif.referralLevel === 2 ? 'bg-blue-500/10 text-blue-500' :
+                                    'bg-purple-500/10 text-purple-500'
+                                  }`}>
+                                    {notif.referralLevel} линия
+                                  </div>
+                                </div>
+                              )}
                               <p className="text-xs text-muted-foreground mt-2">{notif.time}</p>
                             </div>
                           </div>
