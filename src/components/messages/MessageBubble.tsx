@@ -1,15 +1,12 @@
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Message } from './types';
-import { censorContacts } from '@/utils/contactCensorship';
 
 interface MessageBubbleProps {
   message: Message;
 }
 
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
-  const censoredTextParts = message.text ? censorContacts(message.text) : [];
-  
   return (
     <div
       className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
@@ -88,16 +85,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
         )}
         
         {message.text && (
-          <p className="text-sm leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
-            {censoredTextParts.map((part, index) => (
-              <span
-                key={index}
-                className={part.isCensored ? 'text-red-500 font-bold' : ''}
-              >
-                {part.text}
-              </span>
-            ))}
-          </p>
+          <p className="text-sm leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>{message.text}</p>
         )}
         
         <div className="flex items-center justify-end gap-1 mt-1">

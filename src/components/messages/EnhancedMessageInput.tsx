@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
-import { hasCensoredContent } from '@/utils/contactCensorship';
 
 interface EnhancedMessageInputProps {
   messageText: string;
@@ -330,14 +329,8 @@ export const EnhancedMessageInput = ({
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
             onKeyPress={handleKeyPress}
-            className={`bg-background border-border pr-20 ${hasCensoredContent(messageText) ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+            className="bg-background border-border pr-20"
           />
-          {hasCensoredContent(messageText) && (
-            <div className="absolute -top-8 left-0 bg-red-500 text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
-              <Icon name="AlertTriangle" size={12} />
-              <span>Контакты будут скрыты</span>
-            </div>
-          )}
           <Button
             size="icon"
             variant="ghost"
