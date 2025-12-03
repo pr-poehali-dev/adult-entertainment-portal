@@ -56,6 +56,17 @@ const Navigation = ({
     }
     prevBalanceRef.current = rubBalance;
   }, [rubBalance]);
+
+  useEffect(() => {
+    if (showMobileMenu) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showMobileMenu]);
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
@@ -110,7 +121,7 @@ const Navigation = ({
             variant="ghost" 
             size="icon"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="text-foreground/80 hover:text-primary"
+            className="text-foreground/80 hover:text-foreground"
           >
             <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
           </Button>
