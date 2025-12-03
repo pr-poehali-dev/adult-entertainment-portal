@@ -109,7 +109,7 @@ const Navigation = ({
             variant="ghost" 
             size="icon"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="text-foreground/80 hover:text-primary bg-primary/20 hover:bg-primary/30"
+            className="text-foreground/80 hover:text-primary"
           >
             <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
           </Button>
