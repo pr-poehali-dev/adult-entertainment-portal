@@ -39,7 +39,7 @@ interface HomeAndCatalogProps {
 
 export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void }) => {
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in overflow-x-hidden w-full">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
       <DatingBanner setCurrentPage={setCurrentPage} />
@@ -89,8 +89,8 @@ export const CatalogPage = ({
   );
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
-      <div className="max-w-wide mx-auto px-4 py-12 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background overflow-x-hidden w-full">
+      <div className="max-w-wide mx-auto px-4 py-12 animate-fade-in w-full">
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-6xl font-bold">
             <span className="gold-shimmer">{t.catalog.title}</span>
