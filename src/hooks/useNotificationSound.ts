@@ -1,7 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useNotificationSound = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    const saved = localStorage.getItem('soundEnabled');
+    return saved !== null ? saved === 'true' : true;
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'AudioContext' in window) {
@@ -15,8 +19,12 @@ export const useNotificationSound = () => {
     };
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('soundEnabled', soundEnabled.toString());
+  }, [soundEnabled]);
+
   const playBalanceSound = () => {
-    if (!audioContextRef.current) return;
+    if (!audioContextRef.current || !soundEnabled) return;
 
     const ctx = audioContextRef.current;
     const oscillator = ctx.createOscillator();
@@ -38,7 +46,7 @@ export const useNotificationSound = () => {
   };
 
   const playNotificationSound = (type: 'message' | 'booking' | 'review' | 'system' | 'referral' = 'message') => {
-    if (!audioContextRef.current) return;
+    if (!audioContextRef.current || !soundEnabled) return;
 
     const ctx = audioContextRef.current;
     const oscillator = ctx.createOscillator();
@@ -99,5 +107,5 @@ export const useNotificationSound = () => {
     }
   };
 
-  return { playNotificationSound, playBalanceSound };
+  return { playNotificationSound, playBalanceSound, soundEnabled, setSoundEnabled };
 };

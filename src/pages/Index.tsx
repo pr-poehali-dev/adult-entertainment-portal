@@ -37,7 +37,7 @@ const Index = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const { toast } = useToast();
-  const { playNotificationSound, playBalanceSound } = useNotificationSound();
+  const { playNotificationSound, playBalanceSound, soundEnabled, setSoundEnabled } = useNotificationSound();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -361,6 +361,7 @@ const Index = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         userRole={userRole}
+        setUserRole={setUserRole}
         profile={profile}
         notifications={notifications}
         setNotifications={setNotifications}
@@ -369,6 +370,8 @@ const Index = () => {
         isDarkTheme={isDarkTheme}
         setIsDarkTheme={setIsDarkTheme}
         wallet={wallet}
+        soundEnabled={soundEnabled}
+        setSoundEnabled={setSoundEnabled}
       />
       
       <main>

@@ -10,6 +10,7 @@ interface NavigationProps {
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
   userRole: UserRole;
+  setUserRole: (role: UserRole) => void;
   profile: Profile;
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
@@ -18,12 +19,15 @@ interface NavigationProps {
   isDarkTheme: boolean;
   setIsDarkTheme: (isDark: boolean) => void;
   wallet: Wallet;
+  soundEnabled: boolean;
+  setSoundEnabled: (enabled: boolean) => void;
 }
 
 const Navigation = ({
   currentPage,
   setCurrentPage,
   userRole,
+  setUserRole,
   profile,
   notifications,
   setNotifications,
@@ -32,10 +36,13 @@ const Navigation = ({
   isDarkTheme,
   setIsDarkTheme,
   wallet,
+  soundEnabled,
+  setSoundEnabled,
 }: NavigationProps) => {
   const { language, setLanguage, t } = useLanguage();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [balanceAnimation, setBalanceAnimation] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const prevBalanceRef = useRef<number>(0);
   
   const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
@@ -134,16 +141,45 @@ const Navigation = ({
                 </div>
               </Button>
               
-              <div 
-                className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
-                onClick={() => setCurrentPage('profile')}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
-                    {profile.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium leading-none">{profile.name}</span>
+              <div className="relative">
+                <div 
+                  className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                      {profile.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium leading-none">{profile.name}</span>
+                  <Icon name="ChevronDown" size={16} />
+                </div>
+
+                {showProfileMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setCurrentPage('profile');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2"
+                    >
+                      <Icon name="User" size={16} />
+                      <span>Профиль</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setUserRole(null);
+                        setCurrentPage('home');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 text-red-500"
+                    >
+                      <Icon name="LogOut" size={16} />
+                      <span>Выйти</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -178,11 +214,11 @@ const Navigation = ({
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => setCurrentPage('admin')}
+            onClick={() => setSoundEnabled(!soundEnabled)}
             className="text-foreground/80 hover:text-primary"
-            title="Админ-панель"
+            title={soundEnabled ? "Выключить звук" : "Включить звук"}
           >
-            <Icon name="Shield" size={20} />
+            <Icon name={soundEnabled ? "Volume2" : "VolumeX"} size={20} />
           </Button>
           {userRole && (
             <div className="relative">
@@ -395,14 +431,6 @@ const Navigation = ({
             <span className="font-medium">{t.nav.rules}</span>
           </button>
           
-          <button 
-            onClick={() => { setCurrentPage('admin'); setShowMobileMenu(false); }}
-            className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
-          >
-            <Icon name="Shield" size={20} className="text-primary" />
-            <span className="font-medium">Админ-панель</span>
-          </button>
-          
           <div className="border-t border-border pt-4 mt-4">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-muted-foreground">Язык / Language</span>
@@ -426,7 +454,7 @@ const Navigation = ({
               </div>
             </div>
             
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-muted-foreground">Тема</span>
               <Button 
                 variant="outline"
@@ -438,18 +466,44 @@ const Navigation = ({
                 <span>{isDarkTheme ? 'Светлая' : 'Тёмная'}</span>
               </Button>
             </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-muted-foreground">Звук уведомлений</span>
+              <Button 
+                variant="outline"
+                size="sm"
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="flex items-center gap-2"
+              >
+                <Icon name={soundEnabled ? "Volume2" : "VolumeX"} size={16} />
+                <span>{soundEnabled ? 'Вкл' : 'Выкл'}</span>
+              </Button>
+            </div>
           </div>
           
           {userRole ? (
-            <button 
-              onClick={() => { setCurrentPage('profile'); setShowMobileMenu(false); }}
-              className="w-full py-3 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-3 justify-center font-semibold"
-            >
-              <Avatar className="h-6 w-6">
-                <AvatarFallback className="bg-primary-foreground text-primary text-sm">{profile.name[0]}</AvatarFallback>
-              </Avatar>
-              <span>{t.nav.profile}</span>
-            </button>
+            <div className="space-y-3">
+              <button 
+                onClick={() => { setCurrentPage('profile'); setShowMobileMenu(false); }}
+                className="w-full py-3 px-4 rounded-lg bg-muted hover:bg-muted/70 transition-colors flex items-center gap-3 justify-center font-semibold"
+              >
+                <Avatar className="h-6 w-6">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-sm">{profile.name[0]}</AvatarFallback>
+                </Avatar>
+                <span>{profile.name}</span>
+              </button>
+              <button 
+                onClick={() => { 
+                  setUserRole(null); 
+                  setCurrentPage('home'); 
+                  setShowMobileMenu(false); 
+                }}
+                className="w-full py-3 px-4 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors flex items-center gap-3 justify-center font-semibold"
+              >
+                <Icon name="LogOut" size={20} />
+                <span>Выйти</span>
+              </button>
+            </div>
           ) : (
             <button 
               onClick={() => { setCurrentPage('register'); setShowMobileMenu(false); }}

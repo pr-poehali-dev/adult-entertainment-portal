@@ -110,6 +110,8 @@ export interface CatalogItem {
   bodyType?: string;
   workSchedule?: WorkSchedule;
   isActive?: boolean;
+  isApproved?: boolean;
+  isAdminModerated?: boolean;
 }
 
 export interface PriceListItem {

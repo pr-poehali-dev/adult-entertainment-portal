@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
 import { useToast } from '@/hooks/use-toast';
-import { QuickRegistration } from './QuickRegistration';
 
 interface RafflePageProps {
   setCurrentPage: (page: Page) => void;
@@ -25,9 +24,6 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isParticipating, setIsParticipating] = useState(false);
-  const [showQuickReg, setShowQuickReg] = useState(false);
-  const [isVip, setIsVip] = useState(false);
-  const [userLogin, setUserLogin] = useState<string | null>(null);
 
   const winners: Winner[] = [
     { id: 1, name: 'Дмитрий К.', date: '22 ноября 2024', prize: 'iPhone 17 Pro Max (1TB)', amount: 150000 },
@@ -38,24 +34,6 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   ];
 
   const handleBuyTicket = () => {
-    if (!userLogin) {
-      toast({
-        title: 'Нужна регистрация',
-        description: 'Сначала зарегистрируйтесь, чтобы купить билет',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    if (!isVip) {
-      toast({
-        title: 'Нужен VIP статус',
-        description: 'Для участия в розыгрыше требуется VIP статус',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     if (!email || !phone) {
       toast({
         title: 'Заполните все поля',
@@ -70,15 +48,6 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
       title: `Билет куплен! 🎉`,
       description: `Вы купили 1 билет за 100 ₽. Розыгрыш в воскресенье в 12:00 МСК. Уведомление придёт на email.`,
       duration: 6000,
-    });
-  };
-
-  const handleRegisterSuccess = (credentials: { login: string; password: string }) => {
-    setUserLogin(credentials.login);
-    setShowQuickReg(false);
-    toast({
-      title: 'Добро пожаловать! 👋',
-      description: `Вы вошли как ${credentials.login}`,
     });
   };
 
@@ -105,28 +74,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
             Купите билет за 100 ₽ и выигрывайте новенький iPhone 17 каждое воскресенье
           </p>
 
-          {userLogin && (
-            <div className="flex items-center justify-center gap-3">
-              <Badge variant="outline" className="px-4 py-2 text-base">
-                <Icon name="User" size={16} className="mr-2" />
-                {userLogin}
-              </Badge>
-              {isVip && (
-                <Badge className="px-4 py-2 text-base bg-gradient-to-r from-yellow-500 to-amber-600">
-                  <Icon name="Crown" size={16} className="mr-2" />
-                  VIP
-                </Badge>
-              )}
-            </div>
-          )}
         </div>
-
-        {showQuickReg && (
-          <QuickRegistration
-            onRegisterSuccess={handleRegisterSuccess}
-            onCancel={() => setShowQuickReg(false)}
-          />
-        )}
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           <Card className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 border-none shadow-2xl">
