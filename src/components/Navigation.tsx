@@ -70,11 +70,11 @@ const Navigation = ({
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
-    <div className="max-w-wide mx-auto px-4 py-5">
+    <div className="max-w-wide mx-auto px-4 py-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
-          <Icon name="Crown" size={32} className="text-primary" />
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+        <div className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
+          <Icon name="Crown" size={28} className="text-primary" />
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             <span className="gold-shimmer">Elite</span>
           </h1>
         </div>

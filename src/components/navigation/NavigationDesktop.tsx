@@ -53,43 +53,43 @@ export const NavigationDesktop = ({
 
   if (isSecondRow) {
     return (
-      <div className="flex items-center space-x-8 justify-center">
-        <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+      <div className="flex items-center space-x-4 justify-center text-sm">
+        <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors">
           {t.nav.home}
         </button>
-        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors">
           {t.nav.catalog}
         </button>
-        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
-          <Icon name="Radio" size={16} />
+        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
+          <Icon name="Radio" size={14} />
           Онлайн
         </button>
-        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors">
           Работа
         </button>
-        <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
-          <Icon name="Users" size={16} />
+        <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
+          <Icon name="Users" size={14} />
           Партнёрка
         </button>
         {userRole && (
           <>
-            <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+            <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors">
               {t.nav.favorites}
             </button>
             <button 
               onClick={() => setCurrentPage('messages')} 
-              className="text-foreground font-medium hover:text-primary transition-colors relative tracking-wide"
+              className="text-foreground font-medium hover:text-primary transition-colors relative"
             >
               {t.nav.messages}
               {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
-                <span className="absolute -top-1 -right-2 w-5 h-5 bg-gradient-to-r from-secondary to-secondary/90 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg">
+                <span className="absolute -top-1 -right-2 w-4 h-4 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
                   {notifications.filter(n => !n.read && n.type === 'message').length}
                 </span>
               )}
             </button>
           </>
         )}
-        <button onClick={() => setCurrentPage('rules')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+        <button onClick={() => setCurrentPage('rules')} className="text-foreground font-medium hover:text-primary transition-colors">
           {t.nav.rules}
         </button>
       </div>
@@ -139,20 +139,20 @@ export const NavigationDesktop = ({
         </button>
       </div>
 
-      <div className="hidden md:flex items-center space-x-4">
+      <div className="hidden md:flex items-center space-x-2">
         {userRole && (
           <>
             <Button
               onClick={() => setCurrentPage('wallet')}
-              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-6 py-6 shadow-lg hover:shadow-xl transition-all ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
-              size="lg"
+              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-3 py-2 shadow-lg hover:shadow-xl transition-all ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
+              size="sm"
             >
-              <Icon name="Wallet" size={24} className={`mr-3 ${balanceAnimation ? 'animate-bounce' : ''}`} />
+              <Icon name="Wallet" size={18} className={`mr-2 ${balanceAnimation ? 'animate-bounce' : ''}`} />
               <div className="flex flex-col items-start">
-                <span className={`text-lg leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
+                <span className={`text-sm leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
                   {rubBalance.toLocaleString('ru-RU')} ₽
                 </span>
-                <span className="text-xs text-white/80 mt-1">
+                <span className="text-[10px] text-white/80 mt-0.5">
                   {rubInBtc.toFixed(6)} ₿
                 </span>
               </div>
@@ -160,16 +160,16 @@ export const NavigationDesktop = ({
             
             <div className="relative">
               <div 
-                className="flex items-center gap-3 px-3 py-1.5 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
+                className="flex items-center gap-2 px-2 py-1 bg-muted/30 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer" 
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
               >
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
+                <Avatar className="h-6 w-6">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">
                     {profile.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium leading-none">{profile.name}</span>
-                <Icon name="ChevronDown" size={16} />
+                <span className="text-xs font-medium leading-none">{profile.name}</span>
+                <Icon name="ChevronDown" size={14} />
               </div>
 
               {showProfileMenu && (
@@ -200,12 +200,12 @@ export const NavigationDesktop = ({
             </div>
           </>
         )}
-        <div className="flex items-center gap-1 border border-border rounded-lg p-1">
+        <div className="flex items-center gap-0.5 border border-border rounded-lg p-0.5">
           <Button
             variant={language === 'ru' ? 'default' : 'ghost'}
             size="icon"
             onClick={() => setLanguage('ru')}
-            className="h-8 w-8 p-0 text-xl"
+            className="h-6 w-6 p-0 text-sm"
             title="Русский"
           >
             🇷🇺
@@ -214,7 +214,7 @@ export const NavigationDesktop = ({
             variant={language === 'en' ? 'default' : 'ghost'}
             size="icon"
             onClick={() => setLanguage('en')}
-            className="h-8 w-8 p-0 text-xl"
+            className="h-6 w-6 p-0 text-sm"
             title="English"
           >
             🇬🇧
@@ -224,18 +224,18 @@ export const NavigationDesktop = ({
           variant="ghost" 
           size="icon"
           onClick={() => setIsDarkTheme(!isDarkTheme)}
-          className="text-foreground/80 hover:text-primary"
+          className="text-foreground/80 hover:text-primary h-8 w-8"
         >
-          {isDarkTheme ? <Icon name="Sun" size={20} /> : <Icon name="Moon" size={20} />}
+          {isDarkTheme ? <Icon name="Sun" size={16} /> : <Icon name="Moon" size={16} />}
         </Button>
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="text-foreground/80 hover:text-primary"
+          className="text-foreground/80 hover:text-primary h-8 w-8"
           title={soundEnabled ? "Выключить звук" : "Включить звук"}
         >
-          <Icon name={soundEnabled ? "Volume2" : "VolumeX"} size={20} />
+          <Icon name={soundEnabled ? "Volume2" : "VolumeX"} size={16} />
         </Button>
         {userRole && (
           <div className="relative">
@@ -243,11 +243,11 @@ export const NavigationDesktop = ({
               variant="ghost" 
               size="icon"
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative"
+              className="relative h-8 w-8"
             >
-              <Icon name="Bell" size={20} />
+              <Icon name="Bell" size={16} />
               {notifications.filter(n => !n.read).length > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
                   {notifications.filter(n => !n.read).length}
                 </span>
               )}
