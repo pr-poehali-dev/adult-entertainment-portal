@@ -11,13 +11,13 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
   const { t } = useLanguage();
   
   return (
-    <section className="relative py-40 px-4 overflow-hidden bg-gradient-to-br from-background via-muted/30 to-background">
+    <section className="relative py-40 px-4 overflow-hidden bg-gradient-to-br from-background via-muted/30 to-background w-full">
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
       
-      <div className="max-w-5xl mx-auto text-center relative z-10">
+      <div className="w-full mx-auto text-center relative z-10 px-4">
         <div className="mb-6 animate-fade-in">
           <span className="inline-block px-6 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary font-semibold tracking-wider text-sm uppercase">
             Премиум услуги
