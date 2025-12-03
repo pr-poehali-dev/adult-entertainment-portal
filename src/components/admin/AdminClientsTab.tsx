@@ -24,6 +24,7 @@ interface Client {
   registeredAt: string;
   lastActivity: string;
   totalSpent: number;
+  isOnline: boolean;
 }
 
 interface AdminClientsTabProps {
@@ -80,6 +81,25 @@ export const AdminClientsTab = ({ clients, onBlockClient, onUpdateBalance }: Adm
       return <Badge className="bg-green-500">Активен</Badge>;
     }
     return <Badge variant="destructive">Заблокирован</Badge>;
+  };
+
+  const getLastSeenText = (lastActivity: string, isOnline: boolean) => {
+    if (isOnline) return 'Онлайн';
+    
+    const lastSeen = new Date(lastActivity);
+    const now = new Date();
+    const diffMs = now.getTime() - lastSeen.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Только что';
+    if (diffMins < 60) return `${diffMins} мин. назад`;
+    if (diffHours < 24) return `${diffHours} ч. назад`;
+    if (diffDays === 1) return 'Вчера';
+    if (diffDays < 7) return `${diffDays} дн. назад`;
+    
+    return lastSeen.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
   };
 
   const getRoleBadge = (role: string) => {
@@ -143,7 +163,12 @@ export const AdminClientsTab = ({ clients, onBlockClient, onUpdateBalance }: Adm
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
                   <CardTitle className="text-lg flex items-center gap-2 flex-wrap">
-                    {client.name}
+                    <div className="flex items-center gap-2">
+                      {client.isOnline && (
+                        <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                      )}
+                      {client.name}
+                    </div>
                     {getStatusBadge(client.status)}
                     {getRoleBadge(client.role)}
                   </CardTitle>
@@ -209,7 +234,18 @@ export const AdminClientsTab = ({ clients, onBlockClient, onUpdateBalance }: Adm
 
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Последняя активность</p>
-                  <p className="text-sm">{new Date(client.lastActivity).toLocaleDateString('ru-RU')}</p>
+                  <div className="flex items-center gap-2">
+                    {client.isOnline ? (
+                      <Badge className="bg-green-500 text-white">
+                        <Icon name="Circle" size={8} className="mr-1 fill-current" />
+                        Онлайн
+                      </Badge>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        {getLastSeenText(client.lastActivity, client.isOnline)}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-1">

@@ -69,6 +69,7 @@ export interface Client {
   registeredAt: string;
   lastActivity: string;
   totalSpent: number;
+  isOnline: boolean;
 }
 
 export interface Ad {
@@ -141,14 +142,14 @@ export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
   ]);
 
   const [clients, setClients] = useState<Client[]>([
-    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', phone: '+7 (999) 123-45-67', role: 'seller', balance: 45000, status: 'active', registeredAt: '2024-01-15', lastActivity: '2024-12-04', totalSpent: 85000 },
-    { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', phone: '+7 (999) 234-56-78', role: 'buyer', balance: 12000, status: 'active', registeredAt: '2024-02-20', lastActivity: '2024-12-03', totalSpent: 32000 },
-    { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', phone: '+7 (999) 345-67-89', role: 'dating', balance: 0, status: 'blocked', registeredAt: '2024-03-10', lastActivity: '2024-11-15', totalSpent: 15000 },
-    { id: 4, name: 'Виктория Смит', email: 'victoria@mail.ru', phone: '+7 (999) 456-78-90', role: 'seller', balance: 32000, status: 'active', registeredAt: '2024-02-10', lastActivity: '2024-12-04', totalSpent: 62000 },
-    { id: 5, name: 'Дмитрий Козлов', email: 'dmitry@mail.ru', phone: '+7 (999) 567-89-01', role: 'buyer', balance: 8500, status: 'active', registeredAt: '2024-04-05', lastActivity: '2024-12-02', totalSpent: 28000 },
-    { id: 6, name: 'Елена Кузнецова', email: 'elena@mail.ru', phone: '+7 (999) 678-90-12', role: 'seller', balance: 15000, status: 'blocked', registeredAt: '2024-03-05', lastActivity: '2024-11-20', totalSpent: 45000 },
-    { id: 7, name: 'Алексей Новиков', email: 'alexey@mail.ru', phone: '+7 (999) 789-01-23', role: 'buyer', balance: 25000, status: 'active', registeredAt: '2024-05-12', lastActivity: '2024-12-04', totalSpent: 75000 },
-    { id: 8, name: 'Ольга Петрова', email: 'olga@mail.ru', phone: '+7 (999) 890-12-34', role: 'seller', balance: 58000, status: 'active', registeredAt: '2024-01-20', lastActivity: '2024-12-04', totalSpent: 125000 },
+    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', phone: '+7 (999) 123-45-67', role: 'seller', balance: 45000, status: 'active', registeredAt: '2024-01-15', lastActivity: '2024-12-04T14:30:00', totalSpent: 85000, isOnline: true },
+    { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', phone: '+7 (999) 234-56-78', role: 'buyer', balance: 12000, status: 'active', registeredAt: '2024-02-20', lastActivity: '2024-12-04T15:45:00', totalSpent: 32000, isOnline: true },
+    { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', phone: '+7 (999) 345-67-89', role: 'dating', balance: 0, status: 'blocked', registeredAt: '2024-03-10', lastActivity: '2024-11-15T10:20:00', totalSpent: 15000, isOnline: false },
+    { id: 4, name: 'Виктория Смит', email: 'victoria@mail.ru', phone: '+7 (999) 456-78-90', role: 'seller', balance: 32000, status: 'active', registeredAt: '2024-02-10', lastActivity: '2024-12-04T16:10:00', totalSpent: 62000, isOnline: true },
+    { id: 5, name: 'Дмитрий Козлов', email: 'dmitry@mail.ru', phone: '+7 (999) 567-89-01', role: 'buyer', balance: 8500, status: 'active', registeredAt: '2024-04-05', lastActivity: '2024-12-03T09:15:00', totalSpent: 28000, isOnline: false },
+    { id: 6, name: 'Елена Кузнецова', email: 'elena@mail.ru', phone: '+7 (999) 678-90-12', role: 'seller', balance: 15000, status: 'blocked', registeredAt: '2024-03-05', lastActivity: '2024-11-20T18:30:00', totalSpent: 45000, isOnline: false },
+    { id: 7, name: 'Алексей Новиков', email: 'alexey@mail.ru', phone: '+7 (999) 789-01-23', role: 'buyer', balance: 25000, status: 'active', registeredAt: '2024-05-12', lastActivity: '2024-12-04T12:00:00', totalSpent: 75000, isOnline: true },
+    { id: 8, name: 'Ольга Петрова', email: 'olga@mail.ru', phone: '+7 (999) 890-12-34', role: 'seller', balance: 58000, status: 'active', registeredAt: '2024-01-20', lastActivity: '2024-12-02T20:45:00', totalSpent: 125000, isOnline: false },
   ]);
 
   const [services] = useState<Service[]>([
