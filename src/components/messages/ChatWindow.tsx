@@ -6,6 +6,7 @@ import Icon from '@/components/ui/icon';
 import { EnhancedMessageInput } from './EnhancedMessageInput';
 import { ChatWatermark } from './ChatWatermark';
 import { MessageBubble } from './MessageBubble';
+import { ContactCensorshipNotice } from './ContactCensorshipNotice';
 import { Chat, Message } from './types';
 
 interface ChatWindowProps {
@@ -77,6 +78,7 @@ export const ChatWindow = ({
       <Separator />
       
       <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 chat-protected select-none relative z-20">
+        <ContactCensorshipNotice />
         {currentMessages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}

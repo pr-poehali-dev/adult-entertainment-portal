@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { ChatList } from '@/components/messages/ChatList';
 import { ChatWindow } from '@/components/messages/ChatWindow';
 import { Chat, Message } from '@/components/messages/types';
+import { hasCensoredContent } from '@/utils/contactCensorship';
+import { useToast } from '@/hooks/use-toast';
 
 const MessagesPage = () => {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleScreenshotPrevention = (e: KeyboardEvent) => {
@@ -194,6 +197,15 @@ const MessagesPage = () => {
 
   const handleSendMessage = () => {
     if ((!messageText.trim() && selectedFiles.length === 0) || !selectedChatId) return;
+
+    // Проверяем наличие контактных данных в тексте
+    if (messageText && hasCensoredContent(messageText)) {
+      toast({
+        title: "⚠️ Обнаружены контактные данные",
+        description: "Номера телефонов, email и username будут заменены на ********** для безопасности",
+        variant: "default",
+      });
+    }
 
     const currentTime = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
