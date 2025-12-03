@@ -24,6 +24,8 @@ interface Seller {
   status: 'active' | 'blocked';
   registeredAt: string;
   totalEarnings: number;
+  lastActivity: string;
+  isOnline: boolean;
 }
 
 interface AdminSellersTabProps {
@@ -73,6 +75,25 @@ export const AdminSellersTab = ({ sellers, onBlockSeller, onUpdateBalance }: Adm
     return <Badge variant="destructive">Заблокирован</Badge>;
   };
 
+  const getLastSeenText = (lastActivity: string, isOnline: boolean) => {
+    if (isOnline) return 'Онлайн';
+    
+    const lastSeen = new Date(lastActivity);
+    const now = new Date();
+    const diffMs = now.getTime() - lastSeen.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Только что';
+    if (diffMins < 60) return `${diffMins} мин. назад`;
+    if (diffHours < 24) return `${diffHours} ч. назад`;
+    if (diffDays === 1) return 'Вчера';
+    if (diffDays < 7) return `${diffDays} дн. назад`;
+    
+    return lastSeen.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -94,7 +115,12 @@ export const AdminSellersTab = ({ sellers, onBlockSeller, onUpdateBalance }: Adm
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    {seller.name}
+                    <div className="flex items-center gap-2">
+                      {seller.isOnline && (
+                        <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                      )}
+                      {seller.name}
+                    </div>
                     {getStatusBadge(seller.status)}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">{seller.email}</p>
@@ -110,7 +136,7 @@ export const AdminSellersTab = ({ sellers, onBlockSeller, onUpdateBalance }: Adm
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Баланс</p>
                   {editingBalance === seller.id ? (
@@ -151,6 +177,22 @@ export const AdminSellersTab = ({ sellers, onBlockSeller, onUpdateBalance }: Adm
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Дата регистрации</p>
                   <p className="text-sm">{new Date(seller.registeredAt).toLocaleDateString('ru-RU')}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Последняя активность</p>
+                  <div className="flex items-center gap-2">
+                    {seller.isOnline ? (
+                      <Badge className="bg-green-500 text-white">
+                        <Icon name="Circle" size={8} className="mr-1 fill-current" />
+                        Онлайн
+                      </Badge>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        {getLastSeenText(seller.lastActivity, seller.isOnline)}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>

@@ -8,6 +8,8 @@ export interface User {
   status: 'active' | 'blocked';
   registeredAt: string;
   balance: number;
+  lastActivity: string;
+  isOnline: boolean;
 }
 
 export interface Service {
@@ -56,6 +58,8 @@ export interface Seller {
   status: 'active' | 'blocked';
   registeredAt: string;
   totalEarnings: number;
+  lastActivity: string;
+  isOnline: boolean;
 }
 
 export interface Client {
@@ -129,16 +133,16 @@ interface AdminDataProviderProps {
 
 export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
   const [users, setUsers] = useState<User[]>([
-    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', role: 'seller', status: 'active', registeredAt: '2024-01-15', balance: 45000 },
-    { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', role: 'buyer', status: 'active', registeredAt: '2024-02-20', balance: 12000 },
-    { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', role: 'dating', status: 'blocked', registeredAt: '2024-03-10', balance: 0 },
+    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', role: 'seller', status: 'active', registeredAt: '2024-01-15', balance: 45000, lastActivity: '2024-12-04T14:30:00', isOnline: true },
+    { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', role: 'buyer', status: 'active', registeredAt: '2024-02-20', balance: 12000, lastActivity: '2024-12-04T15:45:00', isOnline: true },
+    { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', role: 'dating', status: 'blocked', registeredAt: '2024-03-10', balance: 0, lastActivity: '2024-11-15T10:20:00', isOnline: false },
   ]);
 
   const [sellers, setSellers] = useState<Seller[]>([
-    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', balance: 45000, commission: 12500, status: 'active', registeredAt: '2024-01-15', totalEarnings: 85000 },
-    { id: 2, name: 'Виктория Смит', email: 'victoria@mail.ru', balance: 32000, commission: 8900, status: 'active', registeredAt: '2024-02-10', totalEarnings: 62000 },
-    { id: 3, name: 'Елена Кузнецова', email: 'elena@mail.ru', balance: 15000, commission: 4200, status: 'blocked', registeredAt: '2024-03-05', totalEarnings: 28000 },
-    { id: 4, name: 'Ольга Петрова', email: 'olga@mail.ru', balance: 58000, commission: 18500, status: 'active', registeredAt: '2024-01-20', totalEarnings: 125000 },
+    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', balance: 45000, commission: 12500, status: 'active', registeredAt: '2024-01-15', totalEarnings: 85000, lastActivity: '2024-12-04T14:30:00', isOnline: true },
+    { id: 2, name: 'Виктория Смит', email: 'victoria@mail.ru', balance: 32000, commission: 8900, status: 'active', registeredAt: '2024-02-10', totalEarnings: 62000, lastActivity: '2024-12-04T16:10:00', isOnline: true },
+    { id: 3, name: 'Елена Кузнецова', email: 'elena@mail.ru', balance: 15000, commission: 4200, status: 'blocked', registeredAt: '2024-03-05', totalEarnings: 28000, lastActivity: '2024-11-20T18:30:00', isOnline: false },
+    { id: 4, name: 'Ольга Петрова', email: 'olga@mail.ru', balance: 58000, commission: 18500, status: 'active', registeredAt: '2024-01-20', totalEarnings: 125000, lastActivity: '2024-12-02T20:45:00', isOnline: false },
   ]);
 
   const [clients, setClients] = useState<Client[]>([
