@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { EnhancedMessageInput } from '@/components/messages/EnhancedMessageInput';
+import { ChatWatermark } from '@/components/messages/ChatWatermark';
 
 interface Message {
   id: number;
@@ -37,6 +38,47 @@ const MessagesPage = () => {
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  useEffect(() => {
+    const handleScreenshotPrevention = (e: KeyboardEvent) => {
+      if (
+        (e.key === 'PrintScreen') ||
+        (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) ||
+        (e.ctrlKey && e.shiftKey && e.key === 'S')
+      ) {
+        e.preventDefault();
+        alert('Скриншоты запрещены в чате для защиты конфиденциальности');
+        return false;
+      }
+    };
+
+    const handleContextMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.chat-protected')) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    const handleCopy = (e: ClipboardEvent) => {
+      const selection = window.getSelection()?.toString() || '';
+      const target = (e.target as HTMLElement)?.closest('.chat-protected');
+      if (target && selection) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    document.addEventListener('keydown', handleScreenshotPrevention);
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('copy', handleCopy);
+
+    return () => {
+      document.removeEventListener('keydown', handleScreenshotPrevention);
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('copy', handleCopy);
+    };
+  }, []);
 
   const [chats, setChats] = useState<Chat[]>([
     {
@@ -306,10 +348,11 @@ const MessagesPage = () => {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2 bg-card border-border flex flex-col">
+        <Card className="lg:col-span-2 bg-card border-border flex flex-col relative overflow-hidden">
+          <ChatWatermark userName={selectedChat?.name} />
           {selectedChat ? (
             <>
-              <CardHeader className="pb-4">
+              <CardHeader className="pb-4 relative z-20">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="w-12 h-12">
@@ -335,26 +378,30 @@ const MessagesPage = () => {
               
               <Separator />
               
-              <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+              <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 chat-protected select-none relative z-20">
                 {currentMessages.map((message) => (
                   <div
                     key={message.id}
                     className={`flex ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+                      className={`max-w-[70%] rounded-2xl px-4 py-2 select-none pointer-events-auto ${
                         message.sender === 'me'
                           ? 'bg-primary text-primary-foreground'
                           : 'bg-muted'
                       }`}
+                      onContextMenu={(e) => e.preventDefault()}
+                      style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
                     >
                       {message.attachment && message.attachment.type === 'image' && (
                         <div className="mb-2 rounded-lg overflow-hidden">
                           <img 
                             src={message.attachment.url} 
                             alt={message.attachment.name}
-                            className="max-w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => window.open(message.attachment!.url, '_blank')}
+                            className="max-w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity pointer-events-none"
+                            draggable="false"
+                            onContextMenu={(e) => e.preventDefault()}
+                            style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
                           />
                         </div>
                       )}
@@ -411,7 +458,7 @@ const MessagesPage = () => {
                       )}
                       
                       {message.text && (
-                        <p className="text-sm leading-relaxed">{message.text}</p>
+                        <p className="text-sm leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>{message.text}</p>
                       )}
                       
                       <div className="flex items-center justify-end gap-1 mt-1">

@@ -109,6 +109,39 @@
   }
 }
 
+@layer components {
+  .chat-protected {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .chat-protected * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .chat-protected img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
+
+  @media print {
+    .chat-protected {
+      display: none !important;
+    }
+  }
+}
+
 @layer utilities {
   @keyframes fadeIn {
     from {
