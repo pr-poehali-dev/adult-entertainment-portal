@@ -14,6 +14,7 @@ import { AdminSellersTab } from '@/components/admin/AdminSellersTab';
 import { AdminClientsTab } from '@/components/admin/AdminClientsTab';
 import { AdminAdsManagement } from '@/components/admin/AdminAdsManagement';
 import { AdminMessaging } from '@/components/admin/AdminMessaging';
+import { AdminPricingSettings } from '@/components/admin/AdminPricingSettings';
 import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
 import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
 import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
@@ -139,6 +140,18 @@ const AdminPanel = () => {
     moderationQueue: 12,
     blockedUsers: 34,
     totalTransactions: 5678,
+  });
+
+  const [prices, setPrices] = useState({
+    vipWeek: 500,
+    vipMonth: 1500,
+    vipYear: 12000,
+    profileBoost: 200,
+    top3Week: 1000,
+    top3Month: 3500,
+    highlightAd: 300,
+    premiumSupport: 2000,
+    verificationBadge: 1000,
   });
 
   const [platformBalances] = useState<PlatformBalance[]>([
@@ -304,6 +317,14 @@ const AdminPanel = () => {
     setAdminMessages(prev => [...prev, newMessage]);
   };
 
+  const updatePrices = (newPrices: typeof prices) => {
+    setPrices(newPrices);
+    toast({
+      title: "Цены обновлены",
+      description: "Новые цены на услуги вступили в силу",
+    });
+  };
+
   if (showRecovery) {
     return (
       <AdminPasswordRecovery
@@ -363,7 +384,7 @@ const AdminPanel = () => {
         <AdminStats stats={stats} />
 
         <Tabs defaultValue="clients" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="clients">
               <Icon name="Users" size={16} className="mr-2" />
               Клиенты
@@ -375,6 +396,10 @@ const AdminPanel = () => {
             <TabsTrigger value="messaging">
               <Icon name="MessageSquare" size={16} className="mr-2" />
               Сообщения
+            </TabsTrigger>
+            <TabsTrigger value="pricing">
+              <Icon name="DollarSign" size={16} className="mr-2" />
+              Цены
             </TabsTrigger>
             <TabsTrigger value="moderation">
               <Icon name="FileCheck" size={16} className="mr-2" />
@@ -419,6 +444,15 @@ const AdminPanel = () => {
                 users={clients}
                 messages={adminMessages}
                 onSendMessage={sendMessageToUser}
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="pricing" className="mt-6">
+            <div className="space-y-6">
+              <AdminPricingSettings 
+                prices={prices}
+                onUpdatePrices={updatePrices}
               />
             </div>
           </TabsContent>
