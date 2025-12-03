@@ -11,6 +11,7 @@ import { AdminUsersTab } from '@/components/admin/AdminUsersTab';
 import { AdminServicesTab } from '@/components/admin/AdminServicesTab';
 import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
 import { AdminSellersTab } from '@/components/admin/AdminSellersTab';
+import { AdminClientsTab } from '@/components/admin/AdminClientsTab';
 import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
 import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
 import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
@@ -83,6 +84,17 @@ const AdminPanel = () => {
     { id: 2, name: 'Виктория Смит', email: 'victoria@mail.ru', balance: 32000, commission: 8900, status: 'active' as const, registeredAt: '2024-02-10', totalEarnings: 62000 },
     { id: 3, name: 'Елена Кузнецова', email: 'elena@mail.ru', balance: 15000, commission: 4200, status: 'blocked' as const, registeredAt: '2024-03-05', totalEarnings: 28000 },
     { id: 4, name: 'Ольга Петрова', email: 'olga@mail.ru', balance: 58000, commission: 18500, status: 'active' as const, registeredAt: '2024-01-20', totalEarnings: 125000 },
+  ]);
+
+  const [clients, setClients] = useState([
+    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', phone: '+7 (999) 123-45-67', role: 'seller' as const, balance: 45000, status: 'active' as const, registeredAt: '2024-01-15', lastActivity: '2024-12-04', totalSpent: 85000 },
+    { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', phone: '+7 (999) 234-56-78', role: 'buyer' as const, balance: 12000, status: 'active' as const, registeredAt: '2024-02-20', lastActivity: '2024-12-03', totalSpent: 32000 },
+    { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', phone: '+7 (999) 345-67-89', role: 'dating' as const, balance: 0, status: 'blocked' as const, registeredAt: '2024-03-10', lastActivity: '2024-11-15', totalSpent: 15000 },
+    { id: 4, name: 'Виктория Смит', email: 'victoria@mail.ru', phone: '+7 (999) 456-78-90', role: 'seller' as const, balance: 32000, status: 'active' as const, registeredAt: '2024-02-10', lastActivity: '2024-12-04', totalSpent: 62000 },
+    { id: 5, name: 'Дмитрий Козлов', email: 'dmitry@mail.ru', phone: '+7 (999) 567-89-01', role: 'buyer' as const, balance: 8500, status: 'active' as const, registeredAt: '2024-04-05', lastActivity: '2024-12-02', totalSpent: 28000 },
+    { id: 6, name: 'Елена Кузнецова', email: 'elena@mail.ru', phone: '+7 (999) 678-90-12', role: 'seller' as const, balance: 15000, status: 'blocked' as const, registeredAt: '2024-03-05', lastActivity: '2024-11-20', totalSpent: 45000 },
+    { id: 7, name: 'Алексей Новиков', email: 'alexey@mail.ru', phone: '+7 (999) 789-01-23', role: 'buyer' as const, balance: 25000, status: 'active' as const, registeredAt: '2024-05-12', lastActivity: '2024-12-04', totalSpent: 75000 },
+    { id: 8, name: 'Ольга Петрова', email: 'olga@mail.ru', phone: '+7 (999) 890-12-34', role: 'seller' as const, balance: 58000, status: 'active' as const, registeredAt: '2024-01-20', lastActivity: '2024-12-04', totalSpent: 125000 },
   ]);
 
   const [services] = useState<Service[]>([
@@ -219,6 +231,23 @@ const AdminPanel = () => {
     ));
   };
 
+  const blockClient = (clientId: number) => {
+    setClients(prev => prev.map(c => 
+      c.id === clientId ? { ...c, status: c.status === 'blocked' ? 'active' : 'blocked' } : c
+    ));
+    const client = clients.find(c => c.id === clientId);
+    toast({
+      title: "Статус изменен",
+      description: `${client?.name} ${client?.status === 'active' ? 'заблокирован' : 'разблокирован'}`,
+    });
+  };
+
+  const updateClientBalance = (clientId: number, newBalance: number) => {
+    setClients(prev => prev.map(c => 
+      c.id === clientId ? { ...c, balance: newBalance } : c
+    ));
+  };
+
   const approveService = (serviceId: number) => {
     toast({
       title: "Услуга одобрена",
@@ -284,8 +313,12 @@ const AdminPanel = () => {
       <div className="container mx-auto px-4 py-8">
         <AdminStats stats={stats} />
 
-        <Tabs defaultValue="moderation" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="clients" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="clients">
+              <Icon name="Users" size={16} className="mr-2" />
+              Клиенты
+            </TabsTrigger>
             <TabsTrigger value="moderation">
               <Icon name="FileCheck" size={16} className="mr-2" />
               Модерация
@@ -295,10 +328,21 @@ const AdminPanel = () => {
               Финансы
             </TabsTrigger>
             <TabsTrigger value="sellers">
-              <Icon name="Users" size={16} className="mr-2" />
+              <Icon name="Store" size={16} className="mr-2" />
               Продавцы
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="clients" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">База клиентов</h2>
+              <AdminClientsTab 
+                clients={clients} 
+                onBlockClient={blockClient}
+                onUpdateBalance={updateClientBalance}
+              />
+            </div>
+          </TabsContent>
 
           <TabsContent value="balance" className="mt-6">
             <AdminBalanceTab
