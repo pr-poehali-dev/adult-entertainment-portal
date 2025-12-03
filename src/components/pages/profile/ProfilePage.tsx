@@ -109,18 +109,20 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
       </Card>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className={`grid w-full ${profile.role === 'seller' ? 'grid-cols-8' : 'grid-cols-7'}`}>
-          <TabsTrigger value="profile">Профиль</TabsTrigger>
-          <TabsTrigger value="folders">Папки</TabsTrigger>
-          <TabsTrigger value="contacts">Контакты</TabsTrigger>
-          <TabsTrigger value="wallet">Кошелек</TabsTrigger>
-          <TabsTrigger value="referral">Партнёрка</TabsTrigger>
-          <TabsTrigger value="bookings">Бронирования</TabsTrigger>
-          {profile.role === 'seller' && (
-            <TabsTrigger value="media">Медиа</TabsTrigger>
-          )}
-          <TabsTrigger value="settings">Настройки</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+          <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-7 lg:grid-cols-8 min-w-max md:min-w-0">
+            <TabsTrigger value="profile" className="whitespace-nowrap">Профиль</TabsTrigger>
+            <TabsTrigger value="folders" className="whitespace-nowrap">Папки</TabsTrigger>
+            <TabsTrigger value="contacts" className="whitespace-nowrap">Контакты</TabsTrigger>
+            <TabsTrigger value="wallet" className="whitespace-nowrap">Кошелек</TabsTrigger>
+            <TabsTrigger value="referral" className="whitespace-nowrap">Партнёрка</TabsTrigger>
+            <TabsTrigger value="bookings" className="whitespace-nowrap">Бронирования</TabsTrigger>
+            {profile.role === 'seller' && (
+              <TabsTrigger value="media" className="whitespace-nowrap">Медиа</TabsTrigger>
+            )}
+            <TabsTrigger value="settings" className="whitespace-nowrap">Настройки</TabsTrigger>
+          </TabsList>
+        </div>
         
         <TabsContent value="profile">
           <ProfileEditTab profile={profile} onProfileUpdate={onProfileUpdate} />
