@@ -10,10 +10,14 @@ import { AdminBalanceTab } from '@/components/admin/AdminBalanceTab';
 import { AdminUsersTab } from '@/components/admin/AdminUsersTab';
 import { AdminServicesTab } from '@/components/admin/AdminServicesTab';
 import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
+import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
+import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
+import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
 
 const ADMIN_CREDENTIALS = {
-  login: 'admin',
-  password: 'admin123'
+  login: 'kinderdealer',
+  password: 'Talkfusion1134945',
+  recoveryEmail: 'admin@example.com'
 };
 
 interface User {
@@ -66,6 +70,9 @@ interface BalanceTransaction {
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginForm, setLoginForm] = useState({ login: '', password: '' });
+  const [showRecovery, setShowRecovery] = useState(false);
+  const [show2FA, setShow2FA] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -117,8 +124,12 @@ const AdminPanel = () => {
 
   useEffect(() => {
     const adminSession = sessionStorage.getItem('adminSession');
+    const saved2FA = sessionStorage.getItem('admin2FA');
     if (adminSession === 'true') {
       setIsAuthenticated(true);
+    }
+    if (saved2FA === 'true') {
+      setIs2FAEnabled(true);
     }
   }, []);
 
@@ -126,12 +137,16 @@ const AdminPanel = () => {
     e.preventDefault();
     
     if (loginForm.login === ADMIN_CREDENTIALS.login && loginForm.password === ADMIN_CREDENTIALS.password) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('adminSession', 'true');
-      toast({
-        title: "Успешный вход",
-        description: "Добро пожаловать в админ-панель",
-      });
+      if (is2FAEnabled) {
+        setShow2FA(true);
+      } else {
+        setIsAuthenticated(true);
+        sessionStorage.setItem('adminSession', 'true');
+        toast({
+          title: "Успешный вход",
+          description: "Добро пожаловать в админ-панель",
+        });
+      }
     } else {
       toast({
         title: "Ошибка входа",
@@ -139,6 +154,29 @@ const AdminPanel = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handle2FAVerify = (code: string) => {
+    if (code.length === 6) {
+      setIsAuthenticated(true);
+      setShow2FA(false);
+      sessionStorage.setItem('adminSession', 'true');
+      toast({
+        title: "Успешный вход",
+        description: "Добро пожаловать в админ-панель",
+      });
+    } else {
+      toast({
+        title: "Ошибка 2FA",
+        description: "Неверный код подтверждения",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handle2FAToggle = (enabled: boolean) => {
+    setIs2FAEnabled(enabled);
+    sessionStorage.setItem('admin2FA', enabled ? 'true' : 'false');
   };
 
   const handleLogout = () => {
@@ -165,12 +203,31 @@ const AdminPanel = () => {
     });
   };
 
+  if (showRecovery) {
+    return (
+      <AdminPasswordRecovery
+        onBack={() => setShowRecovery(false)}
+        recoveryEmail={ADMIN_CREDENTIALS.recoveryEmail}
+      />
+    );
+  }
+
+  if (show2FA) {
+    return (
+      <Admin2FAVerification
+        onVerify={handle2FAVerify}
+        onBack={() => setShow2FA(false)}
+      />
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <AdminLogin
         loginForm={loginForm}
         setLoginForm={setLoginForm}
         handleLogin={handleLogin}
+        onForgotPassword={() => setShowRecovery(true)}
       />
     );
   }
@@ -205,7 +262,7 @@ const AdminPanel = () => {
         <AdminStats stats={stats} />
 
         <Tabs defaultValue="balance" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="balance">
               <Icon name="Wallet" size={16} className="mr-2" />
               Баланс
@@ -221,6 +278,10 @@ const AdminPanel = () => {
             <TabsTrigger value="transactions">
               <Icon name="CreditCard" size={16} className="mr-2" />
               Транзакции
+            </TabsTrigger>
+            <TabsTrigger value="security">
+              <Icon name="Shield" size={16} className="mr-2" />
+              Безопасность
             </TabsTrigger>
           </TabsList>
 
@@ -241,6 +302,13 @@ const AdminPanel = () => {
 
           <TabsContent value="transactions" className="mt-6">
             <AdminTransactionsTab transactions={transactions} />
+          </TabsContent>
+
+          <TabsContent value="security" className="mt-6">
+            <Admin2FASettings
+              is2FAEnabled={is2FAEnabled}
+              on2FAToggle={handle2FAToggle}
+            />
           </TabsContent>
         </Tabs>
       </div>
