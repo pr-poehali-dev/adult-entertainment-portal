@@ -58,8 +58,8 @@ const Navigation = ({
   }, [rubBalance]);
   
   return (
-  <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg w-full overflow-x-hidden">
-    <div className="max-w-wide mx-auto px-4 py-5 w-full">
+  <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
+    <div className="max-w-wide mx-auto px-4 py-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
           <Icon name="Crown" size={32} className="text-primary" />
@@ -90,7 +90,7 @@ const Navigation = ({
           setShowProfileMenu={setShowProfileMenu}
         />
 
-        <div className="md:hidden flex items-center space-x-2 relative z-50">
+        <div className="md:hidden flex items-center space-x-2">
           {userRole && (
             <Button
               onClick={() => setCurrentPage('wallet')}

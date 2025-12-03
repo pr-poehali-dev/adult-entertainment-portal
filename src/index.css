@@ -91,35 +91,10 @@
     @apply border-border;
   }
 
-  html {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-  }
-
   body {
     @apply bg-background text-foreground;
     font-family: "Lato", sans-serif;
     letter-spacing: 0.01em;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-    position: relative;
-  }
-
-  #root {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-  }
-
-  .max-w-wide {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  * {
-    box-sizing: border-box;
   }
 
   h1,
@@ -135,12 +110,6 @@
 }
 
 @layer components {
-  .prevent-overflow {
-    overflow-x: hidden;
-    max-width: 100vw;
-    width: 100%;
-  }
-
   .chat-protected {
     -webkit-user-select: none;
     -moz-user-select: none;
