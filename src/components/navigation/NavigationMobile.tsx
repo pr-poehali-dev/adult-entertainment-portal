@@ -42,8 +42,8 @@ export const NavigationMobile = ({
   if (!showMobileMenu) return null;
 
   return (
-    <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-2xl z-50 animate-fade-in">
-      <div className="max-w-wide mx-auto px-4 py-6 space-y-4">
+    <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-2xl z-50 animate-slide-down max-h-[calc(100vh-80px)] overflow-y-auto">
+      <div className="max-w-wide mx-auto px-4 py-6 space-y-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
         <button 
           onClick={() => { setCurrentPage('home'); setShowMobileMenu(false); }}
           className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
