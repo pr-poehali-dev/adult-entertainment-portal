@@ -56,53 +56,51 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in max-w-4xl">
       <Card className="mb-8">
-        <CardHeader>
-          <div className="flex items-center gap-6">
-            <Avatar className="w-24 h-24">
-              <AvatarFallback className="text-3xl bg-primary/20 text-primary">
+        <CardHeader className="pb-4">
+          <div className="flex items-start gap-4">
+            <Avatar className="w-20 h-20 flex-shrink-0">
+              <AvatarFallback className="text-2xl bg-primary/20 text-primary">
                 {profile.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-3xl font-bold">{profile.name}</h2>
-                {isVIP && !isVIPExpired && <VIPBadge size="md" />}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <h2 className="text-xl sm:text-2xl font-bold truncate">{profile.name}</h2>
+                {isVIP && !isVIPExpired && <VIPBadge size="sm" />}
                 {profile.healthCertified && profile.healthCertificateExpiry && new Date(profile.healthCertificateExpiry) > new Date() && profile.role === 'seller' && (
-                  <HealthCertificateBadge size="md" />
+                  <HealthCertificateBadge size="sm" />
                 )}
               </div>
-              <div className="flex items-center gap-4 text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-sm">
                 {isVerified && (
                   <div className="flex items-center gap-1 text-primary">
-                    <Icon name="CheckCircle" size={16} />
-                    <span className="text-sm">Верифицирован</span>
+                    <Icon name="CheckCircle" size={14} />
+                    <span>Верифицирован</span>
                   </div>
                 )}
                 <div className="flex items-center gap-1">
-                  <Icon name="Star" size={16} className="text-yellow-500" />
-                  <span className="text-sm font-semibold">{profile.rating}</span>
+                  <Icon name="Star" size={14} className="text-yellow-500" />
+                  <span className="font-semibold">{profile.rating}</span>
                 </div>
                 {profile.role && (
                   <div className="flex items-center gap-1">
-                    <Icon name={profile.role === 'seller' ? 'Briefcase' : 'ShoppingBag'} size={16} />
-                    <span className="text-sm capitalize">{profile.role === 'seller' ? 'Продавец' : 'Покупатель'}</span>
+                    <Icon name={profile.role === 'seller' ? 'Briefcase' : 'ShoppingBag'} size={14} />
+                    <span className="capitalize">{profile.role === 'seller' ? 'Продавец' : 'Покупатель'}</span>
                   </div>
                 )}
               </div>
             </div>
             {profile.role === 'seller' && setCurrentPage && (
-              <div className="ml-auto">
-                <button
-                  onClick={() => setCurrentPage('invitations')}
-                  className="relative bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                >
-                  <Icon name="Mail" size={20} />
-                  <span className="font-medium">Приглашения</span>
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                    5
-                  </span>
-                </button>
-              </div>
+              <button
+                onClick={() => setCurrentPage('invitations')}
+                className="relative bg-gradient-to-r from-primary to-primary/90 text-white px-3 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 flex-shrink-0"
+              >
+                <Icon name="Mail" size={18} />
+                <span className="font-medium hidden sm:inline">Приглашения</span>
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  5
+                </span>
+              </button>
             )}
           </div>
         </CardHeader>
