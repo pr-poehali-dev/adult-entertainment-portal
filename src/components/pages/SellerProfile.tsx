@@ -12,6 +12,7 @@ import PriceList from '@/components/pages/seller-profile/PriceList';
 import BookingModal from '@/components/pages/seller-profile/BookingModal';
 import PrivateAlbums from '@/components/pages/seller-profile/PrivateAlbums';
 import CustomMediaOrders from '@/components/pages/seller-profile/CustomMediaOrders';
+import { SellerContactsCard } from '@/components/pages/seller-profile/SellerContactsCard';
 import { useToast } from '@/hooks/use-toast';
 
 interface SellerProfilePageProps {
@@ -50,6 +51,14 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
     toast({
       title: 'Заказ оформлен',
       description: `Ваш заказ на ${order.price.toLocaleString()} отправлен продавцу`,
+    });
+  };
+
+  const handleContactPurchase = (contactType: string, amount: number, currency: string) => {
+    console.log('Contact purchased:', { contactType, amount, currency });
+    toast({
+      title: 'Контакт приобретен',
+      description: `${contactType} теперь доступен в вашем профиле`,
     });
   };
   return (
@@ -273,6 +282,13 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
           </div>
 
           <div className="lg:col-span-1 space-y-6">
+            <SellerContactsCard
+              contacts={seller.contacts}
+              sellerName={seller.name}
+              wallet={wallet}
+              onPurchase={handleContactPurchase}
+            />
+
             <Card className="bg-card border-border">
               <CardHeader>
                 <CardTitle>Статистика</CardTitle>

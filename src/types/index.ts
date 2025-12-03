@@ -24,6 +24,31 @@ export interface ProfilePreferences {
   searchOnline: boolean; // Поиск онлайн собеседников
 }
 
+export type Currency = 'RUB' | 'USD' | 'TON' | 'USDT';
+
+export interface ContactPrice {
+  amount: number;
+  currency: Currency;
+}
+
+export interface ProfileContacts {
+  instagram?: {
+    value: string;
+    forSale: boolean;
+    price?: ContactPrice;
+  };
+  telegram?: {
+    value: string;
+    forSale: boolean;
+    price?: ContactPrice;
+  };
+  phone?: {
+    value: string;
+    forSale: boolean;
+    price?: ContactPrice;
+  };
+}
+
 export interface PrivateMediaFolder {
   id: number;
   name: string;
@@ -54,6 +79,7 @@ export interface Profile {
   referralCode?: string;
   preferences?: ProfilePreferences;
   privateFolders?: PrivateMediaFolder[];
+  contacts?: ProfileContacts;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
@@ -164,6 +190,7 @@ export interface SellerProfile {
   audioGreeting?: string | null;
   promoVideo?: string | null;
   profilePhotos?: string[];
+  contacts?: ProfileContacts;
 }
 
 export interface Review {
