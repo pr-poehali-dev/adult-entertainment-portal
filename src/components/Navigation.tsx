@@ -88,6 +88,7 @@ const Navigation = ({
           rubInBtc={rubInBtc}
           showProfileMenu={showProfileMenu}
           setShowProfileMenu={setShowProfileMenu}
+          isSecondRow={false}
         />
 
         <div className="md:hidden flex items-center space-x-2">
@@ -113,6 +114,33 @@ const Navigation = ({
           >
             <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
           </Button>
+        </div>
+      </div>
+      
+      <div className="hidden md:block border-t border-border/30 py-3">
+        <div className="max-w-wide mx-auto px-4">
+          <NavigationDesktop
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            userRole={userRole}
+            setUserRole={setUserRole}
+            profile={profile}
+            notifications={notifications}
+            setNotifications={setNotifications}
+            showNotifications={showNotifications}
+            setShowNotifications={setShowNotifications}
+            isDarkTheme={isDarkTheme}
+            setIsDarkTheme={setIsDarkTheme}
+            wallet={wallet}
+            soundEnabled={soundEnabled}
+            setSoundEnabled={setSoundEnabled}
+            balanceAnimation={balanceAnimation}
+            rubBalance={rubBalance}
+            rubInBtc={rubInBtc}
+            showProfileMenu={showProfileMenu}
+            setShowProfileMenu={setShowProfileMenu}
+            isSecondRow={true}
+          />
         </div>
       </div>
     </div>

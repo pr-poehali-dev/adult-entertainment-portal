@@ -26,6 +26,7 @@ interface NavigationDesktopProps {
   rubInBtc: number;
   showProfileMenu: boolean;
   setShowProfileMenu: (show: boolean) => void;
+  isSecondRow?: boolean;
 }
 
 export const NavigationDesktop = ({
@@ -46,12 +47,58 @@ export const NavigationDesktop = ({
   rubInBtc,
   showProfileMenu,
   setShowProfileMenu,
+  isSecondRow = false,
 }: NavigationDesktopProps) => {
   const { language, setLanguage, t } = useLanguage();
 
+  if (isSecondRow) {
+    return (
+      <div className="flex items-center space-x-8 justify-center">
+        <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+          {t.nav.home}
+        </button>
+        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+          {t.nav.catalog}
+        </button>
+        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
+          <Icon name="Radio" size={16} />
+          Онлайн
+        </button>
+        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+          Работа
+        </button>
+        <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
+          <Icon name="Users" size={16} />
+          Партнёрка
+        </button>
+        {userRole && (
+          <>
+            <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+              {t.nav.favorites}
+            </button>
+            <button 
+              onClick={() => setCurrentPage('messages')} 
+              className="text-foreground font-medium hover:text-primary transition-colors relative tracking-wide"
+            >
+              {t.nav.messages}
+              {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
+                <span className="absolute -top-1 -right-2 w-5 h-5 bg-gradient-to-r from-secondary to-secondary/90 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg">
+                  {notifications.filter(n => !n.read && n.type === 'message').length}
+                </span>
+              )}
+            </button>
+          </>
+        )}
+        <button onClick={() => setCurrentPage('rules')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
+          {t.nav.rules}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="hidden md:flex items-center space-x-8">
+      <div className="hidden md:flex items-center space-x-8" style={{ visibility: 'hidden' }}>
         <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
           {t.nav.home}
         </button>
