@@ -13,7 +13,12 @@ import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
 import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
 import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
 import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
-import { getAdminCredentials, validateAdminLogin, getAdminEmail } from '@/utils/adminAuth';
+
+const ADMIN_CREDENTIALS = {
+  login: 'kinderdealer',
+  password: 'Talkfusion1134945',
+  recoveryEmail: 'admin@example.com'
+};
 
 interface User {
   id: number;
@@ -131,7 +136,7 @@ const AdminPanel = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (validateAdminLogin(loginForm.login, loginForm.password)) {
+    if (loginForm.login === ADMIN_CREDENTIALS.login && loginForm.password === ADMIN_CREDENTIALS.password) {
       if (is2FAEnabled) {
         setShow2FA(true);
       } else {
@@ -202,7 +207,7 @@ const AdminPanel = () => {
     return (
       <AdminPasswordRecovery
         onBack={() => setShowRecovery(false)}
-        recoveryEmail={getAdminEmail()}
+        recoveryEmail={ADMIN_CREDENTIALS.recoveryEmail}
       />
     );
   }
