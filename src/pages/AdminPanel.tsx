@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+import { AdminLogin } from '@/components/admin/AdminLogin';
+import { AdminStats } from '@/components/admin/AdminStats';
+import { AdminBalanceTab } from '@/components/admin/AdminBalanceTab';
+import { AdminUsersTab } from '@/components/admin/AdminUsersTab';
+import { AdminServicesTab } from '@/components/admin/AdminServicesTab';
+import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
 
 const ADMIN_CREDENTIALS = {
   login: 'admin',
@@ -165,47 +167,11 @@ const AdminPanel = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center mb-4">
-              <Icon name="Shield" size={32} className="text-white" />
-            </div>
-            <CardTitle className="text-2xl">Админ-панель</CardTitle>
-            <CardDescription>Введите учетные данные для входа</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="login">Логин</Label>
-                <Input
-                  id="login"
-                  type="text"
-                  placeholder="admin"
-                  value={loginForm.login}
-                  onChange={(e) => setLoginForm({ ...loginForm, login: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Пароль</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={loginForm.password}
-                  onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full" size="lg">
-                <Icon name="LogIn" size={18} className="mr-2" />
-                Войти
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+      <AdminLogin
+        loginForm={loginForm}
+        setLoginForm={setLoginForm}
+        handleLogin={handleLogin}
+      />
     );
   }
 
@@ -236,67 +202,7 @@ const AdminPanel = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Всего пользователей</p>
-                  <p className="text-3xl font-bold">{stats.totalUsers}</p>
-                  <p className="text-xs text-green-600 mt-1">Активных: {stats.activeUsers}</p>
-                </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Icon name="Users" size={24} className="text-blue-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Общий доход</p>
-                  <p className="text-3xl font-bold">{(stats.totalRevenue / 1000).toFixed(0)}К ₽</p>
-                  <p className="text-xs text-green-600 mt-1">+12% за месяц</p>
-                </div>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Icon name="DollarSign" size={24} className="text-green-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">На модерации</p>
-                  <p className="text-3xl font-bold">{stats.moderationQueue}</p>
-                  <p className="text-xs text-orange-600 mt-1">Требует внимания</p>
-                </div>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Icon name="AlertCircle" size={24} className="text-orange-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Транзакции</p>
-                  <p className="text-3xl font-bold">{stats.totalTransactions}</p>
-                  <p className="text-xs text-purple-600 mt-1">За весь период</p>
-                </div>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Icon name="TrendingUp" size={24} className="text-purple-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <AdminStats stats={stats} />
 
         <Tabs defaultValue="balance" className="w-full">
           <TabsList className="grid w-full grid-cols-4">
@@ -319,236 +225,22 @@ const AdminPanel = () => {
           </TabsList>
 
           <TabsContent value="balance" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              {platformBalances.map((balance) => (
-                <Card key={balance.currency} className="overflow-hidden">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 bg-${balance.color}-100 rounded-lg flex items-center justify-center`}>
-                        <Icon name={balance.icon as any} size={24} className={`text-${balance.color}-600`} />
-                      </div>
-                      <Badge variant="outline">{balance.currency}</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-1">Баланс площадки</p>
-                    <p className="text-3xl font-bold">
-                      {balance.balance.toLocaleString()} {balance.symbol}
-                    </p>
-                    <div className="mt-4 pt-4 border-t flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">
-                        <Icon name="ArrowUpRight" size={14} className="mr-1" />
-                        Вывести
-                      </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
-                        <Icon name="Eye" size={14} className="mr-1" />
-                        История
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>История поступлений</CardTitle>
-                <CardDescription>Все поступления от пользователей и комиссии площадки</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {balanceTransactions.map((tx) => (
-                    <div key={tx.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          tx.type === 'vip_purchase' ? 'bg-purple-100' :
-                          tx.type === 'commission' ? 'bg-green-100' :
-                          'bg-red-100'
-                        }`}>
-                          <Icon 
-                            name={tx.type === 'vip_purchase' ? 'Crown' : tx.type === 'commission' ? 'Percent' : 'ArrowDownLeft'} 
-                            size={20} 
-                            className={`${
-                              tx.type === 'vip_purchase' ? 'text-purple-600' :
-                              tx.type === 'commission' ? 'text-green-600' :
-                              'text-red-600'
-                            }`}
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-semibold">{tx.user}</h4>
-                            <Badge variant={tx.type === 'vip_purchase' ? 'default' : tx.type === 'commission' ? 'secondary' : 'destructive'}>
-                              {tx.type === 'vip_purchase' ? 'VIP' : tx.type === 'commission' ? 'Комиссия' : 'Вывод'}
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground">{tx.description}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{tx.date}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className={`text-xl font-bold ${
-                          tx.amount > 0 ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
-                        </p>
-                        <p className="text-sm text-muted-foreground">{tx.currency}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <AdminBalanceTab
+              platformBalances={platformBalances}
+              balanceTransactions={balanceTransactions}
+            />
           </TabsContent>
 
           <TabsContent value="users" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Управление пользователями</CardTitle>
-                <CardDescription>Список всех зарегистрированных пользователей</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {users.map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold">{user.name}</h3>
-                          <Badge variant={user.role === 'seller' ? 'default' : user.role === 'buyer' ? 'secondary' : 'outline'}>
-                            {user.role === 'seller' ? 'Продавец' : user.role === 'buyer' ? 'Покупатель' : 'Знакомства'}
-                          </Badge>
-                          <Badge variant={user.status === 'active' ? 'default' : 'destructive'}>
-                            {user.status === 'active' ? 'Активен' : 'Заблокирован'}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          <span>Регистрация: {user.registeredAt}</span>
-                          <span>Баланс: {user.balance} ₽</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Icon name="Eye" size={16} className="mr-2" />
-                          Просмотр
-                        </Button>
-                        {user.status === 'active' ? (
-                          <Button variant="destructive" size="sm" onClick={() => blockUser(user.id)}>
-                            <Icon name="Ban" size={16} className="mr-2" />
-                            Блокировать
-                          </Button>
-                        ) : (
-                          <Button variant="default" size="sm">
-                            <Icon name="Check" size={16} className="mr-2" />
-                            Разблокировать
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <AdminUsersTab users={users} blockUser={blockUser} />
           </TabsContent>
 
           <TabsContent value="services" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Модерация услуг</CardTitle>
-                <CardDescription>Список услуг требующих проверки</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {services.map((service) => (
-                    <div key={service.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold">{service.title}</h3>
-                          <Badge variant={
-                            service.status === 'active' ? 'default' : 
-                            service.status === 'moderation' ? 'secondary' : 
-                            'destructive'
-                          }>
-                            {service.status === 'active' ? 'Активна' : 
-                             service.status === 'moderation' ? 'На модерации' : 
-                             'Заблокирована'}
-                          </Badge>
-                          {service.reports > 0 && (
-                            <Badge variant="destructive">{service.reports} жалоб</Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground">Продавец: {service.seller}</p>
-                        <p className="text-sm font-semibold mt-2">{service.price} ₽</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Icon name="Eye" size={16} className="mr-2" />
-                          Просмотр
-                        </Button>
-                        {service.status === 'moderation' && (
-                          <Button variant="default" size="sm" onClick={() => approveService(service.id)}>
-                            <Icon name="Check" size={16} className="mr-2" />
-                            Одобрить
-                          </Button>
-                        )}
-                        <Button variant="destructive" size="sm">
-                          <Icon name="X" size={16} className="mr-2" />
-                          Отклонить
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <AdminServicesTab services={services} approveService={approveService} />
           </TabsContent>
 
           <TabsContent value="transactions" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>История транзакций</CardTitle>
-                <CardDescription>Все финансовые операции платформы</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {transactions.map((tx) => (
-                    <div key={tx.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold">{tx.user}</h3>
-                          <Badge variant={
-                            tx.type === 'deposit' ? 'default' :
-                            tx.type === 'withdrawal' ? 'secondary' :
-                            tx.type === 'payment' ? 'outline' :
-                            'destructive'
-                          }>
-                            {tx.type === 'deposit' ? 'Пополнение' :
-                             tx.type === 'withdrawal' ? 'Вывод' :
-                             tx.type === 'payment' ? 'Оплата' :
-                             'Комиссия'}
-                          </Badge>
-                          <Badge variant={
-                            tx.status === 'completed' ? 'default' :
-                            tx.status === 'pending' ? 'secondary' :
-                            'destructive'
-                          }>
-                            {tx.status === 'completed' ? 'Завершена' :
-                             tx.status === 'pending' ? 'В обработке' :
-                             'Ошибка'}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span>{tx.date}</span>
-                          <span className="font-semibold text-foreground">{tx.amount} {tx.currency}</span>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        <Icon name="FileText" size={16} className="mr-2" />
-                        Детали
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <AdminTransactionsTab transactions={transactions} />
           </TabsContent>
         </Tabs>
       </div>
