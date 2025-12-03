@@ -70,11 +70,11 @@ const Navigation = ({
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
-    <div className="max-w-wide mx-auto px-4 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
-          <Icon name="Crown" size={28} className="text-primary" />
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+    <div className="max-w-wide mx-auto px-2 sm:px-4 py-2">
+      <div className="flex items-center justify-between gap-1">
+        <div className="flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
+          <Icon name="Crown" size={24} className="text-primary" />
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
             <span className="gold-shimmer">Elite</span>
           </h1>
         </div>
@@ -102,16 +102,16 @@ const Navigation = ({
           isSecondRow={false}
         />
 
-        <div className="md:hidden flex items-center space-x-2">
+        <div className="md:hidden flex items-center space-x-1">
           {userRole && (
             <Button
               onClick={() => setCurrentPage('wallet')}
-              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-3 py-2 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
+              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-2 py-1.5 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
               size="sm"
             >
-              <Icon name="Wallet" size={18} className={`mr-2 ${balanceAnimation ? 'animate-bounce' : ''}`} />
+              <Icon name="Wallet" size={16} className={`mr-1.5 ${balanceAnimation ? 'animate-bounce' : ''}`} />
               <div className="flex flex-col items-start">
-                <span className={`text-sm leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
+                <span className={`text-xs leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
                   {rubBalance.toLocaleString('ru-RU')} ₽
                 </span>
               </div>
@@ -121,9 +121,9 @@ const Navigation = ({
             variant="ghost" 
             size="icon"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="text-foreground/80 hover:text-foreground"
+            className="text-foreground/80 hover:text-foreground h-8 w-8"
           >
-            <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
+            <Icon name={showMobileMenu ? "X" : "Menu"} size={20} />
           </Button>
         </div>
       </div>
