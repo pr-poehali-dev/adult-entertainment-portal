@@ -69,23 +69,24 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// Детектор отладчика
-let debuggerDetected = false;
-setInterval(() => {
-  const before = new Date().getTime();
-  debugger; // eslint-disable-line no-debugger
-  const after = new Date().getTime();
-  if (after - before > 100) {
-    debuggerDetected = true;
-    // При обнаружении отладчика очищаем чувствительные данные из памяти
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.removeItem('adminSession');
-    }
-  }
-}, 1000);
+// Детектор отладчика (временно отключен)
+const debuggerDetected = false;
+
+// Отключаем для отладки
+// setInterval(() => {
+//   const before = new Date().getTime();
+//   debugger; // eslint-disable-line no-debugger
+//   const after = new Date().getTime();
+//   if (after - before > 100) {
+//     debuggerDetected = true;
+//     if (typeof sessionStorage !== 'undefined') {
+//       sessionStorage.removeItem('adminSession');
+//     }
+//   }
+// }, 1000);
 
 export function isDebuggerActive(): boolean {
-  return debuggerDetected;
+  return false; // Временно всегда возвращаем false
 }
 
 // Функция для безопасного хранения временных данных
