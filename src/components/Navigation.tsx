@@ -103,20 +103,6 @@ const Navigation = ({
         />
 
         <div className="md:hidden flex items-center space-x-1">
-          {userRole && (
-            <Button
-              onClick={() => setCurrentPage('wallet')}
-              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-2 py-1.5 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
-              size="sm"
-            >
-              <Icon name="Wallet" size={16} className={`mr-1.5 ${balanceAnimation ? 'animate-bounce' : ''}`} />
-              <div className="flex flex-col items-start">
-                <span className={`text-xs leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
-                  {rubBalance.toLocaleString('ru-RU')} ₽
-                </span>
-              </div>
-            </Button>
-          )}
           <Button 
             variant="ghost" 
             size="icon"
@@ -127,6 +113,28 @@ const Navigation = ({
           </Button>
         </div>
       </div>
+      
+      {userRole && (
+        <div className="md:hidden border-t border-border/30 py-2">
+          <div className="max-w-wide mx-auto px-2 flex justify-center">
+            <Button
+              onClick={() => setCurrentPage('wallet')}
+              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-3 py-1.5 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
+              size="sm"
+            >
+              <Icon name="Wallet" size={16} className={`mr-2 ${balanceAnimation ? 'animate-bounce' : ''}`} />
+              <div className="flex flex-col items-start">
+                <span className={`text-xs leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
+                  {rubBalance.toLocaleString('ru-RU')} ₽
+                </span>
+                <span className="text-[9px] text-white/80 mt-0.5">
+                  {rubInBtc.toFixed(6)} ₿
+                </span>
+              </div>
+            </Button>
+          </div>
+        </div>
+      )}
       
       <div className="hidden md:block border-t border-border/30 py-3">
         <div className="max-w-wide mx-auto px-4">
