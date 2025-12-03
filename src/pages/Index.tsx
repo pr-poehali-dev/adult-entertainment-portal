@@ -356,7 +356,7 @@ const Index = () => {
   return (
     <div className={isDarkTheme ? 'dark' : ''} data-theme={isDarkTheme ? 'dark' : 'light'}>
     <SplashScreen />
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navigation 
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
