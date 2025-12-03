@@ -10,6 +10,7 @@ import { AdminBalanceTab } from '@/components/admin/AdminBalanceTab';
 import { AdminUsersTab } from '@/components/admin/AdminUsersTab';
 import { AdminServicesTab } from '@/components/admin/AdminServicesTab';
 import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
+import { AdminSellersTab } from '@/components/admin/AdminSellersTab';
 import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
 import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
 import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
@@ -71,10 +72,17 @@ const AdminPanel = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const [users] = useState<User[]>([
+  const [users, setUsers] = useState<User[]>([
     { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', role: 'seller', status: 'active', registeredAt: '2024-01-15', balance: 45000 },
     { id: 2, name: 'Иван Петров', email: 'ivan@mail.ru', role: 'buyer', status: 'active', registeredAt: '2024-02-20', balance: 12000 },
     { id: 3, name: 'Мария Иванова', email: 'maria@mail.ru', role: 'dating', status: 'blocked', registeredAt: '2024-03-10', balance: 0 },
+  ]);
+
+  const [sellers, setSellers] = useState([
+    { id: 1, name: 'Анна Смирнова', email: 'anna@mail.ru', balance: 45000, commission: 12500, status: 'active' as const, registeredAt: '2024-01-15', totalEarnings: 85000 },
+    { id: 2, name: 'Виктория Смит', email: 'victoria@mail.ru', balance: 32000, commission: 8900, status: 'active' as const, registeredAt: '2024-02-10', totalEarnings: 62000 },
+    { id: 3, name: 'Елена Кузнецова', email: 'elena@mail.ru', balance: 15000, commission: 4200, status: 'blocked' as const, registeredAt: '2024-03-05', totalEarnings: 28000 },
+    { id: 4, name: 'Ольга Петрова', email: 'olga@mail.ru', balance: 58000, commission: 18500, status: 'active' as const, registeredAt: '2024-01-20', totalEarnings: 125000 },
   ]);
 
   const [services] = useState<Service[]>([
@@ -185,10 +193,30 @@ const AdminPanel = () => {
   };
 
   const blockUser = (userId: number) => {
+    setUsers(prev => prev.map(u => 
+      u.id === userId ? { ...u, status: u.status === 'blocked' ? 'active' : 'blocked' } : u
+    ));
     toast({
-      title: "Пользователь заблокирован",
-      description: `Пользователь #${userId} был заблокирован`,
+      title: "Статус изменен",
+      description: `Пользователь #${userId} был ${users.find(u => u.id === userId)?.status === 'active' ? 'заблокирован' : 'разблокирован'}`,
     });
+  };
+
+  const blockSeller = (sellerId: number) => {
+    setSellers(prev => prev.map(s => 
+      s.id === sellerId ? { ...s, status: s.status === 'blocked' ? 'active' : 'blocked' } : s
+    ));
+    const seller = sellers.find(s => s.id === sellerId);
+    toast({
+      title: "Статус изменен",
+      description: `${seller?.name} ${seller?.status === 'active' ? 'заблокирован' : 'разблокирован'}`,
+    });
+  };
+
+  const updateSellerBalance = (sellerId: number, newBalance: number) => {
+    setSellers(prev => prev.map(s => 
+      s.id === sellerId ? { ...s, balance: newBalance } : s
+    ));
   };
 
   const approveService = (serviceId: number) => {
@@ -256,27 +284,19 @@ const AdminPanel = () => {
       <div className="container mx-auto px-4 py-8">
         <AdminStats stats={stats} />
 
-        <Tabs defaultValue="balance" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="balance">
+        <Tabs defaultValue="moderation" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="moderation">
+              <Icon name="FileCheck" size={16} className="mr-2" />
+              Модерация
+            </TabsTrigger>
+            <TabsTrigger value="finances">
               <Icon name="Wallet" size={16} className="mr-2" />
-              Баланс
+              Финансы
             </TabsTrigger>
-            <TabsTrigger value="users">
+            <TabsTrigger value="sellers">
               <Icon name="Users" size={16} className="mr-2" />
-              Пользователи
-            </TabsTrigger>
-            <TabsTrigger value="services">
-              <Icon name="Briefcase" size={16} className="mr-2" />
-              Услуги
-            </TabsTrigger>
-            <TabsTrigger value="transactions">
-              <Icon name="CreditCard" size={16} className="mr-2" />
-              Транзакции
-            </TabsTrigger>
-            <TabsTrigger value="security">
-              <Icon name="Shield" size={16} className="mr-2" />
-              Безопасность
+              Продавцы
             </TabsTrigger>
           </TabsList>
 
@@ -287,23 +307,44 @@ const AdminPanel = () => {
             />
           </TabsContent>
 
-          <TabsContent value="users" className="mt-6">
-            <AdminUsersTab users={users} blockUser={blockUser} />
+          <TabsContent value="moderation" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Модерация</h2>
+              <Tabs defaultValue="profiles" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="profiles">Анкеты</TabsTrigger>
+                  <TabsTrigger value="ads">Объявления</TabsTrigger>
+                </TabsList>
+                <TabsContent value="profiles" className="mt-4">
+                  <AdminUsersTab users={users} blockUser={blockUser} />
+                </TabsContent>
+                <TabsContent value="ads" className="mt-4">
+                  <AdminServicesTab services={services} approveService={approveService} />
+                </TabsContent>
+              </Tabs>
+            </div>
           </TabsContent>
 
-          <TabsContent value="services" className="mt-6">
-            <AdminServicesTab services={services} approveService={approveService} />
+          <TabsContent value="finances" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Финансы</h2>
+              <AdminBalanceTab 
+                platformBalances={platformBalances} 
+                balanceTransactions={balanceTransactions} 
+              />
+              <AdminTransactionsTab transactions={transactions} />
+            </div>
           </TabsContent>
 
-          <TabsContent value="transactions" className="mt-6">
-            <AdminTransactionsTab transactions={transactions} />
-          </TabsContent>
-
-          <TabsContent value="security" className="mt-6">
-            <Admin2FASettings
-              is2FAEnabled={is2FAEnabled}
-              on2FAToggle={handle2FAToggle}
-            />
+          <TabsContent value="sellers" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Продавцы</h2>
+              <AdminSellersTab 
+                sellers={sellers} 
+                onBlockSeller={blockSeller}
+                onUpdateBalance={updateSellerBalance}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
