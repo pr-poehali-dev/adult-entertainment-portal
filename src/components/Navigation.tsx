@@ -91,6 +91,20 @@ const Navigation = ({
         />
 
         <div className="md:hidden flex items-center space-x-2">
+          {userRole && (
+            <Button
+              onClick={() => setCurrentPage('wallet')}
+              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-3 py-2 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
+              size="sm"
+            >
+              <Icon name="Wallet" size={18} className={`mr-2 ${balanceAnimation ? 'animate-bounce' : ''}`} />
+              <div className="flex flex-col items-start">
+                <span className={`text-sm leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
+                  {rubBalance.toLocaleString('ru-RU')} ₽
+                </span>
+              </div>
+            </Button>
+          )}
           <Button 
             variant="ghost" 
             size="icon"
