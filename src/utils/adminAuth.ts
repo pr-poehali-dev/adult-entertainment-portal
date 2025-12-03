@@ -27,11 +27,13 @@ function simpleDecrypt(encrypted: string): string {
 }
 
 // Зашифрованные учетные данные администратора
+// Логин: admin
+// Пароль: admin123
 const ENCRYPTED_ADMIN_DATA = {
-  login: 'PwMZCBELGAYPDw4fGREA',
-  password: 'OA0bDQsAABsJGgQAGhUfGhYZGQ==',
+  login: 'PwMZCBEL',
+  password: 'OA0bDQsAABsJGg==',
   email: 'PAIOBBsDBQINGxEYGhMfGhYZGQ8KBR0IBw4AGhASCg==',
-};
+}
 
 export function getAdminCredentials() {
   return obfuscateExecution(() => {
