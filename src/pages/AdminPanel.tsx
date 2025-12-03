@@ -12,6 +12,8 @@ import { AdminServicesTab } from '@/components/admin/AdminServicesTab';
 import { AdminTransactionsTab } from '@/components/admin/AdminTransactionsTab';
 import { AdminSellersTab } from '@/components/admin/AdminSellersTab';
 import { AdminClientsTab } from '@/components/admin/AdminClientsTab';
+import { AdminAdsManagement } from '@/components/admin/AdminAdsManagement';
+import { AdminMessaging } from '@/components/admin/AdminMessaging';
 import { AdminPasswordRecovery } from '@/components/admin/AdminPasswordRecovery';
 import { Admin2FAVerification } from '@/components/admin/Admin2FAVerification';
 import { Admin2FASettings } from '@/components/admin/Admin2FASettings';
@@ -101,6 +103,25 @@ const AdminPanel = () => {
     { id: 1, title: 'Элитный массаж', seller: 'Анна Смирнова', price: 5000, status: 'active', reports: 0 },
     { id: 2, title: 'VIP сопровождение', seller: 'Виктория Смит', price: 15000, status: 'moderation', reports: 2 },
     { id: 3, title: 'Эротический массаж', seller: 'Елена Кузнецова', price: 3500, status: 'blocked', reports: 5 },
+  ]);
+
+  const [ads, setAds] = useState([
+    { id: 1, title: 'Элитный массаж', category: 'massage', price: 5000, seller: 'Анна Смирнова', status: 'active' as const, createdAt: '2024-11-28' },
+    { id: 2, title: 'VIP сопровождение', category: 'escort', price: 15000, seller: 'Виктория Смит', status: 'moderation' as const, createdAt: '2024-11-27' },
+    { id: 3, title: 'Романтическое свидание', category: 'dating', price: 3500, seller: 'Мария Иванова', status: 'active' as const, createdAt: '2024-11-26' },
+    { id: 4, title: 'Фитнес тренировки', category: 'fitness', price: 2500, seller: 'Ольга Петрова', status: 'active' as const, createdAt: '2024-11-25' },
+  ]);
+
+  const [adminMessages, setAdminMessages] = useState<Array<{
+    id: number;
+    userId: number;
+    userName: string;
+    message: string;
+    timestamp: string;
+    isFromAdmin: boolean;
+  }>>([
+    { id: 1, userId: 2, userName: 'Иван Петров', message: 'Добро пожаловать на платформу!', timestamp: '2024-11-28T10:00:00', isFromAdmin: true },
+    { id: 2, userId: 3, userName: 'Мария Иванова', message: 'Ваш аккаунт временно заблокирован', timestamp: '2024-11-27T15:30:00', isFromAdmin: true },
   ]);
 
   const [transactions] = useState<Transaction[]>([
@@ -255,6 +276,34 @@ const AdminPanel = () => {
     });
   };
 
+  const createAd = (ad: Omit<typeof ads[0], 'id'>) => {
+    const newAd = {
+      ...ad,
+      id: ads.length > 0 ? Math.max(...ads.map(a => a.id)) + 1 : 1,
+    };
+    setAds(prev => [...prev, newAd]);
+  };
+
+  const deleteAd = (adId: number) => {
+    setAds(prev => prev.filter(a => a.id !== adId));
+  };
+
+  const sendMessageToUser = (userId: number, message: string) => {
+    const user = clients.find(c => c.id === userId);
+    if (!user) return;
+
+    const newMessage = {
+      id: adminMessages.length > 0 ? Math.max(...adminMessages.map(m => m.id)) + 1 : 1,
+      userId,
+      userName: user.name,
+      message,
+      timestamp: new Date().toISOString(),
+      isFromAdmin: true,
+    };
+    
+    setAdminMessages(prev => [...prev, newMessage]);
+  };
+
   if (showRecovery) {
     return (
       <AdminPasswordRecovery
@@ -314,10 +363,18 @@ const AdminPanel = () => {
         <AdminStats stats={stats} />
 
         <Tabs defaultValue="clients" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="clients">
               <Icon name="Users" size={16} className="mr-2" />
               Клиенты
+            </TabsTrigger>
+            <TabsTrigger value="ads">
+              <Icon name="Package" size={16} className="mr-2" />
+              Объявления
+            </TabsTrigger>
+            <TabsTrigger value="messaging">
+              <Icon name="MessageSquare" size={16} className="mr-2" />
+              Сообщения
             </TabsTrigger>
             <TabsTrigger value="moderation">
               <Icon name="FileCheck" size={16} className="mr-2" />
@@ -340,6 +397,28 @@ const AdminPanel = () => {
                 clients={clients} 
                 onBlockClient={blockClient}
                 onUpdateBalance={updateClientBalance}
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="ads" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Управление объявлениями</h2>
+              <AdminAdsManagement 
+                ads={ads}
+                onCreateAd={createAd}
+                onDeleteAd={deleteAd}
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="messaging" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Сообщения клиентам</h2>
+              <AdminMessaging 
+                users={clients}
+                messages={adminMessages}
+                onSendMessage={sendMessageToUser}
               />
             </div>
           </TabsContent>
