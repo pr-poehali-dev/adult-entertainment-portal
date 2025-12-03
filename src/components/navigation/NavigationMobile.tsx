@@ -68,14 +68,6 @@ export const NavigationMobile = ({
           <span className="font-medium">Работа</span>
         </button>
         
-        <button 
-          onClick={() => { setCurrentPage('referral'); setShowMobileMenu(false); }}
-          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
-        >
-          <Icon name="Users" size={20} className="text-primary" />
-          <span className="font-medium">Партнёрская программа</span>
-        </button>
-        
         {userRole && (
           <>
             <button 
@@ -107,6 +99,14 @@ export const NavigationMobile = ({
         >
           <Icon name="FileText" size={20} className="text-primary" />
           <span className="font-medium">{t.nav.rules}</span>
+        </button>
+        
+        <button 
+          onClick={() => { setCurrentPage('referral'); setShowMobileMenu(false); }}
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
+        >
+          <Icon name="Users" size={20} className="text-primary" />
+          <span className="font-medium">Партнёрская программа</span>
         </button>
         
         <div className="border-t border-border pt-4 mt-4">
