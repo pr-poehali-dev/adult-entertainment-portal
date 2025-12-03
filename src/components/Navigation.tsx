@@ -90,7 +90,7 @@ const Navigation = ({
           setShowProfileMenu={setShowProfileMenu}
         />
 
-        <div className="md:hidden flex items-center space-x-2">
+        <div className="md:hidden flex items-center space-x-2 relative z-50">
           {userRole && (
             <Button
               onClick={() => setCurrentPage('wallet')}
@@ -109,7 +109,7 @@ const Navigation = ({
             variant="ghost" 
             size="icon"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="text-foreground/80 hover:text-primary"
+            className="text-foreground/80 hover:text-primary bg-primary/20 hover:bg-primary/30"
           >
             <Icon name={showMobileMenu ? "X" : "Menu"} size={24} />
           </Button>
