@@ -46,7 +46,7 @@ export const NavigationMobile = ({
       <div className="max-w-wide mx-auto px-4 py-6 space-y-4">
         <button 
           onClick={() => { setCurrentPage('home'); setShowMobileMenu(false); }}
-          className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >
           <Icon name="Home" size={20} className="text-primary" />
           <span className="font-medium">{t.nav.home}</span>
@@ -54,7 +54,7 @@ export const NavigationMobile = ({
         
         <button 
           onClick={() => { setCurrentPage('catalog'); setShowMobileMenu(false); }}
-          className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >
           <Icon name="Search" size={20} className="text-primary" />
           <span className="font-medium">{t.nav.catalog}</span>
@@ -62,7 +62,7 @@ export const NavigationMobile = ({
         
         <button 
           onClick={() => { setCurrentPage('work'); setShowMobileMenu(false); }}
-          className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >
           <Icon name="Briefcase" size={20} className="text-primary" />
           <span className="font-medium">Работа</span>
@@ -70,7 +70,7 @@ export const NavigationMobile = ({
         
         <button 
           onClick={() => { setCurrentPage('referral'); setShowMobileMenu(false); }}
-          className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >
           <Icon name="Users" size={20} className="text-primary" />
           <span className="font-medium">Партнёрская программа</span>
@@ -80,7 +80,7 @@ export const NavigationMobile = ({
           <>
             <button 
               onClick={() => { setCurrentPage('favorites'); setShowMobileMenu(false); }}
-              className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+              className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
             >
               <Icon name="Heart" size={20} className="text-primary" />
               <span className="font-medium">{t.nav.favorites}</span>
@@ -88,12 +88,12 @@ export const NavigationMobile = ({
             
             <button 
               onClick={() => { setCurrentPage('messages'); setShowMobileMenu(false); }}
-              className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 relative"
+              className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3 relative"
             >
               <Icon name="MessageCircle" size={20} className="text-primary" />
               <span className="font-medium">{t.nav.messages}</span>
               {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
-                <span className="ml-auto w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute right-4 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   {notifications.filter(n => !n.read && n.type === 'message').length}
                 </span>
               )}
@@ -103,7 +103,7 @@ export const NavigationMobile = ({
         
         <button 
           onClick={() => { setCurrentPage('rules'); setShowMobileMenu(false); }}
-          className="w-full text-left py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center gap-3"
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >
           <Icon name="FileText" size={20} className="text-primary" />
           <span className="font-medium">{t.nav.rules}</span>
