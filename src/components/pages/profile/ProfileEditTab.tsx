@@ -146,44 +146,7 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="gender">Пол</Label>
-              <Select
-                value={formData.gender}
-                onValueChange={(value: any) => setFormData({ ...formData, gender: value })}
-                disabled={!isEditing}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Мужской</SelectItem>
-                  <SelectItem value="female">Женский</SelectItem>
-                  <SelectItem value="other">Другое</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="orientation">Ориентация</Label>
-              <Select
-                value={formData.preferences.orientation}
-                onValueChange={(value: Orientation) => setFormData({
-                  ...formData,
-                  preferences: { ...formData.preferences, orientation: value }
-                })}
-                disabled={!isEditing}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {orientationOptions.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="city">Город</Label>
