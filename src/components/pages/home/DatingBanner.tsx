@@ -69,13 +69,49 @@ export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
               </Button>
             </div>
             
-            <div className="relative hidden md:flex items-center justify-center">
+            <div className="relative hidden md:block">
               <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
-                <img 
-                  src="https://cdn.poehali.dev/files/fc058fcd-19f2-41c8-a8da-fa48ffe796fd.png" 
-                  alt="Love is..."
-                  className="w-80 h-80 object-contain drop-shadow-2xl"
-                />
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-400/30 to-rose-600/30 rounded-3xl blur-3xl"></div>
+                <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full flex items-center justify-center text-3xl">
+                        👤
+                      </div>
+                      <div className="flex-1">
+                        <div className="h-3 bg-white/40 rounded w-24 mb-2"></div>
+                        <div className="h-2 bg-white/30 rounded w-32"></div>
+                      </div>
+                      <Icon name="Heart" size={24} className="text-white" />
+                    </div>
+                    
+                    <div className="flex items-center gap-4 bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full flex items-center justify-center text-3xl">
+                        👤
+                      </div>
+                      <div className="flex-1">
+                        <div className="h-3 bg-white/40 rounded w-28 mb-2"></div>
+                        <div className="h-2 bg-white/30 rounded w-36"></div>
+                      </div>
+                      <Icon name="Heart" size={24} className="text-white" />
+                    </div>
+                    
+                    <div className="flex items-center gap-4 bg-gradient-to-r from-green-500/30 to-emerald-500/30 backdrop-blur-sm rounded-2xl p-4 border-2 border-green-400/40">
+                      <div className="flex -space-x-2">
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full flex items-center justify-center text-2xl border-2 border-white">
+                          👤
+                        </div>
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-300 to-rose-400 rounded-full flex items-center justify-center text-2xl border-2 border-white">
+                          👤
+                        </div>
+                      </div>
+                      <div className="flex-1 flex items-center gap-2">
+                        <Icon name="Sparkles" size={20} className="text-green-300" />
+                        <span className="text-white font-bold text-sm">Взаимная симпатия!</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-pink-400 rounded-full opacity-20 animate-pulse"></div>

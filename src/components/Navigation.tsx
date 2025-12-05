@@ -15,8 +15,8 @@ interface NavigationProps {
   setNotifications: (notifications: Notification[]) => void;
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
-  theme: 'standard' | 'light' | 'dark';
-  setTheme: (theme: 'standard' | 'light' | 'dark') => void;
+  isDarkTheme: boolean;
+  setIsDarkTheme: (isDark: boolean) => void;
   wallet: Wallet;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
@@ -32,8 +32,8 @@ const Navigation = ({
   setNotifications,
   showNotifications,
   setShowNotifications,
-  theme,
-  setTheme,
+  isDarkTheme,
+  setIsDarkTheme,
   wallet,
   soundEnabled,
   setSoundEnabled,
@@ -90,8 +90,8 @@ const Navigation = ({
           setNotifications={setNotifications}
           showNotifications={showNotifications}
           setShowNotifications={setShowNotifications}
-          theme={theme}
-          setTheme={setTheme}
+          isDarkTheme={isDarkTheme}
+          setIsDarkTheme={setIsDarkTheme}
           wallet={wallet}
           soundEnabled={soundEnabled}
           setSoundEnabled={setSoundEnabled}
@@ -165,8 +165,8 @@ const Navigation = ({
       setUserRole={setUserRole}
       profile={profile}
       notifications={notifications}
-      theme={theme}
-      setTheme={setTheme}
+      isDarkTheme={isDarkTheme}
+      setIsDarkTheme={setIsDarkTheme}
       soundEnabled={soundEnabled}
       setSoundEnabled={setSoundEnabled}
       balanceAnimation={balanceAnimation}
