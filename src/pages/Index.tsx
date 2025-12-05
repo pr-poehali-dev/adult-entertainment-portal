@@ -12,6 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { SplashScreen } from '@/components/SplashScreen';
+import { notificationService } from '@/utils/notificationService';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -157,7 +159,7 @@ const Index = () => {
     }
   };
 
-  const addNotification = (type: 'message' | 'booking' | 'review' | 'system' | 'referral', title: string, text: string, options?: { amount?: number; currency?: string; referralLevel?: 1 | 2 | 3 }) => {
+  const addNotification = (type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'ad_response', title: string, text: string, options?: { amount?: number; currency?: string; referralLevel?: 1 | 2 | 3; adId?: number; responseId?: number }) => {
     const newNotif: Notification = {
       id: Date.now(),
       type,
@@ -167,16 +169,29 @@ const Index = () => {
       read: false,
       amount: options?.amount,
       currency: options?.currency as any,
-      referralLevel: options?.referralLevel
+      referralLevel: options?.referralLevel,
+      adId: options?.adId,
+      responseId: options?.responseId
     };
     setNotifications([newNotif, ...notifications]);
     playNotificationSound(type);
+    
+    // Используем новый сервис уведомлений
+    notificationService.notify(newNotif);
     
     if (type === 'referral' && options?.amount) {
       toast({
         title: title,
         description: text,
         duration: 5000,
+      });
+    }
+    
+    if (type === 'ad_response') {
+      toast({
+        title: title,
+        description: text,
+        duration: 7000,
       });
     }
   };
@@ -379,10 +394,48 @@ const Index = () => {
     },
   });
 
+  // Инициализация сервиса уведомлений
+  useEffect(() => {
+    notificationService.initialize();
+  }, []);
+
+  // Функция для запроса разрешений
+  const handleEnableNotifications = async () => {
+    const granted = await notificationService.requestPermissions();
+    if (granted) {
+      toast({
+        title: "Уведомления включены",
+        description: "Вы будете получать звуковые, вибро и push-уведомления",
+      });
+      // Тестовое уведомление
+      notificationService.testNotification();
+    } else {
+      toast({
+        title: "Разрешения не предоставлены",
+        description: "Включите уведомления в настройках браузера",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className={isDarkTheme ? 'dark' : ''} data-theme={isDarkTheme ? 'dark' : 'light'}>
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
+      {/* Кнопка включения уведомлений */}
+      {!notificationService.hasPermissions() && (
+        <div className="fixed bottom-20 right-4 z-50">
+          <Button
+            onClick={handleEnableNotifications}
+            className="gap-2 shadow-lg animate-pulse"
+            size="lg"
+          >
+            <Icon name="Bell" size={20} />
+            Включить уведомления
+          </Button>
+        </div>
+      )}
+      
       <Navigation 
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

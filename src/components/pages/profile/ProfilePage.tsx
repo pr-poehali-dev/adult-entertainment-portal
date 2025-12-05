@@ -14,6 +14,7 @@ import { ProfileMediaTab } from './ProfileMediaTab';
 import { ProfileEditTab } from './ProfileEditTab';
 import { PrivateFoldersTab } from './PrivateFoldersTab';
 import { ProfileContactsTab } from './ProfileContactsTab';
+import { ProfileNotificationsTab } from './ProfileNotificationsTab';
 
 interface ProfilePageProps {
   profile: Profile;
@@ -121,7 +122,7 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
 
       <Tabs defaultValue="profile" className="space-y-6">
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-          <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-7 lg:grid-cols-8 min-w-max md:min-w-0">
+          <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-8 lg:grid-cols-9 min-w-max md:min-w-0">
             <TabsTrigger value="profile" className="whitespace-nowrap">Профиль</TabsTrigger>
             <TabsTrigger value="folders" className="whitespace-nowrap">Папки</TabsTrigger>
             <TabsTrigger value="contacts" className="whitespace-nowrap">Контакты</TabsTrigger>
@@ -131,6 +132,7 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
             {profile.role === 'seller' && (
               <TabsTrigger value="media" className="whitespace-nowrap">Медиа</TabsTrigger>
             )}
+            <TabsTrigger value="notifications" className="whitespace-nowrap">Уведомления</TabsTrigger>
             <TabsTrigger value="settings" className="whitespace-nowrap">Настройки</TabsTrigger>
           </TabsList>
         </div>
@@ -261,6 +263,10 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
             <ProfileMediaTab />
           </TabsContent>
         )}
+
+        <TabsContent value="notifications">
+          <ProfileNotificationsTab />
+        </TabsContent>
 
         <TabsContent value="settings">
           <ProfileSettingsTab

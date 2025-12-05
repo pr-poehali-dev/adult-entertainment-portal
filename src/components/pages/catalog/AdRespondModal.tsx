@@ -23,6 +23,28 @@ export const AdRespondModal = ({ ad, onClose, onRespond }: AdRespondModalProps) 
       return;
     }
 
+    // Имитируем отправку уведомления автору объявления
+    // В реальном приложении это будет через API
+    setTimeout(() => {
+      // Создаем уведомление для автора объявления
+      const notification = {
+        id: Date.now(),
+        type: 'ad_response' as const,
+        title: 'Новый отклик на объявление!',
+        text: `Девушка откликнулась на "${ad.title}". Посмотрите профиль и примите решение.`,
+        time: new Date().toISOString(),
+        read: false,
+        adId: ad.id,
+        responseId: Date.now()
+      };
+
+      // Отправляем уведомление через сервис (звук, вибрация, push)
+      if (typeof window !== 'undefined') {
+        const { notificationService } = require('@/utils/notificationService');
+        notificationService.notify(notification);
+      }
+    }, 500);
+
     onRespond(message.trim());
   };
 
