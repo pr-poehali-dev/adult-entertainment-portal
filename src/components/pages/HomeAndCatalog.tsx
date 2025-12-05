@@ -154,6 +154,17 @@ export const CatalogPage = ({
   
   const filteredAds = useMemo(() => {
     return userAds.filter(ad => {
+      // Фильтр по полу: мужчины видят объявления девушек, девушки видят объявления мужчин
+      // Исключение: категория "Вечеринка" видна всем
+      if (ad.category !== 'Вечеринка') {
+        if (userRole === 'buyer' && ad.authorRole === 'buyer') {
+          return false; // Мужчины не видят объявления мужчин
+        }
+        if (userRole === 'seller' && ad.authorRole === 'seller') {
+          return false; // Девушки не видят объявления девушек
+        }
+      }
+      
       if (selectedCategory && selectedCategory !== 'all' && ad.category !== selectedCategory) {
         return false;
       }
@@ -165,7 +176,7 @@ export const CatalogPage = ({
       }
       return true;
     });
-  }, [userAds, selectedCategory, searchQuery]);
+  }, [userAds, selectedCategory, searchQuery, userRole]);
   
   const canRespond = userRole === 'seller';
   
