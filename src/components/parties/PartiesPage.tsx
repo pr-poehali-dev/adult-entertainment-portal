@@ -131,6 +131,19 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: Part
 
   const hasUserCreatedParties = parties.some(party => party.organizerId === currentUserId);
 
+  const getPendingApplicationsCount = () => {
+    return parties
+      .filter(party => party.organizerId === currentUserId)
+      .reduce((total, party) => {
+        const pendingCount = party.applications?.filter(app => 
+          app.status === 'pending' || app.status === 'interview'
+        ).length || 0;
+        return total + pendingCount;
+      }, 0);
+  };
+
+  const pendingCount = getPendingApplicationsCount();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
@@ -141,9 +154,14 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: Part
           </div>
           <div className="flex gap-3">
             {hasUserCreatedParties && (
-              <Button onClick={onOrganizerDashboard} variant="outline" size="lg">
+              <Button onClick={onOrganizerDashboard} variant="outline" size="lg" className="relative">
                 <Icon name="Settings" size={20} className="mr-2" />
                 Мои вечеринки
+                {pendingCount > 0 && (
+                  <Badge className="ml-2 bg-red-500 text-white px-2 py-0.5 text-xs">
+                    {pendingCount}
+                  </Badge>
+                )}
               </Button>
             )}
             <Button onClick={() => setShowCreateModal(true)} size="lg">
