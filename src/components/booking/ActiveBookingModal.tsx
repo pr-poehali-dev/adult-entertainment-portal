@@ -185,7 +185,7 @@ export const ActiveBookingModal = ({
                     Баланс: {userBalance?.amount.toLocaleString()} {booking.currency}
                   </span>
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {extendOptions.map(amount => {
                     let cost: number;
                     if (isVirtualSex) {

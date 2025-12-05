@@ -264,7 +264,7 @@ export const ApplyModal = ({ work, onClose, onSubmit }: ApplyModalProps) => {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-border">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Отмена
             </Button>

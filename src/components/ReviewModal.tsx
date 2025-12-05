@@ -90,7 +90,7 @@ const ReviewModal = ({ showReviewModal, setShowReviewModal, serviceName, onSubmi
           </div>
         </div>
 
-        <div className="flex justify-end gap-3">
+        <div className="flex flex-col sm:flex-row justify-end gap-3">
           <Button
             variant="outline"
             onClick={() => {

@@ -118,7 +118,7 @@ export const ForgotPasswordModal = ({ isOpen, onClose }: ForgotPasswordModalProp
               />
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <Button
                 variant="outline"
                 onClick={handleClose}

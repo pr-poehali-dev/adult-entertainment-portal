@@ -173,7 +173,7 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
             </>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               variant="outline"
               onClick={onClose}

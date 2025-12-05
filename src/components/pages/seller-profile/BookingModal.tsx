@@ -153,7 +153,7 @@ export default function BookingModal({
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={onClose}
               className="flex-1 py-3 px-4 bg-accent hover:bg-accent/80 rounded-lg font-semibold transition-colors"
