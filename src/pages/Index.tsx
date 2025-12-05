@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useIndexState } from './IndexState';
 import { useIndexHandlers } from './IndexHandlers';
 import { useIndexEffects } from './IndexEffects';
+import { isCurrentlyActive } from '@/utils/scheduleChecker';
 
 const Index = () => {
   // Состояние
@@ -143,7 +144,6 @@ const Index = () => {
         isServiceActive={state.selectedServiceId ? (() => {
           const item = catalogItems.find(item => item.id === state.selectedServiceId);
           if (!item) return true;
-          const { isCurrentlyActive } = require('@/utils/scheduleChecker');
           return item.isActive !== false && isCurrentlyActive(item.workSchedule);
         })() : true}
       />
