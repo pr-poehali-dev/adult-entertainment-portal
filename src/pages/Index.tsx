@@ -18,6 +18,7 @@ import AgencyRegister from '@/components/pages/AgencyRegister';
 import AgencyDashboard from '@/components/pages/AgencyDashboard';
 import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
+import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 
 const Index = () => {
   // Состояние
@@ -114,6 +115,7 @@ const Index = () => {
     selectedApplicationId: state.selectedApplicationId,
     setSelectedApplicationId: state.setSelectedApplicationId,
     onNotificationAdd: handlers.addNotification,
+    onOpenLovePurchase: () => state.setShowLovePurchase(true),
   });
 
   if (state.currentPage === 'agency-register') {
@@ -236,6 +238,13 @@ const Index = () => {
         editingGirl={state.editingGirl}
         agencyId={state.profile.agencyId || 0}
         agencyName={state.profile.agencyName || ''}
+      />
+
+      <LovePurchaseModal
+        isOpen={state.showLovePurchase}
+        onClose={() => state.setShowLovePurchase(false)}
+        onPurchase={handlers.handlePurchaseLove}
+        rubBalance={state.wallet.balances.find(b => b.currency === 'RUB')?.amount || 0}
       />
 
       <footer className="border-t border-border/50 mt-20 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">

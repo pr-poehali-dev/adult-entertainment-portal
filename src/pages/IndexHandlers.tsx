@@ -368,6 +368,35 @@ export const useIndexHandlers = (props: HandlersProps) => {
     });
   };
 
+  const handlePurchaseLove = (rubAmount: number, loveAmount: number) => {
+    setWallet((prev) => ({
+      balances: prev.balances.map(b => {
+        if (b.currency === 'RUB') return { ...b, amount: b.amount - rubAmount };
+        if (b.currency === 'LOVE') return { ...b, amount: b.amount + loveAmount };
+        return b;
+      })
+    }));
+    
+    const transaction: Transaction = {
+      id: Date.now(),
+      type: 'deposit',
+      amount: loveAmount,
+      currency: 'LOVE',
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
+      description: `Покупка ${loveAmount} LOVE за ${rubAmount} ₽`,
+    };
+    
+    setWalletTransactions([transaction, ...walletTransactions]);
+    
+    toast({
+      title: "💗 LOVE токены получены!",
+      description: `+${loveAmount} LOVE за ${rubAmount.toLocaleString()} ₽`,
+      duration: 5000,
+    });
+  };
+
   return {
     toggleFavorite,
     addNotification,
@@ -384,5 +413,6 @@ export const useIndexHandlers = (props: HandlersProps) => {
     handleToggleGirlActive,
     handleIncrementViews,
     handleTopUpWallet,
+    handlePurchaseLove,
   };
 };

@@ -68,6 +68,7 @@ interface AppPagesProps {
   selectedApplicationId?: number | null;
   setSelectedApplicationId?: (id: number | null) => void;
   onNotificationAdd?: (notification: Notification) => void;
+  onOpenLovePurchase?: () => void;
 }
 
 export const useAppPages = ({
@@ -110,6 +111,7 @@ export const useAppPages = ({
   selectedApplicationId,
   setSelectedApplicationId,
   onNotificationAdd,
+  onOpenLovePurchase,
 }: AppPagesProps) => {
   
   const LoadingFallback = () => (
@@ -265,7 +267,7 @@ export const useAppPages = ({
       case 'wallet':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <WalletPage setCurrentPage={setCurrentPage} wallet={wallet} />
+            <WalletPage setCurrentPage={setCurrentPage} wallet={wallet} onOpenLovePurchase={onOpenLovePurchase} />
           </Suspense>
         );
       

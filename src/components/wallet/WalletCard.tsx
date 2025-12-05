@@ -63,12 +63,14 @@ export const WalletCard = ({ wallet, onDeposit, onWithdraw }: WalletCardProps) =
               </div>
               <div className="flex gap-2">
                 {balance.currency === 'LOVE' ? (
-                  <div className="text-xs text-pink-600 dark:text-pink-400 text-right">
-                    <p className="font-medium">💝 Зарабатывайте LOVE:</p>
-                    <p className="opacity-70">• Реферальная программа</p>
-                    <p className="opacity-70">• Активность на платформе</p>
-                    <p className="opacity-70">• Бонусы и акции</p>
-                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={() => onDeposit(balance.currency)}
+                    className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white border-0"
+                  >
+                    <Icon name="ShoppingCart" size={16} />
+                    Купить LOVE
+                  </Button>
                 ) : (
                   <>
                     <Button 

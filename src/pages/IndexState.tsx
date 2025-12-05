@@ -33,6 +33,7 @@ export const useIndexState = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
+  const [showLovePurchase, setShowLovePurchase] = useState(false);
   const { toast } = useToast();
   const { playNotificationSound, playBalanceSound, soundEnabled, setSoundEnabled } = useNotificationSound();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -208,5 +209,7 @@ export const useIndexState = () => {
     setShowGirlForm,
     editingGirl,
     setEditingGirl,
+    showLovePurchase,
+    setShowLovePurchase,
   };
 };

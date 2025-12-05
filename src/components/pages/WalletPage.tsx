@@ -3,19 +3,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
-import { Page, Wallet } from '@/types';
+import { Page, Wallet, Currency } from '@/types';
 import { TransactionHistory } from './wallet/TransactionHistory';
 import { DepositForm } from './wallet/DepositForm';
 import { WithdrawForm } from './wallet/WithdrawForm';
 import { mockTransactions } from './wallet/mockTransactions';
+import { WalletCard } from '@/components/wallet/WalletCard';
 
 interface WalletPageProps {
   setCurrentPage: (page: Page) => void;
   wallet: Wallet;
+  onOpenLovePurchase?: () => void;
 }
 
-export const WalletPage = ({ setCurrentPage, wallet }: WalletPageProps) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'deposit' | 'withdraw'>('overview');
+export const WalletPage = ({ setCurrentPage, wallet, onOpenLovePurchase }: WalletPageProps) => {
+  const [activeTab, setActiveTab] = useState<'overview' | 'deposit' | 'withdraw' | 'balances'>('balances');
   const [transactions] = useState(mockTransactions);
 
   const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
@@ -23,6 +25,18 @@ export const WalletPage = ({ setCurrentPage, wallet }: WalletPageProps) => {
 
   const handleFormSuccess = () => {
     setActiveTab('overview');
+  };
+
+  const handleDeposit = (currency: Currency) => {
+    if (currency === 'LOVE' && onOpenLovePurchase) {
+      onOpenLovePurchase();
+    } else {
+      setActiveTab('deposit');
+    }
+  };
+
+  const handleWithdraw = (currency: Currency) => {
+    setActiveTab('withdraw');
   };
 
   return (
@@ -95,6 +109,14 @@ export const WalletPage = ({ setCurrentPage, wallet }: WalletPageProps) => {
         <div className="flex justify-center mb-8">
           <div className="inline-flex gap-2 p-1 bg-muted rounded-xl">
             <Button
+              variant={activeTab === 'balances' ? 'default' : 'ghost'}
+              onClick={() => setActiveTab('balances')}
+              className="rounded-lg"
+            >
+              <Icon name="Wallet" size={18} className="mr-2" />
+              Балансы
+            </Button>
+            <Button
               variant={activeTab === 'overview' ? 'default' : 'ghost'}
               onClick={() => setActiveTab('overview')}
               className="rounded-lg"
@@ -120,6 +142,10 @@ export const WalletPage = ({ setCurrentPage, wallet }: WalletPageProps) => {
             </Button>
           </div>
         </div>
+
+        {activeTab === 'balances' && (
+          <WalletCard wallet={wallet} onDeposit={handleDeposit} onWithdraw={handleWithdraw} />
+        )}
 
         {activeTab === 'overview' && (
           <TransactionHistory transactions={transactions} />
