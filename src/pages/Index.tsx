@@ -361,6 +361,10 @@ const Index = () => {
       setNotifications([notification, ...notifications]);
       playNotificationSound('party_application');
       
+      if ('vibrate' in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      }
+      
       toast({
         title: notification.title,
         description: notification.text,
