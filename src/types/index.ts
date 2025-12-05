@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard' | 'my-ads';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -206,7 +206,7 @@ export interface Review {
 
 export interface Notification {
   id: number;
-  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application';
+  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application' | 'ad_response';
   title: string;
   text: string;
   time: string;
@@ -216,6 +216,8 @@ export interface Notification {
   referralLevel?: 1 | 2 | 3;
   partyId?: number;
   applicationId?: number;
+  adId?: number;
+  responseId?: number;
 }
 
 export interface VIPPlan {
@@ -480,6 +482,43 @@ export interface ChatMessage {
   fileUrl?: string;
   fileName?: string;
   fileSize?: number;
+}
+
+export type AdStatus = 'active' | 'completed' | 'cancelled';
+
+export type AdType = 'service_offer' | 'service_request';
+
+export interface UserAd {
+  id: number;
+  authorId: number;
+  authorName: string;
+  authorAvatar: string;
+  authorRole: UserRole;
+  type: AdType;
+  category: string;
+  title: string;
+  description: string;
+  price: number;
+  currency: Currency;
+  duration?: number;
+  lookingFor?: string;
+  status: AdStatus;
+  createdAt: string;
+  expiresAt?: string;
+  responses?: AdResponse[];
+}
+
+export interface AdResponse {
+  id: number;
+  adId: number;
+  responderId: number;
+  responderName: string;
+  responderAvatar: string;
+  responderRole: UserRole;
+  message: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: string;
+  responderProfile?: SellerProfile;
 }
 
 export interface PartyChat {

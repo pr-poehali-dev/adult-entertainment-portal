@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Page, CatalogItem, UserRole } from '@/types';
+import { Page, CatalogItem, UserRole, UserAd } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
@@ -9,7 +9,10 @@ import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { DatingBanner } from './home/DatingBanner';
 import { CatalogFilters } from './catalog/CatalogFilters';
 import { CatalogGrid } from './catalog/CatalogGrid';
+import { AdRequestCard } from './catalog/AdRequestCard';
 import { getFilteredAndSortedItems } from './catalog/catalogUtils';
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 
 interface HomeAndCatalogProps {
   setCurrentPage: (page: Page) => void;
@@ -74,8 +77,65 @@ export const CatalogPage = ({
   setSelectedHeight,
   selectedBodyType,
   setSelectedBodyType,
+  userRole,
 }: HomeAndCatalogProps) => {
   const { t } = useLanguage();
+  const [showAds, setShowAds] = useState(false);
+  
+  // Моковые данные запросов мужчин
+  const [userAds] = useState<UserAd[]>([
+    {
+      id: 1,
+      authorId: 10,
+      authorName: 'Дмитрий',
+      authorAvatar: '/avatars/user1.jpg',
+      authorRole: 'buyer',
+      type: 'service_request',
+      category: 'Классика',
+      title: 'Ищу девушку для классического свидания',
+      description: 'Хочу встретиться с девушкой для приятного вечера в ресторане и дальнейшего продолжения. Гарантирую уважительное отношение и щедрость.',
+      price: 15000,
+      currency: 'RUB',
+      duration: 3,
+      lookingFor: 'Девушка 22-30 лет, стройная, с приятной внешностью. Желательно опыт эскорта.',
+      status: 'active',
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 2,
+      authorId: 11,
+      authorName: 'Александр',
+      authorAvatar: '/avatars/user2.jpg',
+      authorRole: 'buyer',
+      type: 'service_request',
+      category: 'Массаж',
+      title: 'Нужен расслабляющий массаж с продолжением',
+      description: 'Ищу девушку для качественного массажа и приятного времяпрепровождения. Выезд в мой номер отеля.',
+      price: 8000,
+      currency: 'RUB',
+      duration: 2,
+      lookingFor: 'Девушка с опытом массажа, 20-28 лет, привлекательная.',
+      status: 'active',
+      createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 3,
+      authorId: 12,
+      authorName: 'Михаил',
+      authorAvatar: '/avatars/user3.jpg',
+      authorRole: 'buyer',
+      type: 'service_request',
+      category: 'Вечеринка',
+      title: 'Ищу девушку для корпоратива',
+      description: 'Нужна девушка для сопровождения на корпоративном мероприятии. Вечер в приятной компании, ужин, развлечения.',
+      price: 20000,
+      currency: 'RUB',
+      duration: 4,
+      lookingFor: 'Девушка 23-32 года, элегантная, умеющая поддержать беседу. Опыт эскорта обязателен.',
+      status: 'active',
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    }
+  ]);
   
   const filteredItems = useMemo(() => {
     return getFilteredAndSortedItems(
@@ -91,6 +151,23 @@ export const CatalogPage = ({
       selectedBodyType
     );
   }, [catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedCountry, selectedLocation, selectedAge, selectedHeight, selectedBodyType]);
+  
+  const filteredAds = useMemo(() => {
+    return userAds.filter(ad => {
+      if (selectedCategory && selectedCategory !== 'all' && ad.category !== selectedCategory) {
+        return false;
+      }
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        return ad.title.toLowerCase().includes(query) || 
+               ad.description.toLowerCase().includes(query) ||
+               (ad.lookingFor && ad.lookingFor.toLowerCase().includes(query));
+      }
+      return true;
+    });
+  }, [userAds, selectedCategory, searchQuery]);
+  
+  const canRespond = userRole === 'seller';
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
@@ -126,13 +203,47 @@ export const CatalogPage = ({
         setSelectedBodyType={setSelectedBodyType}
       />
 
-      <CatalogGrid
-        filteredItems={filteredItems}
-        favorites={favorites}
-        toggleFavorite={toggleFavorite}
-        setSelectedServiceId={setSelectedServiceId}
-        setCurrentPage={setCurrentPage}
-      />
+      {/* Переключатель между услугами и запросами */}
+      <div className="flex gap-3 mb-8">
+        <Button
+          onClick={() => setShowAds(false)}
+          variant={!showAds ? 'default' : 'outline'}
+          className="flex-1 gap-2"
+        >
+          <Icon name="Briefcase" size={18} />
+          Услуги девушек ({filteredItems.length})
+        </Button>
+        <Button
+          onClick={() => setShowAds(true)}
+          variant={showAds ? 'default' : 'outline'}
+          className="flex-1 gap-2"
+        >
+          <Icon name="Search" size={18} />
+          Запросы мужчин ({filteredAds.length})
+        </Button>
+      </div>
+
+      {/* Контент */}
+      {!showAds ? (
+        <CatalogGrid
+          filteredItems={filteredItems}
+          favorites={favorites}
+          toggleFavorite={toggleFavorite}
+          setSelectedServiceId={setSelectedServiceId}
+          setCurrentPage={setCurrentPage}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredAds.map((ad, index) => (
+            <AdRequestCard
+              key={ad.id}
+              ad={ad}
+              canRespond={canRespond}
+              index={index}
+            />
+          ))}
+        </div>
+      )}
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ const PartiesPage = lazy(() => import('@/components/parties/PartiesPage'));
 const PartyDetailPage = lazy(() => import('@/components/parties/PartyDetailPage'));
 const PartyChatPage = lazy(() => import('@/components/parties/PartyChatPage'));
 const OrganizerDashboard = lazy(() => import('@/components/parties/OrganizerDashboard'));
+const MyAdsPage = lazy(() => import('@/components/pages/my-ads/MyAdsPage').then(m => ({ default: m.MyAdsPage })));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -342,6 +343,13 @@ export const useAppPages = ({
           </Suspense>
         ) : (
           <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
+        );
+      
+      case 'my-ads':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <MyAdsPage profile={profile} setCurrentPage={setCurrentPage} />
+          </Suspense>
         );
       
       case 'organizer-dashboard':
