@@ -103,20 +103,6 @@ const Index = () => {
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
-      {/* Кнопка включения уведомлений */}
-      {!notificationService.hasPermissions() && (
-        <div className="fixed bottom-20 right-4 z-50">
-          <Button
-            onClick={handlers.handleEnableNotifications}
-            className="gap-2 shadow-lg animate-pulse"
-            size="lg"
-          >
-            <Icon name="Bell" size={20} />
-            Включить уведомления
-          </Button>
-        </div>
-      )}
-      
       <Navigation 
         currentPage={state.currentPage}
         setCurrentPage={state.setCurrentPage}
