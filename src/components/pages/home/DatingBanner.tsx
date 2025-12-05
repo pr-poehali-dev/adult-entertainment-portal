@@ -25,12 +25,18 @@ export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
         <div className="relative z-10 px-8 py-12 md:px-16 md:py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
+              <div className="relative mb-4">
+                <div className="comic-starburst inline-block animate-pulse">
+                  💯 FREE
+                </div>
+              </div>
+              
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm font-medium">
                 <Icon name="Heart" size={16} className="animate-pulse" />
                 <span>Бесплатные знакомства</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight comic-text">
                 Найди свою половинку
               </h2>
               

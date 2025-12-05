@@ -28,6 +28,12 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
       
       <div className="max-w-wide mx-auto w-full relative z-10">
         <div className="text-center mb-16 px-4">
+          <div className="relative inline-block mb-6">
+            <div className="comic-starburst mx-auto animate-pulse">
+              ⭐ VIP ⭐
+            </div>
+          </div>
+          
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 comic-text">
             <span className="gold-shimmer">{t.home.categoriesTitle}</span>
           </h2>

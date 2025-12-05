@@ -33,6 +33,12 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
           </span>
         </div>
         
+        <div className="relative inline-block mb-8">
+          <div className="comic-bubble comic-bubble-top absolute -top-20 left-1/2 transform -translate-x-1/2 whitespace-nowrap animate-bounce z-20">
+            💝 Любовь уже рядом!
+          </div>
+        </div>
+        
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-fade-in text-center" style={{ animationDelay: '100ms' }}>
           <span className="block mb-4">{t.home.heroTitle.split('\n')[0]}</span>
           <span className="gold-shimmer block">{t.home.heroTitle.split('\n')[1] || 'по вызову'}</span>

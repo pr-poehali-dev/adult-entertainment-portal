@@ -15,7 +15,13 @@ export const HomeAdvantagesSection = () => {
       
       <div className="max-w-wide mx-auto w-full relative z-10">
         <div className="text-center mb-16 px-4">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <div className="relative inline-block mb-6">
+            <div className="comic-bubble mx-auto animate-bounce">
+              ✨ Гарантия качества!
+            </div>
+          </div>
+          
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 comic-text">
             <span className="gold-shimmer">{t.home.advantagesTitle}</span>
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">

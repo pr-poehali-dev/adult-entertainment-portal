@@ -103,12 +103,18 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
         <div className="relative z-10 px-8 py-12 md:px-16 md:py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
+              <div className="relative mb-4">
+                <div className="comic-bubble inline-block animate-wiggle">
+                  🎁 Всего 100₽!
+                </div>
+              </div>
+              
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm font-medium">
                 <Icon name="Sparkles" size={16} className="animate-pulse" />
                 <span>Еженедельный розыгрыш</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight comic-text">
                 Выиграй новенький iPhone 17
               </h2>
               
