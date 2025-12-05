@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { CatalogItem } from '@/types';
+import { CatalogItem, Transaction } from '@/types';
 import { Input } from '@/components/ui/input';
 import {
   Dialog,
@@ -10,10 +10,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 
 interface AgencyDashboardProps {
   agencyName: string;
   agencyGirls: CatalogItem[];
+  transactions?: Transaction[];
   onBack: () => void;
   onAddGirl: () => void;
   onEditGirl: (girlId: number) => void;
@@ -25,6 +32,7 @@ interface AgencyDashboardProps {
 const AgencyDashboard = ({
   agencyName,
   agencyGirls,
+  transactions = [],
   onBack,
   onAddGirl,
   onEditGirl,
@@ -33,6 +41,7 @@ const AgencyDashboard = ({
 }: AgencyDashboardProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGirl, setSelectedGirl] = useState<CatalogItem | null>(null);
+  const [activeTab, setActiveTab] = useState('profiles');
 
   const filteredGirls = agencyGirls.filter(girl =>
     girl.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -70,6 +79,19 @@ const AgencyDashboard = ({
       </div>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="profiles" className="flex items-center gap-2">
+              <Icon name="Users" size={16} />
+              <span>Анкеты ({agencyGirls.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="transactions" className="flex items-center gap-2">
+              <Icon name="Receipt" size={16} />
+              <span>Транзакции ({transactions.length})</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profiles" className="space-y-6 mt-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5">
             <div className="flex items-center justify-between mb-2">
@@ -112,7 +134,7 @@ const AgencyDashboard = ({
           </Card>
         </div>
 
-        <Card className="p-6">
+            <Card className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1">
               <Icon name="Search" size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -239,7 +261,109 @@ const AgencyDashboard = ({
               ))}
             </div>
           )}
-        </Card>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="transactions" className="space-y-6 mt-6">
+            <Card className="p-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold flex items-center gap-2">
+                    <Icon name="Receipt" size={24} className="text-primary" />
+                    История транзакций
+                  </h2>
+                </div>
+
+                {transactions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Icon name="Receipt" size={64} className="mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">Нет транзакций</h3>
+                    <p className="text-muted-foreground">
+                      История транзакций будет отображаться здесь
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {transactions.map((transaction) => {
+                      const isDeposit = transaction.type === 'deposit';
+                      const isPayment = transaction.type === 'vip_payment' || transaction.type === 'booking_payment';
+                      
+                      return (
+                        <Card key={transaction.id} className="p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                isDeposit 
+                                  ? 'bg-green-500/10'
+                                  : isPayment
+                                  ? 'bg-blue-500/10'
+                                  : 'bg-muted'
+                              }`}>
+                                <Icon 
+                                  name={isDeposit ? 'ArrowDownToLine' : isPayment ? 'CreditCard' : 'ArrowUpFromLine'} 
+                                  size={20} 
+                                  className={isDeposit ? 'text-green-500' : isPayment ? 'text-blue-500' : 'text-muted-foreground'}
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium truncate">{transaction.description}</p>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Icon name="Clock" size={14} />
+                                  <span>
+                                    {new Date(transaction.createdAt).toLocaleString('ru-RU', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <p className={`font-bold text-lg ${
+                                isDeposit 
+                                  ? 'text-green-500' 
+                                  : isPayment 
+                                  ? 'text-blue-500'
+                                  : 'text-muted-foreground'
+                              }`}>
+                                {isDeposit ? '+' : '-'}{transaction.amount.toLocaleString(undefined, {
+                                  minimumFractionDigits: transaction.currency === 'BTC' || transaction.currency === 'ETH' ? 4 : 2,
+                                  maximumFractionDigits: transaction.currency === 'BTC' || transaction.currency === 'ETH' ? 6 : 2,
+                                })}
+                              </p>
+                              <p className="text-sm text-muted-foreground">{transaction.currency}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-3 pt-3 border-t flex items-center justify-between text-xs">
+                            <span className={`px-2 py-1 rounded-full ${
+                              transaction.status === 'completed'
+                                ? 'bg-green-500/10 text-green-500'
+                                : transaction.status === 'pending'
+                                ? 'bg-yellow-500/10 text-yellow-500'
+                                : transaction.status === 'failed'
+                                ? 'bg-red-500/10 text-red-500'
+                                : 'bg-muted text-muted-foreground'
+                            }`}>
+                              {transaction.status === 'completed' && 'Завершено'}
+                              {transaction.status === 'pending' && 'В обработке'}
+                              {transaction.status === 'failed' && 'Не удалось'}
+                              {transaction.status === 'cancelled' && 'Отменено'}
+                            </span>
+                            <span className="text-muted-foreground">ID: {transaction.id}</span>
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
 
       <Dialog open={!!selectedGirl} onOpenChange={() => setSelectedGirl(null)}>

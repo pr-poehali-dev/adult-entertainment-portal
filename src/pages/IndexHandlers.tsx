@@ -1,5 +1,5 @@
 import { catalogItems } from '@/data/mockData';
-import { Profile, Notification, CatalogItem, WalletBalance } from '@/types';
+import { Profile, Notification, CatalogItem, WalletBalance, Transaction } from '@/types';
 import { notificationService } from '@/utils/notificationService';
 
 interface HandlersProps {
@@ -30,6 +30,8 @@ interface HandlersProps {
   setEditingGirl: React.Dispatch<React.SetStateAction<CatalogItem | null>>;
   wallet: { balances: WalletBalance[] };
   setWallet: React.Dispatch<React.SetStateAction<{ balances: WalletBalance[] }>>;
+  walletTransactions: Transaction[];
+  setWalletTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
 }
 
 export const useIndexHandlers = (props: HandlersProps) => {
@@ -61,6 +63,8 @@ export const useIndexHandlers = (props: HandlersProps) => {
     setEditingGirl,
     wallet,
     setWallet,
+    walletTransactions,
+    setWalletTransactions,
   } = props;
 
   const toggleFavorite = (id: number) => {
@@ -222,6 +226,19 @@ export const useIndexHandlers = (props: HandlersProps) => {
       )
     }));
     
+    const transaction: Transaction = {
+      id: Date.now(),
+      type: 'vip_payment',
+      amount: amountInCurrency,
+      currency: currency as any,
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
+      description: `Оплата регистрации агентства "${props.pendingAgencyName}"`,
+    };
+    
+    setWalletTransactions([transaction, ...walletTransactions]);
+    
     setProfile((prev) => ({
       ...prev,
       role: 'agency',
@@ -328,6 +345,19 @@ export const useIndexHandlers = (props: HandlersProps) => {
           : b
       )
     }));
+    
+    const transaction: Transaction = {
+      id: Date.now(),
+      type: 'deposit',
+      amount: amount,
+      currency: currency as any,
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
+      description: `Пополнение баланса ${currency}`,
+    };
+    
+    setWalletTransactions([transaction, ...walletTransactions]);
     
     toast({
       title: "Баланс пополнен!",
