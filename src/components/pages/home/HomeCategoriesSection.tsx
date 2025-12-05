@@ -18,10 +18,17 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
   };
   
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-background to-muted/30 w-full overflow-x-hidden">
-      <div className="max-w-wide mx-auto w-full">
+    <section className="py-24 px-4 bg-gradient-to-b from-background to-muted/30 w-full overflow-x-hidden relative">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <div className="absolute top-1/4 left-5 text-5xl animate-float">🎀</div>
+        <div className="absolute top-10 right-1/4 text-4xl animate-wiggle" style={{ animationDelay: '0.5s' }}>💐</div>
+        <div className="absolute bottom-1/4 right-10 text-5xl animate-float" style={{ animationDelay: '1s' }}>🦋</div>
+        <div className="absolute bottom-10 left-1/3 text-4xl animate-wiggle" style={{ animationDelay: '1.5s' }}>🌹</div>
+      </div>
+      
+      <div className="max-w-wide mx-auto w-full relative z-10">
         <div className="text-center mb-16 px-4">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 comic-text">
             <span className="gold-shimmer">{t.home.categoriesTitle}</span>
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
