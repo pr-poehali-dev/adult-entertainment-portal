@@ -105,9 +105,9 @@ export const AdminClientsTab = ({ clients, onBlockClient, onUpdateBalance }: Adm
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'seller':
-        return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500">Продавец</Badge>;
+        return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500">Девушка</Badge>;
       case 'buyer':
-        return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500">Покупатель</Badge>;
+        return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500">Мужчина</Badge>;
       case 'dating':
         return <Badge variant="outline" className="bg-pink-500/10 text-pink-500 border-pink-500">Знакомства</Badge>;
       default:
@@ -134,8 +134,8 @@ export const AdminClientsTab = ({ clients, onBlockClient, onUpdateBalance }: Adm
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Все роли</SelectItem>
-            <SelectItem value="buyer">Покупатели</SelectItem>
-            <SelectItem value="seller">Продавцы</SelectItem>
+            <SelectItem value="buyer">Мужчины</SelectItem>
+            <SelectItem value="seller">Девушки</SelectItem>
             <SelectItem value="dating">Знакомства</SelectItem>
           </SelectContent>
         </Select>

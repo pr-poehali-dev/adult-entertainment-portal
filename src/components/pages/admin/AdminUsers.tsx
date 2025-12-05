@@ -68,8 +68,8 @@ export const AdminUsers = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Все роли</SelectItem>
-            <SelectItem value="seller">Продавцы</SelectItem>
-            <SelectItem value="buyer">Покупатели</SelectItem>
+            <SelectItem value="seller">Девушки</SelectItem>
+            <SelectItem value="buyer">Мужчины</SelectItem>
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
@@ -116,7 +116,7 @@ export const AdminUsers = () => {
                   </td>
                   <td className="p-4">
                     <Badge variant="outline">
-                      {user.role === 'seller' ? 'Продавец' : 'Покупатель'}
+                      {user.role === 'seller' ? 'Девушка' : 'Мужчина'}
                     </Badge>
                   </td>
                   <td className="p-4">{getStatusBadge(user.status)}</td>

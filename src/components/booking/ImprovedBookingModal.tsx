@@ -88,7 +88,7 @@ export const ImprovedBookingModal = ({
     onClose();
     toast({
       title: "Запрос отправлен",
-      description: "Продавец должен ответить в течение 15 минут",
+      description: "Девушка должна ответить в течение 15 минут",
     });
   };
 
@@ -112,7 +112,7 @@ export const ImprovedBookingModal = ({
               <span className="font-semibold">{serviceName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Продавец:</span>
+              <span className="text-muted-foreground">Девушка:</span>
               <span className="font-semibold">{sellerName}</span>
             </div>
             <div className="flex justify-between">
@@ -227,7 +227,7 @@ export const ImprovedBookingModal = ({
                 <div className="inline-block">
                   <p className="font-semibold mb-1">Как работает бронирование:</p>
                   <ol className="text-xs space-y-1 ml-5 list-decimal">
-                    <li>Продавец имеет 15 минут на подтверждение</li>
+                    <li>Девушка имеет 15 минут на подтверждение</li>
                     <li>После подтверждения средства замораживаются на эскроу</li>
                     <li>В назначенное время обе стороны нажимают "Готов(а)"</li>
                     <li>Начинается таймер встречи на оплаченное время</li>

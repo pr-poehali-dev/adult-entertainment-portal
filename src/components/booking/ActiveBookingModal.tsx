@@ -116,7 +116,7 @@ export const ActiveBookingModal = ({
                 }`}>
                   <Icon name="UserCheck" size={32} />
                 </div>
-                <div className="text-sm font-semibold">Продавец</div>
+                <div className="text-sm font-semibold">Девушка</div>
                 <div className="text-xs text-muted-foreground">
                   {booking.status === 'seller_ready' || booking.status === 'in_progress' ? 'Готова' : 'Ожидание'}
                 </div>
@@ -132,7 +132,7 @@ export const ActiveBookingModal = ({
                 }`}>
                   <Icon name="UserCheck" size={32} />
                 </div>
-                <div className="text-sm font-semibold">Покупатель</div>
+                <div className="text-sm font-semibold">Мужчина</div>
                 <div className="text-xs text-muted-foreground">
                   {booking.status === 'in_progress' ? 'Готов' : 'Ожидание'}
                 </div>

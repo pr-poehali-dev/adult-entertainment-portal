@@ -34,7 +34,7 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
 
     toast({
       title: 'Чаевые отправлены!',
-      description: `${tipAmount.toLocaleString('ru-RU')} ₽ успешно переведены продавцу ${sellerName}`,
+      description: `${tipAmount.toLocaleString('ru-RU')} ₽ успешно переведены девушке ${sellerName}`,
     });
 
     onClose();
@@ -53,7 +53,7 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
             <div>
               <CardTitle className="text-3xl flex items-center gap-2">
                 <Icon name="Heart" size={32} className="text-pink-500" />
-                Чаевые продавцу
+                Чаевые девушке
               </CardTitle>
               <CardDescription className="mt-2">
                 {sellerName} • {serviceName}
@@ -73,9 +73,9 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
               <div className="flex items-start gap-3 mb-4">
                 <Icon name="Sparkles" size={24} className="text-pink-500 mt-1" />
                 <div className="text-sm">
-                  <p className="font-semibold mb-1">Отблагодарите продавца</p>
+                  <p className="font-semibold mb-1">Отблагодарите девушку</p>
                   <p className="text-muted-foreground">
-                    Чаевые поступают напрямую продавцу и помогают поддержать качественный сервис
+                    Чаевые поступают напрямую девушке и помогают поддержать качественный сервис
                   </p>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
                 <Icon name="MessageSquare" size={14} />
-                Сообщение продавцу (необязательно)
+                Сообщение девушке (необязательно)
               </label>
               <Input
                 type="text"
@@ -193,7 +193,7 @@ export const TipModal = ({ isOpen, onClose, sellerName, serviceName, bookingId }
 
           <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
             <Icon name="Lock" size={12} />
-            Платёж защищён. Средства поступят напрямую продавцу
+            Платёж защищён. Средства поступят напрямую девушке
           </p>
         </CardContent>
       </Card>

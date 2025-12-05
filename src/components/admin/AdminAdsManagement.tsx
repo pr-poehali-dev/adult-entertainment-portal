@@ -140,7 +140,7 @@ export const AdminAdsManagement = ({ ads, onCreateAd, onDeleteAd }: AdminAdsMana
         <div className="relative flex-1">
           <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Поиск по названию или продавцу..."
+            placeholder="Поиск по названию или девушке..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -252,10 +252,10 @@ export const AdminAdsManagement = ({ ads, onCreateAd, onDeleteAd }: AdminAdsMana
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="seller">Продавец *</Label>
+              <Label htmlFor="seller">Девушка *</Label>
               <Input
                 id="seller"
-                placeholder="Имя продавца"
+                placeholder="Имя девушки"
                 value={newAd.seller}
                 onChange={(e) => setNewAd({ ...newAd, seller: e.target.value })}
               />

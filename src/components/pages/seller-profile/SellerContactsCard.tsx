@@ -191,7 +191,7 @@ export const SellerContactsCard = ({ contacts, sellerName, wallet, onPurchase }:
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold">{selectedContact.label}</p>
-                  <p className="text-sm text-muted-foreground">Продавец: {sellerName}</p>
+                  <p className="text-sm text-muted-foreground">Девушка: {sellerName}</p>
                 </div>
               </div>
 

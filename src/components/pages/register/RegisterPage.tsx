@@ -30,7 +30,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
     
     toast({
       title: "Регистрация завершена!",
-      description: `Вы зарегистрированы как ${role === 'buyer' ? 'покупатель' : 'продавец'}. Заполните профиль для полного доступа.`,
+      description: `Вы зарегистрированы как ${role === 'buyer' ? 'мужчина' : 'девушка'}. Заполните профиль для полного доступа.`,
       duration: 5000,
     });
   };
@@ -127,7 +127,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               onClick={() => handleOneClickRegister('buyer')}
             >
               <Icon name="ShoppingBag" size={20} className="mr-2" />
-              Покупатель
+              Мужчина
             </Button>
             <Button
               variant="outline"
@@ -135,7 +135,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               onClick={() => handleOneClickRegister('seller')}
             >
               <Icon name="Briefcase" size={20} className="mr-2" />
-              Продавец
+              Девушка
             </Button>
           </div>
         </div>
@@ -151,8 +151,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
 
         <Tabs defaultValue="buyer" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="buyer">Покупатель</TabsTrigger>
-            <TabsTrigger value="seller">Продавец</TabsTrigger>
+            <TabsTrigger value="buyer">Мужчина</TabsTrigger>
+            <TabsTrigger value="seller">Девушка</TabsTrigger>
           </TabsList>
           <TabsContent value="buyer" className="space-y-4 mt-6">
             <div className="space-y-2">
@@ -241,7 +241,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
               onClick={() => handleRegister('buyer')}
             >
-              Зарегистрироваться как покупатель
+              Зарегистрироваться как мужчина
             </Button>
           </TabsContent>
           <TabsContent value="seller" className="space-y-4 mt-6">
@@ -344,7 +344,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
               onClick={() => handleRegister('seller')}
             >
-              Зарегистрироваться как продавец
+              Зарегистрироваться как девушка
             </Button>
           </TabsContent>
         </Tabs>

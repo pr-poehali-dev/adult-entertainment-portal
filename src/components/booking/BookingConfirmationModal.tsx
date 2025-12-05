@@ -70,7 +70,7 @@ export const BookingConfirmationModal = ({
                 <p className="text-xs text-yellow-600 mt-1">
                   {userRole === 'seller' 
                     ? 'Подтвердите или отклоните запрос до истечения времени'
-                    : 'Продавец должен ответить в течение 15 минут'
+                    : 'Девушка должна ответить в течение 15 минут'
                   }
                 </p>
               </div>
@@ -84,7 +84,7 @@ export const BookingConfirmationModal = ({
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">
-                {userRole === 'seller' ? 'Клиент:' : 'Продавец:'}
+                {userRole === 'seller' ? 'Клиент:' : 'Девушка:'}
               </span>
               <span className="font-semibold">
                 {userRole === 'seller' ? booking.buyerName : booking.sellerName}

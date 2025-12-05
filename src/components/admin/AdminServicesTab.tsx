@@ -44,7 +44,7 @@ export const AdminServicesTab = ({ services, approveService }: AdminServicesTabP
                     <Badge variant="destructive">{service.reports} жалоб</Badge>
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground">Продавец: {service.seller}</p>
+                <p className="text-sm text-muted-foreground">Девушка: {service.seller}</p>
                 <p className="text-sm font-semibold mt-2">{service.price} ₽</p>
               </div>
               <div className="flex gap-2">

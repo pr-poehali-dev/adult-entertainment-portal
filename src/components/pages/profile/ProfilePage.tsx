@@ -85,7 +85,7 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
                 {profile.role && (
                   <div className="flex items-center gap-1">
                     <Icon name={profile.role === 'seller' ? 'Briefcase' : 'ShoppingBag'} size={14} />
-                    <span className="capitalize">{profile.role === 'seller' ? 'Продавец' : 'Покупатель'}</span>
+                    <span className="capitalize">{profile.role === 'seller' ? 'Девушка' : 'Мужчина'}</span>
                   </div>
                 )}
               </div>

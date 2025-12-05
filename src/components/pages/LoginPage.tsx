@@ -37,7 +37,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
     setIsLoading(true);
 
     setTimeout(() => {
-      const isSeller = loginValue.includes('seller') || loginValue.includes('продавец');
+      const isSeller = loginValue.includes('seller') || loginValue.includes('девушк');
       const role: UserRole = isSeller ? 'seller' : 'buyer';
       
       setUserRole(role);
@@ -45,7 +45,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
       
       toast({
         title: "Успешный вход!",
-        description: `Добро пожаловать, ${isSeller ? 'продавец' : 'покупатель'}`,
+        description: `Добро пожаловать, ${isSeller ? 'девушка' : 'мужчина'}`,
       });
       
       setIsLoading(false);

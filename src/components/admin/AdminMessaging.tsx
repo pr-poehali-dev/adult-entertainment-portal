@@ -84,9 +84,9 @@ export const AdminMessaging = ({ users, messages, onSendMessage }: AdminMessagin
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'seller':
-        return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500">Продавец</Badge>;
+        return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500">Девушка</Badge>;
       case 'buyer':
-        return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500">Покупатель</Badge>;
+        return <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500">Мужчина</Badge>;
       case 'dating':
         return <Badge variant="outline" className="bg-pink-500/10 text-pink-500 border-pink-500">Знакомства</Badge>;
       default:

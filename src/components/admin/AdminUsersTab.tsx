@@ -59,7 +59,7 @@ export const AdminUsersTab = ({ users, blockUser }: AdminUsersTabProps) => {
                     <h3 className="font-semibold">{user.name}</h3>
                   </div>
                   <Badge variant={user.role === 'seller' ? 'default' : user.role === 'buyer' ? 'secondary' : 'outline'}>
-                    {user.role === 'seller' ? 'Продавец' : user.role === 'buyer' ? 'Покупатель' : 'Знакомства'}
+                    {user.role === 'seller' ? 'Девушка' : user.role === 'buyer' ? 'Мужчина' : 'Знакомства'}
                   </Badge>
                   <Badge variant={user.status === 'active' ? 'default' : 'destructive'}>
                     {user.status === 'active' ? 'Активен' : 'Заблокирован'}

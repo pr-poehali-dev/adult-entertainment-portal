@@ -34,10 +34,10 @@ export const RulesPage = () => {
           <section>
             <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
               <Icon name="Users" size={24} className="text-primary" />
-              Правила для покупателей
+              Правила для мужчин
             </h3>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>Уважительное отношение к продавцам</li>
+              <li>Уважительное отношение к девушкам</li>
               <li>Соблюдение договоренностей и времени встреч</li>
               <li>Своевременная оплата услуг</li>
               <li>Запрещены оскорбления и неадекватное поведение</li>
@@ -49,7 +49,7 @@ export const RulesPage = () => {
           <section>
             <h3 className="text-2xl font-semibold mb-3 flex items-center gap-2">
               <Icon name="Briefcase" size={24} className="text-primary" />
-              Правила для продавцов
+              Правила для девушек
             </h3>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
               <li>Достоверная информация в профиле</li>

@@ -50,7 +50,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
     console.log('Custom order submitted:', { order, requirements });
     toast({
       title: 'Заказ оформлен',
-      description: `Ваш заказ на ${order.price.toLocaleString()} отправлен продавцу`,
+      description: `Ваш заказ на ${order.price.toLocaleString()} отправлен девушке`,
     });
   };
 

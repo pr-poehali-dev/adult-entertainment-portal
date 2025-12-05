@@ -124,8 +124,8 @@ export const getBookingStatusLabel = (status: BookingStatus): { text: string; co
   const statusLabels: Record<BookingStatus, { text: string; color: string }> = {
     pending_seller_confirmation: { text: 'Ожидает подтверждения', color: 'yellow' },
     confirmed: { text: 'Подтверждено', color: 'blue' },
-    seller_ready: { text: 'Продавец готова', color: 'cyan' },
-    buyer_ready: { text: 'Покупатель готов', color: 'cyan' },
+    seller_ready: { text: 'Девушка готова', color: 'cyan' },
+    buyer_ready: { text: 'Мужчина готов', color: 'cyan' },
     in_progress: { text: 'Встреча идет', color: 'green' },
     completed: { text: 'Завершено', color: 'gray' },
     cancelled: { text: 'Отменено', color: 'red' },

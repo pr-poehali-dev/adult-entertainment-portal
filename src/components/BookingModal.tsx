@@ -78,7 +78,7 @@ const BookingModal = ({
                 <div className="text-sm">
                   <p className="font-semibold mb-1 text-red-500">Услуга недоступна</p>
                   <p className="text-foreground/80">
-                    Данный продавец временно не принимает заказы. Бронирование и оплата недоступны.
+                    Данная девушка временно не принимает заказы. Бронирование и оплата недоступны.
                   </p>
                 </div>
               </div>
