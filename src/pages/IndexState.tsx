@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { Page, UserRole, Profile, Notification, Wallet } from '@/types';
+import { Page, UserRole, Profile, Notification, Wallet, CatalogItem } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 export const useIndexState = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
+  const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
+  const [showAgencyPayment, setShowAgencyPayment] = useState(false);
+  const [pendingAgencyName, setPendingAgencyName] = useState('');
+  const [showGirlForm, setShowGirlForm] = useState(false);
+  const [editingGirl, setEditingGirl] = useState<CatalogItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [favorites, setFavorites] = useState<number[]>([]);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
@@ -192,5 +197,15 @@ export const useIndexState = () => {
     setWallet,
     walletTransactions,
     setWalletTransactions,
+    agencyGirls,
+    setAgencyGirls,
+    showAgencyPayment,
+    setShowAgencyPayment,
+    pendingAgencyName,
+    setPendingAgencyName,
+    showGirlForm,
+    setShowGirlForm,
+    editingGirl,
+    setEditingGirl,
   };
 };

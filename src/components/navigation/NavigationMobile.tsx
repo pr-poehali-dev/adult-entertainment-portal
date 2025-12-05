@@ -68,6 +68,14 @@ export const NavigationMobile = ({
           <span className="font-medium">Работа</span>
         </button>
         
+        <button 
+          onClick={() => { setCurrentPage('agency-register'); setShowMobileMenu(false); }}
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
+        >
+          <Icon name="Building2" size={20} className="text-primary" />
+          <span className="font-medium">Открыть Агентство</span>
+        </button>
+        
         {userRole && (
           <>
             <button 

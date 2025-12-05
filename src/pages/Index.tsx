@@ -14,6 +14,10 @@ import { useIndexState } from './IndexState';
 import { useIndexHandlers } from './IndexHandlers';
 import { useIndexEffects } from './IndexEffects';
 import { isCurrentlyActive } from '@/utils/scheduleChecker';
+import AgencyRegister from '@/components/pages/AgencyRegister';
+import AgencyDashboard from '@/components/pages/AgencyDashboard';
+import AgencyPaymentModal from '@/components/AgencyPaymentModal';
+import AgencyGirlForm from '@/components/AgencyGirlForm';
 
 const Index = () => {
   // Состояние
@@ -40,6 +44,14 @@ const Index = () => {
     setCurrentPage: state.setCurrentPage,
     reviewServiceName: state.reviewServiceName,
     setProfile: state.setProfile,
+    agencyGirls: state.agencyGirls,
+    setAgencyGirls: state.setAgencyGirls,
+    setShowAgencyPayment: state.setShowAgencyPayment,
+    setPendingAgencyName: state.setPendingAgencyName,
+    setShowGirlForm: state.setShowGirlForm,
+    setEditingGirl: state.setEditingGirl,
+    wallet: state.wallet,
+    setWallet: state.setWallet,
   });
 
   // Эффекты
@@ -100,6 +112,32 @@ const Index = () => {
     onNotificationAdd: handlers.addNotification,
   });
 
+  if (state.currentPage === 'agency-register') {
+    return (
+      <AgencyRegister
+        onBack={() => state.setCurrentPage('home')}
+        onPayment={handlers.handleAgencyRegister}
+      />
+    );
+  }
+
+  if (state.currentPage === 'agency-dashboard') {
+    return (
+      <AgencyDashboard
+        agencyName={state.profile.agencyName || 'Моё агентство'}
+        agencyGirls={state.agencyGirls}
+        onBack={() => state.setCurrentPage('profile')}
+        onAddGirl={() => {
+          state.setEditingGirl(null);
+          state.setShowGirlForm(true);
+        }}
+        onEditGirl={handlers.handleEditGirl}
+        onDeleteGirl={handlers.handleDeleteGirl}
+        onToggleActive={handlers.handleToggleGirlActive}
+      />
+    );
+  }
+
   return (
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
     <SplashScreen />
@@ -153,6 +191,38 @@ const Index = () => {
         setShowReviewModal={state.setShowReviewModal}
         serviceName={state.reviewServiceName}
         onSubmitReview={handlers.handleSubmitReview}
+      />
+
+      <AgencyPaymentModal
+        isOpen={state.showAgencyPayment}
+        onClose={() => state.setShowAgencyPayment(false)}
+        onPaymentConfirm={handlers.handleAgencyPayment}
+        agencyName={state.pendingAgencyName}
+        walletBalances={state.wallet.balances}
+      />
+
+      <AgencyGirlForm
+        isOpen={state.showGirlForm}
+        onClose={() => {
+          state.setShowGirlForm(false);
+          state.setEditingGirl(null);
+        }}
+        onSubmit={(girlData) => {
+          if (state.editingGirl) {
+            handlers.handleUpdateGirl({ ...state.editingGirl, ...girlData });
+          } else {
+            handlers.handleAddGirl({
+              ...girlData,
+              agencyId: state.profile.agencyId,
+              agencyName: state.profile.agencyName,
+            });
+          }
+          state.setShowGirlForm(false);
+          state.setEditingGirl(null);
+        }}
+        editingGirl={state.editingGirl}
+        agencyId={state.profile.agencyId || 0}
+        agencyName={state.profile.agencyName || ''}
       />
 
       <footer className="border-t border-border/50 mt-20 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">

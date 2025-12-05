@@ -1,5 +1,5 @@
 import { catalogItems } from '@/data/mockData';
-import { Profile, Notification } from '@/types';
+import { Profile, Notification, CatalogItem, WalletBalance } from '@/types';
 import { notificationService } from '@/utils/notificationService';
 
 interface HandlersProps {
@@ -22,6 +22,14 @@ interface HandlersProps {
   setCurrentPage: (page: any) => void;
   reviewServiceName: string;
   setProfile: React.Dispatch<React.SetStateAction<Profile>>;
+  agencyGirls: CatalogItem[];
+  setAgencyGirls: React.Dispatch<React.SetStateAction<CatalogItem[]>>;
+  setShowAgencyPayment: React.Dispatch<React.SetStateAction<boolean>>;
+  setPendingAgencyName: React.Dispatch<React.SetStateAction<string>>;
+  setShowGirlForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingGirl: React.Dispatch<React.SetStateAction<CatalogItem | null>>;
+  wallet: { balances: WalletBalance[] };
+  setWallet: React.Dispatch<React.SetStateAction<{ balances: WalletBalance[] }>>;
 }
 
 export const useIndexHandlers = (props: HandlersProps) => {
@@ -45,6 +53,14 @@ export const useIndexHandlers = (props: HandlersProps) => {
     setCurrentPage,
     reviewServiceName,
     setProfile,
+    agencyGirls,
+    setAgencyGirls,
+    setShowAgencyPayment,
+    setPendingAgencyName,
+    setShowGirlForm,
+    setEditingGirl,
+    wallet,
+    setWallet,
   } = props;
 
   const toggleFavorite = (id: number) => {
@@ -180,6 +196,119 @@ export const useIndexHandlers = (props: HandlersProps) => {
     }
   };
 
+  const handleAgencyRegister = (agencyName: string) => {
+    setPendingAgencyName(agencyName);
+    setShowAgencyPayment(true);
+  };
+
+  const handleAgencyPayment = (currency: string) => {
+    const paymentAmount = 10000;
+    const currencyRates: Record<string, number> = {
+      'RUB': 1,
+      'USD': 100,
+      'EUR': 110,
+      'BTC': 0.00012,
+      'ETH': 0.003,
+      'USDT': 100,
+    };
+    
+    const amountInCurrency = paymentAmount / currencyRates[currency];
+    
+    setWallet((prev) => ({
+      balances: prev.balances.map(b => 
+        b.currency === currency 
+          ? { ...b, amount: b.amount - amountInCurrency }
+          : b
+      )
+    }));
+    
+    setProfile((prev) => ({
+      ...prev,
+      role: 'agency',
+      agencyName: props.setPendingAgencyName as any,
+      isAgencyOwner: true,
+      agencyId: Date.now(),
+    }));
+    
+    setShowAgencyPayment(false);
+    setCurrentPage('agency-dashboard');
+    
+    toast({
+      title: "Агентство открыто!",
+      description: `Добро пожаловать в панель управления`,
+    });
+  };
+
+  const handleAddGirl = (girlData: Partial<CatalogItem>) => {
+    const newGirl: CatalogItem = {
+      id: Date.now(),
+      title: girlData.title || '',
+      seller: girlData.seller || '',
+      rating: girlData.rating || 5.0,
+      price: girlData.price || '25000 ₽/час',
+      category: girlData.category || 'Эскорт',
+      image: girlData.image || '',
+      verified: true,
+      description: girlData.description,
+      location: girlData.location,
+      age: girlData.age,
+      height: girlData.height,
+      bodyType: girlData.bodyType,
+      isActive: true,
+      agencyId: girlData.agencyId,
+      agencyName: girlData.agencyName,
+    };
+    
+    setAgencyGirls([...agencyGirls, newGirl]);
+    
+    toast({
+      title: "Анкета создана",
+      description: `Анкета ${newGirl.title} добавлена в каталог`,
+    });
+  };
+
+  const handleEditGirl = (girlId: number) => {
+    const girl = agencyGirls.find(g => g.id === girlId);
+    if (girl) {
+      setEditingGirl(girl);
+      setShowGirlForm(true);
+    }
+  };
+
+  const handleUpdateGirl = (girlData: Partial<CatalogItem>) => {
+    setAgencyGirls(agencyGirls.map(g => 
+      g.id === girlData.id ? { ...g, ...girlData } : g
+    ));
+    
+    toast({
+      title: "Анкета обновлена",
+      description: "Изменения успешно сохранены",
+    });
+  };
+
+  const handleDeleteGirl = (girlId: number) => {
+    setAgencyGirls(agencyGirls.filter(g => g.id !== girlId));
+    
+    toast({
+      title: "Анкета удалена",
+      description: "Анкета была успешно удалена",
+    });
+  };
+
+  const handleToggleGirlActive = (girlId: number) => {
+    setAgencyGirls(agencyGirls.map(g => 
+      g.id === girlId ? { ...g, isActive: !g.isActive } : g
+    ));
+    
+    const girl = agencyGirls.find(g => g.id === girlId);
+    toast({
+      title: girl?.isActive ? "Анкета деактивирована" : "Анкета активирована",
+      description: girl?.isActive 
+        ? "Анкета больше не отображается в каталоге"
+        : "Анкета снова доступна для клиентов",
+    });
+  };
+
   return {
     toggleFavorite,
     addNotification,
@@ -187,5 +316,12 @@ export const useIndexHandlers = (props: HandlersProps) => {
     handleSubmitReview,
     handleProfileUpdate,
     handleEnableNotifications,
+    handleAgencyRegister,
+    handleAgencyPayment,
+    handleAddGirl,
+    handleEditGirl,
+    handleUpdateGirl,
+    handleDeleteGirl,
+    handleToggleGirlActive,
   };
 };
