@@ -99,7 +99,7 @@ export const CatalogPage = ({
             placeholder={t.catalog.search} 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-80 h-12 bg-card/80 backdrop-blur-sm border-border focus:border-primary shadow-lg"
+            className="w-full md:w-80 h-12 bg-card/80 backdrop-blur-sm border-border focus:border-primary shadow-lg"
           />
         </div>
       

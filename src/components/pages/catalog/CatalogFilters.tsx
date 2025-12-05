@@ -58,7 +58,7 @@ export const CatalogFilters = ({
   return (
     <div className="mb-8 flex flex-wrap gap-4 items-center">
       <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.category} />
         </SelectTrigger>
         <SelectContent className="max-h-[400px]">
@@ -79,7 +79,7 @@ export const CatalogFilters = ({
       </Select>
       
       <Select value={priceRange} onValueChange={setPriceRange}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.price} />
         </SelectTrigger>
         <SelectContent>
@@ -91,7 +91,7 @@ export const CatalogFilters = ({
       </Select>
 
       <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.sortBy} />
         </SelectTrigger>
         <SelectContent>
@@ -105,7 +105,7 @@ export const CatalogFilters = ({
         setSelectedCountry(value);
         setSelectedLocation('all');
       }}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.country} />
         </SelectTrigger>
         <SelectContent>
@@ -117,7 +117,7 @@ export const CatalogFilters = ({
       </Select>
 
       <Select value={selectedLocation} onValueChange={setSelectedLocation} disabled={selectedCountry === 'all'}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.city} />
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
@@ -129,7 +129,7 @@ export const CatalogFilters = ({
       </Select>
 
       <Select value={selectedAge} onValueChange={setSelectedAge}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.age} />
         </SelectTrigger>
         <SelectContent>
@@ -142,7 +142,7 @@ export const CatalogFilters = ({
       </Select>
 
       <Select value={selectedHeight} onValueChange={setSelectedHeight}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.height} />
         </SelectTrigger>
         <SelectContent>
@@ -155,7 +155,7 @@ export const CatalogFilters = ({
       </Select>
 
       <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
-        <SelectTrigger className="w-[200px] bg-background border-border">
+        <SelectTrigger className="w-full sm:w-[200px] bg-background border-border">
           <SelectValue placeholder={t.catalog.bodyType} />
         </SelectTrigger>
         <SelectContent>

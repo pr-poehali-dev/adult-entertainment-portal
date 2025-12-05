@@ -86,7 +86,7 @@ export const AdminUsers = () => {
       </div>
 
       <div className="bg-card border border-border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
@@ -156,6 +156,55 @@ export const AdminUsers = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="lg:hidden divide-y divide-border">
+          {filteredUsers.map((user) => (
+            <div key={user.id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="font-medium flex items-center gap-2">
+                    {user.name}
+                    {user.verified && <Icon name="CheckCircle" size={14} className="text-primary" />}
+                    {user.vipStatus === 'vip' && <Icon name="Crown" size={14} className="text-amber-500" />}
+                  </div>
+                  <div className="text-sm text-muted-foreground">{user.email}</div>
+                  <div className="text-xs text-muted-foreground">ID: #{user.id}</div>
+                </div>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => handleUserAction(user.id, 'просмотр')}>
+                    <Icon name="Eye" size={16} />
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleUserAction(user.id, user.status === 'active' ? 'блокировка' : 'разблокировка')}>
+                    <Icon name={user.status === 'active' ? 'Ban' : 'CheckCircle'} size={16} />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Роль:</span>
+                  <Badge variant="outline" className="ml-2">
+                    {user.role === 'seller' ? 'Продавец' : 'Покупатель'}
+                  </Badge>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Статус:</span>
+                  <span className="ml-2">{getStatusBadge(user.status)}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Бронирований:</span>
+                  <span className="ml-2 font-medium">{user.totalBookings}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Потрачено:</span>
+                  <span className="ml-2 font-medium">{user.totalSpent > 0 ? `${user.totalSpent.toLocaleString()} ₽` : '—'}</span>
+                </div>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Последняя активность: {new Date(user.lastActive).toLocaleDateString('ru-RU')}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

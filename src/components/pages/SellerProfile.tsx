@@ -73,7 +73,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
       </Button>
 
       <div className="space-y-6">
-        <div className="relative h-64 rounded-lg overflow-hidden">
+        <div className="relative h-48 sm:h-64 md:h-80 rounded-lg overflow-hidden">
           <img 
             src={seller.coverImage} 
             alt="Cover"
@@ -154,7 +154,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
                         <Icon name="Video" size={16} className="text-primary" />
                         Промо-видео
                       </div>
-                      <video controls className="w-full rounded-lg max-h-96">
+                      <video controls className="w-full rounded-lg max-h-56 sm:max-h-96">
                         <source src={seller.promoVideo} />
                       </video>
                     </div>
@@ -166,7 +166,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
                         <Icon name="Image" size={16} className="text-primary" />
                         Фото профиля ({seller.profilePhotos.length})
                       </div>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {seller.profilePhotos.map((photo, index) => (
                           <img 
                             key={index}

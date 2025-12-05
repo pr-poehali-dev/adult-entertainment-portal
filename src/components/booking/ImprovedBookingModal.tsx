@@ -122,7 +122,7 @@ export const ImprovedBookingModal = ({
           </div>
 
           {/* Дата и время */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="date">Дата встречи</Label>
               <Input
@@ -164,7 +164,7 @@ export const ImprovedBookingModal = ({
           {/* Валюта */}
           <div>
             <Label>Валюта оплаты</Label>
-            <div className="grid grid-cols-3 gap-2 mt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
               {userBalances.map(balance => {
                 const isSelected = selectedCurrency === balance.currency;
                 const canAfford = balance.amount >= totalPrice;

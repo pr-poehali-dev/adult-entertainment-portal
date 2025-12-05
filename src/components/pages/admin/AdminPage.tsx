@@ -41,7 +41,7 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-8 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mb-8 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>

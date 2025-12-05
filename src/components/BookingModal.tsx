@@ -140,7 +140,7 @@ const BookingModal = ({
                       <Icon name="Clock" size={16} />
                       Время начала
                     </Label>
-                    <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 bg-background rounded-lg border border-border">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 bg-background rounded-lg border border-border">
                       {timeSlots.map((slot) => (
                         <button
                           key={slot}
@@ -187,7 +187,7 @@ const BookingModal = ({
                 </Select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="location" className="flex items-center gap-2">
                     <Icon name="MapPin" size={16} />
