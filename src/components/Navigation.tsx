@@ -73,10 +73,11 @@ const Navigation = ({
     <div className="max-w-wide mx-auto px-2 sm:px-4 py-2">
       <div className="flex items-center justify-between gap-1">
         <div className="flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
-          <Icon name="Crown" size={24} className="text-primary" />
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-            <span className="gold-shimmer">Elite</span>
-          </h1>
+          <img 
+            src="https://cdn.poehali.dev/files/eb44749d-b270-4ce8-8ff5-baa7f8487a4a.png" 
+            alt="Love is..."
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+          />
         </div>
         
         <NavigationDesktop
