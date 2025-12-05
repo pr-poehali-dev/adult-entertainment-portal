@@ -22,6 +22,7 @@ const OnlineSearchPage = lazy(() => import('@/components/pages/OnlineSearchPage'
 const PartiesPage = lazy(() => import('@/components/parties/PartiesPage'));
 const PartyDetailPage = lazy(() => import('@/components/parties/PartyDetailPage'));
 const PartyChatPage = lazy(() => import('@/components/parties/PartyChatPage'));
+const OrganizerDashboard = lazy(() => import('@/components/parties/OrganizerDashboard'));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -304,6 +305,7 @@ export const useAppPages = ({
                 setCurrentPage('party-detail');
               }}
               currentUserId={1}
+              onOrganizerDashboard={() => setCurrentPage('organizer-dashboard')}
             />
           </Suspense>
         );
@@ -337,6 +339,24 @@ export const useAppPages = ({
           </Suspense>
         ) : (
           <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
+        );
+      
+      case 'organizer-dashboard':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <OrganizerDashboard 
+              organizerId={1}
+              onBack={() => setCurrentPage('parties')}
+              onViewParty={(id) => {
+                setSelectedPartyId?.(id);
+                setCurrentPage('party-detail');
+              }}
+              onOpenChat={(applicationId) => {
+                setSelectedApplicationId?.(applicationId);
+                setCurrentPage('party-chat');
+              }}
+            />
+          </Suspense>
         );
       
       default:

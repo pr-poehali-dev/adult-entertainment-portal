@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 

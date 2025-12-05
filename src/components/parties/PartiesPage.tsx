@@ -10,9 +10,10 @@ import { PrivateParty } from '@/types';
 interface PartiesPageProps {
   onPartyClick: (partyId: number) => void;
   currentUserId: number;
+  onOrganizerDashboard?: () => void;
 }
 
-const PartiesPage = ({ onPartyClick, currentUserId }: PartiesPageProps) => {
+const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: PartiesPageProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [parties, setParties] = useState<PrivateParty[]>([
@@ -136,10 +137,16 @@ const PartiesPage = ({ onPartyClick, currentUserId }: PartiesPageProps) => {
             <h1 className="text-4xl font-bold mb-2">Приватные вечеринки</h1>
             <p className="text-muted-foreground">Эксклюзивные закрытые мероприятия</p>
           </div>
-          <Button onClick={() => setShowCreateModal(true)} size="lg">
-            <Icon name="PartyPopper" size={20} className="mr-2" />
-            Создать вечеринку
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={onOrganizerDashboard} variant="outline" size="lg">
+              <Icon name="Settings" size={20} className="mr-2" />
+              Мои вечеринки
+            </Button>
+            <Button onClick={() => setShowCreateModal(true)} size="lg">
+              <Icon name="PartyPopper" size={20} className="mr-2" />
+              Создать вечеринку
+            </Button>
+          </div>
         </div>
 
         <div className="mb-6 space-y-4">

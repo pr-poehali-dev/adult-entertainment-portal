@@ -30,12 +30,49 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card 
+            onClick={() => setCurrentPage('parties')}
+            className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
+            style={{ animationDelay: '0ms' }}
+          >
+            <div className="relative h-56 overflow-hidden">
+              <img 
+                src="https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg" 
+                alt="Приватные вечеринки"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <CardTitle className="text-2xl text-white font-bold tracking-tight drop-shadow-lg flex items-center gap-2">
+                  <Icon name="PartyPopper" size={28} />
+                  Приватные вечеринки
+                </CardTitle>
+              </div>
+            </div>
+            <CardHeader>
+              <div className="text-sm text-muted-foreground space-y-2">
+                <div className="flex items-center gap-2 py-1">
+                  <Icon name="Users" size={16} className="text-primary" />
+                  <span className="font-medium">Закрытые мероприятия</span>
+                </div>
+                <div className="flex items-center gap-2 py-1">
+                  <Icon name="MessageCircle" size={16} className="text-primary" />
+                  <span className="font-medium">Собеседование с организатором</span>
+                </div>
+                <div className="flex items-center gap-2 py-1">
+                  <Icon name="Shield" size={16} className="text-primary" />
+                  <span className="font-medium">Безопасная оплата</span>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
           {serviceCategories.map((category, i) => (
             <Card 
               key={category.id} 
               onClick={() => handleCategoryClick(category.id)}
               className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
-              style={{ animationDelay: `${i * 100}ms` }}
+              style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
               <div className="relative h-56 overflow-hidden">
                 <img 
