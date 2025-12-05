@@ -161,7 +161,7 @@ const AgencyDashboard = ({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3 flex-wrap">
                         <span className="flex items-center gap-1">
                           <Icon name="MapPin" size={14} />
                           {girl.location}
@@ -171,6 +171,12 @@ const AgencyDashboard = ({
                           {girl.rating}
                         </span>
                         <span className="font-semibold text-primary">{girl.price}</span>
+                        {girl.age && (
+                          <span className="flex items-center gap-1">
+                            <Icon name="Calendar" size={14} />
+                            {girl.age} лет
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex gap-2">

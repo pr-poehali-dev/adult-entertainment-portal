@@ -70,13 +70,15 @@ const Index = () => {
     setSelectedApplicationId: state.setSelectedApplicationId,
   });
 
+  const allCatalogItems = [...catalogItems, ...state.agencyGirls];
+
   const { renderPage } = useAppPages({
     currentPage: state.currentPage,
     setCurrentPage: state.setCurrentPage,
     userRole: state.userRole,
     setUserRole: state.setUserRole,
     profile: state.profile,
-    catalogItems,
+    catalogItems: allCatalogItems,
     reviews,
     favorites: state.favorites,
     toggleFavorite: handlers.toggleFavorite,
@@ -177,10 +179,10 @@ const Index = () => {
         bookingNote={state.bookingNote}
         setBookingNote={state.setBookingNote}
         handleBookingSubmit={handlers.handleBookingSubmit}
-        servicePrice={state.selectedServiceId ? parseInt(catalogItems.find(item => item.id === state.selectedServiceId)?.price.replace(/\D/g, '') || '25000') : 25000}
-        serviceName={state.selectedServiceId ? catalogItems.find(item => item.id === state.selectedServiceId)?.title : 'Услуга'}
+        servicePrice={state.selectedServiceId ? parseInt(allCatalogItems.find(item => item.id === state.selectedServiceId)?.price.replace(/\D/g, '') || '25000') : 25000}
+        serviceName={state.selectedServiceId ? allCatalogItems.find(item => item.id === state.selectedServiceId)?.title : 'Услуга'}
         isServiceActive={state.selectedServiceId ? (() => {
-          const item = catalogItems.find(item => item.id === state.selectedServiceId);
+          const item = allCatalogItems.find(item => item.id === state.selectedServiceId);
           if (!item) return true;
           return item.isActive !== false && isCurrentlyActive(item.workSchedule);
         })() : true}

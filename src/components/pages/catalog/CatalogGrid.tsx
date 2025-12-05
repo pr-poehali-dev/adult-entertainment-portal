@@ -94,6 +94,12 @@ export const CatalogGrid = ({
                         <Icon name="MapPin" size={18} className="text-primary" />
                         <span className="text-sm text-white/90 font-medium">{item.location}</span>
                       </div>
+                      {item.agencyName && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <Icon name="Building2" size={16} className="text-primary" />
+                          <span className="text-xs text-white/80 font-medium">{item.agencyName}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   

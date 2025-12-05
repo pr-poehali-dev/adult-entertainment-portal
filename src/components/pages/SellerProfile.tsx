@@ -107,7 +107,7 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-4 text-sm flex-wrap">
                 <span className="flex items-center gap-1">
                   <Icon name="Star" size={16} className="text-primary fill-primary" />
                   {seller.rating}
@@ -120,6 +120,12 @@ export const SellerProfilePage = ({ seller, setCurrentPage, wallet }: SellerProf
                   <Icon name="Calendar" size={16} />
                   {seller.age} лет
                 </span>
+                {seller.agencyName && (
+                  <span className="flex items-center gap-1 bg-primary/20 px-2 py-1 rounded">
+                    <Icon name="Building2" size={16} />
+                    {seller.agencyName}
+                  </span>
+                )}
               </div>
             </div>
           </div>
