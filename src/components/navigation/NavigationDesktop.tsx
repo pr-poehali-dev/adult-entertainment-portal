@@ -67,10 +67,12 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors">
           Работа
         </button>
-        <button onClick={() => setCurrentPage('agency-register')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
-          <Icon name="Building2" size={12} />
-          Открыть Агентство
-        </button>
+        {!profile.isAgencyOwner && (
+          <button onClick={() => setCurrentPage('agency-register')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
+            <Icon name="Building2" size={12} />
+            Открыть Агентство
+          </button>
+        )}
         <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
           <Icon name="Users" size={12} />
           Партнёрка

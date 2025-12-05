@@ -119,7 +119,11 @@ const Index = () => {
   if (state.currentPage === 'agency-register') {
     return (
       <AgencyRegister
-        onBack={() => state.setCurrentPage('home')}
+        onBack={() => {
+          state.setShowAgencyPayment(false);
+          state.setPendingAgencyName('');
+          state.setCurrentPage('home');
+        }}
         onPayment={handlers.handleAgencyRegister}
       />
     );
@@ -200,7 +204,10 @@ const Index = () => {
 
       <AgencyPaymentModal
         isOpen={state.showAgencyPayment}
-        onClose={() => state.setShowAgencyPayment(false)}
+        onClose={() => {
+          state.setShowAgencyPayment(false);
+          state.setCurrentPage('agency-register');
+        }}
         onPaymentConfirm={handlers.handleAgencyPayment}
         agencyName={state.pendingAgencyName}
         walletBalances={state.wallet.balances}
