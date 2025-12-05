@@ -38,6 +38,44 @@ export const useIndexEffects = (props: EffectsProps) => {
     notificationService.initialize();
   }, []);
 
+  // Ежедневный бонус LOVE за посещение
+  useEffect(() => {
+    const DAILY_BONUS_KEY = 'lastDailyBonus';
+    const DAILY_BONUS_AMOUNT = 2;
+    
+    const checkDailyBonus = () => {
+      const lastBonus = localStorage.getItem(DAILY_BONUS_KEY);
+      const today = new Date().toDateString();
+      
+      if (lastBonus !== today) {
+        setWallet(prev => ({
+          ...prev,
+          balances: prev.balances.map(b => 
+            b.currency === 'LOVE' ? { ...b, amount: b.amount + DAILY_BONUS_AMOUNT } : b
+          )
+        }));
+        
+        playBalanceSound();
+        
+        toast({
+          title: "🎁 Ежедневный бонус!",
+          description: `+${DAILY_BONUS_AMOUNT} LOVE за посещение платформы`,
+          duration: 6000,
+        });
+        
+        addNotification(
+          'system',
+          '🎁 Ежедневный бонус',
+          `Вы получили ${DAILY_BONUS_AMOUNT} 💗 LOVE за посещение платформы`
+        );
+        
+        localStorage.setItem(DAILY_BONUS_KEY, today);
+      }
+    };
+    
+    checkDailyBonus();
+  }, []);
+
   // Симуляция уведомлений
   useEffect(() => {
     if (!userRole) return;
