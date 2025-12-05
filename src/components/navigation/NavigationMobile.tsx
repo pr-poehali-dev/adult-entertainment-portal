@@ -61,6 +61,14 @@ export const NavigationMobile = ({
         </button>
         
         <button 
+          onClick={() => { setCurrentPage('parties'); setShowMobileMenu(false); }}
+          className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
+        >
+          <Icon name="PartyPopper" size={20} className="text-primary" />
+          <span className="font-medium">Вечеринки</span>
+        </button>
+        
+        <button 
           onClick={() => { setCurrentPage('work'); setShowMobileMenu(false); }}
           className="w-full py-3 px-4 rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-3"
         >

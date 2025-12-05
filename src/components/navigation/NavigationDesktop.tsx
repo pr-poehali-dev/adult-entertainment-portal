@@ -64,6 +64,10 @@ export const NavigationDesktop = ({
           <Icon name="Radio" size={12} />
           Онлайн
         </button>
+        <button onClick={() => setCurrentPage('parties')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
+          <Icon name="PartyPopper" size={12} />
+          Вечеринки
+        </button>
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors">
           Работа
         </button>
@@ -108,6 +112,10 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
           <Icon name="Radio" size={16} />
           Онлайн
+        </button>
+        <button onClick={() => setCurrentPage('parties')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide flex items-center gap-1">
+          <Icon name="PartyPopper" size={16} />
+          Вечеринки
         </button>
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
           Работа

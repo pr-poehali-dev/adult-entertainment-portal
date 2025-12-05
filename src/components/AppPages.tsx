@@ -19,6 +19,9 @@ const RafflePage = lazy(() => import('@/components/pages/RafflePage').then(m => 
 const DatingPage = lazy(() => import('@/components/pages/DatingPage').then(m => ({ default: m.DatingPage })));
 const WalletPage = lazy(() => import('@/components/pages/WalletPage').then(m => ({ default: m.WalletPage })));
 const OnlineSearchPage = lazy(() => import('@/components/pages/OnlineSearchPage').then(m => ({ default: m.OnlineSearchPage })));
+const PartiesPage = lazy(() => import('@/components/parties/PartiesPage'));
+const PartyDetailPage = lazy(() => import('@/components/parties/PartyDetailPage'));
+const PartyChatPage = lazy(() => import('@/components/parties/PartyChatPage'));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -57,6 +60,10 @@ interface AppPagesProps {
   setSelectedSellerId: (id: number | null) => void;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
   wallet: Wallet;
+  selectedPartyId?: number | null;
+  setSelectedPartyId?: (id: number | null) => void;
+  selectedApplicationId?: number | null;
+  setSelectedApplicationId?: (id: number | null) => void;
 }
 
 export const useAppPages = ({
@@ -94,6 +101,10 @@ export const useAppPages = ({
   setSelectedSellerId,
   onProfileUpdate,
   wallet,
+  selectedPartyId,
+  setSelectedPartyId,
+  selectedApplicationId,
+  setSelectedApplicationId,
 }: AppPagesProps) => {
   
   const LoadingFallback = () => (
@@ -282,6 +293,50 @@ export const useAppPages = ({
           <Suspense fallback={<LoadingFallback />}>
             <OnlineSearchPage />
           </Suspense>
+        );
+      
+      case 'parties':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <PartiesPage 
+              onPartyClick={(id) => {
+                setSelectedPartyId?.(id);
+                setCurrentPage('party-detail');
+              }}
+              currentUserId={1}
+            />
+          </Suspense>
+        );
+      
+      case 'party-detail':
+        return selectedPartyId ? (
+          <Suspense fallback={<LoadingFallback />}>
+            <PartyDetailPage 
+              partyId={selectedPartyId}
+              currentUserId={1}
+              onBack={() => setCurrentPage('parties')}
+              onStartChat={(applicationId) => {
+                setSelectedApplicationId?.(applicationId);
+                setCurrentPage('party-chat');
+              }}
+            />
+          </Suspense>
+        ) : (
+          <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
+        );
+      
+      case 'party-chat':
+        return selectedApplicationId ? (
+          <Suspense fallback={<LoadingFallback />}>
+            <PartyChatPage 
+              applicationId={selectedApplicationId}
+              currentUserId={1}
+              isOrganizer={false}
+              onBack={() => setCurrentPage('party-detail')}
+            />
+          </Suspense>
+        ) : (
+          <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
         );
       
       default:

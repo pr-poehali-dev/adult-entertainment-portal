@@ -33,6 +33,8 @@ const Index = () => {
   const [selectedHeight, setSelectedHeight] = useState<string>('all');
   const [selectedBodyType, setSelectedBodyType] = useState<string>('all');
   const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
+  const [selectedPartyId, setSelectedPartyId] = useState<number | null>(null);
+  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
@@ -351,6 +353,10 @@ const Index = () => {
     setSelectedSellerId,
     onProfileUpdate: handleProfileUpdate,
     wallet,
+    selectedPartyId,
+    setSelectedPartyId,
+    selectedApplicationId,
+    setSelectedApplicationId,
   });
 
   return (

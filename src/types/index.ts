@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat';
 export type UserRole = 'buyer' | 'seller' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -405,6 +405,94 @@ export interface ReferralUser {
   yourEarnings: number;
   isActive: boolean;
   avatar?: string;
+}
+
+// Private Party Types
+export type PartyApplicationStatus = 
+  | 'pending'          // Ожидает собеседования
+  | 'interview'        // Идет собеседование в чате
+  | 'approved'         // Одобрено организатором
+  | 'rejected'         // Отклонено
+  | 'paid';            // Оплачено
+
+export interface PartyTicketPrice {
+  female: number;
+  couple: number;
+  male: number;
+}
+
+export interface PartyApplication {
+  id: number;
+  partyId: number;
+  userId: number;
+  userName: string;
+  userAvatar: string;
+  userGender: 'male' | 'female' | 'couple';
+  status: PartyApplicationStatus;
+  appliedAt: string;
+  approvedAt?: string;
+  paidAt?: string;
+  chatId?: number;
+}
+
+export interface PrivateParty {
+  id: number;
+  organizerId: number;
+  organizerName: string;
+  organizerAvatar: string;
+  organizerRating: number;
+  title: string;
+  description: string;
+  city: string;
+  date: string;
+  time: string;
+  theme: string;
+  maxTickets: number;
+  soldTickets: number;
+  ticketPrices: PartyTicketPrice;
+  currency: Currency;
+  coverImage: string;
+  images: string[];
+  rules: string[];
+  dresscode?: string;
+  ageRestriction?: string;
+  isVerified: boolean;
+  createdAt: string;
+  applications?: PartyApplication[];
+}
+
+export type ChatMessageType = 'text' | 'audio' | 'video' | 'image' | 'file' | 'system';
+export type CallType = 'audio' | 'video';
+export type CallStatus = 'ringing' | 'active' | 'ended' | 'missed' | 'declined';
+
+export interface ChatMessage {
+  id: number;
+  chatId: number;
+  senderId: number;
+  senderName: string;
+  senderAvatar: string;
+  type: ChatMessageType;
+  content: string;
+  timestamp: string;
+  read: boolean;
+  fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
+}
+
+export interface PartyChat {
+  id: number;
+  partyId: number;
+  applicationId: number;
+  organizerId: number;
+  applicantId: number;
+  messages: ChatMessage[];
+  createdAt: string;
+  lastMessageAt: string;
+  isActive: boolean;
+  callStatus?: CallStatus;
+  callType?: CallType;
+  callStartedAt?: string;
 }
 
 export interface ReferralTransaction {
