@@ -55,7 +55,7 @@ const AgencyPaymentModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Icon name="CreditCard" size={24} />
@@ -63,14 +63,14 @@ const AgencyPaymentModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
-          <div className="bg-primary/5 p-4 rounded-lg">
-            <p className="text-sm text-muted-foreground mb-1">Название агентства</p>
-            <p className="font-semibold text-lg">{agencyName}</p>
+        <div className="space-y-4 md:space-y-6">
+          <div className="bg-primary/5 p-3 md:p-4 rounded-lg">
+            <p className="text-xs md:text-sm text-muted-foreground mb-1">Название агентства</p>
+            <p className="font-semibold text-base md:text-lg break-words">{agencyName}</p>
           </div>
 
-          <div className="space-y-3">
-            <p className="font-medium">Выберите валюту для оплаты:</p>
+          <div className="space-y-2 md:space-y-3">
+            <p className="font-medium text-sm md:text-base">Выберите валюту для оплаты:</p>
             
             <div className="space-y-2">
               {walletBalances.map((balance) => {
@@ -80,42 +80,42 @@ const AgencyPaymentModal = ({
                 return (
                   <Card
                     key={balance.currency}
-                    className={`p-4 cursor-pointer transition-all ${
+                    className={`p-3 md:p-4 cursor-pointer transition-all ${
                       selectedCurrency === balance.currency
                         ? 'border-primary bg-primary/5'
                         : hasBalance
-                        ? 'hover:border-primary/50'
+                        ? 'hover:border-primary/50 active:bg-primary/5'
                         : 'opacity-50 cursor-not-allowed'
                     }`}
                     onClick={() => hasBalance && setSelectedCurrency(balance.currency)}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4 h-4 rounded-full border-2 ${
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                           selectedCurrency === balance.currency
                             ? 'border-primary bg-primary'
                             : 'border-muted-foreground'
                         }`}>
                           {selectedCurrency === balance.currency && (
-                            <Icon name="Check" size={12} className="text-white" />
+                            <Icon name="Check" size={14} className="text-white" />
                           )}
                         </div>
-                        <div>
-                          <p className="font-medium">{balance.currency}</p>
-                          <p className="text-sm text-muted-foreground">
+                        <div className="min-w-0">
+                          <p className="font-medium text-sm md:text-base">{balance.currency}</p>
+                          <p className="text-xs md:text-sm text-muted-foreground truncate">
                             Баланс: {balance.amount.toLocaleString()} {balance.symbol}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold">
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-semibold text-sm md:text-base">
                           {amountRequired.toLocaleString(undefined, {
                             minimumFractionDigits: balance.currency === 'BTC' || balance.currency === 'ETH' ? 4 : 2,
                             maximumFractionDigits: balance.currency === 'BTC' || balance.currency === 'ETH' ? 6 : 2,
                           })} {balance.symbol}
                         </p>
                         {!hasBalance && (
-                          <p className="text-xs text-destructive">Недостаточно средств</p>
+                          <p className="text-xs text-destructive">Недостаточно</p>
                         )}
                       </div>
                     </div>
@@ -125,14 +125,14 @@ const AgencyPaymentModal = ({
             </div>
           </div>
 
-          <div className="bg-muted p-4 rounded-lg space-y-2">
-            <div className="flex justify-between text-sm">
+          <div className="bg-muted p-3 md:p-4 rounded-lg space-y-2">
+            <div className="flex justify-between text-xs md:text-sm">
               <span>Стоимость регистрации:</span>
               <span className="font-medium">10 000 ₽</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-xs md:text-sm">
               <span>К оплате:</span>
-              <span className="font-semibold text-lg">
+              <span className="font-semibold text-base md:text-lg">
                 {getAmountInCurrency(selectedCurrency).toLocaleString(undefined, {
                   minimumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 4 : 2,
                   maximumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 6 : 2,
@@ -141,14 +141,14 @@ const AgencyPaymentModal = ({
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+            <Button variant="outline" onClick={onClose} className="w-full md:flex-1">
               Отмена
             </Button>
             <Button
               onClick={handlePayment}
               disabled={!hasEnoughBalance(selectedCurrency)}
-              className="flex-1"
+              className="w-full md:flex-1"
             >
               <Icon name="Check" size={18} />
               <span className="ml-2">Оплатить</span>
@@ -156,8 +156,8 @@ const AgencyPaymentModal = ({
           </div>
 
           {!hasEnoughBalance(selectedCurrency) && (
-            <div className="flex items-start gap-2 text-sm text-muted-foreground bg-muted/50 p-3 rounded">
-              <Icon name="Info" size={16} className="mt-0.5" />
+            <div className="flex items-start gap-2 text-xs md:text-sm text-muted-foreground bg-muted/50 p-3 rounded">
+              <Icon name="Info" size={16} className="mt-0.5 flex-shrink-0" />
               <p>
                 Пополните баланс кошелька для оплаты регистрации агентства
               </p>

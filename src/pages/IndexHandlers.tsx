@@ -225,7 +225,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
     setProfile((prev) => ({
       ...prev,
       role: 'agency',
-      agencyName: props.setPendingAgencyName as any,
+      agencyName: props.pendingAgencyName,
       isAgencyOwner: true,
       agencyId: Date.now(),
     }));
@@ -235,7 +235,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
     
     toast({
       title: "Агентство открыто!",
-      description: `Добро пожаловать в панель управления`,
+      description: `Добро пожаловать в панель управления агентства "${props.pendingAgencyName}"`,
     });
   };
 
