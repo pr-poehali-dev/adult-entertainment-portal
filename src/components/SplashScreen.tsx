@@ -4,12 +4,21 @@ import Icon from '@/components/ui/icon';
 export const SplashScreen = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    const standalone = ('standalone' in window.navigator) && (window.navigator as any).standalone;
-    setIsStandalone(standalone || window.matchMedia('(display-mode: standalone)').matches);
+    const hasLoadedBefore = sessionStorage.getItem('hasLoadedBefore');
+    setIsInitialLoad(!hasLoadedBefore);
+    
+    if (!hasLoadedBefore) {
+      sessionStorage.setItem('hasLoadedBefore', 'true');
+    }
 
-    if (standalone || window.matchMedia('(display-mode: standalone)').matches) {
+    const standalone = ('standalone' in window.navigator) && (window.navigator as any).standalone;
+    const isPWA = standalone || window.matchMedia('(display-mode: standalone)').matches;
+    setIsStandalone(isPWA);
+
+    if (isPWA || !hasLoadedBefore) {
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 2000);
@@ -20,7 +29,7 @@ export const SplashScreen = () => {
     }
   }, []);
 
-  if (!isStandalone || !isVisible) {
+  if ((!isStandalone && !isInitialLoad) || !isVisible) {
     return null;
   }
 
