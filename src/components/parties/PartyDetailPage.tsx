@@ -6,16 +6,17 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { PrivateParty, PartyApplication } from '@/types';
+import { PrivateParty, PartyApplication, Notification } from '@/types';
 
 interface PartyDetailPageProps {
   partyId: number;
   currentUserId: number;
   onBack: () => void;
   onStartChat: (applicationId: number) => void;
+  onNotificationAdd?: (notification: Notification) => void;
 }
 
-const PartyDetailPage = ({ partyId, currentUserId, onBack, onStartChat }: PartyDetailPageProps) => {
+const PartyDetailPage = ({ partyId, currentUserId, onBack, onStartChat, onNotificationAdd }: PartyDetailPageProps) => {
   const [selectedGender, setSelectedGender] = useState<'male' | 'female' | 'couple'>('male');
   const [hasApplied, setHasApplied] = useState(false);
 
@@ -66,6 +67,20 @@ const PartyDetailPage = ({ partyId, currentUserId, onBack, onStartChat }: PartyD
   const handleApply = () => {
     setHasApplied(true);
     const applicationId = Date.now();
+    
+    const notification: Notification = {
+      id: Date.now(),
+      type: 'party_application',
+      title: 'Новая заявка на вечеринку',
+      text: `Получена новая заявка на "${party.title}". Гость ожидает собеседования.`,
+      time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+      read: false,
+      partyId: party.id,
+      applicationId: applicationId,
+    };
+    
+    onNotificationAdd?.(notification);
+    
     setTimeout(() => {
       onStartChat(applicationId);
     }, 500);

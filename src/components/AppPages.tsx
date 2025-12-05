@@ -23,7 +23,7 @@ const PartiesPage = lazy(() => import('@/components/parties/PartiesPage'));
 const PartyDetailPage = lazy(() => import('@/components/parties/PartyDetailPage'));
 const PartyChatPage = lazy(() => import('@/components/parties/PartyChatPage'));
 const OrganizerDashboard = lazy(() => import('@/components/parties/OrganizerDashboard'));
-import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
+import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
 interface AppPagesProps {
@@ -65,6 +65,7 @@ interface AppPagesProps {
   setSelectedPartyId?: (id: number | null) => void;
   selectedApplicationId?: number | null;
   setSelectedApplicationId?: (id: number | null) => void;
+  onNotificationAdd?: (notification: Notification) => void;
 }
 
 export const useAppPages = ({
@@ -106,6 +107,7 @@ export const useAppPages = ({
   setSelectedPartyId,
   selectedApplicationId,
   setSelectedApplicationId,
+  onNotificationAdd,
 }: AppPagesProps) => {
   
   const LoadingFallback = () => (
@@ -321,6 +323,7 @@ export const useAppPages = ({
                 setSelectedApplicationId?.(applicationId);
                 setCurrentPage('party-chat');
               }}
+              onNotificationAdd={onNotificationAdd}
             />
           </Suspense>
         ) : (

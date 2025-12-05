@@ -357,6 +357,22 @@ const Index = () => {
     setSelectedPartyId,
     selectedApplicationId,
     setSelectedApplicationId,
+    onNotificationAdd: (notification: Notification) => {
+      setNotifications([notification, ...notifications]);
+      playNotificationSound('party_application');
+      
+      toast({
+        title: notification.title,
+        description: notification.text,
+        duration: 7000,
+        action: notification.type === 'party_application' ? {
+          label: 'Перейти',
+          onClick: () => {
+            setCurrentPage('organizer-dashboard');
+          },
+        } : undefined,
+      });
+    },
   });
 
   return (

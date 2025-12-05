@@ -206,7 +206,7 @@ export interface Review {
 
 export interface Notification {
   id: number;
-  type: 'message' | 'booking' | 'review' | 'system' | 'referral';
+  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application';
   title: string;
   text: string;
   time: string;
@@ -214,6 +214,8 @@ export interface Notification {
   amount?: number;
   currency?: Currency;
   referralLevel?: 1 | 2 | 3;
+  partyId?: number;
+  applicationId?: number;
 }
 
 export interface VIPPlan {
