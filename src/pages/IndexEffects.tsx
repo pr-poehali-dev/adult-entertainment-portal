@@ -41,35 +41,65 @@ export const useIndexEffects = (props: EffectsProps) => {
   // Ежедневный бонус LOVE за посещение
   useEffect(() => {
     const DAILY_BONUS_KEY = 'lastDailyBonus';
+    const STREAK_KEY = 'dailyStreak';
     const DAILY_BONUS_AMOUNT = 2;
+    const STREAK_BONUS_AMOUNT = 5;
+    const STREAK_DAYS = 7;
     
     const checkDailyBonus = () => {
       const lastBonus = localStorage.getItem(DAILY_BONUS_KEY);
       const today = new Date().toDateString();
       
       if (lastBonus !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toDateString();
+        
+        let currentStreak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
+        
+        if (lastBonus === yesterdayStr) {
+          currentStreak += 1;
+        } else if (lastBonus && lastBonus !== yesterdayStr) {
+          currentStreak = 1;
+        } else {
+          currentStreak = 1;
+        }
+        
+        let totalBonus = DAILY_BONUS_AMOUNT;
+        let bonusMessage = `+${DAILY_BONUS_AMOUNT} LOVE за посещение`;
+        let streakBonus = false;
+        
+        if (currentStreak >= STREAK_DAYS && currentStreak % STREAK_DAYS === 0) {
+          totalBonus += STREAK_BONUS_AMOUNT;
+          bonusMessage = `+${DAILY_BONUS_AMOUNT} LOVE + ${STREAK_BONUS_AMOUNT} LOVE бонус за ${currentStreak} дней подряд! 🔥`;
+          streakBonus = true;
+        } else {
+          bonusMessage = `+${DAILY_BONUS_AMOUNT} LOVE за посещение (${currentStreak}/${STREAK_DAYS} дней)`;
+        }
+        
         setWallet(prev => ({
           ...prev,
           balances: prev.balances.map(b => 
-            b.currency === 'LOVE' ? { ...b, amount: b.amount + DAILY_BONUS_AMOUNT } : b
+            b.currency === 'LOVE' ? { ...b, amount: b.amount + totalBonus } : b
           )
         }));
         
         playBalanceSound();
         
         toast({
-          title: "🎁 Ежедневный бонус!",
-          description: `+${DAILY_BONUS_AMOUNT} LOVE за посещение платформы`,
+          title: streakBonus ? "🔥 Бонус за серию!" : "🎁 Ежедневный бонус!",
+          description: bonusMessage,
           duration: 6000,
         });
         
         addNotification(
           'system',
-          '🎁 Ежедневный бонус',
-          `Вы получили ${DAILY_BONUS_AMOUNT} 💗 LOVE за посещение платформы`
+          streakBonus ? '🔥 Бонус за серию' : '🎁 Ежедневный бонус',
+          `Вы получили ${totalBonus} 💗 LOVE ${streakBonus ? `за ${currentStreak} дней подряд!` : `(серия: ${currentStreak}/${STREAK_DAYS})`}`
         );
         
         localStorage.setItem(DAILY_BONUS_KEY, today);
+        localStorage.setItem(STREAK_KEY, currentStreak.toString());
       }
     };
     
