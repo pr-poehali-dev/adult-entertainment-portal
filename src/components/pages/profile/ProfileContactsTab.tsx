@@ -23,7 +23,14 @@ const defaultContacts: ProfileContacts = {
 export const ProfileContactsTab = ({ contacts, onContactsUpdate }: ProfileContactsTabProps) => {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<ProfileContacts>(contacts || defaultContacts);
+  const [formData, setFormData] = useState<ProfileContacts>(() => {
+    const initialContacts = contacts || defaultContacts;
+    return {
+      instagram: { value: initialContacts.instagram?.value || '', forSale: initialContacts.instagram?.forSale || false },
+      telegram: { value: initialContacts.telegram?.value || '', forSale: initialContacts.telegram?.forSale || false },
+      phone: { value: initialContacts.phone?.value || '', forSale: initialContacts.phone?.forSale || false },
+    };
+  });
 
   const handleSave = () => {
     onContactsUpdate?.(formData);
