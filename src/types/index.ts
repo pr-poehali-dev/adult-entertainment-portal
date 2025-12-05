@@ -117,6 +117,11 @@ export interface CatalogItem {
   isAdminModerated?: boolean;
   agencyId?: number;
   agencyName?: string;
+  stats?: {
+    views: number;
+    bookings: number;
+    revenue: number;
+  };
 }
 
 export interface PriceListItem {

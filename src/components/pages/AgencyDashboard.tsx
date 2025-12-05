@@ -4,6 +4,12 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { CatalogItem } from '@/types';
 import { Input } from '@/components/ui/input';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface AgencyDashboardProps {
   agencyName: string;
@@ -13,6 +19,7 @@ interface AgencyDashboardProps {
   onEditGirl: (girlId: number) => void;
   onDeleteGirl: (girlId: number) => void;
   onToggleActive: (girlId: number) => void;
+  onIncrementViews?: (girlId: number) => void;
 }
 
 const AgencyDashboard = ({
@@ -25,6 +32,7 @@ const AgencyDashboard = ({
   onToggleActive,
 }: AgencyDashboardProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGirl, setSelectedGirl] = useState<CatalogItem | null>(null);
 
   const filteredGirls = agencyGirls.filter(girl =>
     girl.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,11 +40,9 @@ const AgencyDashboard = ({
   );
 
   const activeGirls = agencyGirls.filter(g => g.isActive).length;
-  const totalBookings = agencyGirls.reduce((sum, g) => sum + (g.sellerId || 0), 0);
-  const totalRevenue = agencyGirls.reduce((sum, g) => {
-    const price = parseInt(g.price.replace(/\D/g, ''));
-    return sum + price * 2;
-  }, 0);
+  const totalBookings = agencyGirls.reduce((sum, g) => sum + (g.stats?.bookings || 0), 0);
+  const totalRevenue = agencyGirls.reduce((sum, g) => sum + (g.stats?.revenue || 0), 0);
+  const totalViews = agencyGirls.reduce((sum, g) => sum + (g.stats?.views || 0), 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +70,7 @@ const AgencyDashboard = ({
       </div>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5">
             <div className="flex items-center justify-between mb-2">
               <Icon name="Users" size={24} className="text-primary" />
@@ -79,6 +85,14 @@ const AgencyDashboard = ({
             </div>
             <p className="text-3xl font-bold">{activeGirls}</p>
             <p className="text-sm text-muted-foreground">Активных</p>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-br from-orange-500/10 to-orange-500/5">
+            <div className="flex items-center justify-between mb-2">
+              <Icon name="Eye" size={24} className="text-orange-500" />
+            </div>
+            <p className="text-3xl font-bold">{totalViews.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Просмотров</p>
           </Card>
 
           <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5">
@@ -179,7 +193,16 @@ const AgencyDashboard = ({
                         )}
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedGirl(girl)}
+                        >
+                          <Icon name="BarChart3" size={16} />
+                          <span className="ml-1">Статистика</span>
+                        </Button>
+
                         <Button
                           variant="outline"
                           size="sm"
@@ -218,6 +241,115 @@ const AgencyDashboard = ({
           )}
         </Card>
       </div>
+
+      <Dialog open={!!selectedGirl} onOpenChange={() => setSelectedGirl(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Icon name="BarChart3" size={24} className="text-primary" />
+              Статистика: {selectedGirl?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedGirl && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-3 gap-4">
+                <Card className="p-4 bg-gradient-to-br from-orange-500/10 to-orange-500/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="Eye" size={20} className="text-orange-500" />
+                    <span className="text-sm text-muted-foreground">Просмотры</span>
+                  </div>
+                  <p className="text-2xl font-bold">{selectedGirl.stats?.views.toLocaleString() || 0}</p>
+                </Card>
+
+                <Card className="p-4 bg-gradient-to-br from-blue-500/10 to-blue-500/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="Calendar" size={20} className="text-blue-500" />
+                    <span className="text-sm text-muted-foreground">Бронирования</span>
+                  </div>
+                  <p className="text-2xl font-bold">{selectedGirl.stats?.bookings || 0}</p>
+                </Card>
+
+                <Card className="p-4 bg-gradient-to-br from-purple-500/10 to-purple-500/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="DollarSign" size={20} className="text-purple-500" />
+                    <span className="text-sm text-muted-foreground">Доход</span>
+                  </div>
+                  <p className="text-2xl font-bold">{selectedGirl.stats?.revenue.toLocaleString() || 0} ₽</p>
+                </Card>
+              </div>
+
+              <Card className="p-4 bg-muted/30">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Icon name="TrendingUp" size={20} className="text-primary" />
+                  Показатели эффективности
+                </h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Конверсия просмотров в бронирования:</span>
+                    <span className="font-semibold">
+                      {selectedGirl.stats?.views && selectedGirl.stats.views > 0
+                        ? `${((selectedGirl.stats.bookings / selectedGirl.stats.views) * 100).toFixed(1)}%`
+                        : '0%'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Средний доход за бронирование:</span>
+                    <span className="font-semibold">
+                      {selectedGirl.stats?.bookings && selectedGirl.stats.bookings > 0
+                        ? `${Math.round(selectedGirl.stats.revenue / selectedGirl.stats.bookings).toLocaleString()} ₽`
+                        : '0 ₽'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Рейтинг:</span>
+                    <span className="font-semibold flex items-center gap-1">
+                      <Icon name="Star" size={14} className="text-yellow-500" />
+                      {selectedGirl.rating}
+                    </span>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="MapPin" size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">Локация</span>
+                  </div>
+                  <p className="text-muted-foreground">{selectedGirl.location}</p>
+                </Card>
+
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="DollarSign" size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">Цена</span>
+                  </div>
+                  <p className="text-muted-foreground">{selectedGirl.price}</p>
+                </Card>
+
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="User" size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">Возраст</span>
+                  </div>
+                  <p className="text-muted-foreground">{selectedGirl.age} лет</p>
+                </Card>
+
+                <Card className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="Activity" size={18} className="text-primary" />
+                    <span className="text-sm font-semibold">Статус</span>
+                  </div>
+                  <p className="text-muted-foreground">
+                    {selectedGirl.isActive ? 'Активна' : 'Не активна'}
+                  </p>
+                </Card>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

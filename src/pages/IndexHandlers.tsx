@@ -257,6 +257,11 @@ export const useIndexHandlers = (props: HandlersProps) => {
       isActive: true,
       agencyId: girlData.agencyId,
       agencyName: girlData.agencyName,
+      stats: {
+        views: 0,
+        bookings: 0,
+        revenue: 0,
+      },
     };
     
     setAgencyGirls([...agencyGirls, newGirl]);
@@ -309,6 +314,12 @@ export const useIndexHandlers = (props: HandlersProps) => {
     });
   };
 
+  const handleIncrementViews = (girlId: number) => {
+    setAgencyGirls(agencyGirls.map(g => 
+      g.id === girlId && g.stats ? { ...g, stats: { ...g.stats, views: g.stats.views + 1 } } : g
+    ));
+  };
+
   return {
     toggleFavorite,
     addNotification,
@@ -323,5 +334,6 @@ export const useIndexHandlers = (props: HandlersProps) => {
     handleUpdateGirl,
     handleDeleteGirl,
     handleToggleGirlActive,
+    handleIncrementViews,
   };
 };
