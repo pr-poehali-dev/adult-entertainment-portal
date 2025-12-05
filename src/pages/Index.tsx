@@ -158,13 +158,10 @@ const Index = () => {
       <footer className="border-t border-border/50 mt-20 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
         <div className="max-w-wide mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
-            <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+            <div className="flex items-center justify-center gap-2 md:gap-3">
               <Icon name="Crown" size={32} className="text-primary md:w-10 md:h-10" />
               <h2 className="text-3xl md:text-5xl font-bold gold-shimmer">Elite</h2>
             </div>
-            <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Премиальная платформа эскорт-услуг для взыскательных клиентов
-            </p>
           </div>
           
           {/* Адаптивное меню для мобильных и десктопа */}
