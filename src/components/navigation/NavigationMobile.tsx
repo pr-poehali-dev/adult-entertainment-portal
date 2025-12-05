@@ -178,6 +178,17 @@ export const NavigationMobile = ({
               </Avatar>
               <span>{profile.name}</span>
             </button>
+            
+            {profile.isAgencyOwner && (
+              <button 
+                onClick={() => { setCurrentPage('agency-dashboard'); setShowMobileMenu(false); }}
+                className="w-full py-3 px-4 rounded-lg bg-primary/10 border border-primary hover:bg-primary/20 transition-colors flex items-center gap-3 justify-center font-semibold"
+              >
+                <Icon name="Building2" size={20} className="text-primary" />
+                <span className="text-primary">Моё Агентство</span>
+              </button>
+            )}
+            
             <button 
               onClick={() => { 
                 setUserRole(null); 

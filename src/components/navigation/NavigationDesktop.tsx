@@ -188,13 +188,27 @@ export const NavigationDesktop = ({
                     <Icon name="User" size={16} />
                     <span>Профиль</span>
                   </button>
+                  
+                  {profile.isAgencyOwner && (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setCurrentPage('agency-dashboard');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                    >
+                      <Icon name="Building2" size={16} className="text-primary" />
+                      <span className="font-medium">Моё Агентство</span>
+                    </button>
+                  )}
+                  
                   <button
                     onClick={() => {
                       setShowProfileMenu(false);
                       setUserRole(null);
                       setCurrentPage('home');
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 text-red-500"
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 text-red-500 border-t border-border"
                   >
                     <Icon name="LogOut" size={16} />
                     <span>Выйти</span>
