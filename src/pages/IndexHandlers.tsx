@@ -216,6 +216,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
       'BTC': 0.00012,
       'ETH': 0.003,
       'USDT': 100,
+      'LOVE': 1000,
     };
     
     const amountInCurrency = paymentAmount / currencyRates[currency];

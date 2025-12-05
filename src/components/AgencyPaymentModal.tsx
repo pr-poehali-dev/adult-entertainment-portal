@@ -36,6 +36,7 @@ const AgencyPaymentModal = ({
     'BTC': 0.00012,
     'ETH': 0.003,
     'USDT': 100,
+    'LOVE': 1000,
   };
 
   const getAmountInCurrency = (currency: string) => {
@@ -108,7 +109,13 @@ const AgencyPaymentModal = ({
                   <Card
                     key={balance.currency}
                     className={`p-3 md:p-4 cursor-pointer transition-all ${
-                      selectedCurrency === balance.currency
+                      balance.currency === 'LOVE'
+                        ? selectedCurrency === balance.currency
+                          ? 'border-pink-500 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30'
+                          : hasBalance
+                          ? 'border-pink-300 hover:border-pink-500 active:bg-pink-50 dark:border-pink-800 dark:hover:border-pink-600'
+                          : 'opacity-50 cursor-not-allowed border-pink-200 dark:border-pink-900'
+                        : selectedCurrency === balance.currency
                         ? 'border-primary bg-primary/5'
                         : hasBalance
                         ? 'hover:border-primary/50 active:bg-primary/5'
@@ -128,8 +135,11 @@ const AgencyPaymentModal = ({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-medium text-sm md:text-base">{balance.currency}</p>
-                          <p className="text-xs md:text-sm text-muted-foreground truncate">
+                          <p className={`font-medium text-sm md:text-base ${balance.currency === 'LOVE' ? 'text-pink-600 dark:text-pink-400' : ''}`}>
+                            {balance.currency}
+                            {balance.currency === 'LOVE' && <span className="ml-1 text-xs opacity-70">(Внутренняя валюта)</span>}
+                          </p>
+                          <p className={`text-xs md:text-sm truncate ${balance.currency === 'LOVE' ? 'text-pink-600/80 dark:text-pink-400/80' : 'text-muted-foreground'}`}>
                             Баланс: {balance.amount.toLocaleString()} {balance.symbol}
                           </p>
                         </div>

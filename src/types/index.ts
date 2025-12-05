@@ -239,7 +239,7 @@ export interface VIPPlan {
   discount?: number;
 }
 
-export type Currency = 'RUB' | 'USD' | 'EUR' | 'BTC' | 'ETH' | 'USDT';
+export type Currency = 'RUB' | 'USD' | 'EUR' | 'BTC' | 'ETH' | 'USDT' | 'LOVE';
 
 export interface WalletBalance {
   currency: Currency;

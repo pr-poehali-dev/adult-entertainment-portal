@@ -105,18 +105,29 @@ const Navigation = ({
 
         <div className="md:hidden flex items-center space-x-1">
           {userRole && (
-            <Button
-              onClick={() => setCurrentPage('wallet')}
-              className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-2 py-1.5 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
-              size="sm"
-            >
-              <Icon name="Wallet" size={16} className={`mr-1.5 ${balanceAnimation ? 'animate-bounce' : ''}`} />
-              <div className="flex flex-col items-start">
-                <span className={`text-xs leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
-                  {rubBalance.toLocaleString('ru-RU')} ₽
+            <>
+              <Button
+                onClick={() => setCurrentPage('wallet')}
+                className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold px-2 py-1.5 shadow-lg"
+                size="sm"
+              >
+                <span className="text-xs leading-none">
+                  {(wallet.balances.find(b => b.currency === 'LOVE')?.amount || 0).toLocaleString('ru-RU')} 💗
                 </span>
-              </div>
-            </Button>
+              </Button>
+              <Button
+                onClick={() => setCurrentPage('wallet')}
+                className={`bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold px-2 py-1.5 shadow-lg ${balanceAnimation ? 'animate-pulse scale-110' : ''}`}
+                size="sm"
+              >
+                <Icon name="Wallet" size={16} className={`mr-1.5 ${balanceAnimation ? 'animate-bounce' : ''}`} />
+                <div className="flex flex-col items-start">
+                  <span className={`text-xs leading-none ${balanceAnimation ? 'animate-pulse' : ''}`}>
+                    {rubBalance.toLocaleString('ru-RU')} ₽
+                  </span>
+                </div>
+              </Button>
+            </>
           )}
           <Button 
             variant="ghost" 

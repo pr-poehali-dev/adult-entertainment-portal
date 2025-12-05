@@ -69,11 +69,15 @@ export const useIndexEffects = (props: EffectsProps) => {
           const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
           const commission = referralData.level === 1 ? '10%' : referralData.level === 2 ? '5%' : '1%';
           
+          const loveBonus = referralData.level === 1 ? 100 : referralData.level === 2 ? 50 : 25;
+          
           setWallet(prev => ({
             ...prev,
-            balances: prev.balances.map(b => 
-              b.currency === 'RUB' ? { ...b, amount: b.amount + randomAmount } : b
-            )
+            balances: prev.balances.map(b => {
+              if (b.currency === 'RUB') return { ...b, amount: b.amount + randomAmount };
+              if (b.currency === 'LOVE') return { ...b, amount: b.amount + loveBonus };
+              return b;
+            })
           }));
 
           const newTransaction = {
@@ -94,20 +98,41 @@ export const useIndexEffects = (props: EffectsProps) => {
           addNotification(
             'referral',
             `Комиссия ${commission}`,
-            `Заработано ${randomAmount} ₽ с реферала ${referralData.level} линии`,
+            `Заработано ${randomAmount} ₽ + ${loveBonus} 💗 с реферала ${referralData.level} линии`,
             { amount: randomAmount, currency: 'RUB', referralLevel: referralData.level }
           );
+          
+          toast({
+            title: "💗 LOVE бонус получен!",
+            description: `+${loveBonus} LOVE за реферала ${referralData.level} линии`,
+            duration: 5000,
+          });
         } else {
           const title = referralData.level === 1 ? 'Новый реферал!' : 
                        referralData.level === 2 ? 'Реферал 2 линии' : 
                        'Реферал 3 линии';
           
+          const loveBonus = referralData.level === 1 ? 100 : referralData.level === 2 ? 50 : 25;
+          
+          setWallet(prev => ({
+            ...prev,
+            balances: prev.balances.map(b => 
+              b.currency === 'LOVE' ? { ...b, amount: b.amount + loveBonus } : b
+            )
+          }));
+          
           addNotification(
             'referral',
             title,
-            `${randomName} ${referralData.text} (${referralData.level} линия)`,
+            `${randomName} ${referralData.text} (${referralData.level} линия) +${loveBonus} 💗`,
             { referralLevel: referralData.level }
           );
+          
+          toast({
+            title: "💗 Новый реферал!",
+            description: `${randomName} присоединился! Вы получили ${loveBonus} LOVE`,
+            duration: 5000,
+          });
         }
       } else {
         const randomMessage = messages[randomType][Math.floor(Math.random() * messages[randomType].length)];

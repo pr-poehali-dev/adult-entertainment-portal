@@ -127,6 +127,64 @@ export const ReferralPage = () => {
           </Card>
         </div>
         
+        <Card className="mb-8 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 border-pink-300 dark:border-pink-800">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center flex-shrink-0">
+                <Icon name="Heart" size={32} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-pink-600 dark:text-pink-400 mb-2">
+                  Валюта LOVE 💗
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Внутренняя валюта платформы, которую можно зарабатывать и использовать для оплаты услуг
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white/50 dark:bg-black/20 p-4 rounded-lg border border-pink-200 dark:border-pink-800">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon name="Gift" size={20} className="text-pink-600 dark:text-pink-400" />
+                      <h4 className="font-semibold text-pink-600 dark:text-pink-400">Зарабатывайте</h4>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• +100 💗 за реферала 1 линии</li>
+                      <li>• +50 💗 за реферала 2 линии</li>
+                      <li>• +25 💗 за реферала 3 линии</li>
+                      <li>• Ежедневные бонусы</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-white/50 dark:bg-black/20 p-4 rounded-lg border border-pink-200 dark:border-pink-800">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon name="ShoppingBag" size={20} className="text-pink-600 dark:text-pink-400" />
+                      <h4 className="font-semibold text-pink-600 dark:text-pink-400">Используйте</h4>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Оплата услуг</li>
+                      <li>• VIP статус</li>
+                      <li>• Открытие агентства</li>
+                      <li>• Эксклюзивный контент</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-white/50 dark:bg-black/20 p-4 rounded-lg border border-pink-200 dark:border-pink-800">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon name="TrendingUp" size={20} className="text-pink-600 dark:text-pink-400" />
+                      <h4 className="font-semibold text-pink-600 dark:text-pink-400">Курс обмена</h4>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• 1 💗 = 10 ₽</li>
+                      <li>• 100 💗 = 1000 ₽</li>
+                      <li>• 1000 💗 = 10 000 ₽</li>
+                      <li className="text-pink-600 dark:text-pink-400 font-semibold">Без комиссий!</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-2xl">Уровни комиссии</CardTitle>

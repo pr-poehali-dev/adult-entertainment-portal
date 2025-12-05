@@ -128,6 +128,7 @@ export const useIndexState = () => {
       { currency: 'BTC', amount: 0.5, symbol: '₿' },
       { currency: 'ETH', amount: 2, symbol: 'Ξ' },
       { currency: 'USDT', amount: 10000, symbol: '₮' },
+      { currency: 'LOVE', amount: 0, symbol: '💗' },
     ]
   });
 
