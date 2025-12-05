@@ -40,6 +40,7 @@ export const NavigationDesktop = ({
   setShowNotifications,
   isDarkTheme,
   setIsDarkTheme,
+  wallet,
   soundEnabled,
   setSoundEnabled,
   balanceAnimation,
