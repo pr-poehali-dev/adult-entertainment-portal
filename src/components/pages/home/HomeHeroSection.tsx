@@ -17,26 +17,11 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
       
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 text-6xl animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}>⭐</div>
-        <div className="absolute top-40 right-20 text-5xl animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }}>💕</div>
-        <div className="absolute bottom-40 left-1/4 text-4xl animate-bounce" style={{ animationDelay: '0.5s', animationDuration: '3.5s' }}>✨</div>
-        <div className="absolute top-1/3 right-1/3 text-5xl animate-bounce" style={{ animationDelay: '1.5s', animationDuration: '4.5s' }}>💖</div>
-        <div className="absolute bottom-20 right-10 text-6xl animate-bounce" style={{ animationDelay: '2s', animationDuration: '3s' }}>⭐</div>
-        <div className="absolute top-1/2 left-10 text-4xl animate-bounce" style={{ animationDelay: '0.8s', animationDuration: '3.8s' }}>🌙</div>
-      </div>
-      
       <div className="w-full mx-auto text-center relative z-10 px-4">
         <div className="mb-6 animate-fade-in">
           <span className="inline-block px-6 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary font-semibold tracking-wider text-sm uppercase">
             Премиум услуги
           </span>
-        </div>
-        
-        <div className="relative inline-block mb-8">
-          <div className="comic-bubble comic-bubble-top absolute -top-20 left-1/2 transform -translate-x-1/2 whitespace-nowrap animate-bounce z-20">
-            💝 Любовь уже рядом!
-          </div>
         </div>
         
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-fade-in text-center" style={{ animationDelay: '100ms' }}>

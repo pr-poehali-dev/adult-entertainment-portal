@@ -9,15 +9,8 @@ interface DatingBannerProps {
 export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
   return (
     <div className="max-w-wide mx-auto px-4 py-12 w-full overflow-x-hidden">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 shadow-2xl comic-shadow">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 shadow-2xl">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTJWMGgydjMwem0tOCAwSDBoMnYzMEgwVjB6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
-        
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-6 left-12 text-5xl animate-float">💑</div>
-          <div className="absolute top-16 right-20 text-4xl animate-wiggle" style={{ animationDelay: '0.7s' }}>💘</div>
-          <div className="absolute bottom-16 left-16 text-5xl animate-bounce" style={{ animationDelay: '1.2s' }}>💝</div>
-          <div className="absolute bottom-6 right-14 text-4xl animate-float" style={{ animationDelay: '0.3s' }}>💗</div>
-        </div>
         
         <div className="absolute top-8 right-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-8 left-8 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -25,18 +18,12 @@ export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
         <div className="relative z-10 px-8 py-12 md:px-16 md:py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
-              <div className="relative mb-4">
-                <div className="comic-starburst inline-block animate-pulse">
-                  💯 FREE
-                </div>
-              </div>
-              
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm font-medium">
                 <Icon name="Heart" size={16} className="animate-pulse" />
                 <span>Бесплатные знакомства</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight comic-text">
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
                 Найди свою половинку
               </h2>
               

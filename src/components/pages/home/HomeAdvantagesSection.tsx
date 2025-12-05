@@ -5,23 +5,10 @@ export const HomeAdvantagesSection = () => {
   const { t } = useLanguage();
   
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-x-hidden relative">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-        <div className="absolute top-10 right-1/4 text-4xl animate-pulse">💝</div>
-        <div className="absolute bottom-20 left-1/3 text-3xl animate-pulse" style={{ animationDelay: '1s' }}>🌸</div>
-        <div className="absolute top-1/3 left-10 text-5xl animate-pulse" style={{ animationDelay: '2s' }}>💫</div>
-        <div className="absolute bottom-1/3 right-10 text-4xl animate-pulse" style={{ animationDelay: '1.5s' }}>🌺</div>
-      </div>
-      
-      <div className="max-w-wide mx-auto w-full relative z-10">
+    <section className="py-24 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-x-hidden">
+      <div className="max-w-wide mx-auto w-full">
         <div className="text-center mb-16 px-4">
-          <div className="relative inline-block mb-6">
-            <div className="comic-bubble mx-auto animate-bounce">
-              ✨ Гарантия качества!
-            </div>
-          </div>
-          
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 comic-text">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             <span className="gold-shimmer">{t.home.advantagesTitle}</span>
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">

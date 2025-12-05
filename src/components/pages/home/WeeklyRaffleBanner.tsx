@@ -87,15 +87,8 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
 
   return (
     <div className="max-w-wide mx-auto px-4 py-12 w-full overflow-x-hidden">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 shadow-2xl comic-shadow">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 shadow-2xl">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTJWMGgydjMwem0tOCAwSDBoMnYzMEgwVjB6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
-        
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-4 left-10 text-5xl animate-wiggle">🎁</div>
-          <div className="absolute top-10 right-16 text-4xl animate-float" style={{ animationDelay: '0.5s' }}>✨</div>
-          <div className="absolute bottom-10 left-1/4 text-5xl animate-bounce" style={{ animationDelay: '1s' }}>🎉</div>
-          <div className="absolute bottom-4 right-10 text-4xl animate-wiggle" style={{ animationDelay: '1.5s' }}>🌟</div>
-        </div>
         
         <div className="absolute top-8 right-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-8 left-8 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
@@ -103,18 +96,12 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
         <div className="relative z-10 px-8 py-12 md:px-16 md:py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
-              <div className="relative mb-4">
-                <div className="comic-bubble inline-block animate-wiggle">
-                  🎁 Всего 100₽!
-                </div>
-              </div>
-              
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm font-medium">
                 <Icon name="Sparkles" size={16} className="animate-pulse" />
                 <span>Еженедельный розыгрыш</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight comic-text">
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
                 Выиграй новенький iPhone 17
               </h2>
               
