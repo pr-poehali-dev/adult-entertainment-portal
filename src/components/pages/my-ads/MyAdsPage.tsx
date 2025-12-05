@@ -14,7 +14,7 @@ interface MyAdsPageProps {
   setCurrentPage: (page: Page) => void;
 }
 
-export const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
+const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAd, setSelectedAd] = useState<UserAd | null>(null);
   const [selectedResponse, setSelectedResponse] = useState<AdResponse | null>(null);
@@ -289,3 +289,5 @@ export const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     </div>
   );
 };
+
+export default MyAdsPage;
