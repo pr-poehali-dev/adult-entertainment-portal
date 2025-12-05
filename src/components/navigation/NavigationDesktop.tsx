@@ -16,8 +16,8 @@ interface NavigationDesktopProps {
   setNotifications: (notifications: Notification[]) => void;
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
-  isDarkTheme: boolean;
-  setIsDarkTheme: (isDark: boolean) => void;
+  theme: 'standard' | 'light' | 'dark';
+  setTheme: (theme: 'standard' | 'light' | 'dark') => void;
   wallet: Wallet;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
@@ -38,8 +38,8 @@ export const NavigationDesktop = ({
   setNotifications,
   showNotifications,
   setShowNotifications,
-  isDarkTheme,
-  setIsDarkTheme,
+  theme,
+  setTheme,
   soundEnabled,
   setSoundEnabled,
   balanceAnimation,
@@ -220,14 +220,35 @@ export const NavigationDesktop = ({
             🇬🇧
           </Button>
         </div>
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={() => setIsDarkTheme(!isDarkTheme)}
-          className="text-foreground/80 hover:text-primary h-7 w-7"
-        >
-          {isDarkTheme ? <Icon name="Sun" size={14} /> : <Icon name="Moon" size={14} />}
-        </Button>
+        <div className="relative group">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-foreground/80 hover:text-primary h-7 w-7"
+          >
+            <Icon name="Palette" size={14} />
+          </Button>
+          <div className="absolute right-0 mt-2 w-40 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50 hidden group-hover:block">
+            <button
+              onClick={() => setTheme('standard')}
+              className={`w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-2 text-sm ${theme === 'standard' ? 'bg-primary/10 text-primary font-medium' : ''}`}
+            >
+              💝 Стандартная
+            </button>
+            <button
+              onClick={() => setTheme('light')}
+              className={`w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-2 text-sm ${theme === 'light' ? 'bg-primary/10 text-primary font-medium' : ''}`}
+            >
+              ☀️ Светлая
+            </button>
+            <button
+              onClick={() => setTheme('dark')}
+              className={`w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-2 text-sm ${theme === 'dark' ? 'bg-primary/10 text-primary font-medium' : ''}`}
+            >
+              🌙 Тёмная
+            </button>
+          </div>
+        </div>
         <Button 
           variant="ghost" 
           size="icon"

@@ -12,8 +12,8 @@ interface NavigationMobileProps {
   setUserRole: (role: UserRole) => void;
   profile: Profile;
   notifications: Notification[];
-  isDarkTheme: boolean;
-  setIsDarkTheme: (isDark: boolean) => void;
+  theme: 'standard' | 'light' | 'dark';
+  setTheme: (theme: 'standard' | 'light' | 'dark') => void;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
   balanceAnimation: boolean;
@@ -29,8 +29,8 @@ export const NavigationMobile = ({
   setUserRole,
   profile,
   notifications,
-  isDarkTheme,
-  setIsDarkTheme,
+  theme,
+  setTheme,
   soundEnabled,
   setSoundEnabled,
   balanceAnimation,
@@ -132,17 +132,34 @@ export const NavigationMobile = ({
             </div>
           </div>
           
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-muted-foreground">Тема</span>
-            <Button 
-              variant="outline"
-              size="sm"
-              onClick={() => setIsDarkTheme(!isDarkTheme)}
-              className="flex items-center gap-2"
-            >
-              {isDarkTheme ? <Icon name="Sun" size={16} /> : <Icon name="Moon" size={16} />}
-              <span>{isDarkTheme ? 'Светлая' : 'Тёмная'}</span>
-            </Button>
+          <div className="mb-4">
+            <span className="text-sm font-medium text-muted-foreground mb-2 block">Тема</span>
+            <div className="flex gap-2">
+              <Button 
+                variant={theme === 'standard' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('standard')}
+                className="flex-1 flex items-center justify-center gap-1 text-xs"
+              >
+                💝 Стандартная
+              </Button>
+              <Button 
+                variant={theme === 'light' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('light')}
+                className="flex-1 flex items-center justify-center gap-1 text-xs"
+              >
+                ☀️ Светлая
+              </Button>
+              <Button 
+                variant={theme === 'dark' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTheme('dark')}
+                className="flex-1 flex items-center justify-center gap-1 text-xs"
+              >
+                🌙 Тёмная
+              </Button>
+            </div>
           </div>
 
           <div className="flex items-center justify-between">

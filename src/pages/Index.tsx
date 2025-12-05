@@ -33,7 +33,7 @@ const Index = () => {
   const [selectedHeight, setSelectedHeight] = useState<string>('all');
   const [selectedBodyType, setSelectedBodyType] = useState<string>('all');
   const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [theme, setTheme] = useState<'standard' | 'light' | 'dark'>('standard');
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const { toast } = useToast();
@@ -354,7 +354,7 @@ const Index = () => {
   });
 
   return (
-    <div className={isDarkTheme ? 'dark' : ''} data-theme={isDarkTheme ? 'dark' : 'light'}>
+    <div className={theme} data-theme={theme}>
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navigation 
@@ -367,8 +367,8 @@ const Index = () => {
         setNotifications={setNotifications}
         showNotifications={showNotifications}
         setShowNotifications={setShowNotifications}
-        isDarkTheme={isDarkTheme}
-        setIsDarkTheme={setIsDarkTheme}
+        theme={theme}
+        setTheme={setTheme}
         wallet={wallet}
         soundEnabled={soundEnabled}
         setSoundEnabled={setSoundEnabled}
