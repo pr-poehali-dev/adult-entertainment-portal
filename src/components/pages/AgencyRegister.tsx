@@ -17,6 +17,7 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('AgencyRegister handleSubmit', { agencyName });
     
     if (!agencyName.trim()) {
       setError('Введите название агентства');
@@ -28,6 +29,7 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
       return;
     }
 
+    console.log('Calling onPayment with:', agencyName.trim());
     onPayment(agencyName.trim());
   };
 

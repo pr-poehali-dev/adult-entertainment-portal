@@ -201,8 +201,10 @@ export const useIndexHandlers = (props: HandlersProps) => {
   };
 
   const handleAgencyRegister = (agencyName: string) => {
+    console.log('handleAgencyRegister called', { agencyName });
     setPendingAgencyName(agencyName);
     setShowAgencyPayment(true);
+    console.log('Payment modal should open now');
   };
 
   const handleAgencyPayment = (currency: string) => {

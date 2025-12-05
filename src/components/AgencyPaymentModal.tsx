@@ -53,9 +53,15 @@ const AgencyPaymentModal = ({
   };
 
   const handlePayment = () => {
-    if (hasEnoughBalance(selectedCurrency)) {
-      onPaymentConfirm(selectedCurrency);
+    if (!hasEnoughBalance(selectedCurrency)) {
+      console.warn('Not enough balance', {
+        currency: selectedCurrency,
+        balance: getBalance(selectedCurrency)?.amount,
+        required: getAmountInCurrency(selectedCurrency)
+      });
+      return;
     }
+    onPaymentConfirm(selectedCurrency);
   };
 
   const handleTopUp = () => {
@@ -170,9 +176,12 @@ const AgencyPaymentModal = ({
               onClick={handlePayment}
               disabled={!hasEnoughBalance(selectedCurrency)}
               className="w-full md:flex-1"
+              type="button"
             >
               <Icon name="Check" size={18} />
-              <span className="ml-2">Оплатить</span>
+              <span className="ml-2">
+                {hasEnoughBalance(selectedCurrency) ? 'Оплатить' : 'Недостаточно средств'}
+              </span>
             </Button>
           </div>
 
