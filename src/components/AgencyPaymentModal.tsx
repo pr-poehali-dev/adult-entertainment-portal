@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { WalletBalance } from '@/types';
 
@@ -11,6 +12,7 @@ interface AgencyPaymentModalProps {
   onPaymentConfirm: (currency: string) => void;
   agencyName: string;
   walletBalances: WalletBalance[];
+  onTopUp?: (currency: string, amount: number) => void;
 }
 
 const AgencyPaymentModal = ({ 
@@ -18,9 +20,12 @@ const AgencyPaymentModal = ({
   onClose, 
   onPaymentConfirm, 
   agencyName,
-  walletBalances 
+  walletBalances,
+  onTopUp
 }: AgencyPaymentModalProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>('RUB');
+  const [showTopUp, setShowTopUp] = useState(false);
+  const [topUpAmount, setTopUpAmount] = useState('');
 
   const paymentAmount = 10000;
 
@@ -51,6 +56,22 @@ const AgencyPaymentModal = ({
     if (hasEnoughBalance(selectedCurrency)) {
       onPaymentConfirm(selectedCurrency);
     }
+  };
+
+  const handleTopUp = () => {
+    const amount = parseFloat(topUpAmount);
+    if (amount > 0 && onTopUp) {
+      onTopUp(selectedCurrency, amount);
+      setTopUpAmount('');
+      setShowTopUp(false);
+    }
+  };
+
+  const getShortage = (currency: string) => {
+    const balance = getBalance(currency);
+    const required = getAmountInCurrency(currency);
+    if (!balance) return required;
+    return Math.max(0, required - balance.amount);
   };
 
   return (
@@ -156,11 +177,110 @@ const AgencyPaymentModal = ({
           </div>
 
           {!hasEnoughBalance(selectedCurrency) && (
-            <div className="flex items-start gap-2 text-xs md:text-sm text-muted-foreground bg-muted/50 p-3 rounded">
-              <Icon name="Info" size={16} className="mt-0.5 flex-shrink-0" />
-              <p>
-                Пополните баланс кошелька для оплаты регистрации агентства
-              </p>
+            <div className="space-y-3">
+              {!showTopUp ? (
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2 text-xs md:text-sm text-muted-foreground bg-muted/50 p-3 rounded">
+                    <Icon name="Info" size={16} className="mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="mb-1">
+                        Недостаточно средств для оплаты
+                      </p>
+                      <p className="font-semibold text-destructive">
+                        Не хватает: {getShortage(selectedCurrency).toLocaleString(undefined, {
+                          minimumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 4 : 2,
+                          maximumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 6 : 2,
+                        })} {getBalance(selectedCurrency)?.symbol}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => setShowTopUp(true)}
+                  >
+                    <Icon name="Plus" size={18} />
+                    <span className="ml-2">Пополнить баланс {selectedCurrency}</span>
+                  </Button>
+                </div>
+              ) : (
+                <Card className="p-4 bg-primary/5 border-primary/20">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold flex items-center gap-2">
+                        <Icon name="Wallet" size={20} className="text-primary" />
+                        Пополнение {selectedCurrency}
+                      </h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setShowTopUp(false);
+                          setTopUpAmount('');
+                        }}
+                      >
+                        <Icon name="X" size={16} />
+                      </Button>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        Сумма пополнения ({getBalance(selectedCurrency)?.symbol})
+                      </label>
+                      <div className="flex gap-2">
+                        <Input
+                          type="number"
+                          placeholder={`Минимум ${getShortage(selectedCurrency).toFixed(2)}`}
+                          value={topUpAmount}
+                          onChange={(e) => setTopUpAmount(e.target.value)}
+                          className="flex-1"
+                          min={getShortage(selectedCurrency)}
+                          step={selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? '0.0001' : '1'}
+                        />
+                        <Button
+                          onClick={() => setTopUpAmount(getShortage(selectedCurrency).toFixed(
+                            selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 6 : 2
+                          ))}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Нужная сумма
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="bg-muted/50 p-3 rounded space-y-1 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Текущий баланс:</span>
+                        <span className="font-medium">{getBalance(selectedCurrency)?.amount.toLocaleString()} {getBalance(selectedCurrency)?.symbol}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">После пополнения:</span>
+                        <span className="font-semibold text-primary">
+                          {((getBalance(selectedCurrency)?.amount || 0) + parseFloat(topUpAmount || '0')).toLocaleString(undefined, {
+                            minimumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 4 : 2,
+                            maximumFractionDigits: selectedCurrency === 'BTC' || selectedCurrency === 'ETH' ? 6 : 2,
+                          })} {getBalance(selectedCurrency)?.symbol}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={handleTopUp}
+                      disabled={!topUpAmount || parseFloat(topUpAmount) <= 0}
+                      className="w-full"
+                    >
+                      <Icon name="CreditCard" size={18} />
+                      <span className="ml-2">Пополнить на {topUpAmount || '0'} {getBalance(selectedCurrency)?.symbol}</span>
+                    </Button>
+
+                    <p className="text-xs text-muted-foreground text-center">
+                      После пополнения вы сможете оплатить регистрацию агентства
+                    </p>
+                  </div>
+                </Card>
+              )}
             </div>
           )}
         </div>

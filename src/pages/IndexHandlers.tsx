@@ -320,6 +320,21 @@ export const useIndexHandlers = (props: HandlersProps) => {
     ));
   };
 
+  const handleTopUpWallet = (currency: string, amount: number) => {
+    setWallet((prev) => ({
+      balances: prev.balances.map(b => 
+        b.currency === currency 
+          ? { ...b, amount: b.amount + amount }
+          : b
+      )
+    }));
+    
+    toast({
+      title: "Баланс пополнен!",
+      description: `+${amount.toLocaleString()} ${wallet.balances.find(b => b.currency === currency)?.symbol || currency}`,
+    });
+  };
+
   return {
     toggleFavorite,
     addNotification,
@@ -335,5 +350,6 @@ export const useIndexHandlers = (props: HandlersProps) => {
     handleDeleteGirl,
     handleToggleGirlActive,
     handleIncrementViews,
+    handleTopUpWallet,
   };
 };

@@ -201,6 +201,7 @@ const Index = () => {
         onPaymentConfirm={handlers.handleAgencyPayment}
         agencyName={state.pendingAgencyName}
         walletBalances={state.wallet.balances}
+        onTopUp={handlers.handleTopUpWallet}
       />
 
       <AgencyGirlForm
