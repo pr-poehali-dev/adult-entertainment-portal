@@ -129,6 +129,8 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: Part
     }
   };
 
+  const hasUserCreatedParties = parties.some(party => party.organizerId === currentUserId);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
@@ -138,10 +140,12 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: Part
             <p className="text-muted-foreground">Эксклюзивные закрытые мероприятия</p>
           </div>
           <div className="flex gap-3">
-            <Button onClick={onOrganizerDashboard} variant="outline" size="lg">
-              <Icon name="Settings" size={20} className="mr-2" />
-              Мои вечеринки
-            </Button>
+            {hasUserCreatedParties && (
+              <Button onClick={onOrganizerDashboard} variant="outline" size="lg">
+                <Icon name="Settings" size={20} className="mr-2" />
+                Мои вечеринки
+              </Button>
+            )}
             <Button onClick={() => setShowCreateModal(true)} size="lg">
               <Icon name="PartyPopper" size={20} className="mr-2" />
               Создать вечеринку
