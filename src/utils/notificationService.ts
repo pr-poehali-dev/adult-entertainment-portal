@@ -1,4 +1,4 @@
-import { Notification } from '@/types';
+import type { Notification as AppNotification } from '@/types';
 
 // Звуки уведомлений
 const NOTIFICATION_SOUNDS = {
@@ -82,7 +82,7 @@ class NotificationService {
   }
 
   // Главный метод для отправки уведомления
-  notify(notification: Notification) {
+  notify(notification: AppNotification) {
     // Определяем тип вибрации в зависимости от типа уведомления
     let vibrationPattern: number | number[] = [200];
     let soundType: keyof typeof NOTIFICATION_SOUNDS = 'system';
