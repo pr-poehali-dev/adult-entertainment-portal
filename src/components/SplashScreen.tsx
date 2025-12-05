@@ -74,31 +74,17 @@ export const SplashScreen = () => {
       
       <div className="text-center px-4" style={{ animation: 'fadeIn 0.8s ease-out' }}>
         <div 
-          className="w-32 h-32 mx-auto mb-8 relative"
+          className="w-48 h-48 mx-auto mb-8 relative flex items-center justify-center"
           style={{ 
-            animation: 'pulse 2s ease-in-out infinite',
-            filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.5))'
+            animation: 'pulse 2s ease-in-out infinite'
           }}
         >
-          <Icon name="Crown" size={128} className="text-primary" />
+          <img 
+            src="https://cdn.poehali.dev/files/eb44749d-b270-4ce8-8ff5-baa7f8487a4a.png" 
+            alt="Love is..."
+            className="w-full h-full object-contain"
+          />
         </div>
-        
-        <h1 
-          className="text-6xl font-bold text-primary mb-3"
-          style={{ 
-            letterSpacing: '2px',
-            animation: 'fadeIn 1s ease-out 0.3s both'
-          }}
-        >
-          Elite
-        </h1>
-        
-        <p 
-          className="text-lg text-gray-500"
-          style={{ animation: 'fadeIn 1s ease-out 0.6s both' }}
-        >
-          Premium Services
-        </p>
         
         <div className="w-full max-w-xs mx-auto mt-10 px-4">
           <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
