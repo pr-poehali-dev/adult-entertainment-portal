@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Page, CatalogItem, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -75,18 +76,21 @@ export const CatalogPage = ({
   setSelectedBodyType,
 }: HomeAndCatalogProps) => {
   const { t } = useLanguage();
-  const filteredItems = getFilteredAndSortedItems(
-    catalogItems, 
-    searchQuery, 
-    selectedCategory, 
-    priceRange, 
-    sortBy, 
-    selectedCountry, 
-    selectedLocation, 
-    selectedAge, 
-    selectedHeight, 
-    selectedBodyType
-  );
+  
+  const filteredItems = useMemo(() => {
+    return getFilteredAndSortedItems(
+      catalogItems, 
+      searchQuery, 
+      selectedCategory, 
+      priceRange, 
+      sortBy, 
+      selectedCountry, 
+      selectedLocation, 
+      selectedAge, 
+      selectedHeight, 
+      selectedBodyType
+    );
+  }, [catalogItems, searchQuery, selectedCategory, priceRange, sortBy, selectedCountry, selectedLocation, selectedAge, selectedHeight, selectedBodyType]);
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">

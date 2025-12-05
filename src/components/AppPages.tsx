@@ -1,18 +1,24 @@
-import MessagesPage from '@/components/MessagesPage';
+import { lazy, Suspense } from 'react';
 import { HomePage, CatalogPage } from '@/components/pages/HomeAndCatalog';
-import { ServiceDetailPage } from '@/components/pages/ServiceDetail';
-import { SellerProfilePage } from '@/components/pages/SellerProfile';
-import { RegisterPage, ProfilePage, SearchPage, FavoritesPage, RulesPage } from '@/components/pages/UserPages';
-import { LoginPage } from '@/components/pages/LoginPage';
-import { WorkPage } from '@/components/pages/work/WorkPage';
-import { AdminPage } from '@/components/pages/admin/AdminPage';
-import { ReferralPage } from '@/components/pages/referral/ReferralPage';
-import { CategoryProvidersPage } from '@/components/pages/category/CategoryProvidersPage';
-import { InvitationsPage } from '@/components/pages/invitations/InvitationsPage';
-import { RafflePage } from '@/components/pages/RafflePage';
-import { DatingPage } from '@/components/pages/DatingPage';
-import { WalletPage } from '@/components/pages/WalletPage';
-import { OnlineSearchPage } from '@/components/pages/OnlineSearchPage';
+
+const MessagesPage = lazy(() => import('@/components/MessagesPage'));
+const ServiceDetailPage = lazy(() => import('@/components/pages/ServiceDetail').then(m => ({ default: m.ServiceDetailPage })));
+const SellerProfilePage = lazy(() => import('@/components/pages/SellerProfile').then(m => ({ default: m.SellerProfilePage })));
+const RegisterPage = lazy(() => import('@/components/pages/UserPages').then(m => ({ default: m.RegisterPage })));
+const ProfilePage = lazy(() => import('@/components/pages/UserPages').then(m => ({ default: m.ProfilePage })));
+const SearchPage = lazy(() => import('@/components/pages/UserPages').then(m => ({ default: m.SearchPage })));
+const FavoritesPage = lazy(() => import('@/components/pages/UserPages').then(m => ({ default: m.FavoritesPage })));
+const RulesPage = lazy(() => import('@/components/pages/UserPages').then(m => ({ default: m.RulesPage })));
+const LoginPage = lazy(() => import('@/components/pages/LoginPage').then(m => ({ default: m.LoginPage })));
+const WorkPage = lazy(() => import('@/components/pages/work/WorkPage').then(m => ({ default: m.WorkPage })));
+const AdminPage = lazy(() => import('@/components/pages/admin/AdminPage').then(m => ({ default: m.AdminPage })));
+const ReferralPage = lazy(() => import('@/components/pages/referral/ReferralPage').then(m => ({ default: m.ReferralPage })));
+const CategoryProvidersPage = lazy(() => import('@/components/pages/category/CategoryProvidersPage').then(m => ({ default: m.CategoryProvidersPage })));
+const InvitationsPage = lazy(() => import('@/components/pages/invitations/InvitationsPage').then(m => ({ default: m.InvitationsPage })));
+const RafflePage = lazy(() => import('@/components/pages/RafflePage').then(m => ({ default: m.RafflePage })));
+const DatingPage = lazy(() => import('@/components/pages/DatingPage').then(m => ({ default: m.DatingPage })));
+const WalletPage = lazy(() => import('@/components/pages/WalletPage').then(m => ({ default: m.WalletPage })));
+const OnlineSearchPage = lazy(() => import('@/components/pages/OnlineSearchPage').then(m => ({ default: m.OnlineSearchPage })));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -90,6 +96,12 @@ export const useAppPages = ({
   wallet,
 }: AppPagesProps) => {
   
+  const LoadingFallback = () => (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+  );
+
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
@@ -126,85 +138,151 @@ export const useAppPages = ({
       
       case 'service':
         return (
-          <ServiceDetailPage
-            catalogItems={catalogItems}
-            reviews={reviews}
-            favorites={favorites}
-            toggleFavorite={toggleFavorite}
-            selectedServiceId={selectedServiceId}
-            setCurrentPage={setCurrentPage}
-            setShowBookingModal={setShowBookingModal}
-            setSelectedSellerId={setSelectedSellerId}
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <ServiceDetailPage
+              catalogItems={catalogItems}
+              reviews={reviews}
+              favorites={favorites}
+              toggleFavorite={toggleFavorite}
+              selectedServiceId={selectedServiceId}
+              setCurrentPage={setCurrentPage}
+              setShowBookingModal={setShowBookingModal}
+              setSelectedSellerId={setSelectedSellerId}
+            />
+          </Suspense>
         );
       
       case 'profile':
         return userRole ? (
-          <ProfilePage profile={profile} onProfileUpdate={onProfileUpdate} setCurrentPage={setCurrentPage} />
+          <Suspense fallback={<LoadingFallback />}>
+            <ProfilePage profile={profile} onProfileUpdate={onProfileUpdate} setCurrentPage={setCurrentPage} />
+          </Suspense>
         ) : (
-          <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Suspense fallback={<LoadingFallback />}>
+            <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          </Suspense>
         );
       
       case 'register':
-        return <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'login':
-        return <LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'search':
-        return <SearchPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <SearchPage />
+          </Suspense>
+        );
       
       case 'favorites':
         return (
-          <FavoritesPage
-            catalogItems={catalogItems}
-            favorites={favorites}
-            toggleFavorite={toggleFavorite}
-            setSelectedServiceId={setSelectedServiceId}
-            setCurrentPage={setCurrentPage}
-          />
+          <Suspense fallback={<LoadingFallback />}>
+            <FavoritesPage
+              catalogItems={catalogItems}
+              favorites={favorites}
+              toggleFavorite={toggleFavorite}
+              setSelectedServiceId={setSelectedServiceId}
+              setCurrentPage={setCurrentPage}
+            />
+          </Suspense>
         );
       
       case 'messages':
-        return <MessagesPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <MessagesPage />
+          </Suspense>
+        );
       
       case 'rules':
-        return <RulesPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <RulesPage />
+          </Suspense>
+        );
       
       case 'work':
-        return <WorkPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <WorkPage />
+          </Suspense>
+        );
       
       case 'admin':
-        return <AdminPage setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <AdminPage setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'referral':
-        return <ReferralPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <ReferralPage />
+          </Suspense>
+        );
       
       case 'raffle':
-        return <RafflePage setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <RafflePage setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'dating':
-        return <DatingPage setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <DatingPage setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'wallet':
-        return <WalletPage setCurrentPage={setCurrentPage} wallet={wallet} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <WalletPage setCurrentPage={setCurrentPage} wallet={wallet} />
+          </Suspense>
+        );
       
       case 'category':
-        return <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'invitations':
-        return <InvitationsPage setCurrentPage={setCurrentPage} />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <InvitationsPage setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       case 'seller-profile':
         const seller = sellerProfiles.find(s => s.id === selectedSellerId);
         return seller ? (
-          <SellerProfilePage seller={seller} setCurrentPage={setCurrentPage} wallet={wallet} />
+          <Suspense fallback={<LoadingFallback />}>
+            <SellerProfilePage seller={seller} setCurrentPage={setCurrentPage} wallet={wallet} />
+          </Suspense>
         ) : (
           <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
         );
       
       case 'online-search':
-        return <OnlineSearchPage />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <OnlineSearchPage />
+          </Suspense>
+        );
       
       default:
         return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />;
