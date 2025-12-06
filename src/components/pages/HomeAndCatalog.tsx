@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Page, CatalogItem, UserRole, UserAd } from '@/types';
+import { Page, CatalogItem, UserRole, UserAd, Profile } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeAdvantagesSection } from './home/HomeAdvantagesSection';
 import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { DatingBanner } from './home/DatingBanner';
+import { AgencyBanner } from './home/AgencyBanner';
 import { CatalogFilters } from './catalog/CatalogFilters';
 import { CatalogGrid } from './catalog/CatalogGrid';
 import { AdRequestCard } from './catalog/AdRequestCard';
@@ -41,10 +42,11 @@ interface HomeAndCatalogProps {
   userRole?: UserRole;
 }
 
-export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void }) => {
+export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profile }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void; profile: Profile }) => {
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
+      <AgencyBanner setCurrentPage={setCurrentPage} profile={profile} />
       <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
       <DatingBanner setCurrentPage={setCurrentPage} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />

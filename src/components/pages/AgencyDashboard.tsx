@@ -41,7 +41,7 @@ const AgencyDashboard = ({
 }: AgencyDashboardProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGirl, setSelectedGirl] = useState<CatalogItem | null>(null);
-  const [activeTab, setActiveTab] = useState('profiles');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   const filteredGirls = agencyGirls.filter(girl =>
     girl.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,25 +54,33 @@ const AgencyDashboard = ({
   const totalViews = agencyGirls.reduce((sum, g) => sum + (g.stats?.views || 0), 0);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-background to-pink-50 dark:from-purple-950/20 dark:via-background dark:to-pink-950/20">
+      <div className="border-b bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 text-white sticky top-0 z-10 shadow-lg">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={onBack}>
+              <Button variant="ghost" size="icon" onClick={onBack} className="text-white hover:bg-white/20">
                 <Icon name="ArrowLeft" size={20} />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold flex items-center gap-2">
-                  <Icon name="Building2" size={28} className="text-primary" />
-                  {agencyName}
-                </h1>
-                <p className="text-sm text-muted-foreground">Панель управления агентством</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Icon name="Building2" size={24} className="text-white" />
+                  </div>
+                  <h1 className="text-2xl font-bold">
+                    {agencyName}
+                  </h1>
+                </div>
+                <p className="text-sm text-white/80">Личный кабинет агентства • Полный контроль бизнеса</p>
               </div>
             </div>
-            <Button onClick={onAddGirl} size="lg">
+            <Button 
+              onClick={onAddGirl} 
+              size="lg" 
+              className="bg-white text-purple-600 hover:bg-white/90 font-bold shadow-xl"
+            >
               <Icon name="UserPlus" size={20} />
-              <span className="ml-2">Добавить анкету</span>
+              <span className="ml-2">Добавить модель</span>
             </Button>
           </div>
         </div>
@@ -80,60 +88,130 @@ const AgencyDashboard = ({
 
       <div className="container mx-auto px-4 py-6 space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="profiles" className="flex items-center gap-2">
-              <Icon name="Users" size={16} />
-              <span>Анкеты ({agencyGirls.length})</span>
+          <TabsList className="grid w-full grid-cols-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm p-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white">
+              <Icon name="LayoutDashboard" size={16} />
+              <span>Дашборд</span>
             </TabsTrigger>
-            <TabsTrigger value="transactions" className="flex items-center gap-2">
+            <TabsTrigger value="profiles" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white">
+              <Icon name="Users" size={16} />
+              <span>Модели ({agencyGirls.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="transactions" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white">
               <Icon name="Receipt" size={16} />
-              <span>Транзакции ({transactions.length})</span>
+              <span>Финансы ({transactions.length})</span>
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="dashboard" className="space-y-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border-purple-200 dark:border-purple-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Icon name="Users" size={24} className="text-purple-600" />
+                </div>
+                <p className="text-3xl font-bold">{agencyGirls.length}</p>
+                <p className="text-sm text-muted-foreground">Всего моделей</p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-200 dark:border-green-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Icon name="CheckCircle" size={24} className="text-green-600" />
+                </div>
+                <p className="text-3xl font-bold">{activeGirls}</p>
+                <p className="text-sm text-muted-foreground">Активных</p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-to-br from-orange-500/10 to-orange-500/5 border-orange-200 dark:border-orange-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Icon name="Eye" size={24} className="text-orange-600" />
+                </div>
+                <p className="text-3xl font-bold">{totalViews.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Просмотров</p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Icon name="Calendar" size={24} className="text-blue-600" />
+                </div>
+                <p className="text-3xl font-bold">{totalBookings}</p>
+                <p className="text-sm text-muted-foreground">Бронирований</p>
+              </Card>
+            </div>
+
+            <Card className="p-6 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border-emerald-200 dark:border-emerald-800">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <Icon name="DollarSign" size={24} className="text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Общий доход</p>
+                    <p className="text-4xl font-bold text-emerald-600">{totalRevenue.toLocaleString()} ₽</p>
+                  </div>
+                </div>
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  <Icon name="Download" size={16} />
+                  <span className="ml-2">Скачать отчет</span>
+                </Button>
+              </div>
+            </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  <Icon name="TrendingUp" size={20} className="text-primary" />
+                  Топ моделей по просмотрам
+                </h3>
+                <div className="space-y-3">
+                  {agencyGirls
+                    .sort((a, b) => (b.stats?.views || 0) - (a.stats?.views || 0))
+                    .slice(0, 5)
+                    .map((girl) => (
+                      <div key={girl.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                            {girl.title.charAt(0)}
+                          </div>
+                          <span className="font-medium">{girl.title}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">{girl.stats?.views || 0} просм.</span>
+                      </div>
+                    ))}
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  <Icon name="Star" size={20} className="text-primary" />
+                  Быстрые действия
+                </h3>
+                <div className="space-y-3">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={onAddGirl}
+                  >
+                    <Icon name="UserPlus" size={18} />
+                    <span className="ml-2">Добавить новую модель</span>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Icon name="Settings" size={18} />
+                    <span className="ml-2">Настройки агентства</span>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Icon name="FileText" size={18} />
+                    <span className="ml-2">Сгенерировать отчет</span>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Icon name="HelpCircle" size={18} />
+                    <span className="ml-2">Помощь и поддержка</span>
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          </TabsContent>
+
           <TabsContent value="profiles" className="space-y-6 mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5">
-            <div className="flex items-center justify-between mb-2">
-              <Icon name="Users" size={24} className="text-primary" />
-            </div>
-            <p className="text-3xl font-bold">{agencyGirls.length}</p>
-            <p className="text-sm text-muted-foreground">Всего анкет</p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5">
-            <div className="flex items-center justify-between mb-2">
-              <Icon name="CheckCircle" size={24} className="text-green-500" />
-            </div>
-            <p className="text-3xl font-bold">{activeGirls}</p>
-            <p className="text-sm text-muted-foreground">Активных</p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-orange-500/10 to-orange-500/5">
-            <div className="flex items-center justify-between mb-2">
-              <Icon name="Eye" size={24} className="text-orange-500" />
-            </div>
-            <p className="text-3xl font-bold">{totalViews.toLocaleString()}</p>
-            <p className="text-sm text-muted-foreground">Просмотров</p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5">
-            <div className="flex items-center justify-between mb-2">
-              <Icon name="Calendar" size={24} className="text-blue-500" />
-            </div>
-            <p className="text-3xl font-bold">{totalBookings}</p>
-            <p className="text-sm text-muted-foreground">Бронирований</p>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5">
-            <div className="flex items-center justify-between mb-2">
-              <Icon name="DollarSign" size={24} className="text-purple-500" />
-            </div>
-            <p className="text-3xl font-bold">{totalRevenue.toLocaleString()} ₽</p>
-            <p className="text-sm text-muted-foreground">Доход</p>
-          </Card>
-        </div>
-
             <Card className="p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1">

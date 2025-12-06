@@ -47,14 +47,49 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
 
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-primary/10 p-4 rounded-full">
-              <Icon name="Building2" size={48} className="text-primary" />
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-full shadow-lg">
+              <Icon name="Building2" size={48} className="text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold">Открыть Агентство</h1>
-          <p className="text-muted-foreground">
-            Создайте своё агентство и управляйте анкетами девушек
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Открыть Агентство
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Получите полноценный личный кабинет для управления бизнесом
           </p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border border-purple-200 dark:border-purple-800 p-6 rounded-lg">
+          <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+            <Icon name="Sparkles" size={20} className="text-purple-600" />
+            Что входит в личный кабинет агентства:
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>Дашборд с аналитикой</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>Управление моделями</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>Финансовые отчеты</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>Календарь бронирований</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>История транзакций</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon name="Check" className="text-purple-600" size={16} />
+              <span>Настройки агентства</span>
+            </div>
+          </div>
         </div>
 
         <div className="bg-primary/5 p-6 rounded-lg space-y-4">
@@ -122,21 +157,46 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
             )}
           </div>
 
-          <div className="bg-primary/10 p-6 rounded-lg text-center space-y-2">
-            <p className="text-2xl font-bold">10 000 ₽</p>
+          <div className="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 border-2 border-purple-300 dark:border-purple-700 p-6 rounded-lg text-center space-y-3">
+            <div className="flex items-center justify-center gap-4">
+              <div>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">10,000 ₽</p>
+                <p className="text-xs text-muted-foreground">или</p>
+              </div>
+              <div className="text-3xl">💗</div>
+              <div>
+                <p className="text-2xl font-bold text-pink-600 dark:text-pink-400">1,000 LOVE</p>
+                <p className="text-xs text-muted-foreground">внутренняя валюта</p>
+              </div>
+            </div>
             <p className="text-sm text-muted-foreground">
-              Единоразовая оплата за открытие агентства
+              Единоразовая оплата • Полный доступ навсегда
             </p>
           </div>
 
-          <Button type="submit" className="w-full" size="lg">
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold shadow-lg" 
+            size="lg"
+          >
             <Icon name="CreditCard" size={20} />
-            <span className="ml-2">Перейти к оплате</span>
+            <span className="ml-2">Перейти к оплате и создать кабинет</span>
           </Button>
         </form>
 
-        <div className="text-center text-sm text-muted-foreground">
-          <p>После оплаты вы получите доступ к админ-панели агентства</p>
+        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
+          <div className="flex items-start gap-3">
+            <Icon name="Info" size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-medium text-blue-600 dark:text-blue-400 mb-1">Что произойдет после оплаты:</p>
+              <ul className="space-y-1 text-muted-foreground">
+                <li>✓ Автоматическое создание личного кабинета агентства</li>
+                <li>✓ Доступ к панели управления и статистике</li>
+                <li>✓ Возможность добавлять неограниченное количество моделей</li>
+                <li>✓ Все функции доступны сразу после оплаты</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
