@@ -122,6 +122,17 @@ export const NavigationDesktop = ({
                     <span>Баланс</span>
                   </button>
                   
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('my-ads');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="FileText" size={16} />
+                    <span>Мои объявления</span>
+                  </button>
+                  
                   {profile.isAgencyOwner ? (
                     <button
                       onClick={() => {
