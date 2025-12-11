@@ -190,6 +190,16 @@ export const NavigationDesktop = ({
                   <button
                     onClick={() => {
                       setShowProfileMenu(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Settings" size={16} />
+                    <span>Настройки</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
                       setUserRole(null);
                       setCurrentPage('home');
                     }}
