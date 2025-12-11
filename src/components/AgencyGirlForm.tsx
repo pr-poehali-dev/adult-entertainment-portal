@@ -100,8 +100,8 @@ const AgencyGirlForm = ({
           showAge: false,
           showHeight: false,
           showBodyType: false,
-          priceLabel: 'Стоимость в час',
-          priceSuffix: '₽/час',
+          priceLabel: 'Стоимость за сутки',
+          priceSuffix: '₽/сутки',
           showLocation: true,
           locationLabel: 'Адрес',
           customFields: [
