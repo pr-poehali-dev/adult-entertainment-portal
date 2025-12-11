@@ -20,13 +20,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
       </div>
       
       <div className="w-full mx-auto text-center relative z-10 px-4">
-        <div className="mb-6 animate-fade-in">
-          <span className="inline-block px-6 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary font-semibold tracking-wider text-sm uppercase">
-            Премиум услуги
-          </span>
-        </div>
-        
-        <div className="mb-8 animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '100ms' }}>
+        <div className="mb-8 animate-fade-in max-w-4xl mx-auto">
           <LipstickText text="LOVE IS" className="w-full" />
         </div>
         
