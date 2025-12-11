@@ -345,7 +345,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-2xl font-bold text-amber-500">2,000 ₽/мес</span>
               <span className="text-muted-foreground mx-2">или</span>
-              <span className="text-2xl font-bold text-yellow-500">200 💗 LOVE</span>
+              <span className="text-2xl font-bold text-yellow-500"></span>
             </div>
           </div>
         </div>
