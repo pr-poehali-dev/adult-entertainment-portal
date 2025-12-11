@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Page, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { LipstickText } from '@/components/animations/LipstickText';
 
 interface HomeHeroSectionProps {
   setCurrentPage: (page: Page) => void;
@@ -24,10 +25,9 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
           </span>
         </div>
         
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-fade-in text-center" style={{ animationDelay: '100ms' }}>
-          <span className="block mb-4">{t.home.heroTitle.split('\n')[0]}</span>
-          <span className="gold-shimmer block">{t.home.heroTitle.split('\n')[1] || 'по вызову'}</span>
-        </h1>
+        <div className="mb-8 animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '100ms' }}>
+          <LipstickText text="LOVE IS" className="w-full" />
+        </div>
         
         <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in text-center px-4" style={{ animationDelay: '200ms' }}>
           {t.home.heroSubtitle}
