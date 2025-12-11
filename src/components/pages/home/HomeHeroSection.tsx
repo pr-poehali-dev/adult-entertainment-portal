@@ -64,58 +64,290 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-          <button
-            onClick={() => setCurrentPage('agency-register')}
-            className="group relative bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 border-2 border-primary/20 hover:border-primary/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/20"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                <Icon name="Building2" size={32} className="text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">Откройте своё агентство</h3>
-              <p className="text-sm text-muted-foreground">Начните зарабатывать с командой</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
+          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-primary/20 rounded-3xl p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-300">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <Icon name="Sparkles" size={18} />
+              Новые возможности
             </div>
-          </button>
+            
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+              Откройте своё агентство
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Начните зарабатывать на управлении командой моделей. Полный контроль, статистика и автоматизация бизнеса.
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Icon name="Users" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Управление анкетами</h3>
+                  <p className="text-sm text-muted-foreground">Добавляйте и редактируйте профили моделей</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
+                  <Icon name="BarChart3" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Аналитика</h3>
+                  <p className="text-sm text-muted-foreground">Просмотры, бронирования, доходы</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                  <Icon name="Wallet" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Финансы</h3>
+                  <p className="text-sm text-muted-foreground">Прозрачная система выплат</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
+                  <Icon name="Shield" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Защита</h3>
+                  <p className="text-sm text-muted-foreground">Верификация и безопасность</p>
+                </div>
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => setCurrentPage('agency-register')}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+            >
+              <Icon name="Building2" size={20} className="mr-2" />
+              Открыть агентство
+            </Button>
+            
+            <div className="mt-6 text-center">
+              <span className="text-2xl font-bold text-primary">10,000 ₽</span>
+              <span className="text-muted-foreground mx-2">или</span>
+              <span className="text-2xl font-bold text-pink-500">1,000 💗 LOVE</span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => setCurrentPage('online-search')}
-            className="group relative bg-gradient-to-br from-secondary/10 to-secondary/5 hover:from-secondary/20 hover:to-secondary/10 border-2 border-secondary/20 hover:border-secondary/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/20"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors">
-                <Icon name="Heart" size={32} className="text-secondary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">Бесплатные знакомства</h3>
-              <p className="text-sm text-muted-foreground">Найдите свою половинку</p>
+          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-secondary/20 rounded-3xl p-8 shadow-2xl hover:shadow-secondary/20 transition-all duration-300">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <Icon name="Heart" size={18} />
+              Бесплатно навсегда
             </div>
-          </button>
+            
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+              Знакомства
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Найдите свою половинку без скрытых платежей. Общайтесь, знакомьтесь и встречайтесь абсолютно бесплатно.
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
+                  <Icon name="Search" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Умный поиск</h3>
+                  <p className="text-sm text-muted-foreground">Фильтры по интересам, возрасту, городу</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 rounded-full flex items-center justify-center">
+                  <Icon name="MessageCircle" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Неограниченные сообщения</h3>
+                  <p className="text-sm text-muted-foreground">Общайтесь без лимитов</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Icon name="Video" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Видеозвонки</h3>
+                  <p className="text-sm text-muted-foreground">Познакомьтесь лично онлайн</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                  <Icon name="Shield" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Безопасность</h3>
+                  <p className="text-sm text-muted-foreground">Проверенные анкеты, конфиденциальность</p>
+                </div>
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => setCurrentPage('online-search')}
+              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+            >
+              <Icon name="Heart" size={20} className="mr-2" />
+              Начать знакомство
+            </Button>
+            
+            <div className="mt-6 text-center">
+              <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
+                0 ₽ БЕСПЛАТНО
+              </span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => setCurrentPage('my-ads')}
-            className="group relative bg-gradient-to-br from-green-500/10 to-green-500/5 hover:from-green-500/20 hover:to-green-500/10 border-2 border-green-500/20 hover:border-green-500/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-green-500/20"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-green-500/10 rounded-xl group-hover:bg-green-500/20 transition-colors">
-                <Icon name="FileText" size={32} className="text-green-500" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">Разместить объявление</h3>
-              <p className="text-sm text-muted-foreground">Предложите свои услуги</p>
+          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-green-500/20 rounded-3xl p-8 shadow-2xl hover:shadow-green-500/20 transition-all duration-300">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <Icon name="TrendingUp" size={18} />
+              Увеличьте доход
             </div>
-          </button>
+            
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">
+              Разместить объявление
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Предложите свои услуги тысячам клиентов. Получайте заявки напрямую и зарабатывайте больше без посредников.
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                  <Icon name="FileText" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Простое размещение</h3>
+                  <p className="text-sm text-muted-foreground">Создайте объявление за 2 минуты</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center">
+                  <Icon name="Users" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Тысячи клиентов</h3>
+                  <p className="text-sm text-muted-foreground">Доступ к огромной аудитории</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
+                  <Icon name="Bell" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Мгновенные уведомления</h3>
+                  <p className="text-sm text-muted-foreground">Получайте отклики сразу</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-full flex items-center justify-center">
+                  <Icon name="DollarSign" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Без комиссий</h3>
+                  <p className="text-sm text-muted-foreground">Все деньги остаются у вас</p>
+                </div>
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => setCurrentPage('my-ads')}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+            >
+              <Icon name="Plus" size={20} className="mr-2" />
+              Создать объявление
+            </Button>
+            
+            <div className="mt-6 text-center">
+              <span className="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                0 ₽ БЕСПЛАТНО
+              </span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => setCurrentPage('profile')}
-            className="group relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 hover:from-amber-500/20 hover:to-amber-500/10 border-2 border-amber-500/20 hover:border-amber-500/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/20"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-amber-500/10 rounded-xl group-hover:bg-amber-500/20 transition-colors">
-                <Icon name="Crown" size={32} className="text-amber-500" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">Купить VIP</h3>
-              <p className="text-sm text-muted-foreground">Получите больше возможностей</p>
+          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-amber-500/20 rounded-3xl p-8 shadow-2xl hover:shadow-amber-500/20 transition-all duration-300">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <Icon name="Crown" size={18} />
+              Премиум статус
             </div>
-          </button>
+            
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent mb-6">
+              Купить VIP
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Получите максимум от платформы. Приоритет в поиске, эксклюзивные функции и больше клиентов.
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center">
+                  <Icon name="Star" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Топ выдачи</h3>
+                  <p className="text-sm text-muted-foreground">Ваш профиль всегда на первых местах</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center">
+                  <Icon name="Zap" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Выделение</h3>
+                  <p className="text-sm text-muted-foreground">Золотая рамка и значок VIP</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                  <Icon name="BarChart" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Статистика</h3>
+                  <p className="text-sm text-muted-foreground">Подробная аналитика просмотров</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                  <Icon name="Headphones" size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground mb-1">Поддержка VIP</h3>
+                  <p className="text-sm text-muted-foreground">Приоритетная помощь 24/7</p>
+                </div>
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => setCurrentPage('profile')}
+              className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+            >
+              <Icon name="Crown" size={20} className="mr-2" />
+              Активировать VIP
+            </Button>
+            
+            <div className="mt-6 text-center">
+              <span className="text-2xl font-bold text-amber-500">2,000 ₽/мес</span>
+              <span className="text-muted-foreground mx-2">или</span>
+              <span className="text-2xl font-bold text-yellow-500">200 💗 LOVE</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
