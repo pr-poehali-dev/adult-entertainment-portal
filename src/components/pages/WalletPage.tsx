@@ -9,6 +9,7 @@ import { DepositForm } from './wallet/DepositForm';
 import { WithdrawForm } from './wallet/WithdrawForm';
 import { mockTransactions } from './wallet/mockTransactions';
 import { WalletCard } from '@/components/wallet/WalletCard';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface WalletPageProps {
   setCurrentPage: (page: Page) => void;
@@ -42,14 +43,7 @@ export const WalletPage = ({ setCurrentPage, wallet, onOpenLovePurchase }: Walle
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-green-50/20 dark:via-green-950/10 to-background">
       <div className="max-w-wide mx-auto px-4 py-8">
-        <Button
-          variant="ghost"
-          onClick={() => setCurrentPage('home')}
-          className="mb-6"
-        >
-          <Icon name="ArrowLeft" size={20} className="mr-2" />
-          На главную
-        </Button>
+        <PageBreadcrumb currentPage="wallet" setCurrentPage={setCurrentPage} />
 
         <div className="text-center space-y-4 mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">

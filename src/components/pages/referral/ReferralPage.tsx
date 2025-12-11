@@ -6,6 +6,7 @@ import Icon from '@/components/ui/icon';
 import { ReferralStats, ReferralUser, ReferralTransaction, Page } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { testReferrals, testReferralTransactions, getReferralStats } from '@/data/testDatabase';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface ReferralPageProps {
   setCurrentPage?: (page: Page) => void;
@@ -35,16 +36,7 @@ export const ReferralPage = ({ setCurrentPage }: ReferralPageProps = {}) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background py-12 px-4 animate-fade-in">
       <div className="max-w-wide mx-auto">
-        {setCurrentPage && (
-          <Button
-            variant="ghost"
-            onClick={() => setCurrentPage('home')}
-            className="mb-6"
-          >
-            <Icon name="ArrowLeft" size={20} className="mr-2" />
-            На главную
-          </Button>
-        )}
+        {setCurrentPage && <PageBreadcrumb currentPage="referral" setCurrentPage={setCurrentPage} />}
         <div className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             <span className="gold-shimmer">Партнёрская программа</span>

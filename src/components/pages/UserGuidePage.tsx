@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface UserGuidePageProps {
   setCurrentPage: (page: Page) => void;
@@ -10,18 +11,10 @@ interface UserGuidePageProps {
 export const UserGuidePage = ({ setCurrentPage }: UserGuidePageProps) => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-6 flex items-center gap-3">
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={() => setCurrentPage('home')}
-        >
-          <Icon name="ArrowLeft" size={20} />
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold">Пользовательская Инструкция</h1>
-          <p className="text-sm text-muted-foreground">Руководство по использованию платформы Elite</p>
-        </div>
+      <PageBreadcrumb currentPage="user-guide" setCurrentPage={setCurrentPage} />
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Пользовательская Инструкция</h1>
+        <p className="text-sm text-muted-foreground">Руководство по использованию платформы Elite</p>
       </div>
 
       <div className="space-y-6">

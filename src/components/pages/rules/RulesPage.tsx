@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface RulesPageProps {
   setCurrentPage?: (page: Page) => void;
@@ -11,16 +12,7 @@ interface RulesPageProps {
 export const RulesPage = ({ setCurrentPage }: RulesPageProps = {}) => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in max-w-4xl">
-      {setCurrentPage && (
-        <Button
-          variant="ghost"
-          onClick={() => setCurrentPage('home')}
-          className="mb-6"
-        >
-          <Icon name="ArrowLeft" size={20} className="mr-2" />
-          На главную
-        </Button>
-      )}
+      {setCurrentPage && <PageBreadcrumb currentPage="rules" setCurrentPage={setCurrentPage} />}
       <Card>
         <CardHeader>
           <CardTitle className="text-4xl text-primary flex items-center gap-3">

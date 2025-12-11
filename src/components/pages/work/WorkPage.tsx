@@ -5,6 +5,7 @@ import { PaidAdsSection } from './PaidAdsSection';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface WorkPageProps {
   setCurrentPage?: (page: Page) => void;
@@ -15,16 +16,7 @@ export const WorkPage = ({ setCurrentPage }: WorkPageProps = {}) => {
 
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
-      {setCurrentPage && (
-        <Button
-          variant="ghost"
-          onClick={() => setCurrentPage('home')}
-          className="mb-6"
-        >
-          <Icon name="ArrowLeft" size={20} className="mr-2" />
-          На главную
-        </Button>
-      )}
+      {setCurrentPage && <PageBreadcrumb currentPage="work" setCurrentPage={setCurrentPage} />}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
           <Icon name="Briefcase" size={36} className="text-primary" />

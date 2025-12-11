@@ -8,6 +8,7 @@ import { UserAd, AdResponse, Profile, Page } from '@/types';
 import { CreateAdModal } from './CreateAdModal';
 import { AdResponseModal } from './AdResponseModal';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface MyAdsPageProps {
   profile: Profile;
@@ -188,16 +189,17 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <PageBreadcrumb 
+        currentPage="my-ads" 
+        setCurrentPage={setCurrentPage}
+        customBreadcrumbs={[
+          { label: 'Главная', page: 'home' },
+          { label: 'Профиль', page: 'profile' },
+          { label: 'Мои объявления' },
+        ]}
+      />
       <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setCurrentPage('profile')}
-          >
-            <Icon name="ArrowLeft" size={20} />
-          </Button>
-          <div>
+        <div>
             <h1 className="text-2xl font-bold">Мои объявления</h1>
             <p className="text-sm text-muted-foreground">
               {profile.role === 'seller' ? 'Предлагайте свои услуги' : 'Размещайте запросы услуг'}

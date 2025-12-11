@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface RafflePageProps {
   setCurrentPage: (page: Page) => void;
@@ -54,14 +55,7 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background">
       <div className="max-w-wide mx-auto px-4 py-8">
-        <Button
-          variant="ghost"
-          onClick={() => setCurrentPage('home')}
-          className="mb-6"
-        >
-          <Icon name="ArrowLeft" size={20} className="mr-2" />
-          На главную
-        </Button>
+        <PageBreadcrumb currentPage="raffle" setCurrentPage={setCurrentPage} />
 
         <div className="text-center space-y-6 mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">

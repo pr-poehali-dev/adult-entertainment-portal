@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import CreatePartyModal, { PartyFormData } from './CreatePartyModal';
 import { PrivateParty, Page } from '@/types';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface PartiesPageProps {
   onPartyClick: (partyId: number) => void;
@@ -148,16 +149,7 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard, setCur
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
-        {setCurrentPage && (
-          <Button
-            variant="ghost"
-            onClick={() => setCurrentPage('home')}
-            className="mb-6"
-          >
-            <Icon name="ArrowLeft" size={20} className="mr-2" />
-            На главную
-          </Button>
-        )}
+        {setCurrentPage && <PageBreadcrumb currentPage="parties" setCurrentPage={setCurrentPage} />}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Приватные вечеринки</h1>

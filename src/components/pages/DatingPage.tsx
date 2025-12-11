@@ -9,6 +9,7 @@ import { DatingFilters } from './dating/DatingFilters';
 import { DatingProfileCard, DatingProfile } from './dating/DatingProfileCard';
 import { DatingProfileDetail } from './dating/DatingProfileDetail';
 import { mockProfiles } from './dating/mockProfiles';
+import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface DatingPageProps {
   setCurrentPage: (page: Page) => void;
@@ -91,14 +92,7 @@ export const DatingPage = ({ setCurrentPage }: DatingPageProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-pink-50/30 dark:via-pink-950/10 to-background">
       <div className="max-w-wide mx-auto px-4 py-8">
-        <Button
-          variant="ghost"
-          onClick={() => setCurrentPage('home')}
-          className="mb-6"
-        >
-          <Icon name="ArrowLeft" size={20} className="mr-2" />
-          На главную
-        </Button>
+        <PageBreadcrumb currentPage="dating" setCurrentPage={setCurrentPage} />
         <Button
           variant="ghost"
           onClick={() => setCurrentPage('home')}
