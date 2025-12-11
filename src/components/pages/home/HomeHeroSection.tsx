@@ -65,17 +65,17 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-purple-500/10 hover:to-pink-500/10 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/60 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-purple-500/10 hover:to-pink-500/10 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/60 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer flex flex-col">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Sparkles" size={18} />
               Новые возможности
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
               Откройте своё агентство
             </h2>
             
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed h-[84px]">
               Начните зарабатывать на управлении командой моделей. Полный контроль, статистика и автоматизация бизнеса.
             </p>
             
@@ -123,34 +123,34 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             
             <Button
               onClick={() => setCurrentPage('agency-register')}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all h-[64px]"
             >
               <Icon name="Building2" size={20} className="mr-2" />
               Открыть агентство
             </Button>
             
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-2xl font-bold text-primary">10,000 ₽</span>
               <span className="text-muted-foreground mx-2">или</span>
               <span className="text-2xl font-bold text-pink-500">1,000 💗 LOVE</span>
             </div>
           </div>
 
-          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-pink-500/10 hover:to-rose-500/10 backdrop-blur-sm border-2 border-secondary/20 hover:border-pink-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-pink-500/10 hover:to-rose-500/10 backdrop-blur-sm border-2 border-secondary/20 hover:border-pink-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer flex flex-col">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Heart" size={18} />
               Бесплатно навсегда
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
               Знакомства
             </h2>
             
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed h-[84px]">
               Найдите свою половинку без скрытых платежей. Общайтесь, знакомьтесь и встречайтесь абсолютно бесплатно.
             </p>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-6 flex-grow">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
                   <Icon name="Search" size={24} className="text-white" />
@@ -194,34 +194,34 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             
             <Button
               onClick={() => setCurrentPage('online-search')}
-              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all h-[64px]"
             >
               <Icon name="Heart" size={20} className="mr-2" />
               Начать знакомство
             </Button>
             
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                 0 ₽ БЕСПЛАТНО
               </span>
             </div>
           </div>
 
-          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-green-500/10 hover:to-emerald-500/10 backdrop-blur-sm border-2 border-green-500/20 hover:border-green-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-green-500/10 hover:to-emerald-500/10 backdrop-blur-sm border-2 border-green-500/20 hover:border-green-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer flex flex-col">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="TrendingUp" size={18} />
               Увеличьте доход
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
               Разместить объявление
             </h2>
             
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed h-[84px]">
               Предложите свои услуги тысячам клиентов. Получайте заявки напрямую и зарабатывайте больше без посредников.
             </p>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-6 flex-grow">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
                   <Icon name="FileText" size={24} className="text-white" />
@@ -265,34 +265,34 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             
             <Button
               onClick={() => setCurrentPage('my-ads')}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all h-[64px]"
             >
               <Icon name="Plus" size={20} className="mr-2" />
               Создать объявление
             </Button>
             
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
                 0 ₽ БЕСПЛАТНО
               </span>
             </div>
           </div>
 
-          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-amber-500/10 hover:to-yellow-500/10 backdrop-blur-sm border-2 border-amber-500/20 hover:border-amber-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-amber-500/10 hover:to-yellow-500/10 backdrop-blur-sm border-2 border-amber-500/20 hover:border-amber-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer flex flex-col">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Crown" size={18} />
               Премиум статус
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
               Купить VIP
             </h2>
             
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed h-[84px]">
               Получите максимум от платформы. Приоритет в поиске, эксклюзивные функции и больше клиентов.
             </p>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-6 flex-grow">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center">
                   <Icon name="Star" size={24} className="text-white" />
@@ -336,13 +336,13 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             
             <Button
               onClick={() => setCurrentPage('profile')}
-              className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white text-lg py-6 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all h-[64px]"
             >
               <Icon name="Crown" size={20} className="mr-2" />
               Активировать VIP
             </Button>
             
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-2xl font-bold text-amber-500">2,000 ₽/мес</span>
               <span className="text-muted-foreground mx-2">или</span>
               <span className="text-2xl font-bold text-yellow-500">200 💗 LOVE</span>
