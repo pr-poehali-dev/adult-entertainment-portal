@@ -122,7 +122,7 @@ export const translations: Record<Language, Translations> = {
   ru: {
     nav: {
       home: 'Главная',
-      catalog: 'Каталог',
+      catalog: 'Объявления',
       favorites: 'Избранное',
       messages: 'Сообщения',
       profile: 'Профиль',
@@ -133,7 +133,7 @@ export const translations: Record<Language, Translations> = {
     home: {
       heroTitle: 'Мир магических\nвстреч',
       heroSubtitle: 'Премиальная платформа для взрослых. Конфиденциальность, безопасность и высочайший уровень сервиса',
-      viewCatalog: 'Посмотреть каталог',
+      viewCatalog: 'Посмотреть объявления',
       register: 'Регистрация',
       categoriesTitle: 'Категории услуг',
       advantagesTitle: 'Преимущества платформы',
@@ -145,7 +145,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     catalog: {
-      title: 'Каталог услуг',
+      title: 'Объявления',
       search: 'Поиск...',
       allServices: 'Все услуги',
       allCountries: 'Все страны',
