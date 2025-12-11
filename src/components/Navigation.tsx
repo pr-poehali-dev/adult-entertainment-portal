@@ -69,7 +69,7 @@ const Navigation = ({
   }, [showMobileMenu]);
   
   return (
-  <nav className="border-b border-border/50 glass-effect shadow-lg">
+  <nav className="border-b border-border/50 glass-effect shadow-lg sticky top-0 z-50">
     <div className="max-w-wide mx-auto px-2 sm:px-4 py-4">
       <div className="flex items-center justify-between gap-1">
 
