@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Page, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LipstickText } from '@/components/animations/LipstickText';
+import Icon from '@/components/ui/icon';
 
 interface HomeHeroSectionProps {
   setCurrentPage: (page: Page) => void;
@@ -33,7 +34,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
           {t.home.heroSubtitle}
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in" style={{ animationDelay: '300ms' }}>
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in mb-16" style={{ animationDelay: '300ms' }}>
           <Button 
             size="lg" 
             onClick={() => setCurrentPage('catalog')} 
@@ -61,6 +62,60 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               </Button>
             </>
           )}
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
+          <button
+            onClick={() => setCurrentPage('agency-register')}
+            className="group relative bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 border-2 border-primary/20 hover:border-primary/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/20"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                <Icon name="Building2" size={32} className="text-primary" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Откройте своё агентство</h3>
+              <p className="text-sm text-muted-foreground">Начните зарабатывать с командой</p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => setCurrentPage('online-search')}
+            className="group relative bg-gradient-to-br from-secondary/10 to-secondary/5 hover:from-secondary/20 hover:to-secondary/10 border-2 border-secondary/20 hover:border-secondary/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/20"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors">
+                <Icon name="Heart" size={32} className="text-secondary" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Бесплатные знакомства</h3>
+              <p className="text-sm text-muted-foreground">Найдите свою половинку</p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => setCurrentPage('my-ads')}
+            className="group relative bg-gradient-to-br from-green-500/10 to-green-500/5 hover:from-green-500/20 hover:to-green-500/10 border-2 border-green-500/20 hover:border-green-500/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-green-500/20"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-green-500/10 rounded-xl group-hover:bg-green-500/20 transition-colors">
+                <Icon name="FileText" size={32} className="text-green-500" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Разместить объявление</h3>
+              <p className="text-sm text-muted-foreground">Предложите свои услуги</p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => setCurrentPage('profile')}
+            className="group relative bg-gradient-to-br from-amber-500/10 to-amber-500/5 hover:from-amber-500/20 hover:to-amber-500/10 border-2 border-amber-500/20 hover:border-amber-500/40 rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/20"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-amber-500/10 rounded-xl group-hover:bg-amber-500/20 transition-colors">
+                <Icon name="Crown" size={32} className="text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">Купить VIP</h3>
+              <p className="text-sm text-muted-foreground">Получите больше возможностей</p>
+            </div>
+          </button>
         </div>
       </div>
     </section>
