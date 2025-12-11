@@ -60,12 +60,12 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           {t.nav.home}
         </button>
+        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2 py-2">
+          <Icon name="Heart" size={16} />
+          Знакомства
+        </button>
         <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           {t.nav.catalog}
-        </button>
-        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2 py-2">
-          <Icon name="Radio" size={16} />
-          Онлайн
         </button>
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Работа
