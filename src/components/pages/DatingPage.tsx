@@ -99,6 +99,14 @@ export const DatingPage = ({ setCurrentPage }: DatingPageProps) => {
           <Icon name="ArrowLeft" size={20} className="mr-2" />
           На главную
         </Button>
+        <Button
+          variant="ghost"
+          onClick={() => setCurrentPage('home')}
+          className="mb-6"
+        >
+          <Icon name="ArrowLeft" size={20} className="mr-2" />
+          На главную
+        </Button>
 
         <div className="text-center space-y-4 mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">

@@ -5,15 +5,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import CreatePartyModal, { PartyFormData } from './CreatePartyModal';
-import { PrivateParty } from '@/types';
+import { PrivateParty, Page } from '@/types';
 
 interface PartiesPageProps {
   onPartyClick: (partyId: number) => void;
   currentUserId: number;
   onOrganizerDashboard?: () => void;
+  setCurrentPage?: (page: Page) => void;
 }
 
-const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: PartiesPageProps) => {
+const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard, setCurrentPage }: PartiesPageProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [parties, setParties] = useState<PrivateParty[]>([
@@ -147,6 +148,16 @@ const PartiesPage = ({ onPartyClick, currentUserId, onOrganizerDashboard }: Part
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
+        {setCurrentPage && (
+          <Button
+            variant="ghost"
+            onClick={() => setCurrentPage('home')}
+            className="mb-6"
+          >
+            <Icon name="ArrowLeft" size={20} className="mr-2" />
+            На главную
+          </Button>
+        )}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Приватные вечеринки</h1>

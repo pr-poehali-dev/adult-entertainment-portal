@@ -4,8 +4,15 @@ import { ChatWindow } from '@/components/messages/ChatWindow';
 import { Chat, Message } from '@/components/messages/types';
 import { hasCensoredContent } from '@/utils/contactCensorship';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
+import { Page } from '@/types';
 
-const MessagesPage = () => {
+interface MessagesPageProps {
+  setCurrentPage?: (page: Page) => void;
+}
+
+const MessagesPage = ({ setCurrentPage }: MessagesPageProps = {}) => {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -263,6 +270,16 @@ const MessagesPage = () => {
 
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
+      {setCurrentPage && (
+        <Button
+          variant="ghost"
+          onClick={() => setCurrentPage('home')}
+          className="mb-6"
+        >
+          <Icon name="ArrowLeft" size={20} className="mr-2" />
+          На главную
+        </Button>
+      )}
       <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">

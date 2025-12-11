@@ -3,12 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { Page } from '@/types';
 
-export const SearchPage = () => {
+interface SearchPageProps {
+  setCurrentPage?: (page: Page) => void;
+}
+
+export const SearchPage = ({ setCurrentPage }: SearchPageProps = {}) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
+      {setCurrentPage && (
+        <Button
+          variant="ghost"
+          onClick={() => setCurrentPage('home')}
+          className="mb-6"
+        >
+          <Icon name="ArrowLeft" size={20} className="mr-2" />
+          На главную
+        </Button>
+      )}
       <Card>
         <CardHeader>
           <CardTitle className="text-4xl text-primary flex items-center gap-3">

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { Orientation, SexualPreference } from '@/types';
+import { Orientation, SexualPreference, Page } from '@/types';
 
 interface OnlineUser {
   id: number;
@@ -95,7 +95,11 @@ const mockOnlineUsers: OnlineUser[] = [
   },
 ];
 
-export const OnlineSearchPage = () => {
+interface OnlineSearchPageProps {
+  setCurrentPage: (page: Page) => void;
+}
+
+export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
   const [users, setUsers] = useState<OnlineUser[]>(mockOnlineUsers);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterGender, setFilterGender] = useState<string>('all');
@@ -131,6 +135,14 @@ export const OnlineSearchPage = () => {
 
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
+      <Button
+        variant="ghost"
+        onClick={() => setCurrentPage('home')}
+        className="mb-6"
+      >
+        <Icon name="ArrowLeft" size={20} className="mr-2" />
+        На главную
+      </Button>
       <div className="mb-8">
         <h1 className="text-5xl font-bold mb-4 text-primary">Поиск онлайн</h1>
         <p className="text-lg text-muted-foreground">

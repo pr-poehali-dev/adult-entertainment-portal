@@ -198,7 +198,7 @@ export const useAppPages = ({
       case 'search':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <SearchPage />
+            <SearchPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
@@ -218,21 +218,21 @@ export const useAppPages = ({
       case 'messages':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <MessagesPage />
+            <MessagesPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
       case 'rules':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <RulesPage />
+            <RulesPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
       case 'work':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <WorkPage />
+            <WorkPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
@@ -246,7 +246,7 @@ export const useAppPages = ({
       case 'referral':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <ReferralPage />
+            <ReferralPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
@@ -298,7 +298,7 @@ export const useAppPages = ({
       case 'online-search':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <OnlineSearchPage />
+            <OnlineSearchPage setCurrentPage={setCurrentPage} />
           </Suspense>
         );
       
@@ -312,6 +312,7 @@ export const useAppPages = ({
               }}
               currentUserId={1}
               onOrganizerDashboard={() => setCurrentPage('organizer-dashboard')}
+              setCurrentPage={setCurrentPage}
             />
           </Suspense>
         );
