@@ -105,7 +105,7 @@ export const NavigationDesktop = ({
 
   return (
     <>
-      <div className="hidden md:flex items-center space-x-8" style={{ visibility: 'hidden' }}>
+      <div className="hidden md:flex items-center space-x-8">
         <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors tracking-wide">
           {t.nav.home}
         </button>
