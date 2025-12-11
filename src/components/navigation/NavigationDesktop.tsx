@@ -58,13 +58,12 @@ export const NavigationDesktop = ({
     return (
       <div className="flex items-center space-x-6 justify-center text-base">
         <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-          {t.nav.home}
+          Главная
         </button>
         <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-          {t.nav.catalog}
+          Объявления
         </button>
-        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2 py-2">
-          <Icon name="Radio" size={16} />
+        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Онлайн
         </button>
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
@@ -73,13 +72,13 @@ export const NavigationDesktop = ({
         {userRole && (
           <>
             <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-              {t.nav.favorites}
+              Избранное
             </button>
             <button 
               onClick={() => setCurrentPage('messages')} 
               className="text-foreground font-medium hover:text-primary transition-colors relative py-2"
             >
-              {t.nav.messages}
+              Сообщения
               {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
                 <span className="absolute -top-0 -right-3 w-4 h-4 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
                   {notifications.filter(n => !n.read && n.type === 'message').length}
@@ -200,6 +199,33 @@ export const NavigationDesktop = ({
                 </div>
               )}
             </div>
+            
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 hover:bg-muted rounded-lg transition-colors"
+              title="Уведомления"
+            >
+              <Icon name="Bell" size={18} className="text-foreground" />
+              {notifications.filter(n => !n.read).length > 0 && (
+                <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full" />
+              )}
+            </button>
+            
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              title={soundEnabled ? 'Выключить звук' : 'Включить звук'}
+            >
+              <Icon name={soundEnabled ? 'Volume2' : 'VolumeX'} size={18} className="text-foreground" />
+            </button>
+            
+            <button
+              onClick={() => setCurrentPage('wallet')}
+              className="px-4 py-2 rounded-lg border border-primary/20 bg-transparent hover:bg-primary/5 transition-colors flex items-center gap-2"
+            >
+              <Icon name="Wallet" size={18} className="text-primary" />
+              <span className="font-semibold text-foreground">{rubBalance.toLocaleString()} ₽</span>
+            </button>
           </>
         )}
       </div>
