@@ -25,6 +25,9 @@ export const RafflePage = ({ setCurrentPage }: RafflePageProps) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isParticipating, setIsParticipating] = useState(false);
+  const [userLogin, setUserLogin] = useState(false);
+  const [isVip, setIsVip] = useState(false);
+  const [showQuickReg, setShowQuickReg] = useState(false);
 
   const winners: Winner[] = [
     { id: 1, name: 'Дмитрий К.', date: '22 ноября 2024', prize: 'iPhone 17 Pro Max (1TB)', amount: 150000 },
