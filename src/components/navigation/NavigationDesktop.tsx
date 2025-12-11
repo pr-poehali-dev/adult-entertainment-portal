@@ -84,6 +84,17 @@ export const NavigationDesktop = ({
                 </span>
               )}
             </button>
+            <button 
+              onClick={() => setCurrentPage('profile')} 
+              className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1.5"
+            >
+              <Avatar className="h-4 w-4">
+                <AvatarFallback className="bg-primary text-primary-foreground text-[8px] font-medium">
+                  {profile.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              <span>{profile.name}</span>
+            </button>
           </>
         )}
       </div>
