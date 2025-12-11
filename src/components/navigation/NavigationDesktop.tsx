@@ -68,16 +68,6 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors">
           Работа
         </button>
-        {!profile.isAgencyOwner && (
-          <button onClick={() => setCurrentPage('agency-register')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
-            <Icon name="Building2" size={12} />
-            Открыть Агентство
-          </button>
-        )}
-        <button onClick={() => setCurrentPage('referral')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
-          <Icon name="Users" size={12} />
-          Партнёрка
-        </button>
         {userRole && (
           <>
             <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors">
@@ -96,9 +86,6 @@ export const NavigationDesktop = ({
             </button>
           </>
         )}
-        <button onClick={() => setCurrentPage('rules')} className="text-foreground font-medium hover:text-primary transition-colors">
-          {t.nav.rules}
-        </button>
       </div>
     );
   }
@@ -165,7 +152,7 @@ export const NavigationDesktop = ({
                     <span>Мой профиль</span>
                   </button>
                   
-                  {profile.isAgencyOwner && (
+                  {profile.isAgencyOwner ? (
                     <button
                       onClick={() => {
                         setShowProfileMenu(false);
@@ -176,7 +163,29 @@ export const NavigationDesktop = ({
                       <Icon name="Building2" size={16} className="text-primary" />
                       <span className="font-medium">Моё Агентство</span>
                     </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setCurrentPage('agency-register');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                    >
+                      <Icon name="Building2" size={16} />
+                      <span>Открыть Агентство</span>
+                    </button>
                   )}
+                  
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('referral');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Users" size={16} />
+                    <span>Партнёрка</span>
+                  </button>
                   
                   <button
                     onClick={() => {
