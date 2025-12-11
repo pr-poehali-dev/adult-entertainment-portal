@@ -19,6 +19,7 @@ import AgencyDashboard from '@/components/pages/AgencyDashboard';
 import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
+import { SettingsPage } from '@/components/pages/SettingsPage';
 
 const Index = () => {
   // Состояние
@@ -150,6 +151,37 @@ const Index = () => {
         onDeleteGirl={handlers.handleDeleteGirl}
         onToggleActive={handlers.handleToggleGirlActive}
       />
+    );
+  }
+
+  if (state.currentPage === 'settings') {
+    return (
+      <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
+        <div className="min-h-screen bg-background text-foreground">
+          <Navigation 
+            currentPage={state.currentPage}
+            setCurrentPage={state.setCurrentPage}
+            userRole={state.userRole}
+            setUserRole={state.setUserRole}
+            profile={state.profile}
+            notifications={state.notifications}
+            setNotifications={state.setNotifications}
+            showNotifications={state.showNotifications}
+            setShowNotifications={state.setShowNotifications}
+            isDarkTheme={state.isDarkTheme}
+            setIsDarkTheme={state.setIsDarkTheme}
+            wallet={state.wallet}
+            soundEnabled={state.soundEnabled}
+            setSoundEnabled={state.setSoundEnabled}
+          />
+          <SettingsPage
+            isDarkTheme={state.isDarkTheme}
+            setIsDarkTheme={state.setIsDarkTheme}
+            soundEnabled={state.soundEnabled}
+            setSoundEnabled={state.setSoundEnabled}
+          />
+        </div>
+      </div>
     );
   }
 
