@@ -5,15 +5,65 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate';
+
+interface AgencyTypeOption {
+  id: AgencyType;
+  icon: string;
+  title: string;
+  description: string;
+  gradient: string;
+}
+
 interface AgencyRegisterProps {
   onBack: () => void;
   onPayment: (agencyName: string) => void;
 }
 
 const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
+  const [step, setStep] = useState<'type' | 'details'>(type);
+  const [selectedType, setSelectedType] = useState<AgencyType | null>(null);
   const [agencyName, setAgencyName] = useState('');
   const [error, setError] = useState('');
   const { t } = useLanguage();
+
+  const agencyTypes: AgencyTypeOption[] = [
+    {
+      id: 'escort',
+      icon: 'Users',
+      title: 'Эскорт агентство',
+      description: 'Управление моделями, каталог услуг, бронирования',
+      gradient: 'from-purple-500 to-pink-500'
+    },
+    {
+      id: 'massage',
+      icon: 'Sparkles',
+      title: 'Массажный салон',
+      description: 'Мастера массажа, расписание, онлайн-запись',
+      gradient: 'from-blue-500 to-cyan-500'
+    },
+    {
+      id: 'striptease',
+      icon: 'Music',
+      title: 'Стриптиз клуб',
+      description: 'Танцовщицы и танцоры, выступления, мероприятия',
+      gradient: 'from-pink-500 to-rose-500'
+    },
+    {
+      id: 'virtual',
+      icon: 'Smartphone',
+      title: 'Агентство виртуальных услуг',
+      description: 'Видео-звонки, онлайн общение, контент',
+      gradient: 'from-violet-500 to-purple-500'
+    },
+    {
+      id: 'realestate',
+      icon: 'Building2',
+      title: 'Агентство недвижимости',
+      description: 'Аренда апартаментов, каталог объектов',
+      gradient: 'from-orange-500 to-amber-500'
+    }
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,26 +83,102 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
     onPayment(agencyName.trim());
   };
 
+  if (step === 'type') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4">
+        <Card className="w-full max-w-4xl p-8 space-y-6 bg-card/90 backdrop-blur-sm">
+          <Button
+            variant="ghost"
+            onClick={onBack}
+            className="mb-4"
+          >
+            <Icon name="ArrowLeft" size={20} />
+            <span className="ml-2">Назад</span>
+          </Button>
+
+          <div className="text-center space-y-2 mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-full shadow-lg">
+                <Icon name="Building2" size={48} className="text-white" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Выберите тип агентства
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Выберите специализацию вашего бизнеса
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {agencyTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => {
+                  setSelectedType(type.id);
+                  setStep('details');
+                }}
+                className="group relative overflow-hidden rounded-xl border-2 border-border hover:border-primary transition-all p-6 text-left bg-card hover:shadow-xl"
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-16 h-16 rounded-lg bg-gradient-to-br ${type.gradient} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                    <Icon name={type.icon} size={32} className="text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+                      {type.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {type.description}
+                    </p>
+                  </div>
+                  <Icon name="ChevronRight" size={24} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-4 rounded-lg mt-6">
+            <div className="flex items-start gap-3">
+              <Icon name="Info" size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm">
+                <p className="font-medium text-blue-600 dark:text-blue-400 mb-1">Все типы агентств включают:</p>
+                <ul className="space-y-1 text-muted-foreground">
+                  <li>✓ Личный кабинет с полной аналитикой</li>
+                  <li>✓ Неограниченное количество анкет сотрудников</li>
+                  <li>✓ Управление бронированиями и финансами</li>
+                  <li>✓ Приоритетная поддержка</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  const selectedTypeData = agencyTypes.find(t => t.id === selectedType);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl p-8 space-y-6 bg-card/90 backdrop-blur-sm">
         <Button
           variant="ghost"
-          onClick={onBack}
+          onClick={() => setStep('type')}
           className="mb-4"
         >
           <Icon name="ArrowLeft" size={20} />
-          <span className="ml-2">Назад</span>
+          <span className="ml-2">Назад к выбору типа</span>
         </Button>
 
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-full shadow-lg">
-              <Icon name="Building2" size={48} className="text-white" />
+            <div className={`bg-gradient-to-br ${selectedTypeData?.gradient || 'from-purple-500 to-pink-500'} p-4 rounded-full shadow-lg`}>
+              <Icon name={selectedTypeData?.icon || 'Building2'} size={48} className="text-white" />
             </div>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Открыть Агентство
+            {selectedTypeData?.title || 'Открыть Агентство'}
           </h1>
           <p className="text-muted-foreground text-lg">
             Получите полноценный личный кабинет для управления бизнесом
