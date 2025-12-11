@@ -54,32 +54,32 @@ export const NavigationDesktop = ({
 
   if (isSecondRow) {
     return (
-      <div className="flex items-center space-x-3 justify-center text-xs">
-        <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors">
+      <div className="flex items-center space-x-6 justify-center text-base">
+        <button onClick={() => setCurrentPage('home')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           {t.nav.home}
         </button>
-        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors">
+        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           {t.nav.catalog}
         </button>
-        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1">
-          <Icon name="Radio" size={12} />
+        <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2 py-2">
+          <Icon name="Radio" size={16} />
           Онлайн
         </button>
-        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors">
+        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Работа
         </button>
         {userRole && (
           <>
-            <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors">
+            <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
               {t.nav.favorites}
             </button>
             <button 
               onClick={() => setCurrentPage('messages')} 
-              className="text-foreground font-medium hover:text-primary transition-colors relative"
+              className="text-foreground font-medium hover:text-primary transition-colors relative py-2"
             >
               {t.nav.messages}
               {notifications.filter(n => !n.read && n.type === 'message').length > 0 && (
-                <span className="absolute -top-1 -right-2 w-3.5 h-3.5 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                <span className="absolute -top-0 -right-3 w-4 h-4 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
                   {notifications.filter(n => !n.read && n.type === 'message').length}
                 </span>
               )}
@@ -87,15 +87,15 @@ export const NavigationDesktop = ({
             <div className="relative">
               <button 
                 onClick={() => setShowProfileMenu(!showProfileMenu)} 
-                className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1.5"
+                className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2 py-2"
               >
-                <Avatar className="h-4 w-4">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-[8px] font-medium">
+                <Avatar className="h-5 w-5">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-medium">
                     {profile.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 <span>{profile.name}</span>
-                <Icon name="ChevronDown" size={12} />
+                <Icon name="ChevronDown" size={14} />
               </button>
 
               {showProfileMenu && (
