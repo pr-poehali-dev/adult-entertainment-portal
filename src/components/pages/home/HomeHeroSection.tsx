@@ -65,7 +65,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-primary/20 rounded-3xl p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-purple-500/10 hover:to-pink-500/10 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/60 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Sparkles" size={18} />
               Новые возможности
@@ -136,7 +136,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-secondary/20 rounded-3xl p-8 shadow-2xl hover:shadow-secondary/20 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-pink-500/10 hover:to-rose-500/10 backdrop-blur-sm border-2 border-secondary/20 hover:border-pink-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-pink-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Heart" size={18} />
               Бесплатно навсегда
@@ -207,7 +207,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-green-500/20 rounded-3xl p-8 shadow-2xl hover:shadow-green-500/20 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-green-500/10 hover:to-emerald-500/10 backdrop-blur-sm border-2 border-green-500/20 hover:border-green-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-green-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="TrendingUp" size={18} />
               Увеличьте доход
@@ -278,7 +278,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-2 border-amber-500/20 rounded-3xl p-8 shadow-2xl hover:shadow-amber-500/20 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-amber-500/10 hover:to-yellow-500/10 backdrop-blur-sm border-2 border-amber-500/20 hover:border-amber-500/60 rounded-3xl p-8 shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
               <Icon name="Crown" size={18} />
               Премиум статус
