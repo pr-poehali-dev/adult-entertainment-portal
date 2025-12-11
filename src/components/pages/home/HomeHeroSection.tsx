@@ -128,7 +128,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             <div className="mt-4 text-center h-[56px] flex items-center justify-center">
               <span className="text-2xl font-bold text-primary"></span>
               <span className="text-muted-foreground mx-2"></span>
-              <span className="text-2xl font-bold text-pink-500">1,000 💗 LOVE</span>
+              <span className="text-2xl font-bold text-pink-500"></span>
             </div>
           </div>
 
