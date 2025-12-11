@@ -242,6 +242,7 @@ const Index = () => {
         editingGirl={state.editingGirl}
         agencyId={state.profile.agencyId || 0}
         agencyName={state.profile.agencyName || ''}
+        agencyType={state.profile.agencyType}
       />
 
       <LovePurchaseModal
