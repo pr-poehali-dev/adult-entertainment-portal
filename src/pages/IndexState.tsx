@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Page, UserRole, Profile, Notification, Wallet, CatalogItem, AgencyType } from '@/types';
+import { Page, UserRole, Profile, Notification, Wallet, CatalogItem, AgencyType, UserAd } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
@@ -7,6 +7,7 @@ export const useIndexState = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
+  const [userAds, setUserAds] = useState<UserAd[]>([]);
   const [showAgencyPayment, setShowAgencyPayment] = useState(false);
   const [pendingAgencyName, setPendingAgencyName] = useState('');
   const [pendingAgencyType, setPendingAgencyType] = useState<AgencyType | null>(null);
@@ -214,5 +215,7 @@ export const useIndexState = () => {
     setEditingGirl,
     showLovePurchase,
     setShowLovePurchase,
+    userAds,
+    setUserAds,
   };
 };

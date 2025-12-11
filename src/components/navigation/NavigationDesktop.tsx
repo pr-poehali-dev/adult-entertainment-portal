@@ -51,6 +51,8 @@ export const NavigationDesktop = ({
   isSecondRow = false,
 }: NavigationDesktopProps) => {
   const { language, setLanguage, t } = useLanguage();
+  
+  const activeAdsCount = 1;
 
   if (isSecondRow) {
     return (
@@ -130,7 +132,12 @@ export const NavigationDesktop = ({
                     className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
                   >
                     <Icon name="FileText" size={16} />
-                    <span>Мои объявления</span>
+                    <span className="flex-1">Мои объявления</span>
+                    {activeAdsCount > 0 && (
+                      <span className="ml-auto px-2 py-0.5 text-xs font-bold bg-primary text-primary-foreground rounded-full">
+                        {activeAdsCount}
+                      </span>
+                    )}
                   </button>
                   
                   {profile.isAgencyOwner ? (
