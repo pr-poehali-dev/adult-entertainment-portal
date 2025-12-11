@@ -79,12 +79,12 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               Начните зарабатывать на управлении командой моделей. Полный контроль, статистика и автоматизация бизнеса.
             </p>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-6 flex-grow">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
                   <Icon name="Users" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Управление анкетами</h3>
                   <p className="text-sm text-muted-foreground">Добавляйте и редактируйте профили моделей</p>
                 </div>
@@ -94,7 +94,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
                   <Icon name="BarChart3" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Аналитика</h3>
                   <p className="text-sm text-muted-foreground">Просмотры, бронирования, доходы</p>
                 </div>
@@ -104,7 +104,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center">
                   <Icon name="Wallet" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Финансы</h3>
                   <p className="text-sm text-muted-foreground">Прозрачная система выплат</p>
                 </div>
@@ -114,7 +114,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
                   <Icon name="Shield" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Защита</h3>
                   <p className="text-sm text-muted-foreground">Верификация и безопасность</p>
                 </div>
@@ -155,7 +155,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
                   <Icon name="Search" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Умный поиск</h3>
                   <p className="text-sm text-muted-foreground">Фильтры по интересам, возрасту, городу</p>
                 </div>
@@ -165,7 +165,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-rose-500 to-rose-600 rounded-full flex items-center justify-center">
                   <Icon name="MessageCircle" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Неограниченные сообщения</h3>
                   <p className="text-sm text-muted-foreground">Общайтесь без лимитов</p>
                 </div>
@@ -175,7 +175,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
                   <Icon name="Video" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Видеозвонки</h3>
                   <p className="text-sm text-muted-foreground">Познакомьтесь лично онлайн</p>
                 </div>
@@ -185,7 +185,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                   <Icon name="Shield" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Безопасность</h3>
                   <p className="text-sm text-muted-foreground">Проверенные анкеты, конфиденциальность</p>
                 </div>
@@ -226,7 +226,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
                   <Icon name="FileText" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Простое размещение</h3>
                   <p className="text-sm text-muted-foreground">Создайте объявление за 2 минуты</p>
                 </div>
@@ -236,7 +236,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center">
                   <Icon name="Users" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Тысячи клиентов</h3>
                   <p className="text-sm text-muted-foreground">Доступ к огромной аудитории</p>
                 </div>
@@ -246,7 +246,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
                   <Icon name="Bell" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Мгновенные уведомления</h3>
                   <p className="text-sm text-muted-foreground">Получайте отклики сразу</p>
                 </div>
@@ -256,7 +256,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-full flex items-center justify-center">
                   <Icon name="DollarSign" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Без комиссий</h3>
                   <p className="text-sm text-muted-foreground">Все деньги остаются у вас</p>
                 </div>
@@ -297,7 +297,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center">
                   <Icon name="Star" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Топ выдачи</h3>
                   <p className="text-sm text-muted-foreground">Ваш профиль всегда на первых местах</p>
                 </div>
@@ -307,7 +307,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center">
                   <Icon name="Zap" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Выделение</h3>
                   <p className="text-sm text-muted-foreground">Золотая рамка и значок VIP</p>
                 </div>
@@ -317,7 +317,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
                   <Icon name="BarChart" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Статистика</h3>
                   <p className="text-sm text-muted-foreground">Подробная аналитика просмотров</p>
                 </div>
@@ -327,7 +327,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
                   <Icon name="Headphones" size={24} className="text-white" />
                 </div>
-                <div>
+                <div className="text-left">
                   <h3 className="font-bold text-foreground mb-1">Поддержка VIP</h3>
                   <p className="text-sm text-muted-foreground">Приоритетная помощь 24/7</p>
                 </div>
