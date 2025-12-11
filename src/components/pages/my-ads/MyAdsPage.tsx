@@ -200,11 +200,10 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       />
       <div className="mb-6 flex items-center justify-between">
         <div>
-            <h1 className="text-2xl font-bold">Мои объявления</h1>
-            <p className="text-sm text-muted-foreground">
-              {profile.role === 'seller' ? 'Предлагайте свои услуги' : 'Размещайте запросы услуг'}
-            </p>
-          </div>
+          <h1 className="text-2xl font-bold">Мои объявления</h1>
+          <p className="text-sm text-muted-foreground">
+            {profile.role === 'seller' ? 'Предлагайте свои услуги' : 'Размещайте запросы услуг'}
+          </p>
         </div>
         <Button onClick={() => setShowCreateModal(true)} className="gap-2">
           <Icon name="Plus" size={18} />
