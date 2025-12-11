@@ -14,7 +14,7 @@ export const HeartbeatWelcome = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-8 py-12">
+    <div className="relative flex flex-col items-center justify-center py-12">
       <div className="relative">
         <Icon 
           name="Heart" 
@@ -24,17 +24,6 @@ export const HeartbeatWelcome = () => {
           }`}
         />
       </div>
-      
-      <h1 
-        className="text-6xl md:text-8xl lg:text-9xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent"
-        style={{
-          textShadow: '0 2px 10px rgba(234, 179, 8, 0.3)',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          letterSpacing: '0.05em'
-        }}
-      >
-        WELCOME
-      </h1>
     </div>
   );
 };
