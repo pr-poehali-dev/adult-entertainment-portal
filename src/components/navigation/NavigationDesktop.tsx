@@ -111,6 +111,17 @@ export const NavigationDesktop = ({
                     <span>Мой профиль</span>
                   </button>
                   
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('wallet');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Wallet" size={16} className="text-green-500" />
+                    <span>Баланс</span>
+                  </button>
+                  
                   {profile.isAgencyOwner ? (
                     <button
                       onClick={() => {
