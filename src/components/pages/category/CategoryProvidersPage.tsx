@@ -34,6 +34,11 @@ export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryPr
     return <VIPProvidersPage setCurrentPage={setCurrentPage} />;
   }
 
+  if (categoryId === 'striptease') {
+    const StripteasePage = require('../striptease/StripteasePage').StripteasePage;
+    return <StripteasePage setCurrentPage={setCurrentPage} />;
+  }
+
   const { language } = useLanguage();
   const { toast } = useToast();
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);

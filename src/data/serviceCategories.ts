@@ -20,6 +20,7 @@ const categoryNames: Record<string, Record<Language, string>> = {
   business: { ru: 'Бизнес', en: 'Business' },
   abroad: { ru: 'Заграница', en: 'Abroad' },
   massage: { ru: 'Массаж', en: 'Massage' },
+  striptease: { ru: 'Стриптиз', en: 'Striptease' },
   'real-meeting': { ru: 'Реальная встреча', en: 'Real Meeting' },
   virtual: { ru: 'Виртуальный секс', en: 'Virtual Sex' },
 };
@@ -75,6 +76,12 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'massage',
     icon: 'Sparkles',
     image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/a543fce0-3f60-413a-986e-b7ff2dc53e69.jpg',
+    subcategories: []
+  },
+  {
+    id: 'striptease',
+    icon: 'Music',
+    image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&h=500&fit=crop',
     subcategories: []
   },
   {
