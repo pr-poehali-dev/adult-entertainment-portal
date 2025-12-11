@@ -78,6 +78,8 @@ const Index = () => {
   });
 
   const allCatalogItems = [...catalogItems, ...state.agencyGirls];
+  
+  const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
 
   const { renderPage } = useAppPages({
     currentPage: state.currentPage,
@@ -173,6 +175,7 @@ const Index = () => {
             wallet={state.wallet}
             soundEnabled={state.soundEnabled}
             setSoundEnabled={state.setSoundEnabled}
+            activeAdsCount={activeAdsCount}
           />
           <SettingsPage
             isDarkTheme={state.isDarkTheme}
@@ -204,6 +207,7 @@ const Index = () => {
         wallet={state.wallet}
         soundEnabled={state.soundEnabled}
         setSoundEnabled={state.setSoundEnabled}
+        activeAdsCount={activeAdsCount}
       />
       
       <main>

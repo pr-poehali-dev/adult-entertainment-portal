@@ -20,6 +20,7 @@ interface NavigationProps {
   wallet: Wallet;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  activeAdsCount?: number;
 }
 
 const Navigation = ({
@@ -37,6 +38,7 @@ const Navigation = ({
   wallet,
   soundEnabled,
   setSoundEnabled,
+  activeAdsCount = 0,
 }: NavigationProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [balanceAnimation, setBalanceAnimation] = useState(false);
@@ -154,6 +156,7 @@ const Navigation = ({
           rubInBtc={rubInBtc}
           showProfileMenu={showProfileMenu}
           setShowProfileMenu={setShowProfileMenu}
+          activeAdsCount={activeAdsCount}
           isSecondRow={true}
         />
       </div>

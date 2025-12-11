@@ -26,6 +26,7 @@ interface NavigationDesktopProps {
   rubInBtc: number;
   showProfileMenu: boolean;
   setShowProfileMenu: (show: boolean) => void;
+  activeAdsCount?: number;
   isSecondRow?: boolean;
 }
 
@@ -48,11 +49,10 @@ export const NavigationDesktop = ({
   rubInBtc,
   showProfileMenu,
   setShowProfileMenu,
+  activeAdsCount = 0,
   isSecondRow = false,
 }: NavigationDesktopProps) => {
   const { language, setLanguage, t } = useLanguage();
-  
-  const activeAdsCount = 1;
 
   if (isSecondRow) {
     return (

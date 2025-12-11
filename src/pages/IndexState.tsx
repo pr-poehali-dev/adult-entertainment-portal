@@ -7,7 +7,26 @@ export const useIndexState = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
-  const [userAds, setUserAds] = useState<UserAd[]>([]);
+  const [userAds, setUserAds] = useState<UserAd[]>([
+    {
+      id: 1,
+      authorId: 1,
+      authorName: 'Елена Романова',
+      authorAvatar: '',
+      authorRole: 'buyer',
+      type: 'service_request',
+      category: 'Классика',
+      title: 'Ищу девушку для классического свидания',
+      description: 'Хочу встретиться с девушкой для приятного вечера. Возраст 20-30 лет, стройная.',
+      price: 5000,
+      currency: 'RUB',
+      duration: 2,
+      lookingFor: 'Девушка 20-30 лет, стройная, для классического свидания',
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      responses: []
+    }
+  ]);
   const [showAgencyPayment, setShowAgencyPayment] = useState(false);
   const [pendingAgencyName, setPendingAgencyName] = useState('');
   const [pendingAgencyType, setPendingAgencyType] = useState<AgencyType | null>(null);
