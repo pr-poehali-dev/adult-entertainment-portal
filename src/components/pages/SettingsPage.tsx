@@ -1,7 +1,17 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n/translations';
+
+interface NotificationSettings {
+  messages: boolean;
+  bookings: boolean;
+  reviews: boolean;
+  system: boolean;
+  referral: boolean;
+  party: boolean;
+}
 
 interface SettingsPageProps {
   isDarkTheme: boolean;
@@ -17,6 +27,22 @@ export const SettingsPage = ({
   setSoundEnabled,
 }: SettingsPageProps) => {
   const { language, setLanguage } = useLanguage();
+  
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
+    messages: true,
+    bookings: true,
+    reviews: true,
+    system: true,
+    referral: true,
+    party: true,
+  });
+
+  const toggleNotification = (key: keyof NotificationSettings) => {
+    setNotificationSettings(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
@@ -108,6 +134,122 @@ export const SettingsPage = ({
                   </>
                 )}
               </Button>
+            </div>
+          </div>
+
+          <div className="glass-card p-6 rounded-2xl border border-border/50 shadow-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Icon name="Bell" size={24} className="text-primary" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">Уведомления</h2>
+                <p className="text-sm text-muted-foreground">Управление типами уведомлений</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="MessageSquare" size={20} className="text-blue-500" />
+                  <div>
+                    <p className="font-medium">Сообщения</p>
+                    <p className="text-sm text-muted-foreground">Уведомления о новых сообщениях</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('messages')}
+                  variant={notificationSettings.messages ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.messages ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="Calendar" size={20} className="text-green-500" />
+                  <div>
+                    <p className="font-medium">Бронирования</p>
+                    <p className="text-sm text-muted-foreground">Уведомления о бронированиях</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('bookings')}
+                  variant={notificationSettings.bookings ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.bookings ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="Star" size={20} className="text-yellow-500" />
+                  <div>
+                    <p className="font-medium">Отзывы</p>
+                    <p className="text-sm text-muted-foreground">Уведомления о новых отзывах</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('reviews')}
+                  variant={notificationSettings.reviews ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.reviews ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="Users" size={20} className="text-purple-500" />
+                  <div>
+                    <p className="font-medium">Партнёрка</p>
+                    <p className="text-sm text-muted-foreground">Уведомления о реферальных вознаграждениях</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('referral')}
+                  variant={notificationSettings.referral ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.referral ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="PartyPopper" size={20} className="text-pink-500" />
+                  <div>
+                    <p className="font-medium">Вечеринки</p>
+                    <p className="text-sm text-muted-foreground">Уведомления о приглашениях на вечеринки</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('party')}
+                  variant={notificationSettings.party ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.party ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Icon name="Info" size={20} className="text-gray-500" />
+                  <div>
+                    <p className="font-medium">Системные</p>
+                    <p className="text-sm text-muted-foreground">Важные системные уведомления</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => toggleNotification('system')}
+                  variant={notificationSettings.system ? "default" : "outline"}
+                  size="sm"
+                >
+                  {notificationSettings.system ? 'Вкл' : 'Выкл'}
+                </Button>
+              </div>
             </div>
           </div>
 
