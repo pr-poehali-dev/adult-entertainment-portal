@@ -200,32 +200,34 @@ export const NavigationDesktop = ({
               )}
             </div>
             
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2 hover:bg-muted rounded-lg transition-colors"
-              title="Уведомления"
-            >
-              <Icon name="Bell" size={18} className="text-foreground" />
-              {notifications.filter(n => !n.read).length > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full" />
-              )}
-            </button>
-            
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-2 hover:bg-muted rounded-lg transition-colors"
-              title={soundEnabled ? 'Выключить звук' : 'Включить звук'}
-            >
-              <Icon name={soundEnabled ? 'Volume2' : 'VolumeX'} size={18} className="text-foreground" />
-            </button>
-            
-            <button
-              onClick={() => setCurrentPage('wallet')}
-              className="px-4 py-2 rounded-lg border border-primary/20 bg-transparent hover:bg-primary/5 transition-colors flex items-center gap-2"
-            >
-              <Icon name="Wallet" size={18} className="text-primary" />
-              <span className="font-semibold text-foreground">{rubBalance.toLocaleString()} ₽</span>
-            </button>
+            <div className="flex items-center gap-2 ml-4">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 hover:bg-muted rounded-lg transition-colors"
+                title="Уведомления"
+              >
+                <Icon name="Bell" size={18} className="text-foreground" />
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full" />
+                )}
+              </button>
+              
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                title={soundEnabled ? 'Выключить звук' : 'Включить звук'}
+              >
+                <Icon name={soundEnabled ? 'Volume2' : 'VolumeX'} size={18} className="text-foreground" />
+              </button>
+              
+              <button
+                onClick={() => setCurrentPage('wallet')}
+                className="px-4 py-2 rounded-lg border border-primary/20 bg-transparent hover:bg-primary/5 transition-colors flex items-center gap-2"
+              >
+                <Icon name="Wallet" size={18} className="text-primary" />
+                <span className="font-semibold text-foreground">{rubBalance.toLocaleString()} ₽</span>
+              </button>
+            </div>
           </>
         )}
       </div>
