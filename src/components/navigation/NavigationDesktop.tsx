@@ -154,18 +154,16 @@ export const NavigationDesktop = ({
 
               {showProfileMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
-                  {profile.isAgencyOwner && (
-                    <button
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        setCurrentPage('agency-dashboard');
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2"
-                    >
-                      <Icon name="Building2" size={16} className="text-primary" />
-                      <span className="font-medium">Моё Агентство</span>
-                    </button>
-                  )}
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('profile');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <Icon name="User" size={16} />
+                    <span>Мой профиль</span>
+                  </button>
                   
                   <button
                     onClick={() => {
