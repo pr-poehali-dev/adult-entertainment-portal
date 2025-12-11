@@ -71,7 +71,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               Новые возможности
             </div>
             
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center justify-center text-center">
               Откройте своё агентство
             </h2>
             
@@ -142,7 +142,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               Бесплатно навсегда
             </div>
             
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center justify-center text-center">
               Знакомства
             </h2>
             
@@ -213,7 +213,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               Увеличьте доход
             </div>
             
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center justify-center text-center">
               Разместить объявление
             </h2>
             
@@ -284,12 +284,12 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
               Премиум статус
             </div>
             
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent mb-4 h-[96px] flex items-center justify-center text-center">
               Купить VIP
             </h2>
             
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed h-[84px]">
-              Получите максимум от платформы. Приоритет в поиске, эксклюзивные функции и больше клиентов.
+              Получите максимум от платформы. Приоритет в поиске, эксклюзивные <br />функции и больше клиентов.
             </p>
             
             <div className="space-y-4 mb-6 flex-grow">
