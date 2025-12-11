@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { AbroadProvidersPage } from './AbroadProvidersPage';
 import { VIPProvidersPage } from './VIPProvidersPage';
+import { StripteasePage } from '../striptease/StripteasePage';
 
 interface CategoryProvidersPageProps {
   categoryId: string;
@@ -35,7 +36,6 @@ export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryPr
   }
 
   if (categoryId === 'striptease') {
-    const StripteasePage = require('../striptease/StripteasePage').StripteasePage;
     return <StripteasePage setCurrentPage={setCurrentPage} />;
   }
 
