@@ -225,7 +225,9 @@ export const NavigationDesktop = ({
                 className="px-4 py-2 rounded-lg border border-primary/20 bg-transparent hover:bg-primary/5 transition-colors flex items-center gap-2"
               >
                 <Icon name="Wallet" size={18} className="text-primary" />
-                <span className="font-semibold text-foreground">{rubBalance.toLocaleString()} ₽</span>
+                <span className="font-semibold text-foreground whitespace-nowrap">
+                  {rubBalance >= 100000 ? `${Math.floor(rubBalance / 1000)}к` : rubBalance.toLocaleString()} ₽
+                </span>
               </button>
             </div>
           </>
