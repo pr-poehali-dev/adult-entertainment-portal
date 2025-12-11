@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Page, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { LipstickText } from '@/components/animations/LipstickText';
+import { HeartbeatWelcome } from '@/components/animations/HeartbeatWelcome';
 import Icon from '@/components/ui/icon';
 
 interface HomeHeroSectionProps {
@@ -21,7 +21,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
       
       <div className="w-full mx-auto text-center relative z-10 px-4">
         <div className="mb-8 animate-fade-in max-w-4xl mx-auto">
-          <LipstickText text="LOVE IS" className="w-full" />
+          <HeartbeatWelcome />
         </div>
         
         <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in text-center px-4" style={{ animationDelay: '200ms' }}>
