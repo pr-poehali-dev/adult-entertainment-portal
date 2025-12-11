@@ -4,8 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useLanguage } from '@/contexts/LanguageContext';
-
-type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate';
+import { AgencyType } from '@/types';
 
 interface AgencyTypeOption {
   id: AgencyType;
@@ -17,11 +16,11 @@ interface AgencyTypeOption {
 
 interface AgencyRegisterProps {
   onBack: () => void;
-  onPayment: (agencyName: string) => void;
+  onPayment: (agencyName: string, agencyType: AgencyType) => void;
 }
 
 const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
-  const [step, setStep] = useState<'type' | 'details'>(type);
+  const [step, setStep] = useState<'type' | 'details'>('type');
   const [selectedType, setSelectedType] = useState<AgencyType | null>(null);
   const [agencyName, setAgencyName] = useState('');
   const [error, setError] = useState('');
@@ -79,8 +78,13 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
       return;
     }
 
-    console.log('Calling onPayment with:', agencyName.trim());
-    onPayment(agencyName.trim());
+    if (!selectedType) {
+      setError('Выберите тип агентства');
+      return;
+    }
+
+    console.log('Calling onPayment with:', agencyName.trim(), selectedType);
+    onPayment(agencyName.trim(), selectedType);
   };
 
   if (step === 'type') {

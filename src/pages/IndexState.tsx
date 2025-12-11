@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Page, UserRole, Profile, Notification, Wallet, CatalogItem } from '@/types';
+import { Page, UserRole, Profile, Notification, Wallet, CatalogItem, AgencyType } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
@@ -9,6 +9,7 @@ export const useIndexState = () => {
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
   const [showAgencyPayment, setShowAgencyPayment] = useState(false);
   const [pendingAgencyName, setPendingAgencyName] = useState('');
+  const [pendingAgencyType, setPendingAgencyType] = useState<AgencyType | null>(null);
   const [showGirlForm, setShowGirlForm] = useState(false);
   const [editingGirl, setEditingGirl] = useState<CatalogItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -205,6 +206,8 @@ export const useIndexState = () => {
     setShowAgencyPayment,
     pendingAgencyName,
     setPendingAgencyName,
+    pendingAgencyType,
+    setPendingAgencyType,
     showGirlForm,
     setShowGirlForm,
     editingGirl,

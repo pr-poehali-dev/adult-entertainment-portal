@@ -59,6 +59,8 @@ export interface PrivateMediaFolder {
   isUnlocked?: boolean;
 }
 
+export type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate';
+
 export interface Profile {
   name: string;
   role: UserRole;
@@ -82,6 +84,7 @@ export interface Profile {
   contacts?: ProfileContacts;
   agencyName?: string;
   agencyId?: number;
+  agencyType?: AgencyType;
   isAgencyOwner?: boolean;
 }
 

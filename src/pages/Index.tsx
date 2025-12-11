@@ -55,6 +55,9 @@ const Index = () => {
     setWallet: state.setWallet,
     walletTransactions: state.walletTransactions,
     setWalletTransactions: state.setWalletTransactions,
+    pendingAgencyName: state.pendingAgencyName,
+    pendingAgencyType: state.pendingAgencyType,
+    setPendingAgencyType: state.setPendingAgencyType,
   });
 
   // Эффекты
@@ -135,6 +138,7 @@ const Index = () => {
     return (
       <AgencyDashboard
         agencyName={state.profile.agencyName || 'Моё агентство'}
+        agencyType={state.profile.agencyType}
         agencyGirls={state.agencyGirls}
         transactions={state.walletTransactions}
         onBack={() => state.setCurrentPage('profile')}

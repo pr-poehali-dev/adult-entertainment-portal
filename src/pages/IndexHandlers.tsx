@@ -1,5 +1,5 @@
 import { catalogItems } from '@/data/mockData';
-import { Profile, Notification, CatalogItem, WalletBalance, Transaction } from '@/types';
+import { Profile, Notification, CatalogItem, WalletBalance, Transaction, AgencyType } from '@/types';
 import { notificationService } from '@/utils/notificationService';
 
 interface HandlersProps {
@@ -32,6 +32,9 @@ interface HandlersProps {
   setWallet: React.Dispatch<React.SetStateAction<{ balances: WalletBalance[] }>>;
   walletTransactions: Transaction[];
   setWalletTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
+  pendingAgencyName: string;
+  pendingAgencyType: AgencyType | null;
+  setPendingAgencyType: React.Dispatch<React.SetStateAction<AgencyType | null>>;
 }
 
 export const useIndexHandlers = (props: HandlersProps) => {
@@ -200,9 +203,10 @@ export const useIndexHandlers = (props: HandlersProps) => {
     }
   };
 
-  const handleAgencyRegister = (agencyName: string) => {
-    console.log('handleAgencyRegister called', { agencyName });
+  const handleAgencyRegister = (agencyName: string, agencyType: AgencyType) => {
+    console.log('handleAgencyRegister called', { agencyName, agencyType });
     setPendingAgencyName(agencyName);
+    props.setPendingAgencyType(agencyType);
     setShowAgencyPayment(true);
     console.log('Payment modal should open now');
   };
@@ -246,6 +250,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
       ...prev,
       role: 'agency',
       agencyName: props.pendingAgencyName,
+      agencyType: props.pendingAgencyType || undefined,
       isAgencyOwner: true,
       agencyId: Date.now(),
     }));
