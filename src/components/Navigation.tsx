@@ -70,13 +70,13 @@ const Navigation = ({
   
   return (
   <nav className="border-b border-border/50 glass-effect sticky top-0 z-50 shadow-lg">
-    <div className="max-w-wide mx-auto px-2 sm:px-4 py-2">
-      <div className="flex items-center justify-between gap-1">
+    <div className="max-w-wide mx-auto px-4 py-4">
+      <div className="flex items-center justify-between gap-8">
         <div className="flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform" onClick={() => setCurrentPage('home')}>
           <img 
             src="https://cdn.poehali.dev/files/eb44749d-b270-4ce8-8ff5-baa7f8487a4a.png" 
             alt="Love is..."
-            className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+            className="h-12 w-auto object-contain"
           />
         </div>
         
@@ -100,7 +100,6 @@ const Navigation = ({
           rubInBtc={rubInBtc}
           showProfileMenu={showProfileMenu}
           setShowProfileMenu={setShowProfileMenu}
-          isSecondRow={false}
         />
 
         <div className="md:hidden flex items-center space-x-1">
@@ -137,33 +136,6 @@ const Navigation = ({
           >
             <Icon name={showMobileMenu ? "X" : "Menu"} size={20} />
           </Button>
-        </div>
-      </div>
-      
-      <div className="hidden md:block border-t border-border/30 py-3">
-        <div className="max-w-wide mx-auto px-4">
-          <NavigationDesktop
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            userRole={userRole}
-            setUserRole={setUserRole}
-            profile={profile}
-            notifications={notifications}
-            setNotifications={setNotifications}
-            showNotifications={showNotifications}
-            setShowNotifications={setShowNotifications}
-            isDarkTheme={isDarkTheme}
-            setIsDarkTheme={setIsDarkTheme}
-            wallet={wallet}
-            soundEnabled={soundEnabled}
-            setSoundEnabled={setSoundEnabled}
-            balanceAnimation={balanceAnimation}
-            rubBalance={rubBalance}
-            rubInBtc={rubInBtc}
-            showProfileMenu={showProfileMenu}
-            setShowProfileMenu={setShowProfileMenu}
-            isSecondRow={true}
-          />
         </div>
       </div>
     </div>
