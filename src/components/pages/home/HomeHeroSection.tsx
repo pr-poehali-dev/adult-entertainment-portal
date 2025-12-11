@@ -199,9 +199,7 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
             </Button>
             
             <div className="mt-4 text-center h-[56px] flex items-center justify-center">
-              <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
-                0 ₽ БЕСПЛАТНО
-              </span>
+              <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent"></span>
             </div>
           </div>
 
