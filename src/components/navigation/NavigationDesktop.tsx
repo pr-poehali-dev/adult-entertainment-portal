@@ -84,17 +84,93 @@ export const NavigationDesktop = ({
                 </span>
               )}
             </button>
-            <button 
-              onClick={() => setCurrentPage('profile')} 
-              className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1.5"
-            >
-              <Avatar className="h-4 w-4">
-                <AvatarFallback className="bg-primary text-primary-foreground text-[8px] font-medium">
-                  {profile.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <span>{profile.name}</span>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setShowProfileMenu(!showProfileMenu)} 
+                className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1.5"
+              >
+                <Avatar className="h-4 w-4">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-[8px] font-medium">
+                    {profile.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
+                <span>{profile.name}</span>
+                <Icon name="ChevronDown" size={12} />
+              </button>
+
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('profile');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2"
+                  >
+                    <Icon name="User" size={16} />
+                    <span>Мой профиль</span>
+                  </button>
+                  
+                  {profile.isAgencyOwner ? (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setCurrentPage('agency-dashboard');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                    >
+                      <Icon name="Building2" size={16} className="text-primary" />
+                      <span className="font-medium">Моё Агентство</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setCurrentPage('agency-register');
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                    >
+                      <Icon name="Building2" size={16} />
+                      <span>Открыть Агентство</span>
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('referral');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Users" size={16} />
+                    <span>Партнёрка</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('settings');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Settings" size={16} />
+                    <span>Настройки</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setUserRole(null);
+                      setCurrentPage('home');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 text-red-500 border-t border-border"
+                  >
+                    <Icon name="LogOut" size={16} />
+                    <span>Выйти</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
