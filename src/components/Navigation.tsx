@@ -41,6 +41,8 @@ const Navigation = ({
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [balanceAnimation, setBalanceAnimation] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const prevBalanceRef = useRef<number>(0);
   
   const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
@@ -67,9 +69,30 @@ const Navigation = ({
       document.body.style.overflow = 'unset';
     };
   }, [showMobileMenu]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
   
   return (
-  <nav className="border-b border-border/50 glass-effect shadow-lg sticky top-0 z-50">
+  <nav className={`border-b border-border/50 glass-effect shadow-lg sticky top-0 z-50 transition-transform duration-300 ${
+    isVisible ? 'translate-y-0' : '-translate-y-full'
+  }`}>
     <div className="max-w-wide mx-auto px-2 sm:px-4 py-4">
       <div className="flex items-center justify-between gap-1">
 
