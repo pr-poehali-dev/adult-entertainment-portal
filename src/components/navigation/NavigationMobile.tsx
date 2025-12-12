@@ -12,6 +12,9 @@ interface NavigationMobileProps {
   setUserRole: (role: UserRole) => void;
   profile: Profile;
   notifications: Notification[];
+  setNotifications: (notifications: Notification[]) => void;
+  showNotifications: boolean;
+  setShowNotifications: (show: boolean) => void;
   isDarkTheme: boolean;
   setIsDarkTheme: (isDark: boolean) => void;
   soundEnabled: boolean;
@@ -29,6 +32,9 @@ export const NavigationMobile = ({
   setUserRole,
   profile,
   notifications,
+  setNotifications,
+  showNotifications,
+  setShowNotifications,
   isDarkTheme,
   setIsDarkTheme,
   soundEnabled,

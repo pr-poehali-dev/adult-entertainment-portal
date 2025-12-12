@@ -178,6 +178,30 @@ export const NavigationDesktop = ({
               )}
             </div>
             
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="p-2 hover:bg-muted rounded-lg transition-colors relative"
+                title="Уведомления"
+              >
+                <Icon name="Bell" size={18} className="text-foreground" />
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute top-0 right-0 w-5 h-5 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <NotificationPanel
+                  notifications={notifications}
+                  setNotifications={setNotifications}
+                  onClose={() => setShowNotifications(false)}
+                  setCurrentPage={setCurrentPage}
+                />
+              )}
+            </div>
+            
             <button
               onClick={() => setCurrentPage('settings')}
               className="p-2 hover:bg-muted rounded-lg transition-colors"

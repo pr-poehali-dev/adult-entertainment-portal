@@ -122,6 +122,19 @@ const Navigation = ({
                   </span>
                 </div>
               </Button>
+              <Button
+                onClick={() => setShowNotifications(!showNotifications)}
+                variant="ghost"
+                size="icon"
+                className="relative h-8 w-8"
+              >
+                <Icon name="Bell" size={18} />
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute top-0 right-0 w-4 h-4 bg-gradient-to-r from-secondary to-secondary/90 text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </Button>
             </>
           )}
           <Button 
@@ -170,6 +183,9 @@ const Navigation = ({
       setUserRole={setUserRole}
       profile={profile}
       notifications={notifications}
+      setNotifications={setNotifications}
+      showNotifications={showNotifications}
+      setShowNotifications={setShowNotifications}
       isDarkTheme={isDarkTheme}
       setIsDarkTheme={setIsDarkTheme}
       soundEnabled={soundEnabled}
