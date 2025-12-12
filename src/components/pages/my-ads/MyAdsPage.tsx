@@ -42,6 +42,8 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       status: 'active',
       createdAt: new Date().toISOString(),
       viewCount: 127,
+      isBoosted: false,
+      boostedUntil: undefined,
       responses: profile.role === 'buyer' ? [
         {
           id: 1,
@@ -86,6 +88,8 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       authorRole: profile.role!,
       createdAt: new Date().toISOString(),
       viewCount: 0,
+      isBoosted: false,
+      boostedUntil: undefined,
       responses: []
     };
     setAds([ad, ...ads]);
@@ -132,6 +136,28 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     }
   };
 
+  const handleBoostAd = (adId: number) => {
+    const boostCost = 50; // 50 монет
+    const boostDuration = 24; // 24 часа
+    
+    if (confirm(`Поднять объявление в топ на ${boostDuration} часов за ${boostCost} 💗?`)) {
+      // TODO: Проверка баланса и списание монет
+      const boostedUntil = new Date();
+      boostedUntil.setHours(boostedUntil.getHours() + boostDuration);
+      
+      setAds(ads.map(ad => 
+        ad.id === adId 
+          ? { 
+              ...ad, 
+              isBoosted: true, 
+              boostedUntil: boostedUntil.toISOString(),
+              createdAt: new Date().toISOString() // Обновляем дату для сортировки
+            }
+          : ad
+      ));
+    }
+  };
+
   const handleViewResponse = (ad: UserAd, response: AdResponse) => {
     setSelectedAd(ad);
     setSelectedResponse(response);
@@ -140,17 +166,30 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
 
   const renderAdCard = (ad: UserAd) => {
     const pendingResponses = ad.responses?.filter(r => r.status === 'pending').length || 0;
+    const isBoostedActive = ad.isBoosted && ad.boostedUntil && new Date(ad.boostedUntil) > new Date();
+    const boostedTimeLeft = isBoostedActive && ad.boostedUntil 
+      ? Math.max(0, Math.floor((new Date(ad.boostedUntil).getTime() - new Date().getTime()) / (1000 * 60 * 60)))
+      : 0;
     
     return (
-      <Card key={ad.id} className="hover:shadow-lg transition-shadow">
+      <Card key={ad.id} className={`hover:shadow-lg transition-shadow relative overflow-hidden ${isBoostedActive ? 'border-2 border-primary shadow-xl' : ''}`}>
+        {isBoostedActive && (
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-pink-500 to-primary animate-pulse" />
+        )}
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <Badge variant={ad.type === 'service_offer' ? 'default' : 'secondary'}>
                   {ad.type === 'service_offer' ? 'Предложение услуги' : 'Запрос услуги'}
                 </Badge>
                 <Badge variant="outline">{ad.category}</Badge>
+                {isBoostedActive && (
+                  <Badge variant="default" className="bg-gradient-to-r from-primary to-pink-500 text-white">
+                    <Icon name="TrendingUp" size={12} className="mr-1" />
+                    В топе {boostedTimeLeft}ч
+                  </Badge>
+                )}
               </div>
               <h3 className="font-semibold text-lg truncate">{ad.title}</h3>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{ad.description}</p>
@@ -186,29 +225,42 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
             )}
           </div>
 
-          <div className="flex gap-2 mt-3">
-            {ad.status === 'active' ? (
-              <>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => handleCompleteAd(ad.id)}
-                >
-                  <Icon name="CheckCircle" size={16} className="mr-2" />
-                  Завершить
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => handleDeleteAd(ad.id)}
-                >
-                  <Icon name="Trash2" size={16} className="mr-2" />
-                  Удалить
-                </Button>
-              </>
-            ) : (
+          <div className="space-y-2 mt-3">
+            {ad.status === 'active' && !isBoostedActive && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full bg-gradient-to-r from-primary/10 to-pink-500/10 hover:from-primary/20 hover:to-pink-500/20 border-primary/30"
+                onClick={() => handleBoostAd(ad.id)}
+              >
+                <Icon name="TrendingUp" size={16} className="mr-2" />
+                Поднять в топ за 50 💗
+              </Button>
+            )}
+            
+            <div className="flex gap-2">
+              {ad.status === 'active' ? (
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleCompleteAd(ad.id)}
+                  >
+                    <Icon name="CheckCircle" size={16} className="mr-2" />
+                    Завершить
+                  </Button>
+                  <Button 
+                    variant="destructive" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleDeleteAd(ad.id)}
+                  >
+                    <Icon name="Trash2" size={16} className="mr-2" />
+                    Удалить
+                  </Button>
+                </>
+              ) : (
               <Button 
                 variant="default" 
                 size="sm" 
@@ -218,7 +270,8 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
                 <Icon name="RotateCw" size={16} className="mr-2" />
                 Возобновить
               </Button>
-            )}
+              )}
+            </div>
           </div>
 
           {ad.responses && ad.responses.length > 0 ? (
