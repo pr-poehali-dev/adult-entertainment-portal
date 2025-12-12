@@ -118,6 +118,13 @@ export const ProfileSettingsTab = ({
     ? new Date(profile.healthCertificateExpiry) < new Date() 
     : true;
 
+  const handleSaveSettings = () => {
+    toast({
+      title: "Настройки сохранены",
+      description: "Все изменения успешно применены",
+    });
+  };
+
   return (
     <>
       <div className="space-y-6">
@@ -281,6 +288,17 @@ export const ProfileSettingsTab = ({
             </Card>
           </>
         )}
+        
+        <div className="flex justify-end pt-4">
+          <Button 
+            onClick={handleSaveSettings}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-2"
+            size="lg"
+          >
+            <Icon name="Save" size={18} className="mr-2" />
+            Сохранить настройки
+          </Button>
+        </div>
       </div>
 
       <VerificationModal
