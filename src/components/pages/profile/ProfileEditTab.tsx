@@ -51,6 +51,7 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
 
   const [formData, setFormData] = useState({
     name: profile.name,
+    nickname: profile.nickname,
     age: profile.age || 18,
     gender: profile.gender || 'female',
     preferences: profile.preferences || defaultPreferences,
@@ -95,6 +96,7 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
   const handleSave = () => {
     onProfileUpdate?.({
       name: formData.name,
+      nickname: formData.nickname,
       age: formData.age,
       gender: formData.gender,
       preferences: formData.preferences,
@@ -132,6 +134,17 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 disabled={!isEditing}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="nickname">Никнейм</Label>
+              <Input
+                id="nickname"
+                value={formData.nickname}
+                onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+                disabled={!isEditing}
+                placeholder="Ваш никнейм"
               />
             </div>
 

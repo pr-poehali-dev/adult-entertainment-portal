@@ -134,6 +134,7 @@ export const useIndexState = () => {
   ]);
   const [profile, setProfile] = useState<Profile>({
     name: 'Елена Романова',
+    nickname: 'LenaRom',
     role: 'buyer',
     avatar: '',
     rating: 4.8,

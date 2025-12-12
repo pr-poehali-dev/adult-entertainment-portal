@@ -92,10 +92,10 @@ export const NavigationDesktop = ({
               >
                 <Avatar className="h-5 w-5">
                   <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-medium">
-                    {profile.name.split(' ').map(n => n[0]).join('')}
+                    {profile.nickname[0].toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <span>{profile.name}</span>
+                <span>{profile.nickname}</span>
                 <Icon name="ChevronDown" size={14} />
               </button>
 

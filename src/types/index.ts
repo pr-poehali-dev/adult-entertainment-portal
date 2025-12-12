@@ -63,6 +63,7 @@ export type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'real
 
 export interface Profile {
   name: string;
+  nickname: string;
   role: UserRole;
   avatar: string;
   rating: number;

@@ -182,9 +182,9 @@ export const NavigationMobile = ({
               className="w-full py-3 px-4 rounded-lg bg-muted hover:bg-muted/70 transition-colors flex items-center gap-3 justify-center font-semibold"
             >
               <Avatar className="h-6 w-6">
-                <AvatarFallback className="bg-primary text-primary-foreground text-sm">{profile.name[0]}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground text-sm">{profile.nickname[0].toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span>{profile.name}</span>
+              <span>{profile.nickname}</span>
             </button>
             
             {profile.isAgencyOwner && (

@@ -61,12 +61,13 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
           <div className="flex items-start gap-4">
             <Avatar className="w-20 h-20 flex-shrink-0">
               <AvatarFallback className="text-2xl bg-primary/20 text-primary">
-                {profile.name.charAt(0)}
+                {profile.nickname.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <h2 className="text-xl sm:text-2xl font-bold truncate">{profile.name}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold truncate">{profile.nickname}</h2>
+                <span className="text-sm text-muted-foreground">({profile.name})</span>
                 {isVIP && !isVIPExpired && <VIPBadge size="sm" />}
                 {profile.healthCertified && profile.healthCertificateExpiry && new Date(profile.healthCertificateExpiry) > new Date() && profile.role === 'seller' && (
                   <HealthCertificateBadge size="sm" />

@@ -159,6 +159,12 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               <Label htmlFor="buyer-name">Имя</Label>
               <Input id="buyer-name" placeholder="Введите ваше имя" className="bg-background border-border" />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="buyer-nickname">Никнейм</Label>
+              <Input id="buyer-nickname" placeholder="Придумайте никнейм для профиля" className="bg-background border-border" />
+              <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
+            </div>
             
             <div className="space-y-2">
               <Label>Способ регистрации</Label>
@@ -248,6 +254,12 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             <div className="space-y-2">
               <Label htmlFor="seller-name">Имя</Label>
               <Input id="seller-name" placeholder="Введите ваше имя" className="bg-background border-border" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="seller-nickname">Никнейм</Label>
+              <Input id="seller-nickname" placeholder="Придумайте никнейм для профиля" className="bg-background border-border" />
+              <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
             </div>
             
             <div className="space-y-2">
