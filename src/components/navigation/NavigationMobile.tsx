@@ -195,6 +195,14 @@ export const NavigationMobile = ({
               <span>Мои заказы</span>
             </button>
 
+            <button 
+              onClick={() => { setCurrentPage('bookings'); setShowMobileMenu(false); }}
+              className="w-full py-3 px-4 rounded-lg bg-muted hover:bg-muted/70 transition-colors flex items-center gap-3 justify-center font-semibold"
+            >
+              <Icon name="History" size={20} className="text-primary" />
+              <span>История бронирований</span>
+            </button>
+
             {profile.isAgencyOwner && (
               <button 
                 onClick={() => { setCurrentPage('agency-dashboard'); setShowMobileMenu(false); }}
