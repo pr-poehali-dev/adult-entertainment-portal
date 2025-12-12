@@ -86,97 +86,97 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
   }, []);
 
   return (
-    <div className="max-w-wide mx-auto px-4 py-12 w-full overflow-x-hidden">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 shadow-2xl">
+    <div className="max-w-wide mx-auto px-4 py-6 md:py-12 w-full overflow-x-hidden">
+      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 shadow-2xl w-full">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTJWMGgydjMwem0tOCAwSDBoMnYzMEgwVjB6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
         
         <div className="absolute top-8 right-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-8 left-8 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
         
-        <div className="relative z-10 px-8 py-12 md:px-16 md:py-16">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm font-medium">
-                <Icon name="Sparkles" size={16} className="animate-pulse" />
-                <span>Еженедельный розыгрыш</span>
+        <div className="relative z-10 px-4 py-6 sm:px-6 sm:py-8 md:px-16 md:py-16 w-full">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center w-full">
+            <div className="space-y-4 md:space-y-6 w-full">
+              <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-xs sm:text-sm font-medium">
+                <Icon name="Sparkles" size={14} className="animate-pulse sm:w-4 sm:h-4" />
+                <span className="whitespace-nowrap">Еженедельный розыгрыш</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-tight">
                 Выиграй новенький iPhone 17
               </h2>
               
-              <p className="text-white/90 text-lg leading-relaxed">
+              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed">
                 Каждое воскресенье в 12:00 МСК мы разыгрываем новый iPhone 17 среди участников. 
                 Билет всего 100 ₽. Один аккаунт = один билет.
               </p>
 
               {isQuickDraw ? (
-                <div className="bg-red-500/30 backdrop-blur-sm rounded-2xl p-6 border-2 border-red-400/50">
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <Icon name="Zap" size={20} className="text-yellow-300 animate-pulse" />
-                    <p className="text-white font-bold text-lg">БЫСТРЫЙ РОЗЫГРЫШ!</p>
-                    <Icon name="Zap" size={20} className="text-yellow-300 animate-pulse" />
+                <div className="bg-red-500/30 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-red-400/50">
+                  <div className="flex items-center justify-center gap-1.5 md:gap-2 mb-2 md:mb-3">
+                    <Icon name="Zap" size={16} className="text-yellow-300 animate-pulse sm:w-5 sm:h-5" />
+                    <p className="text-white font-bold text-sm sm:text-base md:text-lg">БЫСТРЫЙ РОЗЫГРЫШ!</p>
+                    <Icon name="Zap" size={16} className="text-yellow-300 animate-pulse sm:w-5 sm:h-5" />
                   </div>
-                  <p className="text-white/90 text-sm mb-3 text-center">
+                  <p className="text-white/90 text-xs sm:text-sm mb-2 md:mb-3 text-center leading-tight">
                     Участников меньше 100! Розыгрыш через:
                   </p>
                   <div className="flex justify-center">
-                    <div className="bg-white/20 rounded-2xl p-6 text-center backdrop-blur-sm min-w-[120px]">
-                      <p className="text-6xl font-bold text-white animate-pulse">{quickDrawSeconds}</p>
-                      <p className="text-sm text-white/90 mt-2">секунд</p>
+                    <div className="bg-white/20 rounded-xl md:rounded-2xl p-4 md:p-6 text-center backdrop-blur-sm min-w-[100px] md:min-w-[120px]">
+                      <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-white animate-pulse">{quickDrawSeconds}</p>
+                      <p className="text-xs md:text-sm text-white/90 mt-1 md:mt-2">секунд</p>
                     </div>
                   </div>
-                  <p className="text-white/80 text-xs text-center mt-4">
+                  <p className="text-white/80 text-[10px] sm:text-xs text-center mt-3 md:mt-4 leading-tight">
                     Успейте купить билет и получить VIP!
                   </p>
                 </div>
               ) : (
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30">
-                  <p className="text-white/90 text-sm mb-3 text-center">До следующего розыгрыша:</p>
-                  <div className="grid grid-cols-4 gap-3">
-                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                      <p className="text-3xl font-bold text-white">{timeLeft.days}</p>
-                      <p className="text-xs text-white/80 mt-1">дней</p>
+                <div className="bg-white/20 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-white/30">
+                  <p className="text-white/90 text-xs sm:text-sm mb-2 md:mb-3 text-center leading-tight">До следующего розыгрыша:</p>
+                  <div className="grid grid-cols-4 gap-2 md:gap-3">
+                    <div className="bg-white/10 rounded-lg md:rounded-xl p-2 md:p-3 text-center backdrop-blur-sm">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{timeLeft.days}</p>
+                      <p className="text-[10px] md:text-xs text-white/80 mt-0.5 md:mt-1">дней</p>
                     </div>
-                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                      <p className="text-3xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</p>
-                      <p className="text-xs text-white/80 mt-1">часов</p>
+                    <div className="bg-white/10 rounded-lg md:rounded-xl p-2 md:p-3 text-center backdrop-blur-sm">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</p>
+                      <p className="text-[10px] md:text-xs text-white/80 mt-0.5 md:mt-1">часов</p>
                     </div>
-                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                      <p className="text-3xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</p>
-                      <p className="text-xs text-white/80 mt-1">минут</p>
+                    <div className="bg-white/10 rounded-lg md:rounded-xl p-2 md:p-3 text-center backdrop-blur-sm">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</p>
+                      <p className="text-[10px] md:text-xs text-white/80 mt-0.5 md:mt-1">минут</p>
                     </div>
-                    <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
-                      <p className="text-3xl font-bold text-white animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</p>
-                      <p className="text-xs text-white/80 mt-1">секунд</p>
+                    <div className="bg-white/10 rounded-lg md:rounded-xl p-2 md:p-3 text-center backdrop-blur-sm">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</p>
+                      <p className="text-[10px] md:text-xs text-white/80 mt-0.5 md:mt-1">секунд</p>
                     </div>
                   </div>
                 </div>
               )}
               
-              <div className="bg-yellow-500/20 backdrop-blur-sm border-2 border-yellow-400/40 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <Icon name="Info" size={20} className="text-yellow-300 mt-0.5 flex-shrink-0" />
-                  <p className="text-white/95 text-sm">
+              <div className="bg-yellow-500/20 backdrop-blur-sm border-2 border-yellow-400/40 rounded-xl p-3 md:p-4">
+                <div className="flex items-start gap-2 md:gap-3">
+                  <Icon name="Info" size={16} className="text-yellow-300 mt-0.5 flex-shrink-0 sm:w-5 sm:h-5" />
+                  <p className="text-white/95 text-xs sm:text-sm leading-tight">
                     <span className="font-bold">Правила участия:</span> Один аккаунт = один билет. 
                     В розыгрыше участвуют только VIP-пользователи с купленным билетом.
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-4 items-center">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 items-stretch sm:items-center">
                 <Button
                   onClick={() => setCurrentPage('raffle')}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold text-lg px-8 py-6 h-auto"
+                  className="bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold text-sm sm:text-base md:text-lg px-6 py-4 sm:px-8 sm:py-5 md:py-6 h-auto w-full sm:w-auto"
                 >
-                  <Icon name="Ticket" size={20} className="mr-2" />
-                  Купить билет 100 ₽
+                  <Icon name="Ticket" size={18} className="mr-2 sm:w-5 sm:h-5" />
+                  <span className="whitespace-nowrap">Купить билет 100 ₽</span>
                 </Button>
                 
-                <div className="flex items-center gap-2 text-white/80 text-sm">
-                  <Icon name="Users" size={16} />
-                  <span>Куплено <span className="font-bold text-white">{ticketsSold.toLocaleString('ru-RU')}</span> билетов</span>
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 md:gap-2 text-white/80 text-xs sm:text-sm">
+                  <Icon name="Users" size={14} className="sm:w-4 sm:h-4" />
+                  <span className="whitespace-nowrap">Куплено <span className="font-bold text-white">{ticketsSold.toLocaleString('ru-RU')}</span> билетов</span>
                 </div>
               </div>
             </div>
