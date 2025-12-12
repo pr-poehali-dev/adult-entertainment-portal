@@ -70,31 +70,41 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
           {serviceCategories.map((category, i) => (
             <Card 
               key={category.id} 
-              onClick={() => handleCategoryClick(category.id)}
-              className="group hover:scale-105 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
+              className="group transition-all duration-300 bg-card/80 backdrop-blur-sm border-border hover:shadow-2xl hover:shadow-primary/20 animate-slide-in-left overflow-hidden"
               style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
-              <div className="relative h-56 overflow-hidden">
-                <img 
-                  src={category.image} 
-                  alt={getCategoryName(category.id, language)}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <CardTitle className="text-2xl text-white font-bold tracking-tight drop-shadow-lg">
-                    {getCategoryName(category.id, language)}
-                  </CardTitle>
+              <div 
+                className={category.subcategories.length === 0 ? "cursor-pointer hover:scale-105 transition-all duration-300" : ""}
+                onClick={() => category.subcategories.length === 0 && handleCategoryClick(category.id)}
+              >
+                <div className="relative h-56 overflow-hidden">
+                  <img 
+                    src={category.image} 
+                    alt={getCategoryName(category.id, language)}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <CardTitle className="text-2xl text-white font-bold tracking-tight drop-shadow-lg">
+                      {getCategoryName(category.id, language)}
+                    </CardTitle>
+                  </div>
                 </div>
               </div>
               {category.subcategories.length > 0 && (
                 <CardHeader>
-                  <div className="text-sm text-muted-foreground space-y-2">
+                  <div className="text-sm space-y-2">
                     {category.subcategories.map(sub => (
-                      <div key={sub.id} className="flex items-center gap-2 py-1">
+                      <button
+                        key={sub.id}
+                        onClick={() => handleCategoryClick(sub.id)}
+                        className="w-full flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-primary/10 transition-colors text-left group/sub"
+                      >
                         <Icon name={sub.icon as any} size={16} className="text-primary" />
-                        <span className="font-medium">{getSubcategoryName(sub.id, language)}</span>
-                      </div>
+                        <span className="font-medium text-foreground group-hover/sub:text-primary transition-colors">
+                          {getSubcategoryName(sub.id, language)}
+                        </span>
+                      </button>
                     ))}
                   </div>
                 </CardHeader>

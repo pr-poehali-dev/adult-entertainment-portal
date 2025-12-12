@@ -26,6 +26,8 @@ const categoryNames: Record<string, Record<Language, string>> = {
 };
 
 const subcategoryNames: Record<string, Record<Language, string>> = {
+  dinner: { ru: 'Вечерний ужин', en: 'Dinner Date' },
+  abroad: { ru: 'Заграница', en: 'Abroad' },
   outcall: { ru: 'Выезд', en: 'Outcall' },
   apartment: { ru: 'Апартаменты', en: 'Apartment' },
   audio: { ru: 'Аудиоразговор', en: 'Audio Call' },
@@ -46,19 +48,18 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'escort',
     icon: 'Users',
     image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg',
-    subcategories: []
-  },
-  {
-    id: 'dinner',
-    icon: 'UtensilsCrossed',
-    image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/5f482fab-004b-42fa-9846-4ad8240e01ef.jpg',
-    subcategories: []
-  },
-  {
-    id: 'abroad',
-    icon: 'Plane',
-    image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/22300f84-1212-499e-a1f1-3125dd4a2728.jpg',
-    subcategories: []
+    subcategories: [
+      { 
+        id: 'dinner', 
+        icon: 'UtensilsCrossed',
+        image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/5f482fab-004b-42fa-9846-4ad8240e01ef.jpg'
+      },
+      { 
+        id: 'abroad', 
+        icon: 'Plane',
+        image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/22300f84-1212-499e-a1f1-3125dd4a2728.jpg'
+      }
+    ]
   },
   {
     id: 'massage',
