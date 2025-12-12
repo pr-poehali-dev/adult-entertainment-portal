@@ -41,6 +41,7 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       lookingFor: profile.role === 'buyer' ? 'Девушка 20-30 лет, стройная, для классического свидания' : undefined,
       status: 'active',
       createdAt: new Date().toISOString(),
+      viewCount: 127,
       responses: profile.role === 'buyer' ? [
         {
           id: 1,
@@ -57,10 +58,25 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     }
   ]);
 
+  // Симуляция увеличения просмотров
+  useState(() => {
+    const interval = setInterval(() => {
+      setAds(currentAds => 
+        currentAds.map(ad => 
+          ad.status === 'active' && Math.random() > 0.7
+            ? { ...ad, viewCount: ad.viewCount + 1 }
+            : ad
+        )
+      );
+    }, 8000); // Обновление каждые 8 секунд
+
+    return () => clearInterval(interval);
+  });
+
   const activeAds = ads.filter(ad => ad.status === 'active');
   const completedAds = ads.filter(ad => ad.status === 'completed' || ad.status === 'cancelled');
 
-  const handleCreateAd = (newAd: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses'>) => {
+  const handleCreateAd = (newAd: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'>) => {
     const ad: UserAd = {
       ...newAd,
       id: Date.now(),
@@ -69,6 +85,7 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       authorAvatar: profile.avatar,
       authorRole: profile.role!,
       createdAt: new Date().toISOString(),
+      viewCount: 0,
       responses: []
     };
     setAds([ad, ...ads]);
@@ -155,7 +172,13 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
           )}
           
           <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-            <span>Создано: {new Date(ad.createdAt).toLocaleDateString('ru-RU')}</span>
+            <div className="flex items-center gap-3">
+              <span>Создано: {new Date(ad.createdAt).toLocaleDateString('ru-RU')}</span>
+              <div className="flex items-center gap-1 text-primary">
+                <Icon name="Eye" size={14} />
+                <span className="font-medium">{ad.viewCount}</span>
+              </div>
+            </div>
             {pendingResponses > 0 && (
               <Badge variant="destructive" className="text-xs">
                 {pendingResponses} новых откликов
