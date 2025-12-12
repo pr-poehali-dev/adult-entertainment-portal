@@ -75,12 +75,12 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
             >
               <div 
                 className={
-                  category.subcategories.length === 0 || category.id === 'escort' || category.id === 'real-meeting' ? 
+                  category.subcategories.length === 0 || category.id === 'escort' || category.id === 'real-meeting' || category.id === 'virtual' ? 
                   "" : 
                   "cursor-pointer hover:scale-105 transition-all duration-300"
                 }
                 onClick={() => {
-                  if (category.id === 'escort' || category.id === 'real-meeting') return;
+                  if (category.id === 'escort' || category.id === 'real-meeting' || category.id === 'virtual') return;
                   if (category.subcategories.length === 0 || category.id === 'striptease') {
                     handleCategoryClick(category.id);
                   }
