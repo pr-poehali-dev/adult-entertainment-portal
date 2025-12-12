@@ -19,15 +19,25 @@ export const NotificationPanel = ({
     <div className="absolute right-0 top-12 w-96 bg-card border border-border rounded-lg shadow-2xl z-50 animate-fade-in">
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-lg">Уведомления</h3>
-        <Button 
-          variant="ghost" 
-          size="sm"
-          onClick={() => {
-            setNotifications(notifications.map(n => ({ ...n, read: true })));
-          }}
-        >
-          Прочитать все
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => {
+              setNotifications(notifications.map(n => ({ ...n, read: true })));
+            }}
+          >
+            Прочитать все
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={onClose}
+            className="h-8 w-8"
+          >
+            <Icon name="X" size={16} />
+          </Button>
+        </div>
       </div>
       <div className="max-h-[400px] overflow-y-auto">
         {notifications.length === 0 ? (
