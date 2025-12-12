@@ -74,8 +74,17 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
               style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
               <div 
-                className={category.subcategories.length === 0 ? "cursor-pointer hover:scale-105 transition-all duration-300" : ""}
-                onClick={() => category.subcategories.length === 0 && handleCategoryClick(category.id)}
+                className={
+                  category.subcategories.length === 0 || category.id === 'escort' ? 
+                  "" : 
+                  "cursor-pointer hover:scale-105 transition-all duration-300"
+                }
+                onClick={() => {
+                  if (category.id === 'escort') return;
+                  if (category.subcategories.length === 0 || category.id === 'striptease') {
+                    handleCategoryClick(category.id);
+                  }
+                }}
               >
                 <div className="relative h-56 overflow-hidden">
                   <img 
@@ -97,11 +106,19 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
                     {category.subcategories.map(sub => (
                       <button
                         key={sub.id}
-                        onClick={() => handleCategoryClick(sub.id)}
-                        className="w-full flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-primary/10 transition-colors text-left group/sub"
+                        onClick={() => category.id !== 'striptease' && handleCategoryClick(sub.id)}
+                        className={`w-full flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-left ${
+                          category.id === 'striptease' 
+                            ? 'cursor-default' 
+                            : 'hover:bg-primary/10 cursor-pointer group/sub'
+                        }`}
                       >
                         <Icon name={sub.icon as any} size={16} className="text-primary" />
-                        <span className="font-medium text-foreground group-hover/sub:text-primary transition-colors">
+                        <span className={`font-medium text-foreground ${
+                          category.id === 'striptease' 
+                            ? '' 
+                            : 'group-hover/sub:text-primary transition-colors'
+                        }`}>
                           {getSubcategoryName(sub.id, language)}
                         </span>
                       </button>
