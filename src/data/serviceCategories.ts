@@ -43,12 +43,6 @@ export const getSubcategoryName = (id: string, lang: Language): string => {
 
 export const serviceCategories: ServiceCategory[] = [
   {
-    id: 'vip',
-    icon: 'Crown',
-    image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/7b022cb5-ced6-46dc-9446-88606525899f.jpg',
-    subcategories: []
-  },
-  {
     id: 'escort',
     icon: 'Users',
     image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/ec51be21-94dc-4e98-b8b1-7d6a13235916.jpg',
@@ -58,12 +52,6 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'dinner',
     icon: 'UtensilsCrossed',
     image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/5f482fab-004b-42fa-9846-4ad8240e01ef.jpg',
-    subcategories: []
-  },
-  {
-    id: 'business',
-    icon: 'Briefcase',
-    image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/29d615d5-3841-4827-a359-06c794346bc3.jpg',
     subcategories: []
   },
   {
