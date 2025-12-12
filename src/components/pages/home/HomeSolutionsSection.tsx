@@ -41,7 +41,7 @@ export const HomeSolutionsSection = () => {
   ];
 
   return (
-    <section className="py-12 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-hidden">
+    <section className="py-12 px-4 pb-6 bg-gradient-to-b from-muted/30 to-background w-full overflow-hidden">
       <div className="max-w-wide mx-auto w-full">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
