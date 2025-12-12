@@ -91,6 +91,20 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     }));
   };
 
+  const handleDeleteAd = (adId: number) => {
+    if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+      setAds(ads.filter(ad => ad.id !== adId));
+    }
+  };
+
+  const handleRenewAd = (adId: number) => {
+    setAds(ads.map(ad => 
+      ad.id === adId 
+        ? { ...ad, status: 'active', createdAt: new Date().toISOString() }
+        : ad
+    ));
+  };
+
   const handleViewResponse = (ad: UserAd, response: AdResponse) => {
     setSelectedAd(ad);
     setSelectedResponse(response);
@@ -136,6 +150,30 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
               <Badge variant="destructive" className="text-xs">
                 {pendingResponses} новых откликов
               </Badge>
+            )}
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            {ad.status === 'active' ? (
+              <Button 
+                variant="destructive" 
+                size="sm" 
+                className="flex-1"
+                onClick={() => handleDeleteAd(ad.id)}
+              >
+                <Icon name="Trash2" size={16} className="mr-2" />
+                Удалить
+              </Button>
+            ) : (
+              <Button 
+                variant="default" 
+                size="sm" 
+                className="flex-1"
+                onClick={() => handleRenewAd(ad.id)}
+              >
+                <Icon name="RotateCw" size={16} className="mr-2" />
+                Возобновить
+              </Button>
             )}
           </div>
 
