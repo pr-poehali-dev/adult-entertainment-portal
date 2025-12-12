@@ -100,37 +100,44 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
                   </div>
                 </div>
               </div>
-              {category.subcategories.length > 0 && (
+              {(category.subcategories.length > 0 || category.description) && (
                 <CardHeader>
-                  <div className="text-sm space-y-2">
-                    {category.subcategories.map(sub => (
-                      <button
-                        key={sub.id}
-                        onClick={() => {
-                          if (category.id === 'striptease') return;
-                          if (category.id === 'real-meeting') {
-                            handleCategoryClick(sub.id);
-                          } else {
-                            handleCategoryClick(sub.id);
-                          }
-                        }}
-                        className={`w-full flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-left ${
-                          category.id === 'striptease' 
-                            ? 'cursor-default' 
-                            : 'hover:bg-primary/10 cursor-pointer group/sub'
-                        }`}
-                      >
-                        <Icon name={sub.icon as any} size={16} className="text-primary" />
-                        <span className={`font-medium text-foreground ${
-                          category.id === 'striptease' 
-                            ? '' 
-                            : 'group-hover/sub:text-primary transition-colors'
-                        }`}>
-                          {getSubcategoryName(sub.id, language)}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+                  {category.description && (
+                    <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                      {category.description}
+                    </p>
+                  )}
+                  {category.subcategories.length > 0 && (
+                    <div className="text-sm space-y-2">
+                      {category.subcategories.map(sub => (
+                        <button
+                          key={sub.id}
+                          onClick={() => {
+                            if (category.id === 'striptease') return;
+                            if (category.id === 'real-meeting') {
+                              handleCategoryClick(sub.id);
+                            } else {
+                              handleCategoryClick(sub.id);
+                            }
+                          }}
+                          className={`w-full flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-left ${
+                            category.id === 'striptease' 
+                              ? 'cursor-default' 
+                              : 'hover:bg-primary/10 cursor-pointer group/sub'
+                          }`}
+                        >
+                          <Icon name={sub.icon as any} size={16} className="text-primary" />
+                          <span className={`font-medium text-foreground ${
+                            category.id === 'striptease' 
+                              ? '' 
+                              : 'group-hover/sub:text-primary transition-colors'
+                          }`}>
+                            {getSubcategoryName(sub.id, language)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </CardHeader>
               )}
             </Card>
