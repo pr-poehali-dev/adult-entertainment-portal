@@ -108,7 +108,7 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
         </CardHeader>
       </Card>
 
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3">
         {setCurrentPage && (
           <>
             <button
@@ -125,14 +125,6 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
             >
               <Icon name="History" size={20} />
               <span>История бронирований</span>
-              <Icon name="ChevronRight" size={18} />
-            </button>
-            <button
-              onClick={() => setCurrentPage('my-orders')}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium"
-            >
-              <Icon name="ShoppingBag" size={20} />
-              <span>Мои заказы</span>
               <Icon name="ChevronRight" size={18} />
             </button>
           </>

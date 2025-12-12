@@ -187,6 +187,14 @@ export const NavigationMobile = ({
               <span>{profile.nickname}</span>
             </button>
             
+            <button 
+              onClick={() => { setCurrentPage('my-orders'); setShowMobileMenu(false); }}
+              className="w-full py-3 px-4 rounded-lg bg-muted hover:bg-muted/70 transition-colors flex items-center gap-3 justify-center font-semibold"
+            >
+              <Icon name="ShoppingBag" size={20} className="text-primary" />
+              <span>Мои заказы</span>
+            </button>
+
             {profile.isAgencyOwner && (
               <button 
                 onClick={() => { setCurrentPage('agency-dashboard'); setShowMobileMenu(false); }}

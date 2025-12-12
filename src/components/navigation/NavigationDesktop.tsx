@@ -128,6 +128,17 @@ export const NavigationDesktop = ({
                     )}
                   </button>
                   
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('my-orders');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="ShoppingBag" size={16} />
+                    <span>Мои заказы</span>
+                  </button>
+                  
                   {profile.isAgencyOwner ? (
                     <button
                       onClick={() => {
