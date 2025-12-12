@@ -13,18 +13,18 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
   const { t } = useLanguage();
   
   return (
-    <section className="relative py-40 px-4 overflow-hidden bg-gradient-to-br from-background via-muted/30 to-background w-full">
+    <section className="relative py-20 px-4 overflow-hidden bg-gradient-to-br from-background via-muted/30 to-background w-full">
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
       
       <div className="w-full mx-auto text-center relative z-10 px-4">
-        <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in text-center px-4" style={{ animationDelay: '200ms' }}>
+        <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in text-center px-4" style={{ animationDelay: '200ms' }}>
           {t.home.heroSubtitle}
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in mb-16" style={{ animationDelay: '300ms' }}>
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in mb-10" style={{ animationDelay: '300ms' }}>
           <Button 
             size="lg" 
             onClick={() => setCurrentPage('catalog')} 

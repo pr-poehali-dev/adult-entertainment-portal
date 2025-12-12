@@ -5,9 +5,9 @@ export const HomeAdvantagesSection = () => {
   const { t } = useLanguage();
   
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-x-hidden">
+    <section className="py-12 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-x-hidden">
       <div className="max-w-wide mx-auto w-full">
-        <div className="text-center mb-16 px-4">
+        <div className="text-center mb-10 px-4">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             <span className="gold-shimmer">{t.home.advantagesTitle}</span>
           </h2>

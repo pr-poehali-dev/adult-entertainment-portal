@@ -41,9 +41,9 @@ export const HomeSolutionsSection = () => {
   ];
 
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-hidden">
+    <section className="py-12 px-4 bg-gradient-to-b from-muted/30 to-background w-full overflow-hidden">
       <div className="max-w-wide mx-auto w-full">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             <span className="gold-shimmer">Проблемы онлайн-знакомств,</span>
             <br />
@@ -54,7 +54,7 @@ export const HomeSolutionsSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {solutions.map((item, index) => (
             <Card 
               key={index}
