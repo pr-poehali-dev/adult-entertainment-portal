@@ -46,8 +46,6 @@ export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profil
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
-      <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
-      <DatingBanner setCurrentPage={setCurrentPage} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeAdvantagesSection />
     </div>
