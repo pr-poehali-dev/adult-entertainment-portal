@@ -103,7 +103,7 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
               {(category.subcategories.length > 0 || category.description) && (
                 <CardHeader>
                   {category.description && (
-                    <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                    <p className="text-sm text-muted-foreground mb-3 leading-relaxed whitespace-pre-line">
                       {category.description}
                     </p>
                   )}
