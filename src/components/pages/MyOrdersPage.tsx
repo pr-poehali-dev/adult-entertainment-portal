@@ -36,8 +36,8 @@ export const MyOrdersPage = ({
 }: MyOrdersPageProps) => {
   const [filter, setFilter] = useState<'all' | OrderStatus>('all');
 
-  const realMeetingOrders: RealMeetingOrder[] = bookings.filter(
-    (b) => b.meetingType && (b.meetingType === 'outcall' || b.meetingType === 'apartment')
+  const allOrders = bookings.filter(
+    (b) => b.serviceType || b.meetingType
   );
 
   const getStatusBadge = (status: OrderStatus) => {
@@ -80,42 +80,41 @@ export const MyOrdersPage = ({
 
   const filteredOrders =
     filter === 'all'
-      ? realMeetingOrders
-      : realMeetingOrders.filter((order) => order.status === filter);
+      ? allOrders
+      : allOrders.filter((order) => order.status === filter);
 
   const getStats = () => {
     return {
-      total: realMeetingOrders.length,
-      pending: realMeetingOrders.filter((o) => o.status === 'pending').length,
-      confirmed: realMeetingOrders.filter((o) => o.status === 'confirmed').length,
-      paid: realMeetingOrders.filter((o) => o.status === 'paid').length,
-      completed: realMeetingOrders.filter((o) => o.status === 'completed').length,
-      cancelled: realMeetingOrders.filter((o) => o.status === 'cancelled').length,
+      total: allOrders.length,
+      pending: allOrders.filter((o) => o.status === 'pending').length,
+      confirmed: allOrders.filter((o) => o.status === 'confirmed').length,
+      paid: allOrders.filter((o) => o.status === 'paid').length,
+      completed: allOrders.filter((o) => o.status === 'completed').length,
+      cancelled: allOrders.filter((o) => o.status === 'cancelled').length,
     };
   };
 
   const stats = getStats();
 
-  const handleOpenChat = (order: RealMeetingOrder) => {
+  const handleOpenChat = (order: any) => {
     if (!setOrderChats || !setSelectedOrderChatId) return;
 
-    // Проверяем, существует ли уже чат для этого заказа
     let existingChat = orderChats.find((c) => c.orderId === order.id);
 
     if (!existingChat && order.chatId) {
-      // Создаем новый чат
       const newChat = {
         id: order.chatId,
         orderId: order.id,
-        providerId: order.providerId,
-        providerName: order.providerName,
-        providerAvatar: order.providerAvatar,
-        buyerId: order.buyerId,
-        buyerName: order.buyerName,
-        buyerAvatar: order.buyerAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Buyer',
+        providerId: 1,
+        providerName: order.performerName,
+        providerAvatar: order.performerAvatar,
+        buyerId: currentUserId,
+        buyerName: 'Покупатель',
+        buyerAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Buyer',
         messages: [],
         createdAt: new Date().toISOString(),
         lastMessageAt: new Date().toISOString(),
+        orderDetails: order,
       };
       setOrderChats([...orderChats, newChat]);
       existingChat = newChat;
@@ -189,25 +188,31 @@ export const MyOrdersPage = ({
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-4">
                         <img
-                          src={order.providerAvatar}
-                          alt={order.providerName}
+                          src={order.performerAvatar}
+                          alt={order.performerName}
                           className="w-16 h-16 rounded-full"
                         />
                         <div>
                           <CardTitle className="text-xl mb-1">
-                            {order.providerName}
+                            {order.performerName}
                           </CardTitle>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                             <Badge variant="secondary">
-                              <Icon
-                                name={
-                                  order.meetingType === 'outcall' ? 'Car' : 'Home'
-                                }
-                                size={12}
-                                className="mr-1"
-                              />
-                              {meetingTypeNames[order.meetingType]}
+                              {order.category}
                             </Badge>
+                            {order.meetingType && (
+                              <>
+                                <span>•</span>
+                                <Badge variant="outline">
+                                  <Icon
+                                    name={order.meetingType === 'outcall' ? 'Car' : 'Home'}
+                                    size={12}
+                                    className="mr-1"
+                                  />
+                                  {meetingTypeNames[order.meetingType]}
+                                </Badge>
+                              </>
+                            )}
                             <span>•</span>
                             <Icon name="Calendar" size={14} />
                             {new Date(order.date).toLocaleDateString('ru-RU', {
@@ -225,19 +230,21 @@ export const MyOrdersPage = ({
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-1">Программа</p>
-                        <p className="font-semibold">{programNames[order.program]}</p>
-                      </div>
+                      {order.program && (
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">Программа</p>
+                          <p className="font-semibold">{programNames[order.program]}</p>
+                        </div>
+                      )}
                       <div>
                         <p className="text-sm text-muted-foreground mb-1">
                           Длительность
                         </p>
                         <p className="font-semibold">
-                          {order.hours}{' '}
-                          {order.hours === 1
+                          {order.hours || order.duration}{' '}
+                          {(order.hours || order.duration) === 1
                             ? 'час'
-                            : order.hours < 5
+                            : (order.hours || order.duration) < 5
                             ? 'часа'
                             : 'часов'}
                         </p>

@@ -265,6 +265,7 @@ export const StripteasePage = ({ setCurrentPage, bookings, setBookings }: Stript
           }}
           bookings={bookings}
           setBookings={setBookings}
+          setCurrentPage={setCurrentPage}
         />
       )}
     </div>

@@ -699,4 +699,28 @@ export interface OrderChat {
   messages: ChatMessage[];
   createdAt: string;
   lastMessageAt: string;
+  orderDetails?: ServiceOrder;
+}
+
+export type ServiceType = 'striptease' | 'real-meeting' | 'massage' | 'escort' | 'online';
+
+export interface ServiceOrder {
+  id: number;
+  serviceType: ServiceType;
+  performerName: string;
+  performerAvatar: string;
+  category: string;
+  date: string;
+  time: string;
+  duration: number;
+  price: number;
+  currency?: Currency;
+  status: 'confirmed' | 'pending' | 'paid' | 'completed' | 'cancelled';
+  createdAt: string;
+  chatId?: number;
+  meetingType?: MeetingType;
+  program?: ProgramType;
+  address?: string;
+  phone?: string;
+  hours?: number;
 }

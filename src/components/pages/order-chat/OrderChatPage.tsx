@@ -38,7 +38,7 @@ export const OrderChatPage = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const chat = orderChats.find((c) => c.id === chatId);
-  const order = bookings.find((b) => b.chatId === chatId);
+  const order = chat?.orderDetails || bookings.find((b) => b.chatId === chatId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -64,10 +64,11 @@ export const OrderChatPage = ({
     );
   }
 
-  const isProvider = currentUserId === order.providerId;
-  const otherUser = isProvider
-    ? { name: order.buyerName, avatar: order.buyerAvatar }
-    : { name: order.providerName, avatar: order.providerAvatar };
+  const isProvider = false;
+  const otherUser = {
+    name: order.performerName || order.providerName,
+    avatar: order.performerAvatar || order.providerAvatar,
+  };
 
   const handleSendMessage = () => {
     if (!messageText.trim()) return;
@@ -75,8 +76,8 @@ export const OrderChatPage = ({
     const newMessage: ChatMessage = {
       id: Date.now(),
       senderId: currentUserId,
-      senderName: isProvider ? order.providerName : order.buyerName,
-      senderAvatar: isProvider ? order.providerAvatar : order.buyerAvatar,
+      senderName: chat.buyerName,
+      senderAvatar: chat.buyerAvatar,
       text: messageText.trim(),
       timestamp: new Date().toISOString(),
       read: false,
@@ -127,11 +128,10 @@ export const OrderChatPage = ({
                 <div>
                   <h2 className="text-lg font-bold">{otherUser.name}</h2>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
-                    <Icon
-                      name={order.meetingType === 'outcall' ? 'Car' : 'Home'}
-                      size={12}
-                    />
-                    {meetingTypeNames[order.meetingType]} •{' '}
+                    <Badge variant="secondary" className="text-xs">
+                      {order.category}
+                    </Badge>
+                    •{' '}
                     {new Date(order.date).toLocaleDateString('ru-RU')} {order.time}
                   </p>
                 </div>
@@ -148,15 +148,17 @@ export const OrderChatPage = ({
         <Card className="rounded-none border-b border-x-0 border-t-0">
           <CardContent className="py-3">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-              <div>
-                <p className="text-muted-foreground">Программа</p>
-                <p className="font-semibold">{programNames[order.program]}</p>
-              </div>
+              {order.program && (
+                <div>
+                  <p className="text-muted-foreground">Программа</p>
+                  <p className="font-semibold">{programNames[order.program]}</p>
+                </div>
+              )}
               <div>
                 <p className="text-muted-foreground">Длительность</p>
                 <p className="font-semibold">
-                  {order.hours}{' '}
-                  {order.hours === 1 ? 'час' : order.hours < 5 ? 'часа' : 'часов'}
+                  {order.hours || order.duration}{' '}
+                  {(order.hours || order.duration) === 1 ? 'час' : (order.hours || order.duration) < 5 ? 'часа' : 'часов'}
                 </p>
               </div>
               <div>

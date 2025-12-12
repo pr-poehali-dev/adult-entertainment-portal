@@ -14,6 +14,7 @@ interface StripteaseBookingStatusProps {
   handleCancelBooking: () => void;
   handleBooking: () => void;
   handlePayment: () => void;
+  handleOpenChat?: () => void;
 }
 
 export const StripteaseBookingStatus = ({
@@ -26,6 +27,7 @@ export const StripteaseBookingStatus = ({
   handleCancelBooking,
   handleBooking,
   handlePayment,
+  handleOpenChat,
 }: StripteaseBookingStatusProps) => {
   return (
     <>
@@ -190,13 +192,25 @@ export const StripteaseBookingStatus = ({
       )}
 
       {bookingStatus === 'confirmed' && (
-        <Button
-          onClick={handlePayment}
-          className="w-full h-12 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
-        >
-          <Icon name="Wallet" size={20} className="mr-2" />
-          Оплатить {getTotalPrice().toLocaleString('ru-RU')} ₽
-        </Button>
+        <div className="space-y-3">
+          {handleOpenChat && (
+            <Button
+              onClick={handleOpenChat}
+              variant="outline"
+              className="w-full h-12 text-lg border-primary/30 hover:bg-primary/5"
+            >
+              <Icon name="MessageCircle" size={20} className="mr-2" />
+              Обсудить сделку
+            </Button>
+          )}
+          <Button
+            onClick={handlePayment}
+            className="w-full h-12 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+          >
+            <Icon name="Wallet" size={20} className="mr-2" />
+            Оплатить {getTotalPrice().toLocaleString('ru-RU')} ₽
+          </Button>
+        </div>
       )}
     </>
   );

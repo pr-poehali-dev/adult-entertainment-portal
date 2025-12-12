@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import { Page } from '@/types';
 import { StripteaseAd } from './stripteaseData';
 import { StripteaseProfileTab } from './StripteaseProfileTab';
 import { StripteaseBookingForm } from './StripteaseBookingForm';
@@ -15,9 +16,10 @@ interface StripteaseBookingModalProps {
   onClose: () => void;
   bookings?: any[];
   setBookings?: (bookings: any[]) => void;
+  setCurrentPage?: (page: Page) => void;
 }
 
-export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBookings }: StripteaseBookingModalProps) => {
+export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBookings, setCurrentPage }: StripteaseBookingModalProps) => {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -74,6 +76,7 @@ export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBooking
     if (setBookings && bookings) {
       const newBooking = {
         id: Date.now(),
+        serviceType: 'striptease' as const,
         performerName: ad.name,
         performerAvatar: ad.avatar,
         category: 'Стриптиз',
@@ -81,8 +84,10 @@ export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBooking
         time: selectedTime,
         duration: duration,
         price: totalPrice,
-        status: 'confirmed' as const,
+        currency: 'RUB' as const,
+        status: 'paid' as const,
         createdAt: new Date().toISOString(),
+        chatId: Date.now() + 1000,
       };
       
       setBookings([newBooking, ...bookings]);
@@ -95,6 +100,13 @@ export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBooking
     });
 
     onClose();
+  };
+
+  const handleOpenChat = () => {
+    if (setCurrentPage) {
+      onClose();
+      setCurrentPage('my-orders');
+    }
   };
 
   const getTotalPrice = () => ad.pricePerHour * duration;
@@ -182,6 +194,7 @@ export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBooking
               handleCancelBooking={handleCancelBooking}
               handleBooking={handleBooking}
               handlePayment={handlePayment}
+              handleOpenChat={handleOpenChat}
             />
           </div>
         )}
