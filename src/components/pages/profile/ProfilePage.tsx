@@ -31,6 +31,7 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
   
   const [wallet, setWallet] = useState<Wallet>({
     balances: [
+      { currency: 'LOVE', amount: 875, symbol: '💗' },
       { currency: 'RUB', amount: 50000, symbol: '₽' },
       { currency: 'USD', amount: 1200, symbol: '$' },
       { currency: 'EUR', amount: 800, symbol: '€' },

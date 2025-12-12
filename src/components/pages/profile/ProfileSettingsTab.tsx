@@ -55,8 +55,14 @@ export const ProfileSettingsTab = ({
     const now = new Date();
     const currentExpiry = profile.vipExpiry ? new Date(profile.vipExpiry) : now;
     const startDate = currentExpiry > now ? currentExpiry : now;
-    const newExpiry = new Date(startDate);
-    newExpiry.setMonth(newExpiry.getMonth() + months);
+    
+    const newExpiry = new Date(startDate.getTime());
+    const targetMonth = newExpiry.getMonth() + months;
+    const targetYear = newExpiry.getFullYear() + Math.floor(targetMonth / 12);
+    const finalMonth = targetMonth % 12;
+    
+    newExpiry.setFullYear(targetYear);
+    newExpiry.setMonth(finalMonth);
 
     onProfileUpdate?.({
       vipStatus: 'vip',
