@@ -313,7 +313,7 @@ const Index = () => {
           
           <div className="pt-8 border-t border-border/30">
             <p className="text-center text-sm text-muted-foreground">
-              © 2026 <span className="font-semibold text-primary">Elite</span>. Все права защищены. 18+
+              © 2026 <span className="font-semibold text-primary">love is</span>. Все права защищены. 18+
             </p>
           </div>
         </div>
