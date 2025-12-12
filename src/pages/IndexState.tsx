@@ -156,6 +156,8 @@ export const useIndexState = () => {
 
   const [walletTransactions, setWalletTransactions] = useState<any[]>([]);
 
+  const [bookings, setBookings] = useState<any[]>([]);
+
   return {
     currentPage,
     setCurrentPage,
@@ -236,5 +238,7 @@ export const useIndexState = () => {
     setShowLovePurchase,
     userAds,
     setUserAds,
+    bookings,
+    setBookings,
   };
 };

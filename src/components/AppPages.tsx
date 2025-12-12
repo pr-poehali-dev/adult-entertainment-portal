@@ -70,6 +70,8 @@ interface AppPagesProps {
   setSelectedApplicationId?: (id: number | null) => void;
   onNotificationAdd?: (notification: Notification) => void;
   onOpenLovePurchase?: () => void;
+  bookings: any[];
+  setBookings: (bookings: any[]) => void;
 }
 
 export const useAppPages = ({
@@ -113,6 +115,8 @@ export const useAppPages = ({
   setSelectedApplicationId,
   onNotificationAdd,
   onOpenLovePurchase,
+  bookings,
+  setBookings,
 }: AppPagesProps) => {
   
   const LoadingFallback = () => (
@@ -275,7 +279,7 @@ export const useAppPages = ({
       case 'category':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} />
+            <CategoryProvidersPage categoryId={selectedCategory} setCurrentPage={setCurrentPage} bookings={bookings} setBookings={setBookings} />
           </Suspense>
         );
       
@@ -385,7 +389,7 @@ export const useAppPages = ({
       case 'bookings':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <BookingsPage setCurrentPage={setCurrentPage} userRole={userRole} />
+            <BookingsPage setCurrentPage={setCurrentPage} userRole={userRole} bookings={bookings} setBookings={setBookings} />
           </Suspense>
         );
       

@@ -11,9 +11,11 @@ import { stripteaseAds, StripteaseAd } from './stripteaseData';
 
 interface StripteasePageProps {
   setCurrentPage: (page: Page) => void;
+  bookings?: any[];
+  setBookings?: (bookings: any[]) => void;
 }
 
-export const StripteasePage = ({ setCurrentPage }: StripteasePageProps) => {
+export const StripteasePage = ({ setCurrentPage, bookings, setBookings }: StripteasePageProps) => {
   const [selectedAd, setSelectedAd] = useState<StripteaseAd | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [filterGender, setFilterGender] = useState<'all' | 'male' | 'female'>('all');
@@ -261,6 +263,8 @@ export const StripteasePage = ({ setCurrentPage }: StripteasePageProps) => {
             setShowBookingModal(false);
             setSelectedAd(null);
           }}
+          bookings={bookings}
+          setBookings={setBookings}
         />
       )}
     </div>

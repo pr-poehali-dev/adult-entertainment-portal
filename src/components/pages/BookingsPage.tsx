@@ -21,12 +21,14 @@ interface BookingHistoryItem {
 interface BookingsPageProps {
   setCurrentPage: (page: Page) => void;
   userRole?: UserRole;
+  bookings: BookingHistoryItem[];
+  setBookings: (bookings: BookingHistoryItem[]) => void;
 }
 
-export const BookingsPage = ({ setCurrentPage, userRole }: BookingsPageProps) => {
+export const BookingsPage = ({ setCurrentPage, userRole, bookings, setBookings }: BookingsPageProps) => {
   const [filter, setFilter] = useState<'all' | 'waiting' | 'confirmed' | 'completed' | 'cancelled'>('all');
 
-  const mockBookings: BookingHistoryItem[] = [
+  const mockBookings: BookingHistoryItem[] = bookings.length > 0 ? bookings : [
     {
       id: 1,
       performerName: 'Анастасия',
@@ -110,17 +112,19 @@ export const BookingsPage = ({ setCurrentPage, userRole }: BookingsPageProps) =>
     );
   };
 
-  const filteredBookings = mockBookings.filter(
+  const allBookings = bookings.length > 0 ? bookings : mockBookings;
+  
+  const filteredBookings = allBookings.filter(
     (booking) => filter === 'all' || booking.status === filter
   );
 
   const getStats = () => {
     return {
-      total: mockBookings.length,
-      waiting: mockBookings.filter((b) => b.status === 'waiting').length,
-      confirmed: mockBookings.filter((b) => b.status === 'confirmed').length,
-      completed: mockBookings.filter((b) => b.status === 'completed').length,
-      cancelled: mockBookings.filter((b) => b.status === 'cancelled').length,
+      total: allBookings.length,
+      waiting: allBookings.filter((b) => b.status === 'waiting').length,
+      confirmed: allBookings.filter((b) => b.status === 'confirmed').length,
+      completed: allBookings.filter((b) => b.status === 'completed').length,
+      cancelled: allBookings.filter((b) => b.status === 'cancelled').length,
     };
   };
 

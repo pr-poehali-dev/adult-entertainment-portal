@@ -122,6 +122,8 @@ const Index = () => {
     setSelectedApplicationId: state.setSelectedApplicationId,
     onNotificationAdd: handlers.addNotification,
     onOpenLovePurchase: () => state.setShowLovePurchase(true),
+    bookings: state.bookings,
+    setBookings: state.setBookings,
   });
 
   if (state.currentPage === 'agency-register') {

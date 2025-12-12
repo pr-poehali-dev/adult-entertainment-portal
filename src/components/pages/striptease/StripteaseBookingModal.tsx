@@ -14,6 +14,8 @@ interface StripteaseBookingModalProps {
   ad: StripteaseAd;
   open: boolean;
   onClose: () => void;
+  bookings?: any[];
+  setBookings?: (bookings: any[]) => void;
 }
 
 const weekDays = [
@@ -26,7 +28,7 @@ const weekDays = [
   { key: 'sun', label: 'Вс' },
 ];
 
-export const StripteaseBookingModal = ({ ad, open, onClose }: StripteaseBookingModalProps) => {
+export const StripteaseBookingModal = ({ ad, open, onClose, bookings, setBookings }: StripteaseBookingModalProps) => {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -80,6 +82,24 @@ export const StripteaseBookingModal = ({ ad, open, onClose }: StripteaseBookingM
 
   const handlePayment = () => {
     const totalPrice = ad.pricePerHour * duration;
+    
+    // Сохраняем бронирование в историю
+    if (setBookings && bookings) {
+      const newBooking = {
+        id: Date.now(),
+        performerName: ad.name,
+        performerAvatar: ad.avatar,
+        category: 'Стриптиз',
+        date: selectedDate,
+        time: selectedTime,
+        duration: duration,
+        price: totalPrice,
+        status: 'confirmed' as const,
+        createdAt: new Date().toISOString(),
+      };
+      
+      setBookings([newBooking, ...bookings]);
+    }
     
     toast({
       title: 'Оплата прошла успешно! 🎉',

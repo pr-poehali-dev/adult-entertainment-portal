@@ -16,6 +16,8 @@ import { EscortEventsPage } from './EscortEventsPage';
 interface CategoryProvidersPageProps {
   categoryId: string;
   setCurrentPage: (page: Page) => void;
+  bookings?: any[];
+  setBookings?: (bookings: any[]) => void;
 }
 
 const dayNames: Record<string, string> = {
@@ -28,7 +30,7 @@ const dayNames: Record<string, string> = {
   sunday: 'Воскресенье',
 };
 
-export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryProvidersPageProps) => {
+export const CategoryProvidersPage = ({ categoryId, setCurrentPage, bookings, setBookings }: CategoryProvidersPageProps) => {
   if (categoryId === 'abroad') {
     return <AbroadProvidersPage setCurrentPage={setCurrentPage} />;
   }
@@ -38,7 +40,7 @@ export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryPr
   }
 
   if (categoryId === 'striptease') {
-    return <StripteasePage setCurrentPage={setCurrentPage} />;
+    return <StripteasePage setCurrentPage={setCurrentPage} bookings={bookings} setBookings={setBookings} />;
   }
 
   if (categoryId === 'massage') {
