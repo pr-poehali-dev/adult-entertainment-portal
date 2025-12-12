@@ -105,6 +105,16 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     ));
   };
 
+  const handleCompleteAd = (adId: number) => {
+    if (confirm('Вы уверены, что хотите завершить это объявление?')) {
+      setAds(ads.map(ad => 
+        ad.id === adId 
+          ? { ...ad, status: 'completed' }
+          : ad
+      ));
+    }
+  };
+
   const handleViewResponse = (ad: UserAd, response: AdResponse) => {
     setSelectedAd(ad);
     setSelectedResponse(response);
@@ -155,15 +165,26 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
 
           <div className="flex gap-2 mt-3">
             {ad.status === 'active' ? (
-              <Button 
-                variant="destructive" 
-                size="sm" 
-                className="flex-1"
-                onClick={() => handleDeleteAd(ad.id)}
-              >
-                <Icon name="Trash2" size={16} className="mr-2" />
-                Удалить
-              </Button>
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => handleCompleteAd(ad.id)}
+                >
+                  <Icon name="CheckCircle" size={16} className="mr-2" />
+                  Завершить
+                </Button>
+                <Button 
+                  variant="destructive" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => handleDeleteAd(ad.id)}
+                >
+                  <Icon name="Trash2" size={16} className="mr-2" />
+                  Удалить
+                </Button>
+              </>
             ) : (
               <Button 
                 variant="default" 
