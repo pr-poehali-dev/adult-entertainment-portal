@@ -4,7 +4,6 @@ import { Page, CatalogItem, UserRole, UserAd, Profile } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
-import { HomeAdvantagesSection } from './home/HomeAdvantagesSection';
 import { HomeSolutionsSection } from './home/HomeSolutionsSection';
 import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { DatingBanner } from './home/DatingBanner';
@@ -49,7 +48,6 @@ export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profil
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeSolutionsSection />
-      <HomeAdvantagesSection />
     </div>
   );
 };
