@@ -254,8 +254,10 @@ export const ProfileSettingsTab = ({
               </CardHeader>
               <CardContent>
                 <WorkScheduleManager
-                  schedule={workSchedule}
-                  onChange={setWorkSchedule}
+                  workSchedule={workSchedule}
+                  isActive={isActive}
+                  onScheduleChange={setWorkSchedule}
+                  onActiveChange={setIsActive}
                 />
               </CardContent>
             </Card>
@@ -281,7 +283,13 @@ export const ProfileSettingsTab = ({
                   <Switch
                     id="active-status"
                     checked={isActive}
-                    onCheckedChange={setIsActive}
+                    onCheckedChange={(checked) => {
+                      setIsActive(checked);
+                      toast({
+                        title: "Настройка сохранена",
+                        description: checked ? "Профиль теперь виден в каталоге" : "Профиль скрыт из каталога",
+                      });
+                    }}
                   />
                 </div>
               </CardContent>
@@ -289,14 +297,18 @@ export const ProfileSettingsTab = ({
           </>
         )}
         
-        <div className="flex justify-end pt-4">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Icon name="CheckCircle" size={16} className="text-green-500" />
+            <span>Автосохранение включено</span>
+          </div>
           <Button 
             onClick={handleSaveSettings}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-2"
-            size="lg"
+            variant="outline"
+            className="px-6"
           >
-            <Icon name="Save" size={18} className="mr-2" />
-            Сохранить настройки
+            <Icon name="Check" size={18} className="mr-2" />
+            Сохранить вручную
           </Button>
         </div>
       </div>
