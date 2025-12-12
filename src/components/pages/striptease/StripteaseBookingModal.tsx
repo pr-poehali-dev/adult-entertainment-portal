@@ -35,6 +35,7 @@ export const StripteaseBookingModal = ({ ad, open, onClose }: StripteaseBookingM
   const [comment, setComment] = useState('');
   const [activeTab, setActiveTab] = useState<'booking' | 'profile'>('profile');
   const [bookingStatus, setBookingStatus] = useState<'form' | 'waiting' | 'confirmed'>('form');
+  const [waitingTimeoutId, setWaitingTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleBooking = () => {
     if (!selectedDate || !selectedTime || !phone) {
@@ -49,14 +50,32 @@ export const StripteaseBookingModal = ({ ad, open, onClose }: StripteaseBookingM
     setBookingStatus('waiting');
     
     // Симуляция ожидания подтверждения от исполнителя (3 секунды)
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setBookingStatus('confirmed');
       toast({
         title: 'Бронирование подтверждено! ✓',
         description: 'Исполнитель подтвердил бронь. Теперь вы можете оплатить.',
         duration: 5000,
       });
+      setWaitingTimeoutId(null);
     }, 3000);
+    
+    setWaitingTimeoutId(timeoutId);
+  };
+
+  const handleCancelBooking = () => {
+    if (waitingTimeoutId) {
+      clearTimeout(waitingTimeoutId);
+      setWaitingTimeoutId(null);
+    }
+    
+    setBookingStatus('form');
+    
+    toast({
+      title: 'Бронирование отменено',
+      description: 'Вы успешно отменили запрос на бронирование.',
+      duration: 3000,
+    });
   };
 
   const handlePayment = () => {
@@ -363,6 +382,15 @@ export const StripteaseBookingModal = ({ ad, open, onClose }: StripteaseBookingM
                     </div>
                   </CardContent>
                 </Card>
+
+                <Button
+                  onClick={handleCancelBooking}
+                  variant="outline"
+                  className="w-full h-12 text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20"
+                >
+                  <Icon name="X" size={20} className="mr-2" />
+                  Отменить бронирование
+                </Button>
               </div>
             )}
 
