@@ -5,6 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeAdvantagesSection } from './home/HomeAdvantagesSection';
+import { HomeSolutionsSection } from './home/HomeSolutionsSection';
 import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { DatingBanner } from './home/DatingBanner';
 import { AgencyBanner } from './home/AgencyBanner';
@@ -47,6 +48,7 @@ export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profil
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
+      <HomeSolutionsSection />
       <HomeAdvantagesSection />
     </div>
   );
