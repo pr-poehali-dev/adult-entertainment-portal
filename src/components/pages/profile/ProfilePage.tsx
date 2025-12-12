@@ -107,16 +107,26 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
         </CardHeader>
       </Card>
 
-      <div className="mb-4">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3">
         {setCurrentPage && (
-          <button
-            onClick={() => setCurrentPage('my-ads')}
-            className="w-full bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium"
-          >
-            <Icon name="FileText" size={20} />
-            <span>Мои объявления</span>
-            <Icon name="ChevronRight" size={18} />
-          </button>
+          <>
+            <button
+              onClick={() => setCurrentPage('my-ads')}
+              className="bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium"
+            >
+              <Icon name="FileText" size={20} />
+              <span>Мои объявления</span>
+              <Icon name="ChevronRight" size={18} />
+            </button>
+            <button
+              onClick={() => setCurrentPage('bookings')}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 font-medium"
+            >
+              <Icon name="History" size={20} />
+              <span>История бронирований</span>
+              <Icon name="ChevronRight" size={18} />
+            </button>
+          </>
         )}
       </div>
 

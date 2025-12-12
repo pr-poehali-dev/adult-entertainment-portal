@@ -25,6 +25,7 @@ const PartyChatPage = lazy(() => import('@/components/parties/PartyChatPage'));
 const OrganizerDashboard = lazy(() => import('@/components/parties/OrganizerDashboard'));
 const MyAdsPage = lazy(() => import('@/components/pages/my-ads/MyAdsPage'));
 const UserGuidePage = lazy(() => import('@/components/pages/UserGuidePage'));
+const BookingsPage = lazy(() => import('@/components/pages/BookingsPage').then(m => ({ default: m.BookingsPage })));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -378,6 +379,13 @@ export const useAppPages = ({
                 setCurrentPage('party-chat');
               }}
             />
+          </Suspense>
+        );
+      
+      case 'bookings':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <BookingsPage setCurrentPage={setCurrentPage} userRole={userRole} />
           </Suspense>
         );
       
