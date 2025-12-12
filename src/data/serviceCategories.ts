@@ -6,6 +6,7 @@ export interface ServiceCategory {
   image: string;
   subcategories: ServiceSubcategory[];
   description?: string;
+  descriptionItems?: Array<{ icon: string; text: string }>;
 }
 
 export interface ServiceSubcategory {
@@ -74,7 +75,11 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'massage',
     icon: 'Sparkles',
     image: 'https://cdn.poehali.dev/projects/2c00503b-224b-423f-b593-94ea364ca1b5/files/a543fce0-3f60-413a-986e-b7ff2dc53e69.jpg',
-    description: 'Расслабляющий массаж\nТайский массаж\nЭротический массаж',
+    descriptionItems: [
+      { icon: 'Waves', text: 'Расслабляющий массаж' },
+      { icon: 'Palmtree', text: 'Тайский массаж' },
+      { icon: 'Heart', text: 'Эротический массаж' }
+    ],
     subcategories: []
   },
   {

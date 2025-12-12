@@ -100,12 +100,22 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
                   </div>
                 </div>
               </div>
-              {(category.subcategories.length > 0 || category.description) && (
+              {(category.subcategories.length > 0 || category.description || category.descriptionItems) && (
                 <CardHeader>
                   {category.description && (
                     <p className="text-sm text-muted-foreground mb-3 leading-relaxed whitespace-pre-line">
                       {category.description}
                     </p>
+                  )}
+                  {category.descriptionItems && (
+                    <div className="text-sm text-muted-foreground space-y-2 mb-3">
+                      {category.descriptionItems.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-2 py-1">
+                          <Icon name={item.icon as any} size={16} className="text-primary" />
+                          <span className="font-medium">{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                   {category.subcategories.length > 0 && (
                     <div className="text-sm space-y-2">
