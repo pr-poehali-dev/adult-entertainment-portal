@@ -57,7 +57,7 @@ export const AgencyBanner = ({ setCurrentPage, profile }: AgencyBannerProps) => 
                   Откройте своё агентство
                 </h2>
 
-                <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
+                <p className="hidden md:block text-sm sm:text-base md:text-lg text-muted-foreground mb-4 md:mb-6 leading-relaxed">
                   Начните зарабатывать на управлении командой моделей. Полный контроль, статистика и автоматизация бизнеса.
                 </p>
 

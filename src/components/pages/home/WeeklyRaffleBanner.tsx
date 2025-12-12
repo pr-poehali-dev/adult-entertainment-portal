@@ -127,7 +127,7 @@ export const WeeklyRaffleBanner = ({ setCurrentPage }: WeeklyRaffleBannerProps) 
                 Выиграй новенький iPhone 17
               </h2>
               
-              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed">
+              <p className="hidden md:block text-white/90 text-sm sm:text-base md:text-lg leading-relaxed">
                 Каждое воскресенье в 12:00 МСК мы разыгрываем новый iPhone 17 среди участников. 
                 Билет всего 100 ₽. Один аккаунт = один билет.
               </p>

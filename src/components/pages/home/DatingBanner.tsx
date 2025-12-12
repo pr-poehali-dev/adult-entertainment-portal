@@ -51,7 +51,7 @@ export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
                 Найди свою половинку
               </h2>
               
-              <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed">
+              <p className="hidden md:block text-white/90 text-sm sm:text-base md:text-lg leading-relaxed">
                 Знакомься с интересными людьми рядом с тобой. Полностью бесплатно, без скрытых платежей. 
                 Реальные анкеты, фото и общение.
               </p>
