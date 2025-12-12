@@ -6,14 +6,14 @@ interface NotificationPanelProps {
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   setCurrentPage: (page: Page) => void;
-  setShowNotifications: (show: boolean) => void;
+  onClose: () => void;
 }
 
 export const NotificationPanel = ({
   notifications,
   setNotifications,
   setCurrentPage,
-  setShowNotifications,
+  onClose,
 }: NotificationPanelProps) => {
   return (
     <div className="absolute right-0 top-12 w-96 bg-card border border-border rounded-lg shadow-2xl z-50 animate-fade-in">
@@ -50,7 +50,7 @@ export const NotificationPanel = ({
                 );
                 if (notif.type === 'message') setCurrentPage('messages');
                 if (notif.type === 'booking') setCurrentPage('profile');
-                setShowNotifications(false);
+                onClose();
               }}
             >
               <div className="flex gap-3">
