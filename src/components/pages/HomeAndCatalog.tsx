@@ -185,10 +185,7 @@ export const CatalogPage = ({
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
       <div className="max-w-wide mx-auto px-4 py-12 animate-fade-in">
-        <div className="flex items-center justify-between mb-12">
-          <h1 className="text-6xl font-bold">
-            <span className="gold-shimmer">{t.catalog.title}</span>
-          </h1>
+        <div className="flex items-center justify-end mb-12">
           <Input 
             placeholder={t.catalog.search} 
             value={searchQuery}
