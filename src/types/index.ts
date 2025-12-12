@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard' | 'my-ads' | 'user-guide' | 'agency-register' | 'agency-dashboard' | 'settings' | 'bookings';
+export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard' | 'my-ads' | 'user-guide' | 'agency-register' | 'agency-dashboard' | 'settings' | 'bookings' | 'my-orders';
 export type UserRole = 'buyer' | 'seller' | 'agency' | null;
 export type VIPStatus = 'none' | 'vip';
 
@@ -657,4 +657,31 @@ export interface TravelInvitation {
   createdAt: string;
   messages: ChatMessage[];
   initialMessage?: string;
+}
+
+export type MeetingType = 'outcall' | 'apartment';
+export type ProgramType = 'classic' | 'standard' | 'exclusive';
+export type OrderStatus = 'pending' | 'confirmed' | 'paid' | 'completed' | 'cancelled';
+
+export interface RealMeetingOrder {
+  id: number;
+  providerId: number;
+  providerName: string;
+  providerAvatar: string;
+  buyerId: number;
+  buyerName: string;
+  meetingType: MeetingType;
+  program: ProgramType;
+  date: string;
+  time: string;
+  hours: number;
+  address?: string;
+  phone?: string;
+  price: number;
+  currency: Currency;
+  status: OrderStatus;
+  createdAt: string;
+  confirmedAt?: string;
+  paidAt?: string;
+  chatId?: number;
 }

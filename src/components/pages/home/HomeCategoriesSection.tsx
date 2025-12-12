@@ -75,12 +75,12 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
             >
               <div 
                 className={
-                  category.subcategories.length === 0 || category.id === 'escort' ? 
+                  category.subcategories.length === 0 || category.id === 'escort' || category.id === 'real-meeting' ? 
                   "" : 
                   "cursor-pointer hover:scale-105 transition-all duration-300"
                 }
                 onClick={() => {
-                  if (category.id === 'escort') return;
+                  if (category.id === 'escort' || category.id === 'real-meeting') return;
                   if (category.subcategories.length === 0 || category.id === 'striptease') {
                     handleCategoryClick(category.id);
                   }
@@ -106,7 +106,14 @@ export const HomeCategoriesSection = ({ setCurrentPage, setSelectedCategory }: H
                     {category.subcategories.map(sub => (
                       <button
                         key={sub.id}
-                        onClick={() => category.id !== 'striptease' && handleCategoryClick(sub.id)}
+                        onClick={() => {
+                          if (category.id === 'striptease') return;
+                          if (category.id === 'real-meeting') {
+                            handleCategoryClick(sub.id);
+                          } else {
+                            handleCategoryClick(sub.id);
+                          }
+                        }}
                         className={`w-full flex items-center gap-2 py-2 px-3 rounded-lg transition-colors text-left ${
                           category.id === 'striptease' 
                             ? 'cursor-default' 

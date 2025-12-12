@@ -26,6 +26,7 @@ const OrganizerDashboard = lazy(() => import('@/components/parties/OrganizerDash
 const MyAdsPage = lazy(() => import('@/components/pages/my-ads/MyAdsPage'));
 const UserGuidePage = lazy(() => import('@/components/pages/UserGuidePage'));
 const BookingsPage = lazy(() => import('@/components/pages/BookingsPage').then(m => ({ default: m.BookingsPage })));
+const MyOrdersPage = lazy(() => import('@/components/pages/MyOrdersPage').then(m => ({ default: m.MyOrdersPage })));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -390,6 +391,13 @@ export const useAppPages = ({
         return (
           <Suspense fallback={<LoadingFallback />}>
             <BookingsPage setCurrentPage={setCurrentPage} userRole={userRole} bookings={bookings} setBookings={setBookings} />
+          </Suspense>
+        );
+      
+      case 'my-orders':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <MyOrdersPage setCurrentPage={setCurrentPage} bookings={bookings} />
           </Suspense>
         );
       
