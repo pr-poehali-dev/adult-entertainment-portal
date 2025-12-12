@@ -138,6 +138,7 @@ export const RealMeetingBookingModal = ({
         providerAvatar: provider.avatar,
         buyerId: 1,
         buyerName: 'Вы',
+        buyerAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Buyer',
         meetingType: meetingType,
         program: program,
         date: selectedDate,

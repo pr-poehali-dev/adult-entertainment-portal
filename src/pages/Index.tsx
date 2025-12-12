@@ -124,6 +124,10 @@ const Index = () => {
     onOpenLovePurchase: () => state.setShowLovePurchase(true),
     bookings: state.bookings,
     setBookings: state.setBookings,
+    orderChats: state.orderChats,
+    setOrderChats: state.setOrderChats,
+    selectedOrderChatId: state.selectedOrderChatId,
+    setSelectedOrderChatId: state.setSelectedOrderChatId,
   });
 
   if (state.currentPage === 'agency-register') {

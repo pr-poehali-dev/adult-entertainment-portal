@@ -27,6 +27,7 @@ const MyAdsPage = lazy(() => import('@/components/pages/my-ads/MyAdsPage'));
 const UserGuidePage = lazy(() => import('@/components/pages/UserGuidePage'));
 const BookingsPage = lazy(() => import('@/components/pages/BookingsPage').then(m => ({ default: m.BookingsPage })));
 const MyOrdersPage = lazy(() => import('@/components/pages/MyOrdersPage').then(m => ({ default: m.MyOrdersPage })));
+const OrderChatPage = lazy(() => import('@/components/pages/order-chat/OrderChatPage').then(m => ({ default: m.OrderChatPage })));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -73,6 +74,10 @@ interface AppPagesProps {
   onOpenLovePurchase?: () => void;
   bookings: any[];
   setBookings: (bookings: any[]) => void;
+  orderChats: any[];
+  setOrderChats: (chats: any[]) => void;
+  selectedOrderChatId: number | null;
+  setSelectedOrderChatId: (id: number | null) => void;
 }
 
 export const useAppPages = ({
@@ -118,6 +123,10 @@ export const useAppPages = ({
   onOpenLovePurchase,
   bookings,
   setBookings,
+  orderChats,
+  setOrderChats,
+  selectedOrderChatId,
+  setSelectedOrderChatId,
 }: AppPagesProps) => {
   
   const LoadingFallback = () => (
@@ -397,8 +406,31 @@ export const useAppPages = ({
       case 'my-orders':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <MyOrdersPage setCurrentPage={setCurrentPage} bookings={bookings} />
+            <MyOrdersPage 
+              setCurrentPage={setCurrentPage} 
+              bookings={bookings}
+              orderChats={orderChats}
+              setOrderChats={setOrderChats}
+              setSelectedOrderChatId={setSelectedOrderChatId}
+              currentUserId={1}
+            />
           </Suspense>
+        );
+      
+      case 'order-chat':
+        return selectedOrderChatId ? (
+          <Suspense fallback={<LoadingFallback />}>
+            <OrderChatPage
+              chatId={selectedOrderChatId}
+              setCurrentPage={setCurrentPage}
+              orderChats={orderChats}
+              setOrderChats={setOrderChats}
+              bookings={bookings}
+              currentUserId={1}
+            />
+          </Suspense>
+        ) : (
+          <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
         );
       
       default:

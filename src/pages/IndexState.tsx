@@ -158,6 +158,9 @@ export const useIndexState = () => {
 
   const [bookings, setBookings] = useState<any[]>([]);
 
+  const [orderChats, setOrderChats] = useState<any[]>([]);
+  const [selectedOrderChatId, setSelectedOrderChatId] = useState<number | null>(null);
+
   return {
     currentPage,
     setCurrentPage,
@@ -240,5 +243,9 @@ export const useIndexState = () => {
     setUserAds,
     bookings,
     setBookings,
+    orderChats,
+    setOrderChats,
+    selectedOrderChatId,
+    setSelectedOrderChatId,
   };
 };

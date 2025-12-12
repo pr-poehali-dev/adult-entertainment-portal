@@ -9,6 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 interface MyOrdersPageProps {
   setCurrentPage: (page: Page) => void;
   bookings?: any[];
+  orderChats?: any[];
+  setOrderChats?: (chats: any[]) => void;
+  setSelectedOrderChatId?: (id: number) => void;
+  currentUserId?: number;
 }
 
 const meetingTypeNames = {
@@ -22,7 +26,14 @@ const programNames = {
   exclusive: 'Эксклюзив',
 };
 
-export const MyOrdersPage = ({ setCurrentPage, bookings = [] }: MyOrdersPageProps) => {
+export const MyOrdersPage = ({ 
+  setCurrentPage, 
+  bookings = [], 
+  orderChats = [],
+  setOrderChats,
+  setSelectedOrderChatId,
+  currentUserId = 1,
+}: MyOrdersPageProps) => {
   const [filter, setFilter] = useState<'all' | OrderStatus>('all');
 
   const realMeetingOrders: RealMeetingOrder[] = bookings.filter(
@@ -85,9 +96,35 @@ export const MyOrdersPage = ({ setCurrentPage, bookings = [] }: MyOrdersPageProp
 
   const stats = getStats();
 
-  const handleOpenChat = (orderId: number) => {
-    // TODO: открыть чат с исполнителем
-    console.log('Open chat for order:', orderId);
+  const handleOpenChat = (order: RealMeetingOrder) => {
+    if (!setOrderChats || !setSelectedOrderChatId) return;
+
+    // Проверяем, существует ли уже чат для этого заказа
+    let existingChat = orderChats.find((c) => c.orderId === order.id);
+
+    if (!existingChat && order.chatId) {
+      // Создаем новый чат
+      const newChat = {
+        id: order.chatId,
+        orderId: order.id,
+        providerId: order.providerId,
+        providerName: order.providerName,
+        providerAvatar: order.providerAvatar,
+        buyerId: order.buyerId,
+        buyerName: order.buyerName,
+        buyerAvatar: order.buyerAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Buyer',
+        messages: [],
+        createdAt: new Date().toISOString(),
+        lastMessageAt: new Date().toISOString(),
+      };
+      setOrderChats([...orderChats, newChat]);
+      existingChat = newChat;
+    }
+
+    if (existingChat) {
+      setSelectedOrderChatId(existingChat.id);
+      setCurrentPage('order-chat' as Page);
+    }
   };
 
   return (
@@ -252,7 +289,7 @@ export const MyOrdersPage = ({ setCurrentPage, bookings = [] }: MyOrdersPageProp
                         <Button
                           variant="default"
                           size="sm"
-                          onClick={() => handleOpenChat(order.id)}
+                          onClick={() => handleOpenChat(order)}
                         >
                           <Icon name="MessageCircle" size={16} className="mr-1" />
                           Обсудить встречу
