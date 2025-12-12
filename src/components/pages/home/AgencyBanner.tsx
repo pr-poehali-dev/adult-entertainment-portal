@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { Page, Profile } from '@/types';
+import { useState, useEffect, useRef } from 'react';
 
 interface AgencyBannerProps {
   setCurrentPage: (page: Page) => void;
@@ -9,13 +10,36 @@ interface AgencyBannerProps {
 }
 
 export const AgencyBanner = ({ setCurrentPage, profile }: AgencyBannerProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const bannerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bannerRef.current) {
+      observer.observe(bannerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Не показываем баннер, если пользователь уже владелец агентства
   if (profile.isAgencyOwner) {
     return null;
   }
 
   return (
-    <section className="py-6 md:py-16 px-4 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-950/30 dark:via-pink-950/30 dark:to-rose-950/30 w-full overflow-x-hidden">
+    <section 
+      ref={bannerRef}
+      className={`py-6 md:py-16 px-4 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-950/30 dark:via-pink-950/30 dark:to-rose-950/30 w-full overflow-x-hidden transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
       <div className="max-w-wide mx-auto w-full">
         <Card className="overflow-hidden border-2 border-purple-300 dark:border-purple-800 bg-gradient-to-br from-white to-purple-50 dark:from-gray-900 dark:to-purple-950/50 shadow-2xl w-full">
           <CardContent className="p-0 w-full">
