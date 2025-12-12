@@ -216,7 +216,7 @@ export const NavigationDesktop = ({
             >
               <Icon name="Wallet" size={18} className="text-primary" />
               <span className="font-semibold text-foreground whitespace-nowrap">
-                {rubBalance >= 100000 ? `${Math.floor(rubBalance / 1000)}к` : rubBalance.toLocaleString()} ₽
+                {rubBalance.toLocaleString('ru-RU')} ₽
               </span>
             </button>
           </>
