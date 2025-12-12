@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { AbroadProvidersPage } from './AbroadProvidersPage';
 import { VIPProvidersPage } from './VIPProvidersPage';
 import { StripteasePage } from '../striptease/StripteasePage';
+import { MassageProvidersPage } from './MassageProvidersPage';
 
 interface CategoryProvidersPageProps {
   categoryId: string;
@@ -37,6 +38,10 @@ export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryPr
 
   if (categoryId === 'striptease') {
     return <StripteasePage setCurrentPage={setCurrentPage} />;
+  }
+
+  if (categoryId === 'massage') {
+    return <MassageProvidersPage setCurrentPage={setCurrentPage} />;
   }
 
   const { language } = useLanguage();
