@@ -29,6 +29,9 @@ const subcategoryNames: Record<string, Record<Language, string>> = {
   dinner: { ru: 'Вечерний ужин', en: 'Dinner Date' },
   abroad: { ru: 'Заграница', en: 'Abroad' },
   'escort-events': { ru: 'Эскорт на мероприятиях', en: 'Escort Events' },
+  'strip-plastic': { ru: 'Стрип-пластика', en: 'Strip Plastic' },
+  'go-go': { ru: 'Go-go', en: 'Go-go' },
+  'oriental': { ru: 'Восточные танцы', en: 'Oriental Dance' },
   outcall: { ru: 'Выезд', en: 'Outcall' },
   apartment: { ru: 'Апартаменты', en: 'Apartment' },
   audio: { ru: 'Аудиоразговор', en: 'Audio Call' },
@@ -76,7 +79,11 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'striptease',
     icon: 'Music',
     image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&h=500&fit=crop',
-    subcategories: []
+    subcategories: [
+      { id: 'strip-plastic', icon: 'Sparkles' },
+      { id: 'go-go', icon: 'Music' },
+      { id: 'oriental', icon: 'Heart' }
+    ]
   },
   {
     id: 'real-meeting',
