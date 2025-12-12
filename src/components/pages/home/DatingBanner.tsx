@@ -40,6 +40,15 @@ export const DatingBanner = ({ setCurrentPage }: DatingBannerProps) => {
         <div className="absolute bottom-8 left-8 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
         
         <div className="relative z-10 px-4 py-6 sm:px-6 sm:py-8 md:px-16 md:py-16 w-full">
+          {/* Картинка для мобильной версии */}
+          <div className="md:hidden mb-4">
+            <img 
+              src="https://cdn.poehali.dev/files/IMG_5135.jpeg" 
+              alt="LOVE IS - Сайт знакомств" 
+              className="w-full rounded-xl shadow-lg"
+            />
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center w-full">
             <div className="space-y-4 md:space-y-6 w-full">
               <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 text-white text-xs sm:text-sm font-medium">
