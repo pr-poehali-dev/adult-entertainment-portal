@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -6,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { Page, CatalogItem, Review } from '@/types';
 import { isCurrentlyActive, getNextAvailableTime, formatWorkSchedule } from '@/utils/scheduleChecker';
+import { MassageBookingModal, MassageBooking } from './MassageBookingModal';
 
 interface ServiceDetailProps {
   catalogItems: CatalogItem[];
@@ -29,13 +31,21 @@ export const ServiceDetailPage = ({
   setSelectedSellerId,
 }: ServiceDetailProps) => {
   const service = catalogItems.find(item => item.id === selectedServiceId);
+  const [showMassageModal, setShowMassageModal] = useState(false);
   
   if (!service) {
     return null;
   }
 
+  const isMassageService = service.category === 'massage' || service.title.toLowerCase().includes('массаж');
   const isServiceActive = service.isActive !== false && isCurrentlyActive(service.workSchedule);
   const nextAvailable = getNextAvailableTime(service.workSchedule);
+
+  const handleMassageBooking = (booking: MassageBooking) => {
+    console.log('Бронирование массажа:', booking);
+    setShowMassageModal(false);
+    alert(`Бронирование подтверждено!\n\nПрограмма: ${booking.program}\nДата: ${booking.date}\nВремя: ${booking.time}\nПредоплата: ${Math.round(booking.price * 0.3)} ₽`);
+  };
 
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
@@ -227,7 +237,7 @@ export const ServiceDetailPage = ({
                 <>
                   <Button 
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6"
-                    onClick={() => setShowBookingModal(true)}
+                    onClick={() => isMassageService ? setShowMassageModal(true) : setShowBookingModal(true)}
                   >
                     <Icon name="Calendar" className="mr-2" size={20} />
                     Забронировать
@@ -290,6 +300,14 @@ export const ServiceDetailPage = ({
           </Card>
         </div>
       </div>
+
+      {showMassageModal && (
+        <MassageBookingModal
+          service={service}
+          onClose={() => setShowMassageModal(false)}
+          onConfirm={handleMassageBooking}
+        />
+      )}
     </div>
   );
 };
