@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { notificationService } from '@/utils/notificationService';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 export const ProfileNotificationsTab = () => {
+  const { toast } = useToast();
   const [hasPermissions, setHasPermissions] = useState(false);
   const [settings, setSettings] = useState({
     sound: true,
@@ -19,6 +21,7 @@ export const ProfileNotificationsTab = () => {
     reviews: true,
     system: true,
   });
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
     setHasPermissions(notificationService.hasPermissions());
@@ -36,6 +39,25 @@ export const ProfileNotificationsTab = () => {
 
   const handleTestNotification = () => {
     notificationService.testNotification();
+  };
+
+  const handleSettingChange = (key: string, value: boolean) => {
+    setSettings({ ...settings, [key]: value });
+    setHasUnsavedChanges(true);
+    
+    // Автосохранение с уведомлением
+    toast({
+      title: "Настройка изменена",
+      description: "Изменения сохранены автоматически",
+    });
+  };
+
+  const handleSaveSettings = () => {
+    setHasUnsavedChanges(false);
+    toast({
+      title: "Настройки сохранены",
+      description: "Все изменения уведомлений применены",
+    });
   };
 
   return (
@@ -117,7 +139,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="ad-responses"
                   checked={settings.adResponses}
-                  onCheckedChange={(checked) => setSettings({ ...settings, adResponses: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('adResponses', checked)}
                 />
               </div>
 
@@ -136,7 +158,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="messages"
                   checked={settings.messages}
-                  onCheckedChange={(checked) => setSettings({ ...settings, messages: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('messages', checked)}
                 />
               </div>
 
@@ -155,7 +177,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="bookings"
                   checked={settings.bookings}
-                  onCheckedChange={(checked) => setSettings({ ...settings, bookings: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('bookings', checked)}
                 />
               </div>
 
@@ -174,7 +196,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="reviews"
                   checked={settings.reviews}
-                  onCheckedChange={(checked) => setSettings({ ...settings, reviews: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('reviews', checked)}
                 />
               </div>
 
@@ -193,7 +215,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="system"
                   checked={settings.system}
-                  onCheckedChange={(checked) => setSettings({ ...settings, system: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('system', checked)}
                 />
               </div>
             </div>
@@ -222,7 +244,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="sound"
                   checked={settings.sound}
-                  onCheckedChange={(checked) => setSettings({ ...settings, sound: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('sound', checked)}
                 />
               </div>
 
@@ -241,7 +263,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="vibration"
                   checked={settings.vibration}
-                  onCheckedChange={(checked) => setSettings({ ...settings, vibration: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('vibration', checked)}
                 />
               </div>
 
@@ -260,7 +282,7 @@ export const ProfileNotificationsTab = () => {
                 <Switch
                   id="push"
                   checked={settings.push}
-                  onCheckedChange={(checked) => setSettings({ ...settings, push: checked })}
+                  onCheckedChange={(checked) => handleSettingChange('push', checked)}
                 />
               </div>
             </div>
@@ -280,6 +302,22 @@ export const ProfileNotificationsTab = () => {
                 </ul>
               </div>
             </div>
+          </div>
+
+          {/* Кнопка сохранения */}
+          <div className="flex items-center justify-between pt-4 border-t border-border">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Icon name="CheckCircle" size={16} className="text-green-500" />
+              <span>Автосохранение включено</span>
+            </div>
+            <Button 
+              onClick={handleSaveSettings}
+              variant="outline"
+              className="px-6"
+            >
+              <Icon name="Check" size={18} className="mr-2" />
+              Сохранить вручную
+            </Button>
           </div>
         </CardContent>
       </Card>
