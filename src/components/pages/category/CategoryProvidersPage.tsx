@@ -11,6 +11,7 @@ import { AbroadProvidersPage } from './AbroadProvidersPage';
 import { VIPProvidersPage } from './VIPProvidersPage';
 import { StripteasePage } from '../striptease/StripteasePage';
 import { MassageProvidersPage } from './MassageProvidersPage';
+import { EscortEventsPage } from './EscortEventsPage';
 
 interface CategoryProvidersPageProps {
   categoryId: string;
@@ -42,6 +43,10 @@ export const CategoryProvidersPage = ({ categoryId, setCurrentPage }: CategoryPr
 
   if (categoryId === 'massage') {
     return <MassageProvidersPage setCurrentPage={setCurrentPage} />;
+  }
+
+  if (categoryId === 'escort-events') {
+    return <EscortEventsPage setCurrentPage={setCurrentPage} />;
   }
 
   const { language } = useLanguage();
