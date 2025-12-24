@@ -17,6 +17,8 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
     password: '',
     referralCode: '',
   });
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,15 +61,24 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="login-password">Пароль</Label>
-                <Input
-                  id="login-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                  className="h-11"
-                />
+                <div className="relative">
+                  <Input
+                    id="login-password"
+                    type={showLoginPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    className="h-11 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    <Icon name={showLoginPassword ? "EyeOff" : "Eye"} size={20} />
+                  </button>
+                </div>
               </div>
 
               <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
@@ -106,15 +117,24 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="reg-password">Пароль</Label>
-                <Input
-                  id="reg-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                  className="h-11"
-                />
+                <div className="relative">
+                  <Input
+                    id="reg-password"
+                    type={showRegPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    className="h-11 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowRegPassword(!showRegPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    <Icon name={showRegPassword ? "EyeOff" : "Eye"} size={20} />
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-2">
