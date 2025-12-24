@@ -4,12 +4,26 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { pushNotificationService } from '@/utils/pushNotifications';
 
-export const NotificationPermissionPrompt = () => {
+interface NotificationPermissionPromptProps {
+  isAuthenticated?: boolean;
+  profileCompleted?: boolean;
+  kycCompleted?: boolean;
+}
+
+export const NotificationPermissionPrompt = ({ 
+  isAuthenticated = false,
+  profileCompleted = false,
+  kycCompleted = false 
+}: NotificationPermissionPromptProps) => {
   const [show, setShow] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     const checkPermission = () => {
+      if (!isAuthenticated || !profileCompleted || !kycCompleted) {
+        return;
+      }
+      
       const hasAsked = localStorage.getItem('notification-permission-asked');
       const permission = pushNotificationService.getPermissionStatus();
       
@@ -19,7 +33,7 @@ export const NotificationPermissionPrompt = () => {
     };
 
     checkPermission();
-  }, []);
+  }, [isAuthenticated, profileCompleted, kycCompleted]);
 
   const handleAllow = async () => {
     const granted = await pushNotificationService.requestPermission();

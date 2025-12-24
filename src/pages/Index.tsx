@@ -368,7 +368,11 @@ const Index = () => {
         messageCount={state.notifications.filter(n => !n.read && n.type === 'message').length}
       />
 
-      <NotificationPermissionPrompt />
+      <NotificationPermissionPrompt 
+        isAuthenticated={state.isAuthenticated}
+        profileCompleted={state.profile.profileCompleted}
+        kycCompleted={state.profile.kycCompleted}
+      />
 
       <footer className="hidden md:block border-t border-border/50 mt-6 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
         <div className="max-w-wide mx-auto px-4">
