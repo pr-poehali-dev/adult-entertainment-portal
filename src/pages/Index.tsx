@@ -24,6 +24,7 @@ import AuthPage from './AuthPage';
 import PremiumModal from '@/components/PremiumModal';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
+import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 
 const Index = () => {
   // Состояние
@@ -349,6 +350,12 @@ const Index = () => {
         onClose={() => state.setShowLovePurchase(false)}
         onPurchase={handlers.handlePurchaseLove}
         rubBalance={state.wallet.balances.find(b => b.currency === 'RUB')?.amount || 0}
+      />
+
+      <MobileBottomNav
+        currentPage={state.currentPage}
+        setCurrentPage={state.setCurrentPage}
+        messageCount={state.notifications.filter(n => !n.read && n.type === 'message').length}
       />
 
       <footer className="border-t border-border/50 mt-6 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">

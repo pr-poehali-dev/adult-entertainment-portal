@@ -76,6 +76,11 @@ const Navigation = ({
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
+      if (window.innerWidth < 768) {
+        setIsVisible(true);
+        return;
+      }
+      
       if (currentScrollY < 10) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -94,7 +99,7 @@ const Navigation = ({
   return (
   <nav className={`border-b border-border/50 glass-effect shadow-lg sticky top-0 z-50 transition-transform duration-300 ${
     isVisible ? 'translate-y-0' : '-translate-y-full'
-  }`}>
+  } md:block hidden`}>
     <div className="max-w-wide mx-auto px-2 sm:px-4 py-4">
       <div className="flex items-center justify-between gap-1">
 

@@ -28,6 +28,7 @@ const UserGuidePage = lazy(() => import('@/components/pages/UserGuidePage'));
 const BookingsPage = lazy(() => import('@/components/pages/BookingsPage').then(m => ({ default: m.BookingsPage })));
 const MyOrdersPage = lazy(() => import('@/components/pages/MyOrdersPage').then(m => ({ default: m.MyOrdersPage })));
 const OrderChatPage = lazy(() => import('@/components/pages/order-chat/OrderChatPage').then(m => ({ default: m.OrderChatPage })));
+const SwipePage = lazy(() => import('@/components/pages/SwipePage'));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -434,6 +435,24 @@ export const useAppPages = ({
         ) : (
           <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />
         );
+      
+      case 'swipe':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <SwipePage onMatch={(id) => onNotificationAdd?.({ 
+              id: Date.now(), 
+              type: 'message', 
+              message: 'У вас новое совпадение! 💕', 
+              time: 'Только что', 
+              read: false 
+            })} />
+          </Suspense>
+        );
+      
+      case 'premium':
+        setCurrentPage('home');
+        onPremiumRequired?.();
+        return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} />;
       
       default:
         return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />;

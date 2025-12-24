@@ -5,7 +5,7 @@ import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 export const useIndexState = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [currentPage, setCurrentPage] = useState<Page>('online-search');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
   const [userAds, setUserAds] = useState<UserAd[]>([
