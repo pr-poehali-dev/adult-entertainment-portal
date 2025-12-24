@@ -3,15 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Icon from '@/components/ui/icon';
 
 interface AuthPageProps {
   onAuth: () => void;
 }
 
 export default function AuthPage({ onAuth }: AuthPageProps) {
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -19,134 +18,42 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
     referralCode: '',
   });
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onAuth();
-  };
-
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onAuth();
   };
 
   return (
-    <>
-      <div className="fixed inset-0 w-screen h-screen overflow-hidden">
-        <div className="relative w-full h-full">
-          <img
-            src="https://cdn.poehali.dev/files/IMG_5134.jpeg"
-            alt="Love is"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          
-          <button
-            onClick={() => setShowRegisterModal(true)}
-            className="absolute cursor-pointer hover:opacity-80 transition-opacity z-10"
-            style={{
-              left: '30%',
-              bottom: '10%',
-              width: '25%',
-              height: '7%',
-            }}
-            aria-label="Зарегистрироваться"
-          />
-          
-          <button
-            onClick={() => setShowLoginModal(true)}
-            className="absolute cursor-pointer hover:opacity-80 transition-opacity z-10"
-            style={{
-              right: '28%',
-              bottom: '10%',
-              width: '14%',
-              height: '7%',
-            }}
-            aria-label="Войти"
-          />
-        </div>
-      </div>
-
-      <Dialog open={showRegisterModal} onOpenChange={setShowRegisterModal}>
-        <DialogContent className="sm:max-w-md">
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold">Регистрация</h2>
-              <p className="text-gray-600 mt-2">Создайте аккаунт</p>
-            </div>
-
-            <form onSubmit={handleRegisterSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="reg-username">Имя пользователя</Label>
-                <Input
-                  id="reg-username"
-                  type="text"
-                  placeholder="Введите имя пользователя"
-                  value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="reg-email">Email</Label>
-                <Input
-                  id="reg-email"
-                  type="email"
-                  placeholder="Введите email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="reg-password">Пароль</Label>
-                <Input
-                  id="reg-password"
-                  type="password"
-                  placeholder="Введите пароль"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="referral">Реферальная ссылка или промокод</Label>
-                <Input
-                  id="referral"
-                  type="text"
-                  placeholder="Необязательно"
-                  value={formData.referralCode}
-                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
-                />
-              </div>
-
-              <Button type="submit" className="w-full" size="lg">
-                Зарегистрироваться
-              </Button>
-            </form>
+    <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md p-8 shadow-2xl border-0">
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+            <Icon name="Heart" className="text-white" size={32} />
           </div>
-        </DialogContent>
-      </Dialog>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            Love Is
+          </h1>
+          <p className="text-gray-500 text-sm mt-2">Найди свою вторую половинку</p>
+        </div>
 
-      <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
-        <DialogContent className="sm:max-w-md">
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold">Вход</h2>
-              <p className="text-gray-600 mt-2">Войдите в свой аккаунт</p>
-            </div>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="login">Вход</TabsTrigger>
+            <TabsTrigger value="register">Регистрация</TabsTrigger>
+          </TabsList>
 
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
+          <TabsContent value="login">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="login-email">Email</Label>
                 <Input
                   id="login-email"
                   type="email"
-                  placeholder="Введите email"
+                  placeholder="your@email.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  className="h-11"
                 />
               </div>
 
@@ -155,20 +62,86 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                 <Input
                   id="login-password"
                   type="password"
-                  placeholder="Введите пароль"
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
+                  className="h-11"
                 />
               </div>
 
-              <Button type="submit" className="w-full" size="lg">
+              <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
                 Войти
               </Button>
             </form>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+          </TabsContent>
+
+          <TabsContent value="register">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reg-username">Имя пользователя</Label>
+                <Input
+                  id="reg-username"
+                  type="text"
+                  placeholder="Ваше имя"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  required
+                  className="h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reg-email">Email</Label>
+                <Input
+                  id="reg-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                  className="h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reg-password">Пароль</Label>
+                <Input
+                  id="reg-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  required
+                  className="h-11"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="referral" className="text-sm text-gray-500">
+                  Промокод или реферальный код (необязательно)
+                </Label>
+                <Input
+                  id="referral"
+                  type="text"
+                  placeholder="Введите код"
+                  value={formData.referralCode}
+                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
+                  className="h-11"
+                />
+              </div>
+
+              <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
+                Создать аккаунт
+              </Button>
+            </form>
+          </TabsContent>
+        </Tabs>
+
+        <div className="mt-6 text-center text-xs text-gray-500">
+          Продолжая, вы соглашаетесь с условиями использования
+        </div>
+      </Card>
+    </div>
   );
 }
