@@ -82,16 +82,28 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
     setSwipeDirection(direction);
     
     if (direction === 'right') {
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
       likeSoundRef.current?.play().catch(() => {});
       
       const isMatch = Math.random() > 0.7;
       if (isMatch) {
         setMatches(prev => prev + 1);
         setShowMatchAnimation(true);
+        
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200, 100, 400]);
+        }
+        
         matchSoundRef.current?.play().catch(() => {});
         onMatch?.(currentProfile.id);
         
         setTimeout(() => setShowMatchAnimation(false), 2000);
+      }
+    } else {
+      if (navigator.vibrate) {
+        navigator.vibrate(30);
       }
     }
 
