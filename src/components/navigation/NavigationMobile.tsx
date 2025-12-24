@@ -63,7 +63,7 @@ export const NavigationMobile = ({
           className="w-full py-2.5 px-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-left"
         >
           <Icon name="Users" size={18} className="text-primary flex-shrink-0" />
-          <span className="text-sm font-medium">Онлайн</span>
+          <span className="text-sm font-medium">Поиск</span>
         </button>
         
         <button 

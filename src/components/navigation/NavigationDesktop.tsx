@@ -61,7 +61,7 @@ export const NavigationDesktop = ({
           Главная
         </button>
         <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-          Онлайн
+          Поиск
         </button>
         <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Объявления
