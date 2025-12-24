@@ -80,6 +80,12 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [cardAnimation, setCardAnimation] = useState(true);
+  const [viewedToday, setViewedToday] = useState(0);
+  const [isPremium] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  
+  const FREE_DAILY_LIMIT = 20;
+  const isLimitReached = !isPremium && viewedToday >= FREE_DAILY_LIMIT;
 
   const currentProfile = profiles[currentIndex];
 
@@ -89,8 +95,14 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   }, []);
 
   const handleSwipe = (direction: 'left' | 'right') => {
+    if (isLimitReached) {
+      setShowLimitModal(true);
+      return;
+    }
+    
     setSwipeDirection(direction);
     setDragOffset({ x: 0, y: 0 });
+    setViewedToday(prev => prev + 1);
     
     if (direction === 'right') {
       if (navigator.vibrate) {
@@ -167,6 +179,26 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
     }
   }, [currentIndex, profiles.length]);
 
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const savedDate = localStorage.getItem('swipe_date');
+    const savedCount = localStorage.getItem('swipe_count');
+    
+    if (savedDate === today && savedCount) {
+      setViewedToday(parseInt(savedCount));
+    } else {
+      localStorage.setItem('swipe_date', today);
+      localStorage.setItem('swipe_count', '0');
+      setViewedToday(0);
+    }
+  }, []);
+
+  useEffect(() => {
+    const today = new Date().toDateString();
+    localStorage.setItem('swipe_date', today);
+    localStorage.setItem('swipe_count', viewedToday.toString());
+  }, [viewedToday]);
+
   if (!currentProfile) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
@@ -193,9 +225,19 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
       
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Знакомства
-          </h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex-1" />
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+              Знакомства
+            </h1>
+            <div className="flex-1 flex justify-end">
+              {!isPremium && (
+                <Badge variant="outline" className="border-amber-500 text-amber-600">
+                  {viewedToday}/{FREE_DAILY_LIMIT}
+                </Badge>
+              )}
+            </div>
+          </div>
           {matches > 0 && (
             <Badge className="mt-2 bg-gradient-to-r from-pink-500 to-purple-600">
               <Icon name="Heart" size={14} className="mr-1" />
@@ -369,6 +411,72 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
           console.log('Отправлено сообщение:', msg, 'для', currentMatch?.name);
         }}
       />
+
+      {showLimitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in p-4">
+          <Card className="w-full max-w-md p-6 animate-scale-up text-center">
+            <div className="mb-6">
+              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center">
+                <Icon name="Crown" size={40} className="text-white" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">Дневной лимит достигнут</h2>
+              <p className="text-muted-foreground mb-4">
+                Вы просмотрели {FREE_DAILY_LIMIT} анкет сегодня. Обновите до Premium для безлимитного просмотра!
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-4 mb-6">
+              <h3 className="font-bold text-amber-900 mb-3 flex items-center justify-center gap-2">
+                <Icon name="Sparkles" size={18} />
+                Premium возможности
+              </h3>
+              <div className="space-y-2 text-left text-sm">
+                <div className="flex items-center gap-2 text-amber-900">
+                  <Icon name="Check" size={16} className="text-green-600" />
+                  <span>Безлимитные свайпы</span>
+                </div>
+                <div className="flex items-center gap-2 text-amber-900">
+                  <Icon name="Check" size={16} className="text-green-600" />
+                  <span>Приоритет в показе анкет</span>
+                </div>
+                <div className="flex items-center gap-2 text-amber-900">
+                  <Icon name="Check" size={16} className="text-green-600" />
+                  <span>Просмотр кто лайкнул вас</span>
+                </div>
+                <div className="flex items-center gap-2 text-amber-900">
+                  <Icon name="Check" size={16} className="text-green-600" />
+                  <span>Возврат случайных свайпов</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowLimitModal(false)}
+                className="flex-1"
+              >
+                Позже
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowLimitModal(false);
+                  const event = new CustomEvent('navigate', { detail: 'premium' });
+                  window.dispatchEvent(event);
+                }}
+                className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white"
+              >
+                <Icon name="Crown" size={18} className="mr-2" />
+                Получить Premium
+              </Button>
+            </div>
+
+            <p className="text-xs text-muted-foreground mt-4">
+              Или вернитесь завтра для новых {FREE_DAILY_LIMIT} свайпов
+            </p>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
