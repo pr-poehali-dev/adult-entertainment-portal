@@ -31,17 +31,17 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
   return (
     <>
-      <div className="min-h-screen w-full flex items-center justify-center bg-gray-100">
-        <div className="relative w-full max-w-4xl">
+      <div className="fixed inset-0 w-screen h-screen overflow-hidden">
+        <div className="relative w-full h-full">
           <img
             src="https://cdn.poehali.dev/files/IMG_5134.jpeg"
             alt="Love is"
-            className="w-full h-auto"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           
           <button
             onClick={() => setShowRegisterModal(true)}
-            className="absolute cursor-pointer hover:opacity-80 transition-opacity"
+            className="absolute cursor-pointer hover:opacity-80 transition-opacity z-10"
             style={{
               left: '30%',
               bottom: '10%',
@@ -53,7 +53,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
           
           <button
             onClick={() => setShowLoginModal(true)}
-            className="absolute cursor-pointer hover:opacity-80 transition-opacity"
+            className="absolute cursor-pointer hover:opacity-80 transition-opacity z-10"
             style={{
               right: '28%',
               bottom: '10%',
