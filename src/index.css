@@ -209,6 +209,24 @@
     }
   }
 
+  @keyframes scaleUp {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-up {
+    animation: scaleUp 0.5s ease-out;
+  }
+
   @keyframes slideDown {
     from {
       opacity: 0;
