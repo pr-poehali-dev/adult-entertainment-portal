@@ -146,6 +146,14 @@ const Index = () => {
         onComplete={(profileData) => {
           state.setProfile({ ...state.profile, ...profileData });
         }}
+        onSkip={() => {
+          state.setProfile({ 
+            ...state.profile, 
+            profileCompleted: true,
+            name: 'Тестовый пользователь',
+            nickname: 'test_user',
+          });
+        }}
       />
     );
   }

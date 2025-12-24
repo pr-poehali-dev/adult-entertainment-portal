@@ -10,9 +10,10 @@ import { Profile } from '@/types';
 
 interface ProfileSetupProps {
   onComplete: (profileData: Partial<Profile>) => void;
+  onSkip?: () => void;
 }
 
-export default function ProfileSetup({ onComplete }: ProfileSetupProps) {
+export default function ProfileSetup({ onComplete, onSkip }: ProfileSetupProps) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -67,10 +68,22 @@ export default function ProfileSetup({ onComplete }: ProfileSetupProps) {
                 Заполнение профиля
               </span>
             </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${step >= 1 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
-              <div className={`w-3 h-3 rounded-full ${step >= 2 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
-              <div className={`w-3 h-3 rounded-full ${step >= 3 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${step >= 1 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
+                <div className={`w-3 h-3 rounded-full ${step >= 2 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
+                <div className={`w-3 h-3 rounded-full ${step >= 3 ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-300'}`} />
+              </div>
+              {onSkip && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onSkip}
+                  className="text-xs text-gray-500 hover:text-gray-700"
+                >
+                  Пропустить (тест)
+                </Button>
+              )}
             </div>
           </div>
           <p className="text-sm text-gray-600">
