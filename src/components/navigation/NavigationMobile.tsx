@@ -59,6 +59,14 @@ export const NavigationMobile = ({
         </button>
         
         <button 
+          onClick={() => { setCurrentPage('online-search'); setShowMobileMenu(false); }}
+          className="w-full py-2.5 px-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-left"
+        >
+          <Icon name="Users" size={18} className="text-primary flex-shrink-0" />
+          <span className="text-sm font-medium">Онлайн</span>
+        </button>
+        
+        <button 
           onClick={() => { setCurrentPage('catalog'); setShowMobileMenu(false); }}
           className="w-full py-2.5 px-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-left"
         >
