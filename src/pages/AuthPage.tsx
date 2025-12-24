@@ -138,7 +138,27 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <div className="mt-6 space-y-3">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">или</span>
+            </div>
+          </div>
+          
+          <Button 
+            type="button" 
+            variant="outline" 
+            className="w-full h-11" 
+            onClick={onAuth}
+          >
+            Войти как гость
+          </Button>
+        </div>
+
+        <div className="mt-4 text-center text-xs text-gray-500">
           Продолжая, вы соглашаетесь с условиями использования
         </div>
       </Card>
