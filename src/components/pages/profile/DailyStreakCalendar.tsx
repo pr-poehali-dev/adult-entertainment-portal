@@ -127,7 +127,7 @@ export const DailyStreakCalendar = () => {
                   )}
                 </div>
                 {index % 10 === 0 && (
-                  <span className="text-[10px] text-muted-foreground mt-1">
+                  <span className="text-xs text-muted-foreground mt-1">
                     {day.month}
                   </span>
                 )}

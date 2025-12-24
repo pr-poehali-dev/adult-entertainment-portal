@@ -88,7 +88,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
         )}
         
         {message.text && (
-          <p className="text-sm leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+          <p className="text-sm leading-relaxed break-words select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
             {censoredTextParts.map((part, index) => (
               <span
                 key={index}

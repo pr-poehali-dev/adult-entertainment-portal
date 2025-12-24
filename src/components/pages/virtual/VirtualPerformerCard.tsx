@@ -62,7 +62,7 @@ export const VirtualPerformerCard = ({
       </div>
 
       <CardContent className="p-4 space-y-4">
-        <p className="text-sm text-muted-foreground line-clamp-2">{performer.about}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2 break-words">{performer.about}</p>
 
         <div className="flex flex-wrap gap-1">
           {performer.specialties.slice(0, 3).map((specialty, idx) => (
