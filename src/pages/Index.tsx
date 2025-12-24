@@ -370,7 +370,7 @@ const Index = () => {
 
       <NotificationPermissionPrompt />
 
-      <footer className="border-t border-border/50 mt-6 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
+      <footer className="hidden md:block border-t border-border/50 mt-6 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
         <div className="max-w-wide mx-auto px-4">
           {/* Адаптивное меню для мобильных и десктопа */}
           <div className="flex flex-wrap justify-center gap-3 md:gap-8 mb-8 text-foreground/80 text-sm md:text-base">
