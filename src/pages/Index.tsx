@@ -26,10 +26,6 @@ const Index = () => {
   // Состояние
   const state = useIndexState();
 
-  if (!state.isAuthenticated) {
-    return <AuthPage onAuth={() => state.setIsAuthenticated(true)} />;
-  }
-
   // Обработчики
   const handlers = useIndexHandlers({
     favorites: state.favorites,
@@ -134,6 +130,10 @@ const Index = () => {
     selectedOrderChatId: state.selectedOrderChatId,
     setSelectedOrderChatId: state.setSelectedOrderChatId,
   });
+
+  if (!state.isAuthenticated) {
+    return <AuthPage onAuth={() => state.setIsAuthenticated(true)} />;
+  }
 
   if (state.currentPage === 'agency-register') {
     return (
