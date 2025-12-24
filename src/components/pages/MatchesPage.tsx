@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
+import { pushNotificationService } from '@/utils/pushNotifications';
 
 interface Match {
   id: number;
@@ -99,6 +100,28 @@ export default function MatchesPage({ setCurrentPage }: MatchesPageProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const simulateIncomingMessage = () => {
+      const randomMatch = matches[Math.floor(Math.random() * matches.length)];
+      const messageTexts = [
+        'Привет! Как дела? 😊',
+        'Что делаешь?',
+        'Хочешь встретиться?',
+        'Расскажи о себе подробнее',
+      ];
+      const randomText = messageTexts[Math.floor(Math.random() * messageTexts.length)];
+      
+      pushNotificationService.showMessageNotification(
+        randomMatch.name,
+        randomText,
+        randomMatch.photo
+      );
+    };
+
+    const timer = setTimeout(simulateIncomingMessage, 10000);
+    return () => clearTimeout(timer);
+  }, [matches]);
 
   const filteredMatches = matches.filter((match) =>
     match.name.toLowerCase().includes(searchQuery.toLowerCase())

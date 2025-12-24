@@ -25,6 +25,7 @@ import PremiumModal from '@/components/PremiumModal';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
+import { NotificationPermissionPrompt } from '@/components/NotificationPermissionPrompt';
 import { useEffect } from 'react';
 
 const Index = () => {
@@ -366,6 +367,8 @@ const Index = () => {
         setCurrentPage={state.setCurrentPage}
         messageCount={state.notifications.filter(n => !n.read && n.type === 'message').length}
       />
+
+      <NotificationPermissionPrompt />
 
       <footer className="border-t border-border/50 mt-6 py-12 md:py-16 bg-gradient-to-b from-card/30 to-card/80 backdrop-blur-sm">
         <div className="max-w-wide mx-auto px-4">

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
 import MatchChatModal from './MatchChatModal';
+import { pushNotificationService } from '@/utils/pushNotifications';
 
 interface SwipeProfile {
   id: number;
@@ -108,6 +109,11 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
         
         matchSoundRef.current?.play().catch(() => {});
         onMatch?.(currentProfile.id);
+        
+        pushNotificationService.showMatchNotification(
+          currentProfile.name,
+          currentProfile.photo
+        );
         
         setTimeout(() => {
           setShowMatchAnimation(false);
