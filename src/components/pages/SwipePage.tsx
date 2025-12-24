@@ -191,11 +191,8 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Свайп-знакомства
+            Знакомства
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Свайпайте вправо, если нравится, влево — если нет
-          </p>
           {matches > 0 && (
             <Badge className="mt-2 bg-gradient-to-r from-pink-500 to-purple-600">
               <Icon name="Heart" size={14} className="mr-1" />
@@ -230,7 +227,7 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
             onTouchMove={(e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY)}
             onTouchEnd={handleDragEnd}
           >
-            <div className="relative aspect-[3/4]">
+            <div className="relative aspect-[2/3] md:aspect-[3/4]">
               {isDragging && dragOffset.x > 50 && (
                 <div className="absolute top-8 right-8 bg-green-500 text-white px-6 py-3 rounded-lg font-bold text-2xl rotate-12 z-10 shadow-lg">
                   LIKE
@@ -246,28 +243,27 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
                 alt={currentProfile.name}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
               
-              <div className="absolute top-4 right-4">
-                {currentProfile.verified && (
-                  <Badge className="bg-blue-500 text-white">
-                    <Icon name="CheckCircle2" size={14} className="mr-1" />
-                    Verified
-                  </Badge>
-                )}
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <div className="flex items-baseline gap-2 mb-2">
-                  <h2 className="text-3xl font-bold">{currentProfile.name}</h2>
-                  <span className="text-xl">{currentProfile.age}</span>
+              <div className="absolute top-6 left-0 right-0 px-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <h2 className="text-4xl font-bold text-white drop-shadow-lg">{currentProfile.name}</h2>
+                    <span className="text-2xl text-white/90 drop-shadow-lg">{currentProfile.age}</span>
+                  </div>
+                  {currentProfile.verified && (
+                    <Badge className="bg-blue-500 text-white">
+                      <Icon name="CheckCircle2" size={14} className="mr-1" />
+                      Verified
+                    </Badge>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Icon name="MapPin" size={16} />
-                  <span className="text-sm">{currentProfile.city}</span>
+                <div className="flex items-center gap-2 mt-2">
+                  <Icon name="MapPin" size={16} className="text-white drop-shadow-lg" />
+                  <span className="text-sm text-white/90 drop-shadow-lg">{currentProfile.city}</span>
                 </div>
-                <p className="text-sm mb-3 line-clamp-2">{currentProfile.bio}</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="text-sm mt-3 line-clamp-2 text-white/90 drop-shadow-lg">{currentProfile.bio}</p>
+                <div className="flex flex-wrap gap-2 mt-3">
                   {currentProfile.interests.map((interest, idx) => (
                     <Badge key={idx} variant="secondary" className="bg-white/20 text-white border-white/30">
                       {interest}
@@ -275,36 +271,36 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
                   ))}
                 </div>
               </div>
+
+              <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-6 px-6">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => handleSwipe('left')}
+                  className="w-16 h-16 rounded-full border-2 border-red-500 text-red-500 bg-white/90 hover:bg-white hover:text-red-600 shadow-lg"
+                >
+                  <Icon name="X" size={32} />
+                </Button>
+
+                <Button
+                  size="lg"
+                  onClick={() => handleSwipe('right')}
+                  className="w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-xl"
+                >
+                  <Icon name="Heart" size={36} />
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => setCurrentIndex(prev => prev + 1)}
+                  className="w-16 h-16 rounded-full border-2 border-blue-500 text-blue-500 bg-white/90 hover:bg-white hover:text-blue-600 shadow-lg"
+                >
+                  <Icon name="RotateCw" size={24} />
+                </Button>
+              </div>
             </div>
           </Card>
-
-          <div className="flex items-center justify-center gap-6 mt-8">
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => handleSwipe('left')}
-              className="w-16 h-16 rounded-full border-2 border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
-            >
-              <Icon name="X" size={32} />
-            </Button>
-
-            <Button
-              size="lg"
-              onClick={() => handleSwipe('right')}
-              className="w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg"
-            >
-              <Icon name="Heart" size={36} />
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => setCurrentIndex(prev => prev + 1)}
-              className="w-16 h-16 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600"
-            >
-              <Icon name="RotateCw" size={24} />
-            </Button>
-          </div>
         </div>
 
         <div className="mt-8 text-center">
