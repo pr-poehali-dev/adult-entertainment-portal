@@ -20,10 +20,15 @@ import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
+import AuthPage from './AuthPage';
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
+
+  if (!state.isAuthenticated) {
+    return <AuthPage onAuth={() => state.setIsAuthenticated(true)} />;
+  }
 
   // Обработчики
   const handlers = useIndexHandlers({
