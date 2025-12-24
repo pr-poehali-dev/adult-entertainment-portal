@@ -34,7 +34,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
       <div className="min-h-screen w-full flex items-center justify-center bg-gray-100">
         <div className="relative w-full max-w-4xl">
           <img
-            src="https://cdn.poehali.dev/files/IMG_5135.jpeg"
+            src="https://cdn.poehali.dev/files/IMG_5134.jpeg"
             alt="Love is"
             className="w-full h-auto"
           />
@@ -43,10 +43,10 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
             onClick={() => setShowRegisterModal(true)}
             className="absolute cursor-pointer hover:opacity-80 transition-opacity"
             style={{
-              left: '29%',
-              bottom: '8.5%',
-              width: '38%',
-              height: '9.5%',
+              left: '30%',
+              bottom: '10%',
+              width: '25%',
+              height: '7%',
             }}
             aria-label="Зарегистрироваться"
           />
@@ -55,10 +55,10 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
             onClick={() => setShowLoginModal(true)}
             className="absolute cursor-pointer hover:opacity-80 transition-opacity"
             style={{
-              right: '11%',
-              bottom: '8.5%',
-              width: '23%',
-              height: '9.5%',
+              right: '28%',
+              bottom: '10%',
+              width: '14%',
+              height: '7%',
             }}
             aria-label="Войти"
           />
