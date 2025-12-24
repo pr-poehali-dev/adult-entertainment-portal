@@ -73,6 +73,8 @@ export interface Profile {
   vipExpiry: string | null;
   subscriptionType: SubscriptionType;
   subscriptionExpiry: string | null;
+  profileCompleted?: boolean;
+  kycCompleted?: boolean;
   healthCertified?: boolean;
   healthCertificateExpiry?: string | null;
   lastHealthCertificateUpload?: string | null;

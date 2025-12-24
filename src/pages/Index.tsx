@@ -22,6 +22,8 @@ import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
 import AuthPage from './AuthPage';
 import PremiumModal from '@/components/PremiumModal';
+import ProfileSetup from '@/components/onboarding/ProfileSetup';
+import KYCVerification from '@/components/onboarding/KYCVerification';
 
 const Index = () => {
   // Состояние
@@ -135,6 +137,40 @@ const Index = () => {
 
   if (!state.isAuthenticated) {
     return <AuthPage onAuth={() => state.setIsAuthenticated(true)} />;
+  }
+
+  // Проверка заполнения профиля
+  if (!state.profile.profileCompleted) {
+    return (
+      <ProfileSetup
+        onComplete={(profileData) => {
+          state.setProfile({ ...state.profile, ...profileData });
+        }}
+      />
+    );
+  }
+
+  // Проверка KYC-верификации
+  if (!state.profile.kycCompleted) {
+    return (
+      <KYCVerification
+        onComplete={() => {
+          state.setProfile({ ...state.profile, kycCompleted: true, verified: true });
+          state.toast({
+            title: "✅ Верификация отправлена!",
+            description: "Ваши данные будут проверены в течение 24 часов",
+          });
+        }}
+        onSkip={() => {
+          state.setProfile({ ...state.profile, kycCompleted: true, verified: false });
+          state.toast({
+            title: "Верификация пропущена",
+            description: "Вы можете пройти её позже в настройках профиля",
+            variant: "default",
+          });
+        }}
+      />
+    );
   }
 
   if (state.currentPage === 'agency-register') {

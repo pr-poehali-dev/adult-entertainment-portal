@@ -144,7 +144,9 @@ export const useIndexState = () => {
     vipStatus: 'none',
     vipExpiry: null,
     subscriptionType: 'free',
-    subscriptionExpiry: null
+    subscriptionExpiry: null,
+    profileCompleted: false,
+    kycCompleted: false
   });
 
   const [wallet, setWallet] = useState<Wallet>({
