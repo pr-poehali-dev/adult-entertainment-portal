@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
+import MatchChatModal from './MatchChatModal';
 
 interface SwipeProfile {
   id: number;
@@ -67,9 +68,16 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [matches, setMatches] = useState<number>(0);
+  const [matchedProfiles, setMatchedProfiles] = useState<SwipeProfile[]>([]);
   const [showMatchAnimation, setShowMatchAnimation] = useState(false);
+  const [showMatchModal, setShowMatchModal] = useState(false);
+  const [currentMatch, setCurrentMatch] = useState<SwipeProfile | null>(null);
   const matchSoundRef = useRef<HTMLAudioElement | null>(null);
   const likeSoundRef = useRef<HTMLAudioElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const currentProfile = profiles[currentIndex];
 
@@ -80,6 +88,7 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
 
   const handleSwipe = (direction: 'left' | 'right') => {
     setSwipeDirection(direction);
+    setDragOffset({ x: 0, y: 0 });
     
     if (direction === 'right') {
       if (navigator.vibrate) {
@@ -90,6 +99,7 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
       const isMatch = Math.random() > 0.7;
       if (isMatch) {
         setMatches(prev => prev + 1);
+        setMatchedProfiles(prev => [...prev, currentProfile]);
         setShowMatchAnimation(true);
         
         if (navigator.vibrate) {
@@ -99,7 +109,11 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
         matchSoundRef.current?.play().catch(() => {});
         onMatch?.(currentProfile.id);
         
-        setTimeout(() => setShowMatchAnimation(false), 2000);
+        setTimeout(() => {
+          setShowMatchAnimation(false);
+          setCurrentMatch(currentProfile);
+          setShowMatchModal(true);
+        }, 2000);
       }
     } else {
       if (navigator.vibrate) {
@@ -111,6 +125,30 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
       setSwipeDirection(null);
       setCurrentIndex(prev => prev + 1);
     }, 300);
+  };
+
+  const handleDragStart = (clientX: number, clientY: number) => {
+    setIsDragging(true);
+    setDragStart({ x: clientX, y: clientY });
+  };
+
+  const handleDragMove = (clientX: number, clientY: number) => {
+    if (!isDragging) return;
+    const deltaX = clientX - dragStart.x;
+    const deltaY = clientY - dragStart.y;
+    setDragOffset({ x: deltaX, y: deltaY });
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const threshold = 100;
+    if (Math.abs(dragOffset.x) > threshold) {
+      handleSwipe(dragOffset.x > 0 ? 'right' : 'left');
+    } else {
+      setDragOffset({ x: 0, y: 0 });
+    }
   };
 
   useEffect(() => {
@@ -162,15 +200,41 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
 
         <div className="relative">
           <Card
-            className={`overflow-hidden transition-all duration-300 transform ${
+            ref={cardRef}
+            className={`overflow-hidden cursor-grab active:cursor-grabbing touch-none ${
+              isDragging ? '' : 'transition-all duration-300'
+            } transform ${
               swipeDirection === 'left'
                 ? '-translate-x-full rotate-12 opacity-0'
                 : swipeDirection === 'right'
                 ? 'translate-x-full -rotate-12 opacity-0'
-                : 'translate-x-0 rotate-0 opacity-100'
+                : ''
             }`}
+            style={{
+              transform: isDragging
+                ? `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`
+                : undefined,
+              opacity: isDragging ? 1 - Math.abs(dragOffset.x) / 300 : undefined,
+            }}
+            onMouseDown={(e) => handleDragStart(e.clientX, e.clientY)}
+            onMouseMove={(e) => handleDragMove(e.clientX, e.clientY)}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={(e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY)}
+            onTouchMove={(e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY)}
+            onTouchEnd={handleDragEnd}
           >
             <div className="relative aspect-[3/4]">
+              {isDragging && dragOffset.x > 50 && (
+                <div className="absolute top-8 right-8 bg-green-500 text-white px-6 py-3 rounded-lg font-bold text-2xl rotate-12 z-10 shadow-lg">
+                  LIKE
+                </div>
+              )}
+              {isDragging && dragOffset.x < -50 && (
+                <div className="absolute top-8 left-8 bg-red-500 text-white px-6 py-3 rounded-lg font-bold text-2xl -rotate-12 z-10 shadow-lg">
+                  NOPE
+                </div>
+              )}
               <img
                 src={currentProfile.photo}
                 alt={currentProfile.name}
@@ -242,7 +306,44 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
             Осталось анкет: {profiles.length - currentIndex - 1}
           </p>
         </div>
+
+        {matchedProfiles.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-bold mb-4 text-center">Ваши совпадения</h3>
+            <div className="grid grid-cols-3 gap-3">
+              {matchedProfiles.slice(-6).reverse().map((profile) => (
+                <button
+                  key={profile.id}
+                  onClick={() => {
+                    setCurrentMatch(profile);
+                    setShowMatchModal(true);
+                  }}
+                  className="relative aspect-square rounded-lg overflow-hidden border-2 border-pink-500 hover:scale-105 transition-transform"
+                >
+                  <img
+                    src={profile.photo}
+                    alt={profile.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                    <p className="text-white text-xs font-bold">{profile.name}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      <MatchChatModal
+        isOpen={showMatchModal}
+        onClose={() => setShowMatchModal(false)}
+        matchName={currentMatch?.name || ''}
+        matchPhoto={currentMatch?.photo || ''}
+        onSendMessage={(msg) => {
+          console.log('Отправлено сообщение:', msg, 'для', currentMatch?.name);
+        }}
+      />
     </div>
   );
 }
