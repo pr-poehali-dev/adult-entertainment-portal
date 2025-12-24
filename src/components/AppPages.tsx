@@ -29,6 +29,7 @@ const BookingsPage = lazy(() => import('@/components/pages/BookingsPage').then(m
 const MyOrdersPage = lazy(() => import('@/components/pages/MyOrdersPage').then(m => ({ default: m.MyOrdersPage })));
 const OrderChatPage = lazy(() => import('@/components/pages/order-chat/OrderChatPage').then(m => ({ default: m.OrderChatPage })));
 const SwipePage = lazy(() => import('@/components/pages/SwipePage'));
+const MatchesPage = lazy(() => import('@/components/pages/MatchesPage'));
 import { Page, Profile, CatalogItem, Review, UserRole, Wallet, Notification } from '@/types';
 import { sellerProfiles } from '@/data/sellerProfiles';
 
@@ -453,6 +454,13 @@ export const useAppPages = ({
         setCurrentPage('home');
         onPremiumRequired?.();
         return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} />;
+      
+      case 'matches':
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <MatchesPage setCurrentPage={setCurrentPage} />
+          </Suspense>
+        );
       
       default:
         return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} />;

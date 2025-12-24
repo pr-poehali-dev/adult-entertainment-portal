@@ -309,7 +309,21 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
 
         {matchedProfiles.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-lg font-bold mb-4 text-center">Ваши совпадения</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold">Ваши совпадения ({matchedProfiles.length})</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const event = new CustomEvent('navigate', { detail: 'matches' });
+                  window.dispatchEvent(event);
+                }}
+                className="text-primary"
+              >
+                Все
+                <Icon name="ChevronRight" size={16} className="ml-1" />
+              </Button>
+            </div>
             <div className="grid grid-cols-3 gap-3">
               {matchedProfiles.slice(-6).reverse().map((profile) => (
                 <button

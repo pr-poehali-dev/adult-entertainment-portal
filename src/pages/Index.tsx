@@ -25,10 +25,19 @@ import PremiumModal from '@/components/PremiumModal';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
+import { useEffect } from 'react';
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
+
+  useEffect(() => {
+    const handleNavigate = (e: CustomEvent) => {
+      state.setCurrentPage(e.detail);
+    };
+    window.addEventListener('navigate', handleNavigate as EventListener);
+    return () => window.removeEventListener('navigate', handleNavigate as EventListener);
+  }, [state]);
 
   // Обработчики
   const handlers = useIndexHandlers({
