@@ -21,6 +21,7 @@ import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
 import AuthPage from './AuthPage';
+import PremiumModal from '@/components/PremiumModal';
 
 const Index = () => {
   // Состояние
@@ -123,6 +124,7 @@ const Index = () => {
     setSelectedApplicationId: state.setSelectedApplicationId,
     onNotificationAdd: handlers.addNotification,
     onOpenLovePurchase: () => state.setShowLovePurchase(true),
+    onPremiumRequired: () => state.setShowPremiumModal(true),
     bookings: state.bookings,
     setBookings: state.setBookings,
     orderChats: state.orderChats,
@@ -290,6 +292,12 @@ const Index = () => {
         agencyId={state.profile.agencyId || 0}
         agencyName={state.profile.agencyName || ''}
         agencyType={state.profile.agencyType}
+      />
+
+      <PremiumModal
+        isOpen={state.showPremiumModal}
+        onClose={() => state.setShowPremiumModal(false)}
+        onPurchase={handlers.handlePurchasePremium}
       />
 
       <LovePurchaseModal

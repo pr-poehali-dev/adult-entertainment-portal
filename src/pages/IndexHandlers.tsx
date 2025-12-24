@@ -373,6 +373,53 @@ export const useIndexHandlers = (props: HandlersProps) => {
     });
   };
 
+  const handlePurchasePremium = (duration: number, price: number, currency: string) => {
+    const balance = wallet.balances.find(b => b.currency === currency);
+    if (!balance || balance.amount < price) {
+      toast({
+        title: "Недостаточно средств",
+        description: "Пополните баланс для покупки Premium",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setWallet((prev) => ({
+      balances: prev.balances.map(b => 
+        b.currency === currency 
+          ? { ...b, amount: b.amount - price }
+          : b
+      )
+    }));
+
+    const expiryDate = new Date();
+    expiryDate.setMonth(expiryDate.getMonth() + duration);
+
+    setProfile((prev) => ({
+      ...prev,
+      subscriptionType: 'premium',
+      subscriptionExpiry: expiryDate.toISOString(),
+    }));
+
+    const transaction: Transaction = {
+      id: Date.now(),
+      type: 'vip_payment',
+      amount: price,
+      currency: currency as any,
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
+      description: `Подписка Premium на ${duration} мес.`,
+    };
+
+    setWalletTransactions([transaction, ...walletTransactions]);
+
+    toast({
+      title: "🎉 Premium активирован!",
+      description: `Подписка действует до ${expiryDate.toLocaleDateString('ru-RU')}`,
+    });
+  };
+
   const handlePurchaseLove = (rubAmount: number, loveAmount: number) => {
     setWallet((prev) => ({
       balances: prev.balances.map(b => {
@@ -409,6 +456,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
     handleSubmitReview,
     handleProfileUpdate,
     handleEnableNotifications,
+    handlePurchasePremium,
     handleAgencyRegister,
     handleAgencyPayment,
     handleAddGirl,

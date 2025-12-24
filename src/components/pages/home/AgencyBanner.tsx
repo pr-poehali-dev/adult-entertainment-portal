@@ -7,9 +7,17 @@ import { useState, useEffect, useRef } from 'react';
 interface AgencyBannerProps {
   setCurrentPage: (page: Page) => void;
   profile: Profile;
+  onPremiumRequired?: () => void;
 }
 
-export const AgencyBanner = ({ setCurrentPage, profile }: AgencyBannerProps) => {
+export const AgencyBanner = ({ setCurrentPage, profile, onPremiumRequired }: AgencyBannerProps) => {
+  const handleAgencyClick = () => {
+    if (profile.subscriptionType === 'free' && onPremiumRequired) {
+      onPremiumRequired();
+    } else {
+      setCurrentPage('agency-register');
+    }
+  };
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef<HTMLElement>(null);
 
@@ -106,11 +114,14 @@ export const AgencyBanner = ({ setCurrentPage, profile }: AgencyBannerProps) => 
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                   <Button
                     size="lg"
-                    onClick={() => setCurrentPage('agency-register')}
+                    onClick={handleAgencyClick}
                     className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:from-purple-700 hover:via-pink-700 hover:to-rose-700 text-white font-bold shadow-xl hover:shadow-2xl transition-all text-sm sm:text-base md:text-lg py-4 sm:py-5 md:py-6 w-full sm:w-auto"
                   >
                     <Icon name="Building2" size={18} className="mr-2 sm:w-5 sm:h-5 md:w-[22px] md:h-[22px]" />
                     <span className="whitespace-nowrap">Открыть агентство</span>
+                    {profile.subscriptionType === 'free' && (
+                      <Icon name="Crown" size={16} className="ml-2" />
+                    )}
                   </Button>
 
                   <div className="flex items-center gap-2 text-xs sm:text-sm justify-center sm:justify-start">

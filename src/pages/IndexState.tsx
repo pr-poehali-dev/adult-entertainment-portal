@@ -56,6 +56,7 @@ export const useIndexState = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
   const [showLovePurchase, setShowLovePurchase] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const { toast } = useToast();
   const { playNotificationSound, playBalanceSound, soundEnabled, setSoundEnabled } = useNotificationSound();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -141,7 +142,9 @@ export const useIndexState = () => {
     rating: 4.8,
     verified: true,
     vipStatus: 'none',
-    vipExpiry: null
+    vipExpiry: null,
+    subscriptionType: 'free',
+    subscriptionExpiry: null
   });
 
   const [wallet, setWallet] = useState<Wallet>({
@@ -243,6 +246,8 @@ export const useIndexState = () => {
     setEditingGirl,
     showLovePurchase,
     setShowLovePurchase,
+    showPremiumModal,
+    setShowPremiumModal,
     userAds,
     setUserAds,
     bookings,

@@ -42,12 +42,15 @@ interface HomeAndCatalogProps {
   userRole?: UserRole;
 }
 
-export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profile }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void; profile: Profile }) => {
+export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profile, onPremiumRequired }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void; profile: Profile; onPremiumRequired?: () => void }) => {
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeSolutionsSection />
+      <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
+      <DatingBanner setCurrentPage={setCurrentPage} />
+      <AgencyBanner setCurrentPage={setCurrentPage} profile={profile} onPremiumRequired={onPremiumRequired} />
     </div>
   );
 };

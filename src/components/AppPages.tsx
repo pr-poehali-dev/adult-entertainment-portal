@@ -72,6 +72,7 @@ interface AppPagesProps {
   setSelectedApplicationId?: (id: number | null) => void;
   onNotificationAdd?: (notification: Notification) => void;
   onOpenLovePurchase?: () => void;
+  onPremiumRequired?: () => void;
   bookings: any[];
   setBookings: (bookings: any[]) => void;
   orderChats: any[];
@@ -121,6 +122,7 @@ export const useAppPages = ({
   setSelectedApplicationId,
   onNotificationAdd,
   onOpenLovePurchase,
+  onPremiumRequired,
   bookings,
   setBookings,
   orderChats,
@@ -138,7 +140,7 @@ export const useAppPages = ({
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} />;
+        return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} />;
       
       case 'catalog':
         return (
