@@ -4,7 +4,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 export const useIndexState = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
@@ -164,8 +163,6 @@ export const useIndexState = () => {
   const [selectedOrderChatId, setSelectedOrderChatId] = useState<number | null>(null);
 
   return {
-    isAuthenticated,
-    setIsAuthenticated,
     currentPage,
     setCurrentPage,
     userRole,

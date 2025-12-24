@@ -92,7 +92,7 @@ export const DatingProfileCard = ({
         </div>
       </div>
       <CardContent className="p-4">
-        <p className="text-sm text-muted-foreground line-clamp-2 mb-3 break-words">
+        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
           {profile.about}
         </p>
         {showLikeButton && onLike ? (
