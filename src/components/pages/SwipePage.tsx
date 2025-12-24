@@ -79,6 +79,7 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [cardAnimation, setCardAnimation] = useState(true);
 
   const currentProfile = profiles[currentIndex];
 
@@ -129,7 +130,9 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
 
     setTimeout(() => {
       setSwipeDirection(null);
+      setCardAnimation(false);
       setCurrentIndex(prev => prev + 1);
+      setTimeout(() => setCardAnimation(true), 50);
     }, 300);
   };
 
@@ -205,6 +208,8 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
           <Card
             ref={cardRef}
             className={`overflow-hidden cursor-grab active:cursor-grabbing touch-none ${
+              cardAnimation ? 'animate-scale-up' : ''
+            } ${
               isDragging ? '' : 'transition-all duration-300'
             } transform ${
               swipeDirection === 'left'

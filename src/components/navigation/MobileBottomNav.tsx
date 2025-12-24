@@ -11,7 +11,7 @@ export const MobileBottomNav = ({ currentPage, setCurrentPage, messageCount = 0 
   const navItems = [
     { page: 'online-search' as Page, icon: 'Search', label: 'Поиск' },
     { page: 'catalog' as Page, icon: 'Grid3x3', label: 'Объявления' },
-    { page: 'swipe' as Page, icon: 'Heart', label: 'Знакомства' },
+    { page: 'swipe' as Page, icon: 'Heart', label: 'Свайп' },
     { page: 'matches' as Page, icon: 'MessageCircle', label: 'Чаты', badge: messageCount },
     { page: 'profile' as Page, icon: 'User', label: 'Профиль' },
   ];
