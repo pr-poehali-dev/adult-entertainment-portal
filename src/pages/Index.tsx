@@ -27,6 +27,7 @@ import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { NotificationPermissionPrompt } from '@/components/NotificationPermissionPrompt';
 import { TelegramThemeAdapter } from '@/components/TelegramThemeAdapter';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { useEffect } from 'react';
 
 const Index = () => {
@@ -264,6 +265,7 @@ const Index = () => {
   return (
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
     <TelegramThemeAdapter />
+    <OfflineIndicator />
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navigation 
