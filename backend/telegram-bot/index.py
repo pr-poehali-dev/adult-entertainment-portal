@@ -2,12 +2,13 @@ import json
 import os
 import hmac
 import hashlib
+import requests
 from urllib.parse import parse_qs
 
 def handler(event: dict, context) -> dict:
     """
-    Telegram Bot Webhook обработчик для приема уведомлений и команд от бота.
-    Проверяет подлинность запросов от Telegram и обрабатывает команды пользователей.
+    Telegram Bot Webhook обработчик для команд бота и Telegram Payments.
+    Поддерживает: /start, /help, /profile, создание инвойсов, обработку платежей.
     """
     method = event.get('httpMethod', 'POST')
     
@@ -39,7 +40,12 @@ def handler(event: dict, context) -> dict:
             }
         
         body = event.get('body', '{}')
-        update = json.loads(body) if isinstance(body, str) else body
+        data = json.loads(body) if isinstance(body, str) else body
+        
+        if 'action' in data:
+            return handle_payment_action(data, bot_token)
+        
+        update = data
         
         if 'message' in update:
             message = update['message']
@@ -117,6 +123,46 @@ def handler(event: dict, context) -> dict:
                     })
                 }
         
+        elif 'pre_checkout_query' in update:
+            query = update['pre_checkout_query']
+            query_id = query['id']
+            
+            telegram_data = {
+                'pre_checkout_query_id': query_id,
+                'ok': True
+            }
+            
+            requests.post(
+                f'https://api.telegram.org/bot{bot_token}/answerPreCheckoutQuery',
+                json=telegram_data,
+                timeout=5
+            )
+            
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json'},
+                'body': json.dumps({'ok': True})
+            }
+        
+        elif 'message' in update and 'successful_payment' in update['message']:
+            payment = update['message']['successful_payment']
+            payload = json.loads(payment.get('invoice_payload', '{}'))
+            
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json'},
+                'body': json.dumps({
+                    'ok': True,
+                    'payment': {
+                        'amount': payment.get('total_amount', 0) / 100,
+                        'currency': payment.get('currency'),
+                        'payload': payload,
+                        'telegram_payment_charge_id': payment.get('telegram_payment_charge_id'),
+                        'provider_payment_charge_id': payment.get('provider_payment_charge_id')
+                    }
+                })
+            }
+        
         elif 'callback_query' in update:
             callback = update['callback_query']
             chat_id = callback['message']['chat']['id']
@@ -144,3 +190,73 @@ def handler(event: dict, context) -> dict:
             'headers': {'Content-Type': 'application/json'},
             'body': json.dumps({'error': str(e)})
         }
+
+
+def handle_payment_action(data: dict, bot_token: str) -> dict:
+    """Обработка действий с платежами"""
+    action = data.get('action')
+    payment_provider_token = os.environ.get('TELEGRAM_PAYMENT_PROVIDER_TOKEN')
+    
+    if not payment_provider_token:
+        return {
+            'statusCode': 500,
+            'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': 'Payment provider token not configured'})
+        }
+    
+    if action == 'create_invoice':
+        chat_id = data.get('chatId')
+        title = data.get('title', 'Пополнение баланса')
+        description = data.get('description', 'Пополнение баланса в приложении')
+        amount = data.get('amount')
+        currency = data.get('currency', 'RUB')
+        payload = data.get('payload', {})
+        
+        if not chat_id or not amount:
+            return {
+                'statusCode': 400,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'chatId and amount are required'})
+            }
+        
+        telegram_data = {
+            'chat_id': chat_id,
+            'title': title,
+            'description': description,
+            'payload': json.dumps(payload),
+            'provider_token': payment_provider_token,
+            'currency': currency,
+            'prices': [{'label': title, 'amount': int(amount * 100)}]
+        }
+        
+        response = requests.post(
+            f'https://api.telegram.org/bot{bot_token}/sendInvoice',
+            json=telegram_data,
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({
+                    'success': True,
+                    'message_id': result.get('result', {}).get('message_id')
+                })
+            }
+        else:
+            return {
+                'statusCode': response.status_code,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({
+                    'error': 'Failed to create invoice',
+                    'details': response.text
+                })
+            }
+    
+    return {
+        'statusCode': 400,
+        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        'body': json.dumps({'error': 'Invalid action'})
+    }
