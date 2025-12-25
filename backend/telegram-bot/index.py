@@ -145,21 +145,55 @@ def handler(event: dict, context) -> dict:
             }
         
         elif 'message' in update and 'successful_payment' in update['message']:
-            payment = update['message']['successful_payment']
+            from db_utils import save_payment, notify_frontend
+            
+            message = update['message']
+            payment = message['successful_payment']
+            telegram_user_id = message['from']['id']
             payload = json.loads(payment.get('invoice_payload', '{}'))
+            
+            payment_data = {
+                'amount': payment.get('total_amount', 0) / 100,
+                'currency': payment.get('currency'),
+                'payload': payload,
+                'telegram_payment_charge_id': payment.get('telegram_payment_charge_id'),
+                'provider_payment_charge_id': payment.get('provider_payment_charge_id')
+            }
+            
+            save_payment(telegram_user_id, payment_data)
+            notify_frontend(telegram_user_id, payment_data)
+            
+            try:
+                thanks_message = f"✅ Платёж получен!\n\n💰 Сумма: {payment_data['amount']:.2f} {payment_data['currency']}\n\n"
+                if payload.get('type') == 'love_purchase':
+                    love_amount = payload.get('love', 0)
+                    thanks_message += f"💗 Зачислено {love_amount} LOVE токенов\n\nСредства будут доступны в приложении через несколько секунд."
+                else:
+                    thanks_message += "Средства зачислены на ваш счёт!"
+                
+                requests.post(
+                    f'https://api.telegram.org/bot{bot_token}/sendMessage',
+                    json={
+                        'chat_id': telegram_user_id,
+                        'text': thanks_message,
+                        'reply_markup': {
+                            'inline_keyboard': [[{
+                                'text': '🚀 Открыть приложение',
+                                'web_app': {'url': os.environ.get('WEB_APP_URL', 'https://your-app.poehali.dev')}
+                            }]]
+                        }
+                    },
+                    timeout=5
+                )
+            except Exception as e:
+                print(f"Error sending confirmation message: {e}")
             
             return {
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
                 'body': json.dumps({
                     'ok': True,
-                    'payment': {
-                        'amount': payment.get('total_amount', 0) / 100,
-                        'currency': payment.get('currency'),
-                        'payload': payload,
-                        'telegram_payment_charge_id': payment.get('telegram_payment_charge_id'),
-                        'provider_payment_charge_id': payment.get('provider_payment_charge_id')
-                    }
+                    'payment': payment_data
                 })
             }
         

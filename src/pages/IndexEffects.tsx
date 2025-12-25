@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { UserRole, Notification, Wallet } from '@/types';
 import { notificationService } from '@/utils/notificationService';
+import { useTelegram } from '@/contexts/TelegramProvider';
+import { handlePaymentWebhook, PaymentWebhookData } from '@/utils/paymentWebhook';
 
 interface EffectsProps {
   userRole: UserRole;
@@ -236,4 +238,69 @@ export const useIndexEffects = (props: EffectsProps) => {
     // В реальном приложении здесь была бы подписка на события
     // Сейчас просто держим функцию готовой к использованию
   }, [selectedPartyId, toast, setCurrentPage]);
+
+  // Автозачисление средств после оплаты через Telegram
+  const { userId: telegramUserId, isTelegramEnv } = useTelegram();
+  
+  useEffect(() => {
+    if (!isTelegramEnv || !telegramUserId) return;
+
+    const handlePaymentMessage = (event: MessageEvent) => {
+      if (event.data.type === 'telegram_payment_success') {
+        const paymentData: PaymentWebhookData = event.data.payment;
+        
+        handlePaymentWebhook(
+          paymentData,
+          (amount, currency) => {
+            setWallet(prev => ({
+              ...prev,
+              balances: prev.balances.map(b => 
+                b.currency === currency ? { ...b, amount: b.amount + amount } : b
+              )
+            }));
+            
+            const newTransaction = {
+              id: Date.now(),
+              type: 'deposit',
+              amount,
+              currency,
+              status: 'completed',
+              createdAt: new Date().toISOString(),
+              completedAt: new Date().toISOString(),
+              description: `Пополнение через Telegram Payments`,
+              paymentId: paymentData.payment.telegram_payment_charge_id
+            };
+            setWalletTransactions(prev => [newTransaction, ...prev]);
+            
+            playBalanceSound();
+          },
+          (title, description) => {
+            addNotification('payment', title, description);
+            toast({
+              title,
+              description,
+              duration: 5000,
+            });
+          }
+        );
+      }
+    };
+
+    window.addEventListener('message', handlePaymentMessage);
+    
+    const checkInterval = setInterval(() => {
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.onEvent('invoice_closed', (event: any) => {
+          if (event.status === 'paid') {
+            console.log('Payment completed via Telegram');
+          }
+        });
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('message', handlePaymentMessage);
+      clearInterval(checkInterval);
+    };
+  }, [isTelegramEnv, telegramUserId, setWallet, setWalletTransactions, playBalanceSound, addNotification, toast]);
 };
