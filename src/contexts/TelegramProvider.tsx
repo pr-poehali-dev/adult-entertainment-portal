@@ -60,9 +60,17 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   useEffect(() => {
     const initTelegram = async () => {
       try {
-        const launchParams = retrieveLaunchParams();
+        let launchParams;
+        try {
+          launchParams = retrieveLaunchParams();
+        } catch (e) {
+          console.log('Not running in Telegram environment (failed to retrieve params)');
+          setIsTelegramEnv(false);
+          setIsReady(true);
+          return;
+        }
         
-        if (launchParams.platform === 'unknown') {
+        if (!launchParams || launchParams.platform === 'unknown') {
           console.log('Not running in Telegram environment');
           setIsTelegramEnv(false);
           setIsReady(true);
