@@ -19,12 +19,92 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
   });
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSent, setResetSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('isAuthenticated', 'true');
     onAuth();
   };
+
+  const handlePasswordReset = (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetSent(true);
+    setTimeout(() => {
+      setShowForgotPassword(false);
+      setResetSent(false);
+      setResetEmail('');
+    }, 3000);
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in">
+          <button
+            onClick={() => setShowForgotPassword(false)}
+            className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <Icon name="ArrowLeft" size={20} />
+            Назад
+          </button>
+
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+              <Icon name="KeyRound" className="text-white" size={32} />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Восстановление пароля
+            </h1>
+            <p className="text-gray-500 text-sm text-center">
+              Введите email для получения ссылки на восстановление
+            </p>
+          </div>
+
+          {!resetSent ? (
+            <form onSubmit={handlePasswordReset} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                  className="h-11"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                size="lg"
+              >
+                Отправить ссылку
+              </Button>
+            </form>
+          ) : (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center animate-fade-in">
+              <Icon name="CheckCircle" size={48} className="mx-auto text-green-500 mb-3" />
+              <p className="text-green-800 font-medium mb-1">
+                Ссылка отправлена!
+              </p>
+              <p className="text-green-600 text-sm">
+                Проверьте вашу почту {resetEmail}
+              </p>
+            </div>
+          )}
+
+          <div className="mt-6 text-center text-sm text-gray-500">
+            Не получили письмо? Проверьте папку "Спам"
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
@@ -80,6 +160,16 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                     <Icon name={showLoginPassword ? "EyeOff" : "Eye"} size={20} />
                   </button>
                 </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-sm text-primary hover:underline"
+                >
+                  Забыли пароль?
+                </button>
               </div>
 
               <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
