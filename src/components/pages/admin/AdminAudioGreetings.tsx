@@ -23,6 +23,11 @@ interface AudioModerationStatus {
   status: 'pending' | 'approved' | 'rejected';
   moderatedAt?: string;
   moderatorNote?: string;
+  aiAnalysis?: {
+    transcript: string;
+    confidence: number;
+    aiRecommendation: boolean;
+  };
 }
 
 interface AdminAudioGreetingsProps {
@@ -85,9 +90,102 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
   const [selectedAd, setSelectedAd] = useState<UserAd | null>(null);
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
+  const [aiProcessing, setAiProcessing] = useState<number[]>([]);
 
   const getModeration = (adId: number) => {
     return moderationStatuses.find(m => m.adId === adId);
+  };
+
+  const handleAIModeration = async (ad: UserAd) => {
+    if (!ad.audioGreeting) return;
+    
+    setAiProcessing(prev => [...prev, ad.id]);
+    
+    try {
+      const audioResponse = await fetch(ad.audioGreeting);
+      const audioBlob = await audioResponse.blob();
+      
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      
+      await new Promise((resolve) => {
+        reader.onloadend = resolve;
+      });
+      
+      const base64Audio = (reader.result as string).split(',')[1];
+      
+      const response = await fetch('https://functions.poehali.dev/64dd8681-70e5-4e25-b3c8-d218918038fc', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          audioBase64: base64Audio,
+          adTitle: ad.title,
+          adDescription: ad.description
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.approved) {
+        setModerationStatuses(prev => prev.map(m => 
+          m.adId === ad.id 
+            ? { 
+                ...m, 
+                status: 'approved', 
+                moderatedAt: new Date().toISOString(),
+                aiAnalysis: {
+                  transcript: result.transcript,
+                  confidence: result.confidence,
+                  aiRecommendation: true
+                }
+              }
+            : m
+        ));
+        
+        onAddNotification({
+          type: 'audio_approved',
+          title: '✅ Аудио-приветствие одобрено',
+          text: `Ваше голосовое приветствие в объявлении "${ad.title}" прошло модерацию и теперь видно всем пользователям!`,
+          adId: ad.id
+        });
+        
+        toast({
+          title: '🤖 AI одобрил аудио',
+          description: `Объявление #${ad.id} автоматически одобрено. Уверенность: ${result.confidence}%`,
+        });
+      } else {
+        setModerationStatuses(prev => prev.map(m => 
+          m.adId === ad.id 
+            ? { 
+                ...m,
+                aiAnalysis: {
+                  transcript: result.transcript,
+                  confidence: result.confidence,
+                  aiRecommendation: false
+                },
+                moderatorNote: result.reason
+              }
+            : m
+        ));
+        
+        toast({
+          title: '🤖 AI рекомендует отклонить',
+          description: `Причина: ${result.reason}`,
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('AI moderation error:', error);
+      toast({
+        title: 'Ошибка AI-анализа',
+        description: 'Не удалось проанализировать аудио. Проверьте вручную.',
+        variant: 'destructive',
+      });
+    } finally {
+      setAiProcessing(prev => prev.filter(id => id !== ad.id));
+    }
   };
 
   const handleApprove = (ad: UserAd) => {
@@ -258,6 +356,23 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
             />
           )}
 
+          {moderation?.aiAnalysis && (
+            <div className={`p-3 border rounded-lg ${
+              moderation.aiAnalysis.aiRecommendation 
+                ? 'bg-green-500/10 border-green-500/20' 
+                : 'bg-amber-500/10 border-amber-500/20'
+            }`}>
+              <div className="flex items-center gap-2 mb-2">
+                <Icon name="Sparkles" size={14} className={moderation.aiAnalysis.aiRecommendation ? 'text-green-500' : 'text-amber-500'} />
+                <p className="text-xs font-medium">
+                  AI-анализ (уверенность: {moderation.aiAnalysis.confidence}%)
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground mb-1">Распознанный текст:</p>
+              <p className="text-sm">{moderation.aiAnalysis.transcript}</p>
+            </div>
+          )}
+
           {moderation?.moderatorNote && (
             <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
               <p className="text-xs font-medium text-destructive mb-1">Причина отклонения:</p>
@@ -280,24 +395,44 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
           </div>
 
           {showActions && (
-            <div className="flex gap-2 pt-2">
+            <div className="space-y-2 pt-2">
               {moderation?.status === 'pending' && (
                 <>
                   <Button 
-                    className="flex-1 bg-green-500 hover:bg-green-600"
-                    onClick={() => handleApprove(ad)}
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                    onClick={() => handleAIModeration(ad)}
+                    disabled={aiProcessing.includes(ad.id)}
                   >
-                    <Icon name="CheckCircle" size={16} className="mr-2" />
-                    Одобрить
+                    {aiProcessing.includes(ad.id) ? (
+                      <>
+                        <Icon name="Loader2" size={16} className="mr-2 animate-spin" />
+                        AI анализирует...
+                      </>
+                    ) : (
+                      <>
+                        <Icon name="Sparkles" size={16} className="mr-2" />
+                        🤖 Проверить AI-модератором
+                      </>
+                    )}
                   </Button>
-                  <Button 
-                    variant="destructive"
-                    className="flex-1"
-                    onClick={() => handleReject(ad)}
-                  >
-                    <Icon name="XCircle" size={16} className="mr-2" />
-                    Отклонить
-                  </Button>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      className="flex-1 bg-green-500 hover:bg-green-600"
+                      onClick={() => handleApprove(ad)}
+                    >
+                      <Icon name="CheckCircle" size={16} className="mr-2" />
+                      Одобрить
+                    </Button>
+                    <Button 
+                      variant="destructive"
+                      className="flex-1"
+                      onClick={() => handleReject(ad)}
+                    >
+                      <Icon name="XCircle" size={16} className="mr-2" />
+                      Отклонить
+                    </Button>
+                  </div>
                 </>
               )}
               {(moderation?.status === 'approved' || moderation?.status === 'rejected') && (
@@ -365,13 +500,19 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
       <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
         <CardContent className="p-6">
           <div className="flex items-start gap-3">
-            <Icon name="Info" size={20} className="text-purple-500 mt-0.5" />
+            <Icon name="Sparkles" size={20} className="text-purple-500 mt-0.5" />
             <div className="flex-1">
-              <h3 className="font-semibold mb-2">Правила модерации аудио-приветствий</h3>
+              <h3 className="font-semibold mb-2 flex items-center gap-2">
+                🤖 AI-модератор включен
+              </h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                Нажмите кнопку "Проверить AI-модератором" для автоматического анализа аудио через OpenAI Whisper + GPT-4
+              </p>
               <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                <li>Проверяйте на наличие нецензурной лексики</li>
-                <li>Убедитесь что содержание соответствует описанию объявления</li>
-                <li>Отклоняйте спам, рекламу сторонних ресурсов</li>
+                <li>AI распознает речь и анализирует содержание на правила</li>
+                <li>Автоматическое одобрение безопасных аудио</li>
+                <li>Помечает подозрительный контент для ручной проверки</li>
+                <li>Показывает уверенность AI в процентах</li>
                 <li>Контролируйте соответствие правилам платформы</li>
                 <li>При отклонении обязательно указывайте причину</li>
               </ul>

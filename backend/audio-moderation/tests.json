@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Test audio moderation with valid greeting",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "audioBase64": "test_audio_data",
+        "adTitle": "Массаж для мужчин",
+        "adDescription": "Профессиональный расслабляющий массаж"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "approved": "boolean",
+        "transcript": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
