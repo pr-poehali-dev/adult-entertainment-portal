@@ -137,12 +137,6 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       <PageBreadcrumb currentPage="online-search" setCurrentPage={setCurrentPage} />
-      <div className="mb-8">
-        <h1 className="text-5xl font-bold mb-4 text-primary">Поиск онлайн</h1>
-        <p className="text-lg text-muted-foreground">
-          Найдите собеседников, которые сейчас онлайн
-        </p>
-      </div>
 
       <Card className="mb-6">
         <CardContent className="p-6">
