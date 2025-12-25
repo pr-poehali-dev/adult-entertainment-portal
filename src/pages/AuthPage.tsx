@@ -32,7 +32,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
           <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
             <Icon name="Heart" className="text-white" size={32} />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent uppercase">
             Love Is
           </h1>
           <p className="text-gray-500 text-sm mt-2">Найди свою вторую половинку</p>
