@@ -14,10 +14,11 @@ interface MessagesPageProps {
 }
 
 const MessagesPage = ({ setCurrentPage }: MessagesPageProps = {}) => {
-  const [selectedChatId, setSelectedChatId] = useState<number | null>(1);
+  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [showChatWindow, setShowChatWindow] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -269,32 +270,60 @@ const MessagesPage = ({ setCurrentPage }: MessagesPageProps = {}) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleChatSelect = (chatId: number) => {
+    setSelectedChatId(chatId);
+    setShowChatWindow(true);
+  };
+
+  const handleBackToList = () => {
+    setShowChatWindow(false);
+    setSelectedChatId(null);
+  };
+
   return (
     <div className="max-w-wide mx-auto px-4 py-8 animate-fade-in">
       {setCurrentPage && <PageBreadcrumb currentPage="messages" setCurrentPage={setCurrentPage} />}
-      <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
+      
+      {!showChatWindow && (
+        <h1 className="text-5xl font-bold mb-8 text-primary">Сообщения</h1>
+      )}
+      
+      {showChatWindow && selectedChat && (
+        <Button
+          variant="ghost"
+          className="mb-4 lg:hidden"
+          onClick={handleBackToList}
+        >
+          <Icon name="ArrowLeft" size={20} className="mr-2" />
+          Назад к чатам
+        </Button>
+      )}
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">
-        <ChatList
-          chats={chats}
-          selectedChatId={selectedChatId}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          onChatSelect={setSelectedChatId}
-        />
+        <div className={`${showChatWindow ? 'hidden lg:block' : 'block'}`}>
+          <ChatList
+            chats={chats}
+            selectedChatId={selectedChatId}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onChatSelect={handleChatSelect}
+          />
+        </div>
 
-        <ChatWindow
-          selectedChat={selectedChat}
-          currentMessages={currentMessages}
-          messageText={messageText}
-          setMessageText={setMessageText}
-          selectedFiles={selectedFiles}
-          onSendMessage={handleSendMessage}
-          onFileSelect={handleFileSelect}
-          onRemoveFile={removeSelectedFile}
-          onAddAudio={handleAddAudio}
-          onAddLocation={handleAddLocation}
-        />
+        <div className={`${showChatWindow ? 'block' : 'hidden lg:block'} lg:col-span-2`}>
+          <ChatWindow
+            selectedChat={selectedChat}
+            currentMessages={currentMessages}
+            messageText={messageText}
+            setMessageText={setMessageText}
+            selectedFiles={selectedFiles}
+            onSendMessage={handleSendMessage}
+            onFileSelect={handleFileSelect}
+            onRemoveFile={removeSelectedFile}
+            onAddAudio={handleAddAudio}
+            onAddLocation={handleAddLocation}
+          />
+        </div>
       </div>
     </div>
   );
