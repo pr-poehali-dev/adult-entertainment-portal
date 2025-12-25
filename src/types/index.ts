@@ -227,7 +227,7 @@ export interface Review {
 
 export interface Notification {
   id: number;
-  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application' | 'ad_response';
+  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application' | 'ad_response' | 'audio_approved' | 'audio_rejected';
   title: string;
   text: string;
   time: string;
@@ -239,6 +239,7 @@ export interface Notification {
   applicationId?: number;
   adId?: number;
   responseId?: number;
+  moderatorNote?: string;
 }
 
 export interface VIPPlan {

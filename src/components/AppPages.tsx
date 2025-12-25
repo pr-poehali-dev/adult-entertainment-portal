@@ -76,6 +76,7 @@ interface AppPagesProps {
   selectedApplicationId?: number | null;
   setSelectedApplicationId?: (id: number | null) => void;
   onNotificationAdd?: (notification: Notification) => void;
+  addNotification?: (notification: Omit<Notification, 'id' | 'time' | 'read'>) => void;
   onOpenLovePurchase?: () => void;
   onPremiumRequired?: () => void;
   bookings: any[];
@@ -129,6 +130,7 @@ export const useAppPages = ({
   selectedApplicationId,
   setSelectedApplicationId,
   onNotificationAdd,
+  addNotification,
   onOpenLovePurchase,
   onPremiumRequired,
   bookings,
@@ -272,7 +274,7 @@ export const useAppPages = ({
       case 'admin':
         return (
           <Suspense fallback={<LoadingFallback />}>
-            <AdminPage setCurrentPage={setCurrentPage} />
+            <AdminPage setCurrentPage={setCurrentPage} onAddNotification={addNotification || (() => {})} />
           </Suspense>
         );
       

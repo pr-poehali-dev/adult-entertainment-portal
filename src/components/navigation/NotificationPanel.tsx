@@ -60,6 +60,9 @@ export const NotificationPanel = ({
                 );
                 if (notif.type === 'message') setCurrentPage('messages');
                 if (notif.type === 'booking') setCurrentPage('profile');
+                if (notif.type === 'audio_approved' || notif.type === 'audio_rejected') {
+                  if (notif.adId) setCurrentPage('my-ads');
+                }
                 onClose();
               }}
             >
@@ -68,6 +71,8 @@ export const NotificationPanel = ({
                   notif.type === 'message' ? 'bg-blue-500/20' :
                   notif.type === 'booking' ? 'bg-green-500/20' :
                   notif.type === 'review' ? 'bg-yellow-500/20' :
+                  notif.type === 'audio_approved' ? 'bg-green-500/20' :
+                  notif.type === 'audio_rejected' ? 'bg-red-500/20' :
                   'bg-purple-500/20'
                 }`}>
                   <Icon 
@@ -75,6 +80,8 @@ export const NotificationPanel = ({
                       notif.type === 'message' ? 'MessageCircle' :
                       notif.type === 'booking' ? 'Calendar' :
                       notif.type === 'review' ? 'Star' :
+                      notif.type === 'audio_approved' ? 'CheckCircle' :
+                      notif.type === 'audio_rejected' ? 'XCircle' :
                       'Bell'
                     } 
                     size={20}
@@ -82,6 +89,8 @@ export const NotificationPanel = ({
                       notif.type === 'message' ? 'text-blue-500' :
                       notif.type === 'booking' ? 'text-green-500' :
                       notif.type === 'review' ? 'text-yellow-500' :
+                      notif.type === 'audio_approved' ? 'text-green-500' :
+                      notif.type === 'audio_rejected' ? 'text-red-500' :
                       'text-purple-500'
                     }
                   />
@@ -106,6 +115,12 @@ export const NotificationPanel = ({
                       }`}>
                         {notif.referralLevel} линия
                       </div>
+                    </div>
+                  )}
+                  {notif.type === 'audio_rejected' && notif.moderatorNote && (
+                    <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded text-xs">
+                      <p className="font-medium text-destructive mb-0.5">Причина отклонения:</p>
+                      <p className="text-muted-foreground">{notif.moderatorNote}</p>
                     </div>
                   )}
                   <p className="text-xs text-muted-foreground mt-2">{notif.time}</p>

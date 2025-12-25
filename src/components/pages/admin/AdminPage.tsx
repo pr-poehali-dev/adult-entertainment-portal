@@ -9,14 +9,15 @@ import { AdminSettings } from './AdminSettings';
 import { AdminEmojis } from './AdminEmojis';
 import { AdminAudioGreetings } from './AdminAudioGreetings';
 import Icon from '@/components/ui/icon';
-import { Page } from '@/types';
+import { Page, Notification } from '@/types';
 import { Button } from '@/components/ui/button';
 
 interface AdminPageProps {
   setCurrentPage: (page: Page) => void;
+  onAddNotification: (notification: Omit<Notification, 'id' | 'time' | 'read'>) => void;
 }
 
-export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
+export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps) => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   return (
@@ -98,7 +99,7 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
           </TabsContent>
 
           <TabsContent value="audio">
-            <AdminAudioGreetings />
+            <AdminAudioGreetings onAddNotification={onAddNotification} />
           </TabsContent>
 
           <TabsContent value="applications">

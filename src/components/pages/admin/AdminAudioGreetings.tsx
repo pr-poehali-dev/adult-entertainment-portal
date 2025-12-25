@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
-import { UserAd } from '@/types';
+import { UserAd, Notification } from '@/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AudioPlayer } from '@/components/audio/AudioPlayer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -25,7 +25,11 @@ interface AudioModerationStatus {
   moderatorNote?: string;
 }
 
-export const AdminAudioGreetings = () => {
+interface AdminAudioGreetingsProps {
+  onAddNotification: (notification: Omit<Notification, 'id' | 'time' | 'read'>) => void;
+}
+
+export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsProps) => {
   const { toast } = useToast();
   
   const [ads] = useState<UserAd[]>([
@@ -92,9 +96,17 @@ export const AdminAudioGreetings = () => {
         ? { ...m, status: 'approved', moderatedAt: new Date().toISOString() }
         : m
     ));
+    
+    onAddNotification({
+      type: 'audio_approved',
+      title: '✅ Аудио-приветствие одобрено',
+      text: `Ваше голосовое приветствие в объявлении "${ad.title}" прошло модерацию и теперь видно всем пользователям!`,
+      adId: ad.id
+    });
+    
     toast({
       title: 'Аудио одобрено',
-      description: `Голосовое приветствие в объявлении #${ad.id} одобрено`,
+      description: `Голосовое приветствие в объявлении #${ad.id} одобрено. Пользователь получит уведомление.`,
     });
   };
 
@@ -117,9 +129,17 @@ export const AdminAudioGreetings = () => {
         : m
     ));
     
+    onAddNotification({
+      type: 'audio_rejected',
+      title: '❌ Аудио-приветствие отклонено',
+      text: `Ваше голосовое приветствие в объявлении "${selectedAd.title}" не прошло модерацию. Причина: ${rejectReason}`,
+      adId: selectedAd.id,
+      moderatorNote: rejectReason
+    });
+    
     toast({
       title: 'Аудио отклонено',
-      description: `Голосовое приветствие в объявлении #${selectedAd.id} отклонено`,
+      description: `Голосовое приветствие в объявлении #${selectedAd.id} отклонено. Пользователь получит уведомление.`,
       variant: 'destructive',
     });
 

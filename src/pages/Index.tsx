@@ -139,6 +139,7 @@ const Index = () => {
     selectedApplicationId: state.selectedApplicationId,
     setSelectedApplicationId: state.setSelectedApplicationId,
     onNotificationAdd: handlers.addNotification,
+    addNotification: handlers.addNotification,
     onOpenLovePurchase: () => state.setShowLovePurchase(true),
     onPremiumRequired: () => state.setShowPremiumModal(true),
     bookings: state.bookings,
