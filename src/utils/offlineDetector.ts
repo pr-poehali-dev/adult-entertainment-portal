@@ -32,22 +32,15 @@ export class OfflineDetector {
   }
 
   private async checkConnection() {
-    try {
-      const response = await fetch('/favicon.ico', {
-        method: 'HEAD',
-        cache: 'no-cache'
-      });
-      const online = response.ok;
-      if (this.isOnline !== online) {
-        this.isOnline = online;
-        this.notifyListeners(online);
-      }
-    } catch {
+    if (!navigator.onLine) {
       if (this.isOnline) {
         this.isOnline = false;
         this.notifyListeners(false);
       }
+      return;
     }
+
+    this.isOnline = true;
   }
 
   private notifyListeners(isOnline: boolean) {
