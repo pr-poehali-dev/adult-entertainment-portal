@@ -1,0 +1,48 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "name": "Start command from user",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "message": {
+          "chat": {"id": 123456},
+          "from": {"id": 123456, "first_name": "Test User"},
+          "text": "/start"
+        }
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "method": "sendMessage",
+        "chat_id": 123456
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Help command",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "message": {
+          "chat": {"id": 123456},
+          "from": {"id": 123456, "first_name": "Test User"},
+          "text": "/help"
+        }
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "method": "sendMessage"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

@@ -26,6 +26,7 @@ import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { NotificationPermissionPrompt } from '@/components/NotificationPermissionPrompt';
+import { TelegramThemeAdapter } from '@/components/TelegramThemeAdapter';
 import { useEffect } from 'react';
 
 const Index = () => {
@@ -262,6 +263,7 @@ const Index = () => {
 
   return (
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
+    <TelegramThemeAdapter />
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navigation 
