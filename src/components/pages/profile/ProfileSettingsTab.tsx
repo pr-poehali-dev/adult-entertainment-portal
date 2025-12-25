@@ -135,6 +135,14 @@ export const ProfileSettingsTab = ({
     });
   };
 
+  const handleLogout = () => {
+    if (confirm('Вы уверены, что хотите выйти из профиля?')) {
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/';
+    }
+  };
+
   return (
     <>
       <div className="space-y-6">
@@ -306,6 +314,28 @@ export const ProfileSettingsTab = ({
             </Card>
           </>
         )}
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-500">
+              <Icon name="LogOut" size={24} />
+              Выход из профиля
+            </CardTitle>
+            <CardDescription>
+              Выйти из текущего аккаунта и вернуться на страницу входа
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={handleLogout}
+              variant="destructive"
+              className="w-full"
+            >
+              <Icon name="LogOut" size={18} />
+              Выйти из профиля
+            </Button>
+          </CardContent>
+        </Card>
         
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
