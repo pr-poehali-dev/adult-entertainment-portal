@@ -7,8 +7,9 @@ import Icon from '@/components/ui/icon';
 
 export interface SwipeFilters {
   ageRange: [number, number];
-  city: string;
-  interests: string[];
+  heightRange: [number, number];
+  location: string;
+  lookingFor: 'friend' | 'girlfriend' | 'any';
   verifiedOnly: boolean;
 }
 
@@ -18,7 +19,7 @@ interface SwipeFiltersProps {
   onClose: () => void;
 }
 
-const CITIES = [
+const LOCATIONS = [
   'Все города',
   'Москва',
   'Санкт-Петербург',
@@ -29,19 +30,10 @@ const CITIES = [
   'Краснодар',
 ];
 
-const INTERESTS = [
-  'Путешествия',
-  'Спорт',
-  'Музыка',
-  'Кино',
-  'Книги',
-  'Искусство',
-  'Технологии',
-  'Фотография',
-  'Йога',
-  'Кофе',
-  'Природа',
-  'Танцы',
+const LOOKING_FOR_OPTIONS = [
+  { value: 'any' as const, label: 'Всё равно' },
+  { value: 'friend' as const, label: 'Друга' },
+  { value: 'girlfriend' as const, label: 'Девушку' },
 ];
 
 export default function SwipeFiltersModal({ filters, onApply, onClose }: SwipeFiltersProps) {
@@ -51,25 +43,16 @@ export default function SwipeFiltersModal({ filters, onApply, onClose }: SwipeFi
     setLocalFilters({ ...localFilters, ageRange: [value[0], value[1]] });
   };
 
-  const toggleInterest = (interest: string) => {
-    if (localFilters.interests.includes(interest)) {
-      setLocalFilters({
-        ...localFilters,
-        interests: localFilters.interests.filter(i => i !== interest),
-      });
-    } else {
-      setLocalFilters({
-        ...localFilters,
-        interests: [...localFilters.interests, interest],
-      });
-    }
+  const handleHeightChange = (value: number[]) => {
+    setLocalFilters({ ...localFilters, heightRange: [value[0], value[1]] });
   };
 
   const handleReset = () => {
     setLocalFilters({
-      ageRange: [18, 50],
-      city: 'Все города',
-      interests: [],
+      ageRange: [18, 75],
+      heightRange: [150, 220],
+      location: 'Все города',
+      lookingFor: 'any',
       verifiedOnly: false,
     });
   };
@@ -91,6 +74,38 @@ export default function SwipeFiltersModal({ filters, onApply, onClose }: SwipeFi
 
         <div className="space-y-6">
           <div>
+            <label className="text-sm font-medium mb-3 block">Местоположение</label>
+            <div className="flex flex-wrap gap-2">
+              {LOCATIONS.map(location => (
+                <Badge
+                  key={location}
+                  variant={localFilters.location === location ? 'default' : 'outline'}
+                  className="cursor-pointer px-3 py-2"
+                  onClick={() => setLocalFilters({ ...localFilters, location })}
+                >
+                  {location}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium mb-3 block">Ищу</label>
+            <div className="flex flex-wrap gap-2">
+              {LOOKING_FOR_OPTIONS.map(option => (
+                <Badge
+                  key={option.value}
+                  variant={localFilters.lookingFor === option.value ? 'default' : 'outline'}
+                  className="cursor-pointer px-3 py-2"
+                  onClick={() => setLocalFilters({ ...localFilters, lookingFor: option.value })}
+                >
+                  {option.label}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <div>
             <div className="flex items-center justify-between mb-3">
               <label className="text-sm font-medium">Возраст</label>
               <span className="text-sm text-muted-foreground">
@@ -99,7 +114,7 @@ export default function SwipeFiltersModal({ filters, onApply, onClose }: SwipeFi
             </div>
             <Slider
               min={18}
-              max={50}
+              max={75}
               step={1}
               value={localFilters.ageRange}
               onValueChange={handleAgeChange}
@@ -108,35 +123,20 @@ export default function SwipeFiltersModal({ filters, onApply, onClose }: SwipeFi
           </div>
 
           <div>
-            <label className="text-sm font-medium mb-3 block">Город</label>
-            <div className="flex flex-wrap gap-2">
-              {CITIES.map(city => (
-                <Badge
-                  key={city}
-                  variant={localFilters.city === city ? 'default' : 'outline'}
-                  className="cursor-pointer px-3 py-2"
-                  onClick={() => setLocalFilters({ ...localFilters, city })}
-                >
-                  {city}
-                </Badge>
-              ))}
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-medium">Рост</label>
+              <span className="text-sm text-muted-foreground">
+                {localFilters.heightRange[0]} - {localFilters.heightRange[1]} см
+              </span>
             </div>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium mb-3 block">Интересы</label>
-            <div className="flex flex-wrap gap-2">
-              {INTERESTS.map(interest => (
-                <Badge
-                  key={interest}
-                  variant={localFilters.interests.includes(interest) ? 'default' : 'outline'}
-                  className="cursor-pointer px-3 py-2"
-                  onClick={() => toggleInterest(interest)}
-                >
-                  {interest}
-                </Badge>
-              ))}
-            </div>
+            <Slider
+              min={150}
+              max={220}
+              step={1}
+              value={localFilters.heightRange}
+              onValueChange={handleHeightChange}
+              className="w-full"
+            />
           </div>
 
           <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">

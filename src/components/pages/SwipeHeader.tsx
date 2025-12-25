@@ -46,7 +46,21 @@ export default function SwipeHeader({
       )}
       <Button
         variant="outline"
-        className="w-full mt-4 bg-white/90 backdrop-blur-sm relative"
+        size="icon"
+        className="mt-4 bg-white/90 backdrop-blur-sm relative md:hidden"
+        onClick={onOpenFilters}
+      >
+        <Icon name="SlidersHorizontal" size={20} />
+        {activeFiltersCount > 0 && (
+          <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+            {activeFiltersCount}
+          </Badge>
+        )}
+      </Button>
+      
+      <Button
+        variant="outline"
+        className="hidden md:flex w-full mt-4 bg-white/90 backdrop-blur-sm relative"
         onClick={onOpenFilters}
       >
         <Icon name="Filter" size={18} className="mr-2" />
