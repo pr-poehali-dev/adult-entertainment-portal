@@ -1,3 +1,5 @@
+import { useTelegram } from '@/contexts/TelegramProvider';
+
 const TELEGRAM_BOT_URL = 'https://functions.poehali.dev/05a886f0-8259-4934-933b-0f3e1e110704';
 
 export interface TelegramPaymentOptions {
@@ -74,21 +76,33 @@ export const getTelegramUserId = (): number | null => {
 };
 
 export const useTelegramPayments = () => {
+  const { userId, isTelegramEnv } = useTelegram();
+
   const createInvoice = async (
     amount: number,
     title: string,
     description: string,
     payload?: Record<string, any>
   ) => {
-    return {
-      success: false,
-      error: 'Telegram payments temporarily disabled'
-    };
+    if (!isTelegramEnv || !userId) {
+      return {
+        success: false,
+        error: 'Not running in Telegram environment'
+      };
+    }
+
+    return createTelegramInvoice({
+      chatId: userId,
+      amount,
+      title,
+      description,
+      payload
+    });
   };
 
   return {
-    isAvailable: false,
+    isAvailable: isTelegramEnv && !!userId,
     createInvoice,
-    userId: null
+    userId
   };
 };

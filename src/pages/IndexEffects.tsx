@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { UserRole, Notification, Wallet } from '@/types';
 import { notificationService } from '@/utils/notificationService';
+import { useTelegram } from '@/contexts/TelegramProvider';
 import { handlePaymentWebhook, PaymentWebhookData } from '@/utils/paymentWebhook';
 
 interface EffectsProps {
@@ -239,9 +240,10 @@ export const useIndexEffects = (props: EffectsProps) => {
   }, [selectedPartyId, toast, setCurrentPage]);
 
   // Автозачисление средств после оплаты через Telegram
+  const { userId: telegramUserId, isTelegramEnv } = useTelegram();
+  
   useEffect(() => {
-    const isTelegramEnv = false;
-    if (!isTelegramEnv) return;
+    if (!isTelegramEnv || !telegramUserId) return;
 
     const handlePaymentMessage = (event: MessageEvent) => {
       if (event.data.type === 'telegram_payment_success') {
