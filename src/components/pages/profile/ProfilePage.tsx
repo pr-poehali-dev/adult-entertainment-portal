@@ -20,16 +20,28 @@ interface ProfilePageProps {
   profile: Profile;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
   setCurrentPage?: (page: Page) => void;
+  wallet?: Wallet;
+  setWallet?: (wallet: Wallet) => void;
+  transactions?: Transaction[];
+  setTransactions?: (transactions: Transaction[]) => void;
 }
 
-export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: ProfilePageProps) => {
+export const ProfilePage = ({ 
+  profile, 
+  onProfileUpdate, 
+  setCurrentPage,
+  wallet: walletProp,
+  setWallet: setWalletProp,
+  transactions: transactionsProp,
+  setTransactions: setTransactionsProp
+}: ProfilePageProps) => {
   const [isVerified, setIsVerified] = useState(profile.verified);
   const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
   const [isActive, setIsActive] = useState(true);
   const [showTipModal, setShowTipModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   
-  const [wallet, setWallet] = useState<Wallet>({
+  const [localWallet, setLocalWallet] = useState<Wallet>({
     balances: [
       { currency: 'LOVE', amount: 875, symbol: '💗' },
       { currency: 'RUB', amount: 50000, symbol: '₽' },
@@ -41,7 +53,12 @@ export const ProfilePage = ({ profile, onProfileUpdate, setCurrentPage }: Profil
     ]
   });
 
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [localTransactions, setLocalTransactions] = useState<Transaction[]>([]);
+
+  const wallet = walletProp || localWallet;
+  const setWallet = setWalletProp || setLocalWallet;
+  const transactions = transactionsProp || localTransactions;
+  const setTransactions = setTransactionsProp || setLocalTransactions;
 
   const handleShowTipModal = (booking: any) => {
     setSelectedBooking(booking);

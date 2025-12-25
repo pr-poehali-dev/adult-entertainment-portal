@@ -68,6 +68,9 @@ interface AppPagesProps {
   setSelectedSellerId: (id: number | null) => void;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
   wallet: Wallet;
+  setWallet?: (wallet: Wallet) => void;
+  walletTransactions?: any[];
+  setWalletTransactions?: (transactions: any[]) => void;
   selectedPartyId?: number | null;
   setSelectedPartyId?: (id: number | null) => void;
   selectedApplicationId?: number | null;
@@ -118,6 +121,9 @@ export const useAppPages = ({
   setSelectedSellerId,
   onProfileUpdate,
   wallet,
+  setWallet,
+  walletTransactions,
+  setWalletTransactions,
   selectedPartyId,
   setSelectedPartyId,
   selectedApplicationId,
@@ -192,7 +198,15 @@ export const useAppPages = ({
       case 'profile':
         return userRole ? (
           <Suspense fallback={<LoadingFallback />}>
-            <ProfilePage profile={profile} onProfileUpdate={onProfileUpdate} setCurrentPage={setCurrentPage} />
+            <ProfilePage 
+              profile={profile} 
+              onProfileUpdate={onProfileUpdate} 
+              setCurrentPage={setCurrentPage}
+              wallet={wallet}
+              setWallet={setWallet}
+              transactions={walletTransactions}
+              setTransactions={setWalletTransactions}
+            />
           </Suspense>
         ) : (
           <Suspense fallback={<LoadingFallback />}>
