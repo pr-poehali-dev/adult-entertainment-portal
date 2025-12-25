@@ -5,6 +5,7 @@ import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
 import MatchChatModal from './MatchChatModal';
 import { pushNotificationService } from '@/utils/pushNotifications';
+import SwipeFiltersModal, { SwipeFilters } from './SwipeFilters';
 
 interface SwipeProfile {
   id: number;
@@ -65,7 +66,7 @@ interface SwipePageProps {
 }
 
 export default function SwipePage({ onMatch }: SwipePageProps) {
-  const [profiles, setProfiles] = useState<SwipeProfile[]>(mockProfiles);
+  const [profiles] = useState<SwipeProfile[]>(mockProfiles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [matches, setMatches] = useState<number>(0);
@@ -83,11 +84,24 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   const [viewedToday, setViewedToday] = useState(0);
   const [isPremium] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<SwipeFilters>({
+    ageRange: [18, 50],
+    city: 'Все города',
+    interests: [],
+    verifiedOnly: false,
+  });
+  const [filteredProfiles, setFilteredProfiles] = useState<SwipeProfile[]>(mockProfiles);
   
   const FREE_DAILY_LIMIT = 20;
   const isLimitReached = !isPremium && viewedToday >= FREE_DAILY_LIMIT;
 
-  const currentProfile = profiles[currentIndex];
+  const currentProfile = filteredProfiles[currentIndex];
+  const activeFiltersCount = 
+    (filters.city !== 'Все города' ? 1 : 0) + 
+    filters.interests.length + 
+    (filters.verifiedOnly ? 1 : 0) + 
+    (filters.ageRange[0] !== 18 || filters.ageRange[1] !== 50 ? 1 : 0);
 
   useEffect(() => {
     matchSoundRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBzGH0fPTgjMGHm7A7+OZSA0PS6Lf8LljHQU2jdXzzn0pBSh+y/Hej0EKEly16+qmVBIJRJzg8sFuIwcugM/z1YU1Bx1rwO/jmUoNDkug3vC3YxwFN4/U8s98KQUofsvx3o9BCRNctuvqplQSCUOb3/HCbyQHLX/P89aGNgcdbL/u4ppLDQ5Kn93vt2IdBTiP0/LOfCgEKH7M8d+PQQkSW7Xs6qdVEglCmt7xw3AlByx+zvPXhzYHHmy/7uKbTA0NSp/d7rdiHAU4jtLyzn0oBSh+zPHfj0EJEVq07OmoVhIJQZnd8cR0JgcrfM3z2Ig3Bx5tv+zjnE0ODUme3O+0YRwEOIzR8c99KQUoffzx4JBBChFYs+vqqlYTCUCY3fHGdSYHKnrL8tmKOAcdbb7r45xNDg1JntvutWIcBDeL0fHOfioFJ378+eGRQQoRVrLq6qtXEwo+ltvxx3YnByl4yfLaizgHHGy97OScTg4NSJ3a7rVjHAQ3idDx0H8qBSd7+/nikkIKEFSw6OnrV1QKPZbZ8cl4KAcnds/z24s4BxpquuvkmUoLDEed2O+yYRsDN4jP8dGAKgUme/v54pJCCg9Srevp7FlXCzuU1+/KeCgHJXLL89yMOQcZaLfq5ZlMDAtGm9fvs2IcAzWGzvDTgisEJXr7+uOUQwsPUKrn6uxaVgs7ktXuynooBSNuy/PdqTsFGGW06OWaTQwKRZnW7rNiGwM0hM3v1IMsBCR5+/rpk0MLDk6o5ejsWkcKOpDU7s16KAYhbc7y3Ko7BRdks+fmnEwLCUOX1O+zYRoCNILN7taELQQif/z66pRDDBBMpuXn7V1NDDSP0+7Oei4MIXHP8t6rPQgWYbLm5pxNCglCldLvtWEaAjSBzO/XhS0EInr8+OqVRAwNTKTl5u1dTgwyjdLtz3ouCiFuzvLfqz0HFmCx5eacTQoJQ5PQ77dhGgIygMvv2IYuBCF5+vfqlkQNCUqj5OXuYFEMMIvR7NB7LwohbMzy4Kw+BxVescTjnE0KCUKRzu61YBkCMX/K79iGLgQhePr36pdFDQlIoeTk7mFSDC6J0OzQey8KIGrL8uCsPgcVX7LD45tNCglBj83tuWAZAi9+ye/Yhy8EIXn69+uYRQ0JR5/k5O5iUgwthtDrz3wvCh9px/LhrtAIFV6xwuKbTgoJQY7N7LlgGAItfsjv2IcvBCF4+vfrmEYOCEeg5OPuY1IMK4TO69F8MAocaMjy4a7RCBRdssDim04LCUGOzO26YRgCLH3I79mJMAQgePn47JlGDghFnuLi7mNUDCqDzevSfTEKG2fI8uGu0ggUXbK/4ZpOCglAjMrtumEXAit8x+/ZiTAFIHj5+OybRw4HRJ3i4u5kVQwog8vq0n4xCxpnx/LirtMIE16xvuCZTwoHQYrJ7rpgFwIre8fv2YkxBB94+Pjsm0gOB0Kb4uHuZFYMJ4LJ6tN+MwoZZsfw4q7TCBNesL/fmU8KB0CJye67YRYCKnrG79qKMQQeePj47JxIDAdCmuLh72VWDCaBye3SfzULGGTH8OOu0wgSXa++35lPCgc/h8fvvGIVASl6xu/aijIEHnf4+OydSA4HQpni4u5lVwwmf8jt0oA0CxhjxvDjr9MJEV2svuCaUAoGPoXG77xjFQEoecXv24ozBB52+Pjtng==');
@@ -173,11 +187,24 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   };
 
   useEffect(() => {
-    if (currentIndex >= profiles.length) {
-      setProfiles([...mockProfiles]);
+    const filtered = profiles.filter(profile => {
+      const ageMatch = profile.age >= filters.ageRange[0] && profile.age <= filters.ageRange[1];
+      const cityMatch = filters.city === 'Все города' || profile.city === filters.city;
+      const verifiedMatch = !filters.verifiedOnly || profile.verified;
+      const interestsMatch = filters.interests.length === 0 || 
+        filters.interests.some(interest => profile.interests.includes(interest));
+      
+      return ageMatch && cityMatch && verifiedMatch && interestsMatch;
+    });
+    setFilteredProfiles(filtered);
+    setCurrentIndex(0);
+  }, [filters, profiles]);
+
+  useEffect(() => {
+    if (currentIndex >= filteredProfiles.length) {
       setCurrentIndex(0);
     }
-  }, [currentIndex, profiles.length]);
+  }, [currentIndex, filteredProfiles.length]);
 
   useEffect(() => {
     const today = new Date().toDateString();
@@ -244,6 +271,19 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
               {matches} {matches === 1 ? 'совпадение' : 'совпадений'}
             </Badge>
           )}
+          <Button
+            variant="outline"
+            className="w-full mt-4 bg-white/90 backdrop-blur-sm relative"
+            onClick={() => setShowFilters(true)}
+          >
+            <Icon name="Filter" size={18} className="mr-2" />
+            Фильтры поиска
+            {activeFiltersCount > 0 && (
+              <Badge className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                {activeFiltersCount}
+              </Badge>
+            )}
+          </Button>
         </div>
 
         <div className="relative">
@@ -356,7 +396,7 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
 
         <div className="mt-8 text-center">
           <p className="text-xs text-muted-foreground">
-            Осталось анкет: {profiles.length - currentIndex - 1}
+            Осталось анкет: {filteredProfiles.length - currentIndex - 1}
           </p>
         </div>
 
@@ -476,6 +516,14 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
             </p>
           </Card>
         </div>
+      )}
+
+      {showFilters && (
+        <SwipeFiltersModal
+          filters={filters}
+          onApply={setFilters}
+          onClose={() => setShowFilters(false)}
+        />
       )}
     </div>
   );
