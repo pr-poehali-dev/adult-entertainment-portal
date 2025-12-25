@@ -11,9 +11,10 @@ import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 
 interface MessagesPageProps {
   setCurrentPage?: (page: Page) => void;
+  isPremium?: boolean;
 }
 
-const MessagesPage = ({ setCurrentPage }: MessagesPageProps = {}) => {
+const MessagesPage = ({ setCurrentPage, isPremium = false }: MessagesPageProps = {}) => {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -322,6 +323,7 @@ const MessagesPage = ({ setCurrentPage }: MessagesPageProps = {}) => {
             onRemoveFile={removeSelectedFile}
             onAddAudio={handleAddAudio}
             onAddLocation={handleAddLocation}
+            isPremium={isPremium}
           />
         </div>
       </div>

@@ -708,6 +708,16 @@ export interface OrderChat {
   orderDetails?: ServiceOrder;
 }
 
+export type BrandEmojiCategory = 'love' | 'flirt' | 'hot' | 'party' | 'vip' | 'money';
+
+export interface BrandEmoji {
+  id: string;
+  emoji: string;
+  name: string;
+  category: BrandEmojiCategory;
+  isPremium?: boolean;
+}
+
 export type ServiceType = 'striptease' | 'real-meeting' | 'massage' | 'escort' | 'online';
 
 export interface ServiceOrder {

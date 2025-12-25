@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { hasCensoredContent } from '@/utils/contactCensorship';
+import { EmojiButton } from '@/components/chat/EmojiButton';
 
 interface EnhancedMessageInputProps {
   messageText: string;
@@ -15,6 +16,7 @@ interface EnhancedMessageInputProps {
   onRemoveFile: (index: number) => void;
   onAddAudio: (audioBlob: Blob) => void;
   onAddLocation: (location: { lat: number; lng: number }) => void;
+  isPremium?: boolean;
 }
 
 export const EnhancedMessageInput = ({
@@ -26,6 +28,7 @@ export const EnhancedMessageInput = ({
   onRemoveFile,
   onAddAudio,
   onAddLocation,
+  isPremium = false,
 }: EnhancedMessageInputProps) => {
   const { toast } = useToast();
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
@@ -338,19 +341,24 @@ export const EnhancedMessageInput = ({
               <span>Контакты будут скрыты</span>
             </div>
           )}
-          <Button
-            size="icon"
-            variant="ghost"
-            className="absolute right-1 top-1/2 -translate-y-1/2"
-            onClick={onSendMessage}
-            disabled={!messageText.trim() && selectedFiles.length === 0}
-          >
-            <Icon 
-              name="Send" 
-              size={18} 
-              className={messageText.trim() || selectedFiles.length > 0 ? "text-primary" : "text-muted-foreground"} 
+          <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <EmojiButton 
+              onEmojiSelect={(emoji) => setMessageText(messageText + emoji)}
+              isPremium={isPremium}
             />
-          </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onSendMessage}
+              disabled={!messageText.trim() && selectedFiles.length === 0}
+            >
+              <Icon 
+                name="Send" 
+                size={18} 
+                className={messageText.trim() || selectedFiles.length > 0 ? "text-primary" : "text-muted-foreground"} 
+              />
+            </Button>
+          </div>
         </div>
       </div>
       

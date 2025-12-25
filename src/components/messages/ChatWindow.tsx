@@ -20,6 +20,7 @@ interface ChatWindowProps {
   onRemoveFile: (index: number) => void;
   onAddAudio: (audioBlob: Blob) => void;
   onAddLocation: (location: { lat: number; lng: number }) => void;
+  isPremium?: boolean;
 }
 
 export const ChatWindow = ({
@@ -33,6 +34,7 @@ export const ChatWindow = ({
   onRemoveFile,
   onAddAudio,
   onAddLocation,
+  isPremium = false,
 }: ChatWindowProps) => {
   if (!selectedChat) {
     return (
@@ -95,6 +97,7 @@ export const ChatWindow = ({
         onRemoveFile={onRemoveFile}
         onAddAudio={onAddAudio}
         onAddLocation={onAddLocation}
+        isPremium={isPremium}
       />
     </Card>
   );
