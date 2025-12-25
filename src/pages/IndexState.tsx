@@ -146,7 +146,12 @@ export const useIndexState = () => {
     subscriptionType: 'free',
     subscriptionExpiry: null,
     profileCompleted: false,
-    kycCompleted: false
+    kycCompleted: false,
+    contacts: {
+      instagram: { value: '', forSale: false },
+      telegram: { value: '', forSale: false },
+      phone: { value: '', forSale: false },
+    }
   });
 
   const [wallet, setWallet] = useState<Wallet>({
