@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "name": "Test photo moderation with missing image",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "userName": "Test User",
+        "photoType": "avatar"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test photo moderation with valid image (requires API key)",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "imageBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "userName": "Test User",
+        "photoType": "profile"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "approved": "boolean",
+        "confidence": "number",
+        "reason": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

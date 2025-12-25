@@ -8,6 +8,7 @@ import { AdminWorkApplications } from './AdminWorkApplications';
 import { AdminSettings } from './AdminSettings';
 import { AdminEmojis } from './AdminEmojis';
 import { AdminAudioGreetings } from './AdminAudioGreetings';
+import { AdminPhotoModeration } from './AdminPhotoModeration';
 import Icon from '@/components/ui/icon';
 import { Page, Notification } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -44,7 +45,7 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 mb-8 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-9 mb-8 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
@@ -66,6 +67,13 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
               <span className="text-xs">Аудио</span>
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                 2
+              </span>
+            </TabsTrigger>
+            <TabsTrigger value="photos" className="flex flex-col items-center gap-1 py-3 relative">
+              <Icon name="Image" size={20} />
+              <span className="text-xs">Фото</span>
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                3
               </span>
             </TabsTrigger>
             <TabsTrigger value="applications" className="flex flex-col items-center gap-1 py-3">
@@ -100,6 +108,10 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
           <TabsContent value="audio">
             <AdminAudioGreetings onAddNotification={onAddNotification} />
+          </TabsContent>
+
+          <TabsContent value="photos">
+            <AdminPhotoModeration onAddNotification={onAddNotification} />
           </TabsContent>
 
           <TabsContent value="applications">

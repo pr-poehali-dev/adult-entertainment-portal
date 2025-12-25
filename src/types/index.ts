@@ -92,6 +92,8 @@ export interface Profile {
   agencyId?: number;
   agencyType?: AgencyType;
   isAgencyOwner?: boolean;
+  avatarModerationStatus?: 'pending' | 'approved' | 'rejected';
+  photosModerationStatus?: Record<string, 'pending' | 'approved' | 'rejected'>;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';
@@ -131,6 +133,7 @@ export interface CatalogItem {
     bookings: number;
     revenue: number;
   };
+  imageModerationStatus?: 'pending' | 'approved' | 'rejected';
 }
 
 export interface PriceListItem {
@@ -227,7 +230,7 @@ export interface Review {
 
 export interface Notification {
   id: number;
-  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application' | 'ad_response' | 'audio_approved' | 'audio_rejected';
+  type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'party_application' | 'ad_response' | 'audio_approved' | 'audio_rejected' | 'photo_approved' | 'photo_rejected';
   title: string;
   text: string;
   time: string;
@@ -240,6 +243,7 @@ export interface Notification {
   adId?: number;
   responseId?: number;
   moderatorNote?: string;
+  photoType?: 'avatar' | 'profile' | 'catalog';
 }
 
 export interface VIPPlan {

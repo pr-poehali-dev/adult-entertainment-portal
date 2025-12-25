@@ -57,6 +57,14 @@ export const AdminDashboard = () => {
       change: 'Требуют проверки'
     },
     { 
+      title: 'Фото на модерации', 
+      value: 3, 
+      icon: 'Image', 
+      color: 'text-pink-500',
+      bg: 'bg-pink-500/10',
+      change: 'Требуют проверки'
+    },
+    { 
       title: 'Отклики на вакансии', 
       value: adminStats.totalWorkApplications, 
       icon: 'Briefcase', 

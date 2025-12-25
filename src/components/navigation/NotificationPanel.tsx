@@ -82,6 +82,8 @@ export const NotificationPanel = ({
                       notif.type === 'review' ? 'Star' :
                       notif.type === 'audio_approved' ? 'CheckCircle' :
                       notif.type === 'audio_rejected' ? 'XCircle' :
+                      notif.type === 'photo_approved' ? 'CheckCircle' :
+                      notif.type === 'photo_rejected' ? 'XCircle' :
                       'Bell'
                     } 
                     size={20}
@@ -91,6 +93,8 @@ export const NotificationPanel = ({
                       notif.type === 'review' ? 'text-yellow-500' :
                       notif.type === 'audio_approved' ? 'text-green-500' :
                       notif.type === 'audio_rejected' ? 'text-red-500' :
+                      notif.type === 'photo_approved' ? 'text-green-500' :
+                      notif.type === 'photo_rejected' ? 'text-red-500' :
                       'text-purple-500'
                     }
                   />
@@ -117,7 +121,7 @@ export const NotificationPanel = ({
                       </div>
                     </div>
                   )}
-                  {notif.type === 'audio_rejected' && notif.moderatorNote && (
+                  {(notif.type === 'audio_rejected' || notif.type === 'photo_rejected') && notif.moderatorNote && (
                     <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded text-xs">
                       <p className="font-medium text-destructive mb-0.5">Причина отклонения:</p>
                       <p className="text-muted-foreground">{notif.moderatorNote}</p>
