@@ -297,21 +297,13 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                   )}
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-3 space-y-2">
+                <div className="absolute bottom-0 left-0 right-0 p-3">
                   <Button 
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
                     onClick={() => handleMessageClick(user.id)}
                   >
                     <Icon name="MessageCircle" size={18} className="mr-2" />
                     Написать сообщение
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full bg-amber-500/90 hover:bg-amber-500 text-white border-none shadow-lg backdrop-blur-sm"
-                    onClick={() => handleGiftVIPClick(user.id)}
-                  >
-                    <Icon name="Gift" size={18} className="mr-2" />
-                    Подарить VIP
                   </Button>
                 </div>
               </div>
