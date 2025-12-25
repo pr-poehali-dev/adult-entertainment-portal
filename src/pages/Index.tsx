@@ -28,11 +28,14 @@ import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { NotificationPermissionPrompt } from '@/components/NotificationPermissionPrompt';
 import { TelegramThemeAdapter } from '@/components/TelegramThemeAdapter';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
+  const loading = useLoadingState();
 
   useEffect(() => {
     const handleNavigate = (e: CustomEvent) => {
@@ -266,6 +269,7 @@ const Index = () => {
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
     <TelegramThemeAdapter />
     <OfflineIndicator />
+    <LoadingOverlay isLoading={loading.isLoading} message={loading.message} />
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navigation 
