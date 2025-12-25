@@ -77,6 +77,9 @@ export const MobileHomePage = ({
 
   // Фильтруем анкеты
   const filteredItems = useMemo(() => {
+    if (!catalogItems || !Array.isArray(catalogItems)) {
+      return [];
+    }
     return getFilteredAndSortedItems(
       catalogItems,
       searchQuery,

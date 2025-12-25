@@ -28,7 +28,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 shadow-2xl border-0">
+      <Card className="w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in">
         <div className="flex flex-col items-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
             <Icon name="Heart" className="text-white" size={32} />

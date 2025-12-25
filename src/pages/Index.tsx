@@ -161,7 +161,11 @@ const Index = () => {
   });
 
   if (!state.isAuthenticated) {
-    return <AuthPage onAuth={() => state.setIsAuthenticated(true)} />;
+    return (
+      <div className="animate-fade-in">
+        <AuthPage onAuth={() => state.setIsAuthenticated(true)} />
+      </div>
+    );
   }
 
   // Проверка заполнения профиля
