@@ -9,6 +9,7 @@ import { CreateAdModal } from './CreateAdModal';
 import { AdResponseModal } from './AdResponseModal';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { PageBreadcrumb } from '@/components/PageBreadcrumb';
+import { AudioPlayer } from '@/components/audio/AudioPlayer';
 
 interface MyAdsPageProps {
   profile: Profile;
@@ -88,8 +89,6 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
       authorRole: profile.role!,
       createdAt: new Date().toISOString(),
       viewCount: 0,
-      isBoosted: false,
-      boostedUntil: undefined,
       responses: []
     };
     setAds([ad, ...ads]);
@@ -190,6 +189,12 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
                     В топе {boostedTimeLeft}ч
                   </Badge>
                 )}
+                {ad.audioGreeting && (
+                  <Badge variant="outline" className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30">
+                    <Icon name="Volume2" size={12} className="mr-1 text-purple-500" />
+                    <span className="text-purple-700 dark:text-purple-300">С голосом</span>
+                  </Badge>
+                )}
               </div>
               <h3 className="font-semibold text-lg truncate">{ad.title}</h3>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{ad.description}</p>
@@ -201,6 +206,15 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
           </div>
         </CardHeader>
         <CardContent className="pt-0">
+          {ad.audioGreeting && (
+            <div className="mb-3">
+              <AudioPlayer 
+                audioUrl={ad.audioGreeting} 
+                duration={ad.audioGreetingDuration}
+              />
+            </div>
+          )}
+
           {ad.lookingFor && (
             <div className="mb-3 p-3 bg-muted rounded-lg">
               <p className="text-sm">

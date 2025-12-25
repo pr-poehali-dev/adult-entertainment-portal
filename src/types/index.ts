@@ -527,6 +527,11 @@ export interface UserAd {
   createdAt: string;
   expiresAt?: string;
   responses?: AdResponse[];
+  audioGreeting?: string | null;
+  audioGreetingDuration?: number;
+  viewCount: number;
+  isBoosted: boolean;
+  boostedUntil?: string;
 }
 
 export interface AdResponse {

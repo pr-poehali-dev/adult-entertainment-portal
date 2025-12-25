@@ -6,11 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { UserAd, Profile, Currency } from '@/types';
+import { AudioRecorder } from '@/components/audio/AudioRecorder';
 
 interface CreateAdModalProps {
   profile: Profile;
   onClose: () => void;
-  onCreate: (ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses'>) => void;
+  onCreate: (ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'>) => void;
 }
 
 const CATEGORIES = [
@@ -31,8 +32,16 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
   const [duration, setDuration] = useState('');
   const [lookingFor, setLookingFor] = useState('');
   const [currency] = useState<Currency>('RUB');
+  const [audioGreeting, setAudioGreeting] = useState<Blob | null>(null);
+  const [audioGreetingDuration, setAudioGreetingDuration] = useState<number>(0);
+  const [isPaidAd, setIsPaidAd] = useState(false);
 
   const isServiceOffer = profile.role === 'seller';
+
+  const handleAudioRecording = (blob: Blob, duration: number) => {
+    setAudioGreeting(blob);
+    setAudioGreetingDuration(duration);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +56,11 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
       return;
     }
 
-    const ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses'> = {
+    const audioUrl = audioGreeting && audioGreeting.size > 0 
+      ? URL.createObjectURL(audioGreeting) 
+      : null;
+
+    const ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'> = {
       type: isServiceOffer ? 'service_offer' : 'service_request',
       category,
       title: title.trim(),
@@ -56,7 +69,11 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
       currency,
       duration: duration ? parseFloat(duration) : undefined,
       lookingFor: !isServiceOffer ? lookingFor.trim() : undefined,
-      status: 'active'
+      status: 'active',
+      audioGreeting: audioUrl,
+      audioGreetingDuration: audioGreetingDuration || undefined,
+      isBoosted: false,
+      boostedUntil: undefined
     };
 
     onCreate(ad);
@@ -178,6 +195,49 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
                 step="0.5"
               />
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border border-primary/20">
+              <input
+                type="checkbox"
+                id="isPaid"
+                checked={isPaidAd}
+                onChange={(e) => setIsPaidAd(e.target.checked)}
+                className="w-5 h-5 rounded border-primary"
+              />
+              <div className="flex-1">
+                <Label htmlFor="isPaid" className="text-base font-semibold cursor-pointer flex items-center gap-2">
+                  <Icon name="Sparkles" size={18} className="text-primary" />
+                  Платное объявление (50 💗)
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Добавьте голосовое приветствие 15-20 сек и выделитесь среди других
+                </p>
+              </div>
+            </div>
+
+            {isPaidAd && (
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg text-sm">
+                  <Icon name="Info" size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <div className="space-y-1">
+                    <p className="font-medium">Преимущества аудио-приветствия:</p>
+                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                      <li>Ваш голос привлечет больше внимания</li>
+                      <li>Объявление будет выделено специальным бейджем</li>
+                      <li>Увеличивает количество откликов в 3 раза</li>
+                      <li>Можно записать прямо с телефона или загрузить файл</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <AudioRecorder 
+                  onRecordingComplete={handleAudioRecording}
+                  maxDuration={20}
+                />
+              </div>
+            )}
           </div>
 
           <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-2">

@@ -6,6 +6,7 @@ import Icon from '@/components/ui/icon';
 import { UserAd } from '@/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AdRespondModal } from './AdRespondModal';
+import { AudioPlayer } from '@/components/audio/AudioPlayer';
 
 interface AdRequestCardProps {
   ad: UserAd;
@@ -47,7 +48,7 @@ export const AdRequestCard = ({ ad, canRespond, index }: AdRequestCardProps) => 
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <Badge className="bg-gradient-to-r from-primary to-primary/90">
               {ad.category}
             </Badge>
@@ -55,6 +56,12 @@ export const AdRequestCard = ({ ad, canRespond, index }: AdRequestCardProps) => 
               <Icon name="Search" size={12} className="mr-1" />
               Ищет девушку
             </Badge>
+            {ad.audioGreeting && (
+              <Badge variant="outline" className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30">
+                <Icon name="Volume2" size={12} className="mr-1 text-purple-500" />
+                <span className="text-purple-700 dark:text-purple-300">С голосом</span>
+              </Badge>
+            )}
           </div>
 
           <h3 className="font-semibold text-lg mb-2">{ad.title}</h3>
@@ -62,6 +69,15 @@ export const AdRequestCard = ({ ad, canRespond, index }: AdRequestCardProps) => 
 
         <CardContent className="pt-0">
           <div className="space-y-3">
+            {ad.audioGreeting && (
+              <div>
+                <AudioPlayer 
+                  audioUrl={ad.audioGreeting} 
+                  duration={ad.audioGreetingDuration}
+                />
+              </div>
+            )}
+
             <div>
               <p className="text-sm text-muted-foreground line-clamp-3">
                 {ad.description}
