@@ -34,7 +34,11 @@ export const ProfileWalletTab = ({
     if (transactions.length === 0) {
       setTransactions(testTransactions);
     }
-  }, []);
+  }, [transactions.length, setTransactions]);
+  
+  if (!wallet || !wallet.balances) {
+    return <div className="p-4">Загрузка кошелька...</div>;
+  }
 
   const handleDeposit = (currency: Currency, amount: number) => {
     const transaction = createDepositTransaction(amount, currency);

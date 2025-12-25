@@ -42,6 +42,10 @@ export const ProfileSettingsTab = ({
   const [showVIPModal, setShowVIPModal] = useState(false);
   const [showHealthCertModal, setShowHealthCertModal] = useState(false);
 
+  if (!profile) {
+    return <div className="p-4">Загрузка настроек...</div>;
+  }
+
   const handleVerificationSubmit = (files: File[]) => {
     setIsVerified(true);
     onProfileUpdate?.({ verified: true });
