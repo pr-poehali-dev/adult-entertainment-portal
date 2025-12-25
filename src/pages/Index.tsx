@@ -48,7 +48,7 @@ const Index = () => {
     };
     window.addEventListener('navigate', handleNavigate as EventListener);
     return () => window.removeEventListener('navigate', handleNavigate as EventListener);
-  }, [state]);
+  }, [state.setIsAuthenticated, state.setCurrentPage]);
 
   // Обработчики
   const handlers = useIndexHandlers({
