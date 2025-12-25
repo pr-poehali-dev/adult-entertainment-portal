@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -140,6 +140,7 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
   const [filterCountry, setFilterCountry] = useState<string>('all');
   const [filterCity, setFilterCity] = useState<string>('all');
   const [onlineOnly, setOnlineOnly] = useState(true);
+  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
 
   const availableCities = filterCountry === 'all' 
     ? Object.values(countriesWithCities).flat()
@@ -167,6 +168,23 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
 
   const handleGiftVIPClick = (userId: number) => {
     console.log('Gift VIP to user:', userId);
+  };
+
+  const handleCardClick = (userId: number) => {
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleNameClick = (userId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentPage('seller-profile');
   };
 
   return (
@@ -265,46 +283,104 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredUsers.map(user => (
-            <Card key={user.id} className="overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 group">
-              <div className="relative aspect-[3/4]">
-                {user.photo ? (
-                  <img 
-                    src={user.photo} 
-                    alt={user.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                    <span className="text-6xl font-bold text-primary/30">{user.avatar}</span>
-                  </div>
-                )}
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                
-                <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                  <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-1.5">
-                    <h3 className="text-white font-bold text-lg leading-tight">{user.name}, {user.age}</h3>
-                    <p className="text-white/90 text-sm flex items-center gap-1 mt-0.5">
-                      <Icon name="MapPin" size={12} />
-                      {user.city}
-                    </p>
-                  </div>
-                  {user.isOnline && (
-                    <div className="bg-green-500 rounded-full px-2.5 py-1 flex items-center gap-1.5">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                      <span className="text-white text-xs font-medium">Онлайн</span>
+            <Card key={user.id} className="overflow-hidden hover:shadow-lg transition-all" style={{ perspective: '1000px' }}>
+              <div 
+                className="relative aspect-[3/4] cursor-pointer"
+                style={{
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.6s',
+                  transform: flippedCards.has(user.id) ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                }}
+              >
+                <div 
+                  className="absolute inset-0"
+                  style={{ backfaceVisibility: 'hidden' }}
+                  onClick={() => handleCardClick(user.id)}
+                >
+                  {user.photo ? (
+                    <img 
+                      src={user.photo} 
+                      alt={user.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                      <span className="text-6xl font-bold text-primary/30">{user.avatar}</span>
                     </div>
                   )}
-                </div>
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  
+                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+                    <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-1.5">
+                      <h3 
+                        className="text-white font-bold text-lg leading-tight hover:text-primary/80 cursor-pointer transition-colors"
+                        onClick={(e) => handleNameClick(user.id, e)}
+                      >{user.name}, {user.age}</h3>
+                      <p className="text-white/90 text-sm flex items-center gap-1 mt-0.5">
+                        <Icon name="MapPin" size={12} />
+                        {user.city}
+                      </p>
+                    </div>
+                    {user.isOnline && (
+                      <div className="bg-green-500 rounded-full px-2.5 py-1 flex items-center gap-1.5">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                        <span className="text-white text-xs font-medium">Онлайн</span>
+                      </div>
+                    )}
+                  </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
-                    onClick={() => handleMessageClick(user.id)}
-                  >
-                    <Icon name="MessageCircle" size={18} className="mr-2" />
-                    Написать сообщение
-                  </Button>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <Button 
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMessageClick(user.id);
+                      }}
+                    >
+                      <Icon name="MessageCircle" size={18} className="mr-2" />
+                      Написать сообщение
+                    </Button>
+                  </div>
+                </div>
+                
+                <div 
+                  className="absolute inset-0 bg-black/90 p-4 flex flex-col justify-center overflow-auto"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)'
+                  }}
+                  onClick={() => handleCardClick(user.id)}
+                >
+                  <div className="text-white space-y-3">
+                    <div>
+                      <h4 className="text-xs font-medium text-white/70 mb-1">О себе:</h4>
+                      <p className="text-sm">{user.aboutMe}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-medium text-white/70 mb-1">Ищет:</h4>
+                      <p className="text-sm">{user.lookingFor}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-medium text-white/70 mb-1">Предпочтения:</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {user.sexualPreferences.map((pref, idx) => (
+                          <span key={idx} className="px-2 py-0.5 bg-white/20 rounded text-xs">
+                            {pref === 'classic' && 'Классика'}
+                            {pref === 'oral' && 'Оральные ласки'}
+                            {pref === 'anal' && 'Анальный секс'}
+                            {pref === 'group' && 'Групповой секс'}
+                            {pref === 'toys' && 'Игрушки'}
+                            {pref === 'bdsm' && 'БДСМ'}
+                            {pref === 'dirty' && 'Грязные игры'}
+                            {pref === 'cuckold' && 'Куколд'}
+                            {pref === 'extreme' && 'Экстрим'}
+                            {pref === 'other' && 'Другое'}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>
