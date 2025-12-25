@@ -4,9 +4,18 @@ import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 export const useIndexState = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+  const [isAuthenticated, setIsAuthenticatedState] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
   });
+
+  const setIsAuthenticated = (value: boolean) => {
+    setIsAuthenticatedState(value);
+    if (value) {
+      localStorage.setItem('isAuthenticated', 'true');
+    } else {
+      localStorage.removeItem('isAuthenticated');
+    }
+  };
   const [currentPage, setCurrentPage] = useState<Page>('online-search');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
@@ -136,25 +145,39 @@ export const useIndexState = () => {
       read: true
     }
   ]);
-  const [profile, setProfile] = useState<Profile>({
-    name: 'Елена Романова',
-    nickname: 'LenaRom',
-    role: 'buyer',
-    avatar: '',
-    rating: 4.8,
-    verified: true,
-    vipStatus: 'none',
-    vipExpiry: null,
-    subscriptionType: 'free',
-    subscriptionExpiry: null,
-    profileCompleted: false,
-    kycCompleted: false,
-    contacts: {
-      instagram: { value: '', forSale: false },
-      telegram: { value: '', forSale: false },
-      phone: { value: '', forSale: false },
+  const [profile, setProfile] = useState<Profile>(() => {
+    const saved = localStorage.getItem('userProfile');
+    if (saved) {
+      return JSON.parse(saved);
     }
+    return {
+      name: 'Елена Романова',
+      nickname: 'LenaRom',
+      role: 'buyer',
+      avatar: '',
+      rating: 4.8,
+      verified: true,
+      vipStatus: 'none',
+      vipExpiry: null,
+      subscriptionType: 'free',
+      subscriptionExpiry: null,
+      profileCompleted: true,
+      kycCompleted: true,
+      contacts: {
+        instagram: { value: '', forSale: false },
+        telegram: { value: '', forSale: false },
+        phone: { value: '', forSale: false },
+      }
+    };
   });
+
+  const setProfileWithSave = (updater: Profile | ((prev: Profile) => Profile)) => {
+    setProfile((prev) => {
+      const newProfile = typeof updater === 'function' ? updater(prev) : updater;
+      localStorage.setItem('userProfile', JSON.stringify(newProfile));
+      return newProfile;
+    });
+  };
 
   const [wallet, setWallet] = useState<Wallet>({
     balances: [
@@ -236,7 +259,7 @@ export const useIndexState = () => {
     notifications,
     setNotifications,
     profile,
-    setProfile,
+    setProfile: setProfileWithSave,
     wallet,
     setWallet,
     walletTransactions,

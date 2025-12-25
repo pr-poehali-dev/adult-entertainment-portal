@@ -138,6 +138,7 @@ export const ProfileSettingsTab = ({
   const handleLogout = () => {
     if (confirm('Вы уверены, что хотите выйти из профиля?')) {
       localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userProfile');
       sessionStorage.clear();
       window.dispatchEvent(new CustomEvent('navigate', { detail: 'login' }));
       toast({
