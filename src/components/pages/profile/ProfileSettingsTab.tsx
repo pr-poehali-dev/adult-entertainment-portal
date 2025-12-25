@@ -137,9 +137,13 @@ export const ProfileSettingsTab = ({
 
   const handleLogout = () => {
     if (confirm('Вы уверены, что хотите выйти из профиля?')) {
-      localStorage.clear();
+      localStorage.removeItem('isAuthenticated');
       sessionStorage.clear();
-      window.location.href = '/';
+      window.dispatchEvent(new CustomEvent('navigate', { detail: 'login' }));
+      toast({
+        title: "Вы вышли из профиля",
+        description: "До скорой встречи!",
+      });
     }
   };
 

@@ -22,6 +22,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem('isAuthenticated', 'true');
     onAuth();
   };
 

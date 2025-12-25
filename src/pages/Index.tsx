@@ -39,7 +39,12 @@ const Index = () => {
 
   useEffect(() => {
     const handleNavigate = (e: CustomEvent) => {
-      state.setCurrentPage(e.detail);
+      const page = e.detail;
+      if (page === 'login') {
+        state.setIsAuthenticated(false);
+      } else {
+        state.setCurrentPage(page);
+      }
     };
     window.addEventListener('navigate', handleNavigate as EventListener);
     return () => window.removeEventListener('navigate', handleNavigate as EventListener);
