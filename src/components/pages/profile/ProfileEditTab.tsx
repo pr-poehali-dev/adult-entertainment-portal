@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { Profile, Orientation, SexualPreference, ProfilePreferences } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { submitPhotoForModeration } from '@/utils/photoModeration';
 
 interface ProfileEditTabProps {
   profile: Profile;
@@ -59,17 +61,36 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
 
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>(profile.profilePhotos || []);
+  const [photoModeration, setPhotoModeration] = useState<Record<number, 'pending' | 'approved' | 'rejected'>>({});
 
-  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       setSelectedPhotos([...selectedPhotos, ...Array.from(files)]);
       
-      Array.from(files).forEach(file => {
+      Array.from(files).forEach(async (file) => {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
           if (event.target?.result) {
-            setUploadedPhotos(prev => [...prev, event.target!.result as string]);
+            const photoUrl = event.target.result as string;
+            setUploadedPhotos(prev => [...prev, photoUrl]);
+            
+            const result = await submitPhotoForModeration(
+              file,
+              1,
+              profile.name,
+              profile.avatar,
+              'profile'
+            );
+            
+            if (result.success && result.moderationId) {
+              setPhotoModeration(prev => ({ ...prev, [result.moderationId!]: 'pending' }));
+              
+              toast({
+                title: 'Фото отправлено на модерацию',
+                description: 'Проверка займет несколько минут',
+              });
+            }
           }
         };
         reader.readAsDataURL(file);
@@ -272,6 +293,12 @@ export const ProfileEditTab = ({ profile, onProfileUpdate }: ProfileEditTabProps
                   alt={`Photo ${index + 1}`}
                   className="w-full h-full object-cover rounded-lg"
                 />
+                <div className="absolute top-2 left-2">
+                  <Badge className="bg-amber-500 text-white text-xs">
+                    <Icon name="Clock" size={10} className="mr-1" />
+                    На модерации
+                  </Badge>
+                </div>
                 {isEditing && (
                   <button
                     onClick={() => removePhoto(index)}

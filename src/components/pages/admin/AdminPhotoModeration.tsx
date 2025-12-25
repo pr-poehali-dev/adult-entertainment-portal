@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { Notification } from '@/types';
 import { PhotoModerationCard, PhotoModerationItem } from './photo-moderation/PhotoModerationCard';
 import { PhotoModerationStats } from './photo-moderation/PhotoModerationStats';
 import { PhotoRejectDialog } from './photo-moderation/PhotoRejectDialog';
+import { getPendingPhotoModeration } from '@/utils/photoModeration';
 
 interface AdminPhotoModerationProps {
   onAddNotification: (notification: Omit<Notification, 'id' | 'time' | 'read'>) => void;
@@ -44,7 +45,21 @@ const MOCK_PHOTOS: PhotoModerationItem[] = [
 ];
 
 export const AdminPhotoModeration = ({ onAddNotification }: AdminPhotoModerationProps) => {
-  const [photos, setPhotos] = useState<PhotoModerationItem[]>(MOCK_PHOTOS);
+  const [photos, setPhotos] = useState<PhotoModerationItem[]>([]);
+  
+  useEffect(() => {
+    const loadPhotos = () => {
+      const pendingPhotos = getPendingPhotoModeration();
+      const combinedPhotos = [...MOCK_PHOTOS, ...pendingPhotos];
+      setPhotos(combinedPhotos);
+    };
+    
+    loadPhotos();
+    
+    const interval = setInterval(loadPhotos, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
   const [activeTab, setActiveTab] = useState('pending');
   const [rejectDialog, setRejectDialog] = useState<{ isOpen: boolean; photo: PhotoModerationItem | null }>({
     isOpen: false,
