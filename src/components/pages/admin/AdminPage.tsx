@@ -6,6 +6,7 @@ import { AdminBookings } from './AdminBookings';
 import { AdminAds } from './AdminAds';
 import { AdminWorkApplications } from './AdminWorkApplications';
 import { AdminSettings } from './AdminSettings';
+import { AdminEmojis } from './AdminEmojis';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -41,7 +42,7 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mb-8 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 mb-8 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
@@ -61,6 +62,10 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
             <TabsTrigger value="applications" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Briefcase" size={20} />
               <span className="text-xs">Отклики</span>
+            </TabsTrigger>
+            <TabsTrigger value="emojis" className="flex flex-col items-center gap-1 py-3">
+              <Icon name="Smile" size={20} />
+              <span className="text-xs">Эмодзи</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Settings" size={20} />
@@ -86,6 +91,10 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
 
           <TabsContent value="applications">
             <AdminWorkApplications />
+          </TabsContent>
+
+          <TabsContent value="emojis">
+            <AdminEmojis />
           </TabsContent>
 
           <TabsContent value="settings">
