@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Page, CatalogItem, UserRole, UserAd, Profile } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,6 +8,7 @@ import { HomeSolutionsSection } from './home/HomeSolutionsSection';
 import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
 import { DatingBanner } from './home/DatingBanner';
 import { AgencyBanner } from './home/AgencyBanner';
+import { MobileHomePage } from './home/MobileHomePage';
 import { CatalogFilters } from './catalog/CatalogFilters';
 import { CatalogGrid } from './catalog/CatalogGrid';
 import { AdRequestCard } from './catalog/AdRequestCard';
@@ -42,7 +43,103 @@ interface HomeAndCatalogProps {
   userRole?: UserRole;
 }
 
-export const HomePage = ({ setCurrentPage, userRole, setSelectedCategory, profile, onPremiumRequired }: { setCurrentPage: (page: Page) => void; userRole?: UserRole; setSelectedCategory: (categoryId: string) => void; profile: Profile; onPremiumRequired?: () => void }) => {
+export const HomePage = ({ 
+  setCurrentPage, 
+  userRole, 
+  setSelectedCategory, 
+  profile, 
+  onPremiumRequired,
+  catalogItems,
+  favorites,
+  toggleFavorite,
+  setSelectedServiceId,
+  searchQuery,
+  setSearchQuery,
+  selectedCategory,
+  priceRange,
+  setPriceRange,
+  sortBy,
+  setSortBy,
+  selectedCountry,
+  setSelectedCountry,
+  selectedLocation,
+  setSelectedLocation,
+  selectedAge,
+  setSelectedAge,
+  selectedHeight,
+  setSelectedHeight,
+  selectedBodyType,
+  setSelectedBodyType,
+}: { 
+  setCurrentPage: (page: Page) => void; 
+  userRole?: UserRole; 
+  setSelectedCategory: (categoryId: string) => void; 
+  profile: Profile; 
+  onPremiumRequired?: () => void;
+  catalogItems: CatalogItem[];
+  favorites: number[];
+  toggleFavorite: (id: number) => void;
+  setSelectedServiceId: (id: number | null) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedCategory: string;
+  priceRange: string;
+  setPriceRange: (range: string) => void;
+  sortBy: string;
+  setSortBy: (sort: string) => void;
+  selectedCountry: string;
+  setSelectedCountry: (country: string) => void;
+  selectedLocation: string;
+  setSelectedLocation: (location: string) => void;
+  selectedAge: string;
+  setSelectedAge: (age: string) => void;
+  selectedHeight: string;
+  setSelectedHeight: (height: string) => void;
+  selectedBodyType: string;
+  setSelectedBodyType: (bodyType: string) => void;
+}) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <MobileHomePage
+        setCurrentPage={setCurrentPage}
+        catalogItems={catalogItems}
+        favorites={favorites}
+        toggleFavorite={toggleFavorite}
+        setSelectedServiceId={setSelectedServiceId}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        selectedLocation={selectedLocation}
+        setSelectedLocation={setSelectedLocation}
+        selectedAge={selectedAge}
+        setSelectedAge={setSelectedAge}
+        selectedHeight={selectedHeight}
+        setSelectedHeight={setSelectedHeight}
+        selectedBodyType={selectedBodyType}
+        setSelectedBodyType={setSelectedBodyType}
+      />
+    );
+  }
+
   return (
     <div className="animate-fade-in">
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
