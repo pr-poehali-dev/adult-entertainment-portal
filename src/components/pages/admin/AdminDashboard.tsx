@@ -49,6 +49,14 @@ export const AdminDashboard = () => {
       bg: 'bg-pink-500/10'
     },
     { 
+      title: 'Аудио на модерации', 
+      value: 2, 
+      icon: 'Volume2', 
+      color: 'text-purple-500',
+      bg: 'bg-purple-500/10',
+      change: 'Требуют проверки'
+    },
+    { 
       title: 'Отклики на вакансии', 
       value: adminStats.totalWorkApplications, 
       icon: 'Briefcase', 
@@ -71,7 +79,7 @@ export const AdminDashboard = () => {
         <p className="text-muted-foreground">Основные метрики и статистика</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2">

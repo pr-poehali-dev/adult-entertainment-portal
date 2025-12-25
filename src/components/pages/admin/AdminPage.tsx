@@ -7,6 +7,7 @@ import { AdminAds } from './AdminAds';
 import { AdminWorkApplications } from './AdminWorkApplications';
 import { AdminSettings } from './AdminSettings';
 import { AdminEmojis } from './AdminEmojis';
+import { AdminAudioGreetings } from './AdminAudioGreetings';
 import Icon from '@/components/ui/icon';
 import { Page } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -42,7 +43,7 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 mb-8 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 mb-8 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
@@ -58,6 +59,13 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
             <TabsTrigger value="ads" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Megaphone" size={20} />
               <span className="text-xs">Объявления</span>
+            </TabsTrigger>
+            <TabsTrigger value="audio" className="flex flex-col items-center gap-1 py-3 relative">
+              <Icon name="Volume2" size={20} />
+              <span className="text-xs">Аудио</span>
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                2
+              </span>
             </TabsTrigger>
             <TabsTrigger value="applications" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Briefcase" size={20} />
@@ -87,6 +95,10 @@ export const AdminPage = ({ setCurrentPage }: AdminPageProps) => {
 
           <TabsContent value="ads">
             <AdminAds />
+          </TabsContent>
+
+          <TabsContent value="audio">
+            <AdminAudioGreetings />
           </TabsContent>
 
           <TabsContent value="applications">
