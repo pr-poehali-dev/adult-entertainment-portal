@@ -1,22 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { UserAd, Notification } from '@/types';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { AudioPlayer } from '@/components/audio/AudioPlayer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+import Icon from '@/components/ui/icon';
+import { AudioModerationCard } from './audio-moderation/AudioModerationCard';
+import { AudioModerationStats } from './audio-moderation/AudioModerationStats';
+import { AudioRejectDialog } from './audio-moderation/AudioRejectDialog';
 
 interface AudioModerationStatus {
   adId: number;
@@ -273,185 +262,6 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
     return ad.audioGreeting && mod?.status === 'rejected';
   });
 
-  const renderAdCard = (ad: UserAd, showActions: boolean = true) => {
-    const moderation = getModeration(ad.id);
-    
-    return (
-      <Card key={ad.id} className="hover:shadow-lg transition-shadow">
-        <CardHeader className="pb-3">
-          <div className="flex items-start gap-3 mb-3">
-            <Avatar className="w-12 h-12">
-              <AvatarFallback className="bg-primary/20 text-primary">
-                {ad.authorName.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <span className="font-semibold">{ad.authorName}</span>
-                <Badge variant="outline" className="text-xs">
-                  {ad.authorRole === 'buyer' ? 'Мужчина' : 'Девушка'}
-                </Badge>
-                {moderation?.status === 'approved' && (
-                  <Badge className="bg-green-500">
-                    <Icon name="CheckCircle" size={12} className="mr-1" />
-                    Одобрено
-                  </Badge>
-                )}
-                {moderation?.status === 'rejected' && (
-                  <Badge variant="destructive">
-                    <Icon name="XCircle" size={12} className="mr-1" />
-                    Отклонено
-                  </Badge>
-                )}
-                {moderation?.status === 'pending' && (
-                  <Badge variant="outline" className="border-amber-500 text-amber-500">
-                    <Icon name="Clock" size={12} className="mr-1" />
-                    На модерации
-                  </Badge>
-                )}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Icon name="Calendar" size={12} />
-                <span>{new Date(ad.createdAt).toLocaleString('ru-RU')}</span>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="font-bold text-xl text-primary">{ad.price} ₽</div>
-              {ad.duration && <div className="text-xs text-muted-foreground">{ad.duration} ч</div>}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <Badge className="bg-gradient-to-r from-primary to-primary/90">
-              {ad.category}
-            </Badge>
-            <Badge variant="secondary">
-              <Icon name="Megaphone" size={12} className="mr-1" />
-              {ad.type === 'service_offer' ? 'Предложение' : 'Запрос'}
-            </Badge>
-            <Badge variant="outline" className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30">
-              <Icon name="Volume2" size={12} className="mr-1 text-purple-500" />
-              <span className="text-purple-700 dark:text-purple-300">С голосом</span>
-            </Badge>
-            {ad.isBoosted && (
-              <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
-                <Icon name="TrendingUp" size={12} className="mr-1" />
-                В топе
-              </Badge>
-            )}
-          </div>
-
-          <h3 className="font-semibold text-lg">{ad.title}</h3>
-        </CardHeader>
-
-        <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {ad.description}
-          </p>
-
-          {ad.audioGreeting && (
-            <AudioPlayer 
-              audioUrl={ad.audioGreeting} 
-              duration={ad.audioGreetingDuration}
-            />
-          )}
-
-          {moderation?.aiAnalysis && (
-            <div className={`p-3 border rounded-lg ${
-              moderation.aiAnalysis.aiRecommendation 
-                ? 'bg-green-500/10 border-green-500/20' 
-                : 'bg-amber-500/10 border-amber-500/20'
-            }`}>
-              <div className="flex items-center gap-2 mb-2">
-                <Icon name="Sparkles" size={14} className={moderation.aiAnalysis.aiRecommendation ? 'text-green-500' : 'text-amber-500'} />
-                <p className="text-xs font-medium">
-                  AI-анализ (уверенность: {moderation.aiAnalysis.confidence}%)
-                </p>
-              </div>
-              <p className="text-xs text-muted-foreground mb-1">Распознанный текст:</p>
-              <p className="text-sm">{moderation.aiAnalysis.transcript}</p>
-            </div>
-          )}
-
-          {moderation?.moderatorNote && (
-            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-              <p className="text-xs font-medium text-destructive mb-1">Причина отклонения:</p>
-              <p className="text-sm">{moderation.moderatorNote}</p>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Icon name="Eye" size={12} />
-                <span>{ad.viewCount}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Icon name="MessageCircle" size={12} />
-                <span>{ad.responses?.length || 0}</span>
-              </div>
-            </div>
-            <span>ID: #{ad.id}</span>
-          </div>
-
-          {showActions && (
-            <div className="space-y-2 pt-2">
-              {moderation?.status === 'pending' && (
-                <>
-                  <Button 
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-                    onClick={() => handleAIModeration(ad)}
-                    disabled={aiProcessing.includes(ad.id)}
-                  >
-                    {aiProcessing.includes(ad.id) ? (
-                      <>
-                        <Icon name="Loader2" size={16} className="mr-2 animate-spin" />
-                        AI анализирует...
-                      </>
-                    ) : (
-                      <>
-                        <Icon name="Sparkles" size={16} className="mr-2" />
-                        🤖 Проверить AI-модератором
-                      </>
-                    )}
-                  </Button>
-                  
-                  <div className="flex gap-2">
-                    <Button 
-                      className="flex-1 bg-green-500 hover:bg-green-600"
-                      onClick={() => handleApprove(ad)}
-                    >
-                      <Icon name="CheckCircle" size={16} className="mr-2" />
-                      Одобрить
-                    </Button>
-                    <Button 
-                      variant="destructive"
-                      className="flex-1"
-                      onClick={() => handleReject(ad)}
-                    >
-                      <Icon name="XCircle" size={16} className="mr-2" />
-                      Отклонить
-                    </Button>
-                  </div>
-                </>
-              )}
-              {(moderation?.status === 'approved' || moderation?.status === 'rejected') && (
-                <Button 
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => handleUndo(ad)}
-                >
-                  <Icon name="RotateCcw" size={16} className="mr-2" />
-                  Отменить модерацию
-                </Button>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    );
-  };
-
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -459,180 +269,121 @@ export const AdminAudioGreetings = ({ onAddNotification }: AdminAudioGreetingsPr
         <p className="text-muted-foreground">Проверка голосовых приветствий в платных объявлениях</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          { 
-            label: 'На модерации', 
-            value: pendingAds.length, 
-            icon: 'Clock', 
-            color: 'text-amber-500',
-            bgColor: 'bg-amber-500/10'
-          },
-          { 
-            label: 'Одобрено', 
-            value: approvedAds.length, 
-            icon: 'CheckCircle', 
-            color: 'text-green-500',
-            bgColor: 'bg-green-500/10'
-          },
-          { 
-            label: 'Отклонено', 
-            value: rejectedAds.length, 
-            icon: 'XCircle', 
-            color: 'text-red-500',
-            bgColor: 'bg-red-500/10'
-          }
-        ].map((stat, index) => (
-          <Card key={index} className={stat.bgColor}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                </div>
-                <Icon name={stat.icon as any} size={32} className={stat.color} />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-3">
-            <Icon name="Sparkles" size={20} className="text-purple-500 mt-0.5" />
-            <div className="flex-1">
-              <h3 className="font-semibold mb-2 flex items-center gap-2">
-                🤖 AI-модератор включен
-              </h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Нажмите кнопку "Проверить AI-модератором" для автоматического анализа аудио через OpenAI Whisper + GPT-4
-              </p>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                <li>AI распознает речь и анализирует содержание на правила</li>
-                <li>Автоматическое одобрение безопасных аудио</li>
-                <li>Помечает подозрительный контент для ручной проверки</li>
-                <li>Показывает уверенность AI в процентах</li>
-                <li>Контролируйте соответствие правилам платформы</li>
-                <li>При отклонении обязательно указывайте причину</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <AudioModerationStats
+        pendingCount={pendingAds.length}
+        approvedCount={approvedAds.length}
+        rejectedCount={rejectedAds.length}
+      />
 
       <Tabs defaultValue="pending" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="pending" className="gap-2">
-            <Icon name="Clock" size={16} />
-            На модерации ({pendingAds.length})
+        <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsTrigger value="pending" className="relative">
+            <Icon name="Clock" size={16} className="mr-2" />
+            На модерации
+            {pendingAds.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                {pendingAds.length}
+              </span>
+            )}
           </TabsTrigger>
-          <TabsTrigger value="approved" className="gap-2">
-            <Icon name="CheckCircle" size={16} />
+          <TabsTrigger value="approved">
+            <Icon name="CheckCircle" size={16} className="mr-2" />
             Одобрено ({approvedAds.length})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="gap-2">
-            <Icon name="XCircle" size={16} />
+          <TabsTrigger value="rejected">
+            <Icon name="XCircle" size={16} className="mr-2" />
             Отклонено ({rejectedAds.length})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="pending" className="mt-6">
+        <TabsContent value="pending" className="space-y-4">
           {pendingAds.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <Icon name="CheckCircle" size={48} className="mx-auto mb-4 text-green-500" />
-                <h3 className="text-xl font-semibold mb-2">Все проверено!</h3>
-                <p className="text-muted-foreground">Нет аудио-приветствий ожидающих модерации</p>
-              </CardContent>
-            </Card>
+            <div className="text-center py-12 text-muted-foreground">
+              <Icon name="CheckCircle" size={48} className="mx-auto mb-4 opacity-50" />
+              <p>Нет объявлений на модерации</p>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {pendingAds.map(ad => renderAdCard(ad, true))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendingAds.map((ad) => (
+                <AudioModerationCard
+                  key={ad.id}
+                  ad={ad}
+                  moderation={getModeration(ad.id)}
+                  showActions={true}
+                  aiProcessing={aiProcessing}
+                  onAIModeration={handleAIModeration}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                  onUndo={handleUndo}
+                />
+              ))}
             </div>
           )}
         </TabsContent>
 
-        <TabsContent value="approved" className="mt-6">
+        <TabsContent value="approved" className="space-y-4">
           {approvedAds.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <Icon name="Inbox" size={48} className="mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-semibold mb-2">Пока пусто</h3>
-                <p className="text-muted-foreground">Одобренные аудио появятся здесь</p>
-              </CardContent>
-            </Card>
+            <div className="text-center py-12 text-muted-foreground">
+              <Icon name="Inbox" size={48} className="mx-auto mb-4 opacity-50" />
+              <p>Нет одобренных объявлений</p>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {approvedAds.map(ad => renderAdCard(ad, true))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {approvedAds.map((ad) => (
+                <AudioModerationCard
+                  key={ad.id}
+                  ad={ad}
+                  moderation={getModeration(ad.id)}
+                  showActions={true}
+                  aiProcessing={aiProcessing}
+                  onAIModeration={handleAIModeration}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                  onUndo={handleUndo}
+                />
+              ))}
             </div>
           )}
         </TabsContent>
 
-        <TabsContent value="rejected" className="mt-6">
+        <TabsContent value="rejected" className="space-y-4">
           {rejectedAds.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <Icon name="Inbox" size={48} className="mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-semibold mb-2">Пока пусто</h3>
-                <p className="text-muted-foreground">Отклоненные аудио появятся здесь</p>
-              </CardContent>
-            </Card>
+            <div className="text-center py-12 text-muted-foreground">
+              <Icon name="Inbox" size={48} className="mx-auto mb-4 opacity-50" />
+              <p>Нет отклоненных объявлений</p>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {rejectedAds.map(ad => renderAdCard(ad, true))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rejectedAds.map((ad) => (
+                <AudioModerationCard
+                  key={ad.id}
+                  ad={ad}
+                  moderation={getModeration(ad.id)}
+                  showActions={true}
+                  aiProcessing={aiProcessing}
+                  onAIModeration={handleAIModeration}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                  onUndo={handleUndo}
+                />
+              ))}
             </div>
           )}
         </TabsContent>
       </Tabs>
 
-      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Отклонить аудио-приветствие</DialogTitle>
-            <DialogDescription>
-              Укажите причину отклонения голосового приветствия в объявлении #{selectedAd?.id}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Причина отклонения</label>
-              <Textarea
-                placeholder="Например: Нецензурная лексика, спам, не соответствует правилам..."
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                rows={4}
-              />
-            </div>
-
-            <div className="bg-muted/50 p-3 rounded-lg text-sm">
-              <p className="font-medium mb-1">Частые причины отклонения:</p>
-              <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                <li>Нецензурная лексика</li>
-                <li>Реклама сторонних ресурсов</li>
-                <li>Не соответствует описанию</li>
-                <li>Низкое качество записи</li>
-                <li>Нарушение правил платформы</li>
-              </ul>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>
-              Отмена
-            </Button>
-            <Button 
-              variant="destructive" 
-              onClick={confirmReject}
-              disabled={!rejectReason.trim()}
-            >
-              <Icon name="XCircle" size={16} className="mr-2" />
-              Отклонить
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <AudioRejectDialog
+        open={showRejectDialog}
+        selectedAd={selectedAd}
+        rejectReason={rejectReason}
+        onRejectReasonChange={setRejectReason}
+        onConfirm={confirmReject}
+        onCancel={() => {
+          setShowRejectDialog(false);
+          setSelectedAd(null);
+          setRejectReason('');
+        }}
+      />
     </div>
   );
 };
