@@ -1,15 +1,24 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { 
-  initInitData, 
   themeParams as tgThemeParams,
   viewport,
   backButton,
   mainButton,
   hapticFeedback,
   retrieveLaunchParams,
-  type InitData,
   type ThemeParams
 } from '@telegram-apps/sdk';
+
+interface InitDataUser {
+  id: number;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+interface InitData {
+  user?: InitDataUser;
+}
 
 interface TelegramContextType {
   initData: InitData | null;
@@ -62,9 +71,8 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
 
         setIsTelegramEnv(true);
 
-        const initDataResult = initInitData();
-        if (initDataResult) {
-          setInitData(initDataResult);
+        if (launchParams.initData) {
+          setInitData(launchParams.initData);
         }
 
         if (tgThemeParams.isSupported()) {
