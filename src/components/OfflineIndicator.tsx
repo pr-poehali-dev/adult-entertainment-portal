@@ -5,12 +5,14 @@ import Icon from '@/components/ui/icon';
 export const OfflineIndicator = () => {
   const [isOnline, setIsOnline] = useState(offlineDetector.getStatus());
   const [showOffline, setShowOffline] = useState(false);
+  const [manuallyHidden, setManuallyHidden] = useState(false);
 
   useEffect(() => {
     const unsubscribe = offlineDetector.subscribe((online) => {
       setIsOnline(online);
       if (!online) {
         setShowOffline(true);
+        setManuallyHidden(false);
       } else {
         setTimeout(() => setShowOffline(false), 3000);
       }
@@ -19,7 +21,7 @@ export const OfflineIndicator = () => {
     return unsubscribe;
   }, []);
 
-  if (!showOffline && isOnline) return null;
+  if (manuallyHidden || (!showOffline && isOnline)) return null;
 
   return (
     <div
@@ -37,7 +39,7 @@ export const OfflineIndicator = () => {
           !isOnline
             ? 'bg-red-500'
             : 'bg-green-500'
-        } text-white px-4 py-2 flex items-center justify-center gap-2 text-sm font-medium shadow-lg`}
+        } text-white px-4 py-2 flex items-center justify-center gap-2 text-sm font-medium shadow-lg relative`}
       >
         <Icon 
           name={!isOnline ? 'WifiOff' : 'Wifi'} 
@@ -51,6 +53,15 @@ export const OfflineIndicator = () => {
           </>
         ) : (
           <span>Подключение восстановлено ✓</span>
+        )}
+        {!isOnline && (
+          <button
+            onClick={() => setManuallyHidden(true)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded-full transition-colors"
+            aria-label="Скрыть уведомление"
+          >
+            <Icon name="X" size={16} />
+          </button>
         )}
       </div>
     </div>
