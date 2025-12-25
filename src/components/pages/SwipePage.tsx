@@ -2,21 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { Badge } from '@/components/ui/badge';
 import MatchChatModal from './MatchChatModal';
 import { pushNotificationService } from '@/utils/pushNotifications';
 import SwipeFiltersModal, { SwipeFilters } from './SwipeFilters';
-
-interface SwipeProfile {
-  id: number;
-  name: string;
-  age: number;
-  city: string;
-  photo: string;
-  bio: string;
-  interests: string[];
-  verified: boolean;
-}
+import SwipeCard, { SwipeProfile } from './SwipeCard';
+import SwipeHeader from './SwipeHeader';
+import SwipeLimitModal from './SwipeLimitModal';
 
 const mockProfiles: SwipeProfile[] = [
   {
@@ -76,7 +67,6 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
   const [currentMatch, setCurrentMatch] = useState<SwipeProfile | null>(null);
   const matchSoundRef = useRef<HTMLAudioElement | null>(null);
   const likeSoundRef = useRef<HTMLAudioElement | null>(null);
-  const cardRef = useRef<HTMLDivElement | null>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -243,156 +233,37 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
       {showMatchAnimation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
           <div className="text-center animate-scale-up">
-            <div className="text-8xl mb-4 animate-bounce">💕</div>
-            <h2 className="text-4xl font-bold text-white mb-2">Совпадение!</h2>
+            <div className="text-8xl mb-6 animate-bounce">💕</div>
+            <h2 className="text-4xl font-bold text-white mb-4">Взаимная симпатия!</h2>
             <p className="text-xl text-white/90">Вы понравились друг другу</p>
           </div>
         </div>
       )}
       
       <div className="max-w-md mx-auto">
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex-1" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Знакомства
-            </h1>
-            <div className="flex-1 flex justify-end">
-              {!isPremium && (
-                <Badge variant="outline" className="border-amber-500 text-amber-600">
-                  {viewedToday}/{FREE_DAILY_LIMIT}
-                </Badge>
-              )}
-            </div>
-          </div>
-          {matches > 0 && (
-            <Badge className="mt-2 bg-gradient-to-r from-pink-500 to-purple-600">
-              <Icon name="Heart" size={14} className="mr-1" />
-              {matches} {matches === 1 ? 'совпадение' : 'совпадений'}
-            </Badge>
-          )}
-          <Button
-            variant="outline"
-            className="w-full mt-4 bg-white/90 backdrop-blur-sm relative"
-            onClick={() => setShowFilters(true)}
-          >
-            <Icon name="Filter" size={18} className="mr-2" />
-            Фильтры поиска
-            {activeFiltersCount > 0 && (
-              <Badge className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                {activeFiltersCount}
-              </Badge>
-            )}
-          </Button>
-        </div>
+        <SwipeHeader
+          matches={matches}
+          viewedToday={viewedToday}
+          freeLimit={FREE_DAILY_LIMIT}
+          isPremium={isPremium}
+          filteredProfilesCount={filteredProfiles.length}
+          currentIndex={currentIndex}
+          activeFiltersCount={activeFiltersCount}
+          onOpenFilters={() => setShowFilters(true)}
+        />
 
-        <div className="relative">
-          <Card
-            ref={cardRef}
-            className={`overflow-hidden cursor-grab active:cursor-grabbing touch-none ${
-              cardAnimation ? 'animate-scale-up' : ''
-            } ${
-              isDragging ? '' : 'transition-all duration-300'
-            } transform ${
-              swipeDirection === 'left'
-                ? '-translate-x-full rotate-12 opacity-0'
-                : swipeDirection === 'right'
-                ? 'translate-x-full -rotate-12 opacity-0'
-                : ''
-            }`}
-            style={{
-              transform: isDragging
-                ? `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`
-                : undefined,
-              opacity: isDragging ? 1 - Math.abs(dragOffset.x) / 300 : undefined,
-            }}
-            onMouseDown={(e) => handleDragStart(e.clientX, e.clientY)}
-            onMouseMove={(e) => handleDragMove(e.clientX, e.clientY)}
-            onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd}
-            onTouchStart={(e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY)}
-            onTouchMove={(e) => handleDragMove(e.touches[0].clientX, e.touches[0].clientY)}
-            onTouchEnd={handleDragEnd}
-          >
-            <div className="relative aspect-[2/3] md:aspect-[3/4]">
-              {isDragging && dragOffset.x > 50 && (
-                <div className="absolute top-8 right-8 bg-green-500 text-white px-6 py-3 rounded-lg font-bold text-2xl rotate-12 z-10 shadow-lg">
-                  LIKE
-                </div>
-              )}
-              {isDragging && dragOffset.x < -50 && (
-                <div className="absolute top-8 left-8 bg-red-500 text-white px-6 py-3 rounded-lg font-bold text-2xl -rotate-12 z-10 shadow-lg">
-                  NOPE
-                </div>
-              )}
-              <img
-                src={currentProfile.photo}
-                alt={currentProfile.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
-              <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/40 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-black/20 to-transparent" />
-              <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-black/20 to-transparent" />
-              
-              <div className="absolute top-6 left-0 right-0 px-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <h2 className="text-4xl font-bold text-white drop-shadow-lg">{currentProfile.name}</h2>
-                    <span className="text-2xl text-white/90 drop-shadow-lg">{currentProfile.age}</span>
-                  </div>
-                  {currentProfile.verified && (
-                    <Badge className="bg-blue-500 text-white">
-                      <Icon name="CheckCircle2" size={14} className="mr-1" />
-                      Verified
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 mt-2">
-                  <Icon name="MapPin" size={16} className="text-white drop-shadow-lg" />
-                  <span className="text-sm text-white/90 drop-shadow-lg">{currentProfile.city}</span>
-                </div>
-                <p className="text-sm mt-3 line-clamp-2 text-white/90 drop-shadow-lg">{currentProfile.bio}</p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {currentProfile.interests.map((interest, idx) => (
-                    <Badge key={idx} variant="secondary" className="bg-white/20 text-white border-white/30">
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-6 px-6">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => handleSwipe('left')}
-                  className="w-16 h-16 rounded-full border-2 border-red-500 text-red-500 bg-white/90 hover:bg-white hover:text-red-600 shadow-lg"
-                >
-                  <Icon name="X" size={32} />
-                </Button>
-
-                <Button
-                  size="lg"
-                  onClick={() => handleSwipe('right')}
-                  className="w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-xl"
-                >
-                  <Icon name="Heart" size={36} />
-                </Button>
-
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => setCurrentIndex(prev => prev + 1)}
-                  className="w-16 h-16 rounded-full border-2 border-blue-500 text-blue-500 bg-white/90 hover:bg-white hover:text-blue-600 shadow-lg"
-                >
-                  <Icon name="RotateCw" size={24} />
-                </Button>
-              </div>
-            </div>
-          </Card>
-        </div>
+        <SwipeCard
+          profile={currentProfile}
+          swipeDirection={swipeDirection}
+          dragOffset={dragOffset}
+          isDragging={isDragging}
+          cardAnimation={cardAnimation}
+          onSwipe={handleSwipe}
+          onDragStart={handleDragStart}
+          onDragMove={handleDragMove}
+          onDragEnd={handleDragEnd}
+          onSkip={() => setCurrentIndex(prev => prev + 1)}
+        />
 
         <div className="mt-8 text-center">
           <p className="text-xs text-muted-foreground">
@@ -408,32 +279,33 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const event = new CustomEvent('navigate', { detail: 'matches' });
+                  const event = new CustomEvent('navigate', { detail: 'messages' });
                   window.dispatchEvent(event);
                 }}
-                className="text-primary"
               >
-                Все
+                Смотреть все
                 <Icon name="ChevronRight" size={16} className="ml-1" />
               </Button>
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              {matchedProfiles.slice(-6).reverse().map((profile) => (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {matchedProfiles.map((profile) => (
                 <button
                   key={profile.id}
                   onClick={() => {
                     setCurrentMatch(profile);
                     setShowMatchModal(true);
                   }}
-                  className="relative aspect-square rounded-lg overflow-hidden border-2 border-pink-500 hover:scale-105 transition-transform"
+                  className="flex-shrink-0 relative group"
                 >
-                  <img
-                    src={profile.photo}
-                    alt={profile.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                    <p className="text-white text-xs font-bold">{profile.name}</p>
+                  <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-pink-500 ring-offset-2">
+                    <img
+                      src={profile.photo}
+                      alt={profile.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                    <Icon name="Heart" size={12} className="text-white" />
                   </div>
                 </button>
               ))}
@@ -442,81 +314,26 @@ export default function SwipePage({ onMatch }: SwipePageProps) {
         )}
       </div>
 
-      <MatchChatModal
-        isOpen={showMatchModal}
-        onClose={() => setShowMatchModal(false)}
-        matchName={currentMatch?.name || ''}
-        matchPhoto={currentMatch?.photo || ''}
-        onSendMessage={(msg) => {
-          console.log('Отправлено сообщение:', msg, 'для', currentMatch?.name);
+      {showMatchModal && currentMatch && (
+        <MatchChatModal
+          profile={currentMatch}
+          onClose={() => {
+            setShowMatchModal(false);
+            setCurrentMatch(null);
+          }}
+        />
+      )}
+
+      <SwipeLimitModal
+        show={showLimitModal}
+        freeLimit={FREE_DAILY_LIMIT}
+        onClose={() => setShowLimitModal(false)}
+        onGetPremium={() => {
+          setShowLimitModal(false);
+          const event = new CustomEvent('navigate', { detail: 'premium' });
+          window.dispatchEvent(event);
         }}
       />
-
-      {showLimitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in p-4">
-          <Card className="w-full max-w-md p-6 animate-scale-up text-center">
-            <div className="mb-6">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center">
-                <Icon name="Crown" size={40} className="text-white" />
-              </div>
-              <h2 className="text-2xl font-bold mb-2">Дневной лимит достигнут</h2>
-              <p className="text-muted-foreground mb-4">
-                Вы просмотрели {FREE_DAILY_LIMIT} анкет сегодня. Обновите до Premium для безлимитного просмотра!
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-4 mb-6">
-              <h3 className="font-bold text-amber-900 mb-3 flex items-center justify-center gap-2">
-                <Icon name="Sparkles" size={18} />
-                Premium возможности
-              </h3>
-              <div className="space-y-2 text-left text-sm">
-                <div className="flex items-center gap-2 text-amber-900">
-                  <Icon name="Check" size={16} className="text-green-600" />
-                  <span>Безлимитные свайпы</span>
-                </div>
-                <div className="flex items-center gap-2 text-amber-900">
-                  <Icon name="Check" size={16} className="text-green-600" />
-                  <span>Приоритет в показе анкет</span>
-                </div>
-                <div className="flex items-center gap-2 text-amber-900">
-                  <Icon name="Check" size={16} className="text-green-600" />
-                  <span>Просмотр кто лайкнул вас</span>
-                </div>
-                <div className="flex items-center gap-2 text-amber-900">
-                  <Icon name="Check" size={16} className="text-green-600" />
-                  <span>Возврат случайных свайпов</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowLimitModal(false)}
-                className="flex-1"
-              >
-                Позже
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowLimitModal(false);
-                  const event = new CustomEvent('navigate', { detail: 'premium' });
-                  window.dispatchEvent(event);
-                }}
-                className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white"
-              >
-                <Icon name="Crown" size={18} className="mr-2" />
-                Получить Premium
-              </Button>
-            </div>
-
-            <p className="text-xs text-muted-foreground mt-4">
-              Или вернитесь завтра для новых {FREE_DAILY_LIMIT} свайпов
-            </p>
-          </Card>
-        </div>
-      )}
 
       {showFilters && (
         <SwipeFiltersModal
