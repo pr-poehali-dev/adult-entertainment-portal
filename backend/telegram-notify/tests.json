@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "name": "Missing required fields",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "message": "Test message"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "chatId and message are required"
+      }
+    },
+    {
+      "name": "Valid notification request (will fail without bot token)",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "chatId": 123456,
+        "message": "Test notification",
+        "type": "success"
+      },
+      "expectedStatus": 500,
+      "expectedBody": {
+        "error": "Bot token not configured"
+      }
+    }
+  ]
+}

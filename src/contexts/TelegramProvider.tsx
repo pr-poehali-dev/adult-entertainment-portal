@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { 
   initInitData, 
-  initThemeParams, 
-  initViewport,
-  initBackButton,
-  initMainButton,
-  initHapticFeedback,
+  themeParams as tgThemeParams,
+  viewport,
+  backButton,
+  mainButton,
+  hapticFeedback,
   retrieveLaunchParams,
   type InitData,
   type ThemeParams
@@ -62,29 +62,31 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
 
         setIsTelegramEnv(true);
 
-        const [initDataResult, themeParamsResult] = await Promise.all([
-          initInitData(),
-          initThemeParams()
-        ]);
-
+        const initDataResult = initInitData();
         if (initDataResult) {
           setInitData(initDataResult);
         }
 
-        if (themeParamsResult) {
-          setThemeParams(themeParamsResult);
+        if (tgThemeParams.isSupported()) {
+          tgThemeParams.mount();
+          const params = tgThemeParams.state();
+          setThemeParams(params);
           
-          document.documentElement.style.setProperty('--tg-theme-bg-color', themeParamsResult.bgColor || '#ffffff');
-          document.documentElement.style.setProperty('--tg-theme-text-color', themeParamsResult.textColor || '#000000');
-          document.documentElement.style.setProperty('--tg-theme-hint-color', themeParamsResult.hintColor || '#999999');
-          document.documentElement.style.setProperty('--tg-theme-link-color', themeParamsResult.linkColor || '#2481cc');
-          document.documentElement.style.setProperty('--tg-theme-button-color', themeParamsResult.buttonColor || '#2481cc');
-          document.documentElement.style.setProperty('--tg-theme-button-text-color', themeParamsResult.buttonTextColor || '#ffffff');
+          if (params) {
+            document.documentElement.style.setProperty('--tg-theme-bg-color', params.bgColor || '#ffffff');
+            document.documentElement.style.setProperty('--tg-theme-text-color', params.textColor || '#000000');
+            document.documentElement.style.setProperty('--tg-theme-hint-color', params.hintColor || '#999999');
+            document.documentElement.style.setProperty('--tg-theme-link-color', params.linkColor || '#2481cc');
+            document.documentElement.style.setProperty('--tg-theme-button-color', params.buttonColor || '#2481cc');
+            document.documentElement.style.setProperty('--tg-theme-button-text-color', params.buttonTextColor || '#ffffff');
+          }
         }
 
         try {
-          const viewport = await initViewport();
-          viewport.expand();
+          if (viewport.isSupported()) {
+            viewport.mount();
+            viewport.expand();
+          }
         } catch (e) {
           console.log('Viewport not available');
         }
@@ -103,8 +105,10 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const showBackButton = () => {
     if (!isTelegramEnv) return;
     try {
-      const backButton = initBackButton();
-      backButton.show();
+      if (backButton.isSupported()) {
+        backButton.mount();
+        backButton.show();
+      }
     } catch (e) {
       console.log('Back button not available');
     }
@@ -113,8 +117,9 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const hideBackButton = () => {
     if (!isTelegramEnv) return;
     try {
-      const backButton = initBackButton();
-      backButton.hide();
+      if (backButton.isSupported()) {
+        backButton.hide();
+      }
     } catch (e) {
       console.log('Back button not available');
     }
@@ -123,10 +128,12 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const showMainButton = (text: string, onClick: () => void) => {
     if (!isTelegramEnv) return;
     try {
-      const mainButton = initMainButton();
-      mainButton.setText(text);
-      mainButton.on('click', onClick);
-      mainButton.show();
+      if (mainButton.isSupported()) {
+        mainButton.mount();
+        mainButton.setText(text);
+        mainButton.on('click', onClick);
+        mainButton.show();
+      }
     } catch (e) {
       console.log('Main button not available');
     }
@@ -135,8 +142,9 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const hideMainButton = () => {
     if (!isTelegramEnv) return;
     try {
-      const mainButton = initMainButton();
-      mainButton.hide();
+      if (mainButton.isSupported()) {
+        mainButton.hide();
+      }
     } catch (e) {
       console.log('Main button not available');
     }
@@ -145,8 +153,10 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const impactOccurred = (style: 'light' | 'medium' | 'heavy') => {
     if (!isTelegramEnv) return;
     try {
-      const haptic = initHapticFeedback();
-      haptic.impactOccurred(style);
+      if (hapticFeedback.isSupported()) {
+        hapticFeedback.mount();
+        hapticFeedback.impactOccurred(style);
+      }
     } catch (e) {
       console.log('Haptic feedback not available');
     }
@@ -155,8 +165,10 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const notificationOccurred = (type: 'error' | 'success' | 'warning') => {
     if (!isTelegramEnv) return;
     try {
-      const haptic = initHapticFeedback();
-      haptic.notificationOccurred(type);
+      if (hapticFeedback.isSupported()) {
+        hapticFeedback.mount();
+        hapticFeedback.notificationOccurred(type);
+      }
     } catch (e) {
       console.log('Haptic feedback not available');
     }

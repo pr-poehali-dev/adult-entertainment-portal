@@ -1,6 +1,7 @@
 import { catalogItems } from '@/data/mockData';
 import { Profile, Notification, CatalogItem, WalletBalance, Transaction, AgencyType } from '@/types';
 import { notificationService } from '@/utils/notificationService';
+import { sendTelegramNotification, getTelegramChatId, checkTelegramAvailability } from '@/utils/telegramNotifications';
 
 interface HandlersProps {
   favorites: number[];
@@ -89,7 +90,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
     }
   };
 
-  const addNotification = (type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'ad_response', title: string, text: string, options?: { amount?: number; currency?: string; referralLevel?: 1 | 2 | 3; adId?: number; responseId?: number }) => {
+  const addNotification = async (type: 'message' | 'booking' | 'review' | 'system' | 'referral' | 'ad_response', title: string, text: string, options?: { amount?: number; currency?: string; referralLevel?: 1 | 2 | 3; adId?: number; responseId?: number }) => {
     const newNotif: Notification = {
       id: Date.now(),
       type,
@@ -106,8 +107,17 @@ export const useIndexHandlers = (props: HandlersProps) => {
     setNotifications([newNotif, ...notifications]);
     playNotificationSound(type);
     
-    // Используем новый сервис уведомлений
     notificationService.notify(newNotif);
+    
+    if (checkTelegramAvailability()) {
+      const chatId = getTelegramChatId();
+      if (chatId) {
+        await sendTelegramNotification({
+          chatId,
+          notification: newNotif
+        });
+      }
+    }
     
     if (type === 'referral' && options?.amount) {
       toast({
