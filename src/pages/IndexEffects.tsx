@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { UserRole, Notification, Wallet } from '@/types';
 import { notificationService } from '@/utils/notificationService';
-import { useTelegram } from '@/contexts/TelegramProvider';
 import { handlePaymentWebhook, PaymentWebhookData } from '@/utils/paymentWebhook';
 
 interface EffectsProps {
