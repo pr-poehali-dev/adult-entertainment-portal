@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useState } from 'react';
+import { useTelegramPayments } from '@/utils/telegramPayments';
 import { useToast } from '@/hooks/use-toast';
 
 interface LovePurchaseModalProps {
@@ -22,20 +23,51 @@ const LOVE_PACKAGES = [
 
 export const LovePurchaseModal = ({ isOpen, onClose, onPurchase, rubBalance }: LovePurchaseModalProps) => {
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { isAvailable: isTelegramPayments, createInvoice } = useTelegramPayments();
   const { toast } = useToast();
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (selectedPackage === null) return;
     
     const pkg = LOVE_PACKAGES[selectedPackage];
     
-    if (rubBalance < pkg.rub) {
+    if (rubBalance < pkg.rub && !isTelegramPayments) {
       return;
     }
     
-    onPurchase(pkg.rub, pkg.love);
-    setSelectedPackage(null);
-    onClose();
+    if (isTelegramPayments) {
+      setIsProcessing(true);
+      const result = await createInvoice(
+        pkg.rub,
+        `${pkg.love} LOVE токенов`,
+        `Пополнение баланса на ${pkg.love} LOVE токенов`,
+        {
+          type: 'love_purchase',
+          rub: pkg.rub,
+          love: pkg.love
+        }
+      );
+      
+      setIsProcessing(false);
+      
+      if (result.success) {
+        toast({
+          title: "💳 Инвойс отправлен",
+          description: "Оплатите счёт в Telegram для пополнения баланса",
+        });
+      } else {
+        toast({
+          title: "❌ Ошибка",
+          description: result.error || "Не удалось создать инвойс",
+          variant: "destructive"
+        });
+      }
+    } else {
+      onPurchase(pkg.rub, pkg.love);
+      setSelectedPackage(null);
+      onClose();
+    }
   };
 
   return (
@@ -139,14 +171,33 @@ export const LovePurchaseModal = ({ isOpen, onClose, onPurchase, rubBalance }: L
             </div>
           </div>
 
+          {isTelegramPayments && (
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-300 dark:border-blue-800 rounded-lg p-4 flex items-center gap-3">
+              <Icon name="CreditCard" size={24} className="text-blue-600 dark:text-blue-400" />
+              <div className="text-sm">
+                <p className="font-bold text-blue-600 dark:text-blue-400">Оплата через Telegram</p>
+                <p className="text-blue-600/80 dark:text-blue-400/80">Быстро и безопасно</p>
+              </div>
+            </div>
+          )}
+
           <div className="flex gap-3 pt-2">
             <Button
               onClick={handlePurchase}
-              disabled={selectedPackage === null || (selectedPackage !== null && rubBalance < LOVE_PACKAGES[selectedPackage].rub)}
+              disabled={isProcessing || selectedPackage === null || (!isTelegramPayments && selectedPackage !== null && rubBalance < LOVE_PACKAGES[selectedPackage].rub)}
               className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-6 text-lg disabled:opacity-50"
             >
-              <Icon name="ShoppingCart" size={20} />
-              {selectedPackage !== null ? `Купить за ${LOVE_PACKAGES[selectedPackage].rub.toLocaleString()} ₽` : 'Выберите пакет'}
+              {isProcessing ? (
+                <>
+                  <Icon name="Loader2" size={20} className="animate-spin" />
+                  Создание инвойса...
+                </>
+              ) : (
+                <>
+                  <Icon name={isTelegramPayments ? "CreditCard" : "ShoppingCart"} size={20} />
+                  {selectedPackage !== null ? `Купить за ${LOVE_PACKAGES[selectedPackage].rub.toLocaleString()} ₽` : 'Выберите пакет'}
+                </>
+              )}
             </Button>
             <Button
               onClick={onClose}
