@@ -1,7 +1,6 @@
 import { catalogItems } from '@/data/mockData';
 import { Profile, Notification, CatalogItem, WalletBalance, Transaction, AgencyType } from '@/types';
 import { notificationService } from '@/utils/notificationService';
-import { sendTelegramNotification, getTelegramChatId, checkTelegramAvailability } from '@/utils/telegramNotifications';
 
 interface HandlersProps {
   favorites: number[];
@@ -108,16 +107,6 @@ export const useIndexHandlers = (props: HandlersProps) => {
     playNotificationSound(type);
     
     notificationService.notify(newNotif);
-    
-    if (checkTelegramAvailability()) {
-      const chatId = getTelegramChatId();
-      if (chatId) {
-        await sendTelegramNotification({
-          chatId,
-          notification: newNotif
-        });
-      }
-    }
     
     if (type === 'referral' && options?.amount) {
       toast({

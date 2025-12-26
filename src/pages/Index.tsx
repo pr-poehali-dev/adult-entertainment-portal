@@ -26,7 +26,7 @@ import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { NotificationPermissionPrompt } from '@/components/NotificationPermissionPrompt';
-import { TelegramThemeAdapter } from '@/components/TelegramThemeAdapter';
+
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { useLoadingState } from '@/hooks/useLoadingState';
@@ -276,7 +276,6 @@ const Index = () => {
 
   return (
     <div className={state.isDarkTheme ? 'dark' : ''} data-theme={state.isDarkTheme ? 'dark' : 'light'}>
-    <TelegramThemeAdapter />
     <OfflineIndicator />
     <LoadingOverlay isLoading={loading.isLoading} message={loading.message} />
     <SplashScreen />
