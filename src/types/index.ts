@@ -60,7 +60,7 @@ export interface PrivateMediaFolder {
   isUnlocked?: boolean;
 }
 
-export type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate' | 'online-school';
+export type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate';
 
 export interface Profile {
   name: string;

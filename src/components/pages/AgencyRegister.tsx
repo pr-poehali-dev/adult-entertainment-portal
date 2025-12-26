@@ -61,13 +61,6 @@ const AgencyRegister = ({ onBack, onPayment }: AgencyRegisterProps) => {
       title: 'Агентство недвижимости',
       description: 'Аренда апартаментов, каталог объектов',
       gradient: 'from-orange-500 to-amber-500'
-    },
-    {
-      id: 'online-school',
-      icon: 'GraduationCap',
-      title: 'Онлайн школа',
-      description: 'Образовательные курсы, преподаватели, расписание занятий',
-      gradient: 'from-green-500 to-emerald-500'
     }
   ];
 
