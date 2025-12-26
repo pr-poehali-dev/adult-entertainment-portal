@@ -59,7 +59,11 @@
   </head>
 
 <body>
-<div id="root"></div>
+<div id="root">Если вы видите это, JavaScript не загрузился</div>
+<script>
+  console.log('HTML loaded successfully');
+  document.getElementById('root').innerHTML = 'JavaScript работает! Загружаю приложение...';
+</script>
 <script type="module" src="/src/main.tsx"></script>
 <script>
   if ('serviceWorker' in navigator) {
