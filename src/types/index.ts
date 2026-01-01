@@ -63,6 +63,32 @@ export interface PrivateMediaFolder {
 
 export type AgencyType = 'escort' | 'massage' | 'striptease' | 'virtual' | 'realestate';
 
+export type ServiceUnit = 'hour' | 'minute' | 'time' | 'piece' | 'night';
+
+export interface ServiceProgram {
+  id: string;
+  name: string;
+  description: string;
+  unit: ServiceUnit;
+  price: number;
+  currency: Currency;
+}
+
+export interface ServiceCategory {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export interface BusinessService {
+  id: string;
+  categoryId: string;
+  categoryName: string;
+  programs: ServiceProgram[];
+  status: 'active' | 'draft' | 'paused';
+  createdAt: string;
+}
+
 export interface Profile {
   name: string;
   nickname: string;
