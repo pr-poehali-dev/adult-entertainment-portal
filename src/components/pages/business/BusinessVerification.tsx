@@ -178,6 +178,33 @@ export const BusinessVerification = ({ businessType, onComplete }: BusinessVerif
     }
   };
 
+  const handleSkip = () => {
+    const mockData: BusinessVerificationData = {
+      companyName: businessType === 'organization' ? 'Тестовая Организация' : undefined,
+      cities: ['Москва'],
+      responsiblePerson: {
+        firstName: 'Тест',
+        lastName: 'Тестов',
+        middleName: 'Тестович',
+        birthDate: '1',
+        birthMonth: '1',
+        birthYear: '1990',
+      },
+      document: {
+        type: 'passport',
+        series: '0000',
+        number: '000000',
+        photoFront: null,
+        photoWithDocument: null,
+      },
+    };
+    onComplete(mockData);
+    toast({
+      title: "Верификация пропущена",
+      description: "Вы можете пройти верификацию позже в настройках",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-gray-950 dark:via-purple-950/20 dark:to-gray-950 p-4">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -245,28 +272,39 @@ export const BusinessVerification = ({ businessType, onComplete }: BusinessVerif
               />
             )}
 
-            <div className="flex gap-3 mt-8">
-              {step > 1 && (
-                <Button variant="outline" onClick={() => setStep(step - 1)} className="flex-1">
-                  <Icon name="ChevronLeft" size={16} className="mr-2" />
-                  Назад
-                </Button>
-              )}
-              <Button
-                onClick={handleNext}
-                className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
-              >
-                {step === 3 ? (
-                  <>
-                    <Icon name="CheckCircle" size={16} className="mr-2" />
-                    Отправить на проверку
-                  </>
-                ) : (
-                  <>
-                    Продолжить
-                    <Icon name="ChevronRight" size={16} className="ml-2" />
-                  </>
+            <div className="space-y-3 mt-8">
+              <div className="flex gap-3">
+                {step > 1 && (
+                  <Button variant="outline" onClick={() => setStep(step - 1)} className="flex-1">
+                    <Icon name="ChevronLeft" size={16} className="mr-2" />
+                    Назад
+                  </Button>
                 )}
+                <Button
+                  onClick={handleNext}
+                  className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                >
+                  {step === 3 ? (
+                    <>
+                      <Icon name="CheckCircle" size={16} className="mr-2" />
+                      Отправить на проверку
+                    </>
+                  ) : (
+                    <>
+                      Продолжить
+                      <Icon name="ChevronRight" size={16} className="ml-2" />
+                    </>
+                  )}
+                </Button>
+              </div>
+              
+              <Button
+                variant="ghost"
+                onClick={handleSkip}
+                className="w-full text-muted-foreground hover:text-foreground"
+              >
+                <Icon name="FastForward" size={16} className="mr-2" />
+                Пропустить верификацию (тестовая версия)
               </Button>
             </div>
           </CardContent>
