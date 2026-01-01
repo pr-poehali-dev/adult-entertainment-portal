@@ -329,12 +329,15 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
             variant="outline" 
             className="w-full h-11" 
             onClick={() => {
-              localStorage.setItem('isAuthenticated', 'true');
               if (isBusinessMode) {
+                localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('userRole', 'business');
                 localStorage.setItem('businessType', businessType);
+                onAuth();
+              } else {
+                localStorage.setItem('isAuthenticated', 'true');
+                onAuth();
               }
-              onAuth();
             }}
           >
             Войти как гость
