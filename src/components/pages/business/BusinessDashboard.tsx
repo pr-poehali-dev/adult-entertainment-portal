@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { BusinessType } from '@/types';
+import { BusinessVerification, BusinessVerificationData } from './BusinessVerification';
 
 interface Service {
   id: string;
@@ -27,6 +28,8 @@ interface BusinessDashboardProps {
 
 export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardProps) => {
   const { toast } = useToast();
+  const [isVerified, setIsVerified] = useState(false);
+  const [verificationData, setVerificationData] = useState<BusinessVerificationData | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [showServiceForm, setShowServiceForm] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
@@ -37,6 +40,15 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
     currency: 'RUB',
     category: '',
   });
+
+  const handleVerificationComplete = (data: BusinessVerificationData) => {
+    setVerificationData(data);
+    setIsVerified(true);
+  };
+
+  if (!isVerified) {
+    return <BusinessVerification businessType={businessType} onComplete={handleVerificationComplete} />;
+  }
 
   const handleAddService = () => {
     if (!formData.title || !formData.price) {
