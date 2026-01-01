@@ -117,14 +117,14 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
         </div>
       )}
       <Card className={`w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in relative z-10 transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900' : ''}`}>
+        <button
+          onClick={() => setIsBusinessMode(!isBusinessMode)}
+          className={`absolute top-4 right-4 w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-20 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
+          aria-label="Toggle business mode"
+        >
+          <Icon name="Heart" size={28} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
+        </button>
         <div className="flex flex-col items-center mb-8 relative">
-          <button
-            onClick={() => setIsBusinessMode(!isBusinessMode)}
-            className={`absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
-            aria-label="Toggle business mode"
-          >
-            <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
-          </button>
           <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
             <Icon name="Heart" className="text-white" size={32} />
           </div>
