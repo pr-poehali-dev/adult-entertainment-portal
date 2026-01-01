@@ -328,7 +328,14 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
             type="button" 
             variant="outline" 
             className="w-full h-11" 
-            onClick={onAuth}
+            onClick={() => {
+              localStorage.setItem('isAuthenticated', 'true');
+              if (isBusinessMode) {
+                localStorage.setItem('userRole', 'business');
+                localStorage.setItem('businessType', businessType);
+              }
+              onAuth();
+            }}
           >
             Войти как гость
           </Button>
