@@ -23,10 +23,15 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
   const [resetEmail, setResetEmail] = useState('');
   const [resetSent, setResetSent] = useState(false);
   const [isBusinessMode, setIsBusinessMode] = useState(false);
+  const [businessType, setBusinessType] = useState<'organization' | 'individual'>('individual');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('isAuthenticated', 'true');
+    if (isBusinessMode) {
+      localStorage.setItem('userRole', 'business');
+      localStorage.setItem('businessType', businessType);
+    }
     onAuth();
   };
 
@@ -202,6 +207,38 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
           <TabsContent value="register">
             <form onSubmit={handleSubmit} className="space-y-4">
+              {isBusinessMode && (
+                <div className="space-y-3 p-4 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 rounded-lg border border-pink-200 dark:border-pink-800">
+                  <Label className="text-sm font-semibold">Тип аккаунта</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setBusinessType('individual')}
+                      className={`p-3 rounded-lg border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
+                        businessType === 'individual'
+                          ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/30'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-pink-300'
+                      }`}
+                    >
+                      <Icon name="User" size={24} className={businessType === 'individual' ? 'text-pink-600' : 'text-gray-500'} />
+                      <span className="text-sm font-medium">Частное лицо</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setBusinessType('organization')}
+                      className={`p-3 rounded-lg border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
+                        businessType === 'organization'
+                          ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/30'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-pink-300'
+                      }`}
+                    >
+                      <Icon name="Building2" size={24} className={businessType === 'organization' ? 'text-pink-600' : 'text-gray-500'} />
+                      <span className="text-sm font-medium">Организация</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="reg-username">Имя пользователя</Label>
                 <Input
@@ -250,19 +287,21 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="referral" className="text-sm text-gray-500">
-                  Промокод или реферальный код (необязательно)
-                </Label>
-                <Input
-                  id="referral"
-                  type="text"
-                  placeholder="Введите код"
-                  value={formData.referralCode}
-                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
-                  className="h-11"
-                />
-              </div>
+              {!isBusinessMode && (
+                <div className="space-y-2">
+                  <Label htmlFor="referral" className="text-sm text-gray-500">
+                    Промокод или реферальный код (необязательно)
+                  </Label>
+                  <Input
+                    id="referral"
+                    type="text"
+                    placeholder="Введите код"
+                    value={formData.referralCode}
+                    onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
+                    className="h-11"
+                  />
+                </div>
+              )}
 
               <Button 
                 type="submit" 

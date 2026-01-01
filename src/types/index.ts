@@ -1,5 +1,6 @@
 export type Page = 'home' | 'catalog' | 'profile' | 'register' | 'login' | 'search' | 'favorites' | 'messages' | 'rules' | 'service' | 'seller-profile' | 'work' | 'admin' | 'referral' | 'category' | 'invitations' | 'raffle' | 'dating' | 'wallet' | 'online-search' | 'parties' | 'party-detail' | 'party-chat' | 'organizer-dashboard' | 'my-ads' | 'user-guide' | 'agency-register' | 'agency-dashboard' | 'settings' | 'bookings' | 'my-orders' | 'order-chat' | 'swipe' | 'premium' | 'matches';
-export type UserRole = 'buyer' | 'seller' | 'agency' | null;
+export type UserRole = 'buyer' | 'seller' | 'agency' | 'business' | null;
+export type BusinessType = 'organization' | 'individual' | null;
 export type VIPStatus = 'none' | 'vip';
 export type SubscriptionType = 'free' | 'premium';
 
@@ -94,6 +95,9 @@ export interface Profile {
   isAgencyOwner?: boolean;
   avatarModerationStatus?: 'pending' | 'approved' | 'rejected';
   photosModerationStatus?: Record<string, 'pending' | 'approved' | 'rejected'>;
+  businessType?: BusinessType;
+  companyName?: string;
+  inn?: string;
 }
 
 export type WorkScheduleType = '24/7' | 'custom' | 'inactive';

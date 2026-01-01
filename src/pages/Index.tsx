@@ -31,6 +31,7 @@ import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
+import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
 
 const Index = () => {
   // Состояние
@@ -163,8 +164,35 @@ const Index = () => {
   if (!state.isAuthenticated) {
     return (
       <div className="animate-fade-in">
-        <AuthPage onAuth={() => state.setIsAuthenticated(true)} />
+        <AuthPage onAuth={() => {
+          state.setIsAuthenticated(true);
+          const userRole = localStorage.getItem('userRole');
+          if (userRole === 'business') {
+            state.setProfile({ 
+              ...state.profile, 
+              role: 'business',
+              businessType: localStorage.getItem('businessType') as 'organization' | 'individual',
+              profileCompleted: true,
+              kycCompleted: true,
+            });
+          }
+        }} />
       </div>
+    );
+  }
+
+  // Проверка бизнес-аккаунта
+  if (state.profile.role === 'business') {
+    return (
+      <BusinessDashboard 
+        businessType={state.profile.businessType || 'individual'}
+        onBack={() => {
+          localStorage.removeItem('isAuthenticated');
+          localStorage.removeItem('userRole');
+          localStorage.removeItem('businessType');
+          state.setIsAuthenticated(false);
+        }}
+      />
     );
   }
 
