@@ -22,6 +22,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const [isBusinessMode, setIsBusinessMode] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,16 +108,32 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in">
-        <div className="flex flex-col items-center mb-8">
+    <div className={`min-h-screen w-full flex items-center justify-center p-4 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-pink-950/20' : 'bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50'}`}>
+      {isBusinessMode && (
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/40 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+        </div>
+      )}
+      <Card className={`w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in relative z-10 transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900' : ''}`}>
+        <div className="flex flex-col items-center mb-8 relative">
+          <button
+            onClick={() => setIsBusinessMode(!isBusinessMode)}
+            className={`absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
+            aria-label="Toggle business mode"
+          >
+            <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
+          </button>
           <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
             <Icon name="Heart" className="text-white" size={32} />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent uppercase">
-            Love Is
+            {isBusinessMode ? 'LOVE IS BUSINESS' : 'Love Is'}
           </h1>
-          <p className="text-gray-500 text-sm mt-2">Найди свою вторую половинку</p>
+          <p className="text-gray-500 text-sm mt-2">
+            {isBusinessMode ? 'Управляйте своим бизнесом' : 'Найди свою вторую половинку'}
+          </p>
         </div>
 
         <Tabs defaultValue="login" className="w-full">
@@ -172,7 +189,11 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                 </button>
               </div>
 
-              <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
+              <Button 
+                type="submit" 
+                className={`w-full h-11 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700'}`}
+                size="lg"
+              >
                 Войти
               </Button>
             </form>
@@ -242,7 +263,11 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                 />
               </div>
 
-              <Button type="submit" className="w-full h-11 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700" size="lg">
+              <Button 
+                type="submit" 
+                className={`w-full h-11 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700'}`}
+                size="lg"
+              >
                 Создать аккаунт
               </Button>
             </form>
