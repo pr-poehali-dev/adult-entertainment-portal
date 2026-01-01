@@ -137,14 +137,21 @@ export const ProfileSettingsTab = ({
 
   const handleLogout = () => {
     if (confirm('Вы уверены, что хотите выйти из профиля?')) {
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userProfile');
-      sessionStorage.clear();
-      window.dispatchEvent(new CustomEvent('navigate', { detail: 'login' }));
       toast({
         title: "Вы вышли из профиля",
         description: "До скорой встречи!",
       });
+      
+      // Очищаем хранилище
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userProfile');
+      sessionStorage.clear();
+      
+      // Отправляем событие навигации
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('navigate', { detail: 'login' }));
+        window.location.reload();
+      }, 500);
     }
   };
 
