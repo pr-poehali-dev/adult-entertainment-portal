@@ -101,6 +101,7 @@ const Index = () => {
     toast: state.toast,
     selectedPartyId: state.selectedPartyId,
     setSelectedApplicationId: state.setSelectedApplicationId,
+    isAuthenticated: state.isAuthenticated,
   });
 
   const allCatalogItems = [...catalogItems, ...state.agencyGirls];

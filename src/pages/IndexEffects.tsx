@@ -17,6 +17,7 @@ interface EffectsProps {
   toast: any;
   selectedPartyId: number | null;
   setSelectedApplicationId: React.Dispatch<React.SetStateAction<number | null>>;
+  isAuthenticated: boolean;
 }
 
 export const useIndexEffects = (props: EffectsProps) => {
@@ -33,6 +34,7 @@ export const useIndexEffects = (props: EffectsProps) => {
     toast,
     selectedPartyId,
     setSelectedApplicationId,
+    isAuthenticated,
   } = props;
 
   // Инициализация сервиса уведомлений
@@ -42,6 +44,7 @@ export const useIndexEffects = (props: EffectsProps) => {
 
   // Ежедневный бонус LOVE за посещение
   useEffect(() => {
+    if (!isAuthenticated) return;
     const DAILY_BONUS_KEY = 'lastDailyBonus';
     const STREAK_KEY = 'dailyStreak';
     const DAILY_BONUS_AMOUNT = 2;
@@ -106,11 +109,11 @@ export const useIndexEffects = (props: EffectsProps) => {
     };
     
     checkDailyBonus();
-  }, []);
+  }, [isAuthenticated]);
 
   // Симуляция уведомлений
   useEffect(() => {
-    if (!userRole) return;
+    if (!isAuthenticated || !userRole) return;
 
     const simulateNotifications = () => {
       const notificationTypes: Array<'message' | 'booking' | 'review' | 'system' | 'referral'> = ['message', 'booking', 'review', 'system', 'referral'];
@@ -213,10 +216,11 @@ export const useIndexEffects = (props: EffectsProps) => {
     const intervalId = setInterval(simulateNotifications, 30000);
 
     return () => clearInterval(intervalId);
-  }, [userRole, notifications]);
+  }, [isAuthenticated, userRole, notifications]);
 
   // Обработка уведомлений о заявках на вечеринку
   useEffect(() => {
+    if (!isAuthenticated) return;
     const handlePartyApplication = (notification: Notification) => {
       if ('vibrate' in navigator) {
         navigator.vibrate([200, 100, 200]);
@@ -237,13 +241,13 @@ export const useIndexEffects = (props: EffectsProps) => {
 
     // В реальном приложении здесь была бы подписка на события
     // Сейчас просто держим функцию готовой к использованию
-  }, [selectedPartyId, toast, setCurrentPage]);
+  }, [isAuthenticated, selectedPartyId, toast, setCurrentPage]);
 
   // Автозачисление средств после оплаты через Telegram
   const { userId: telegramUserId, isTelegramEnv } = useTelegram();
   
   useEffect(() => {
-    if (!isTelegramEnv || !telegramUserId) return;
+    if (!isAuthenticated || !isTelegramEnv || !telegramUserId) return;
 
     const handlePaymentMessage = (event: MessageEvent) => {
       if (event.data.type === 'telegram_payment_success') {

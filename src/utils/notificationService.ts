@@ -17,10 +17,9 @@ class NotificationService {
   async initialize() {
     if (this.isInitialized) return;
 
-    // Запрос разрешения на уведомления
+    // Проверка текущего разрешения (без запроса)
     if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-      this.permissionGranted = permission === 'granted';
+      this.permissionGranted = Notification.permission === 'granted';
     }
 
     // Запрос разрешения на вибрацию (автоматически доступно на мобильных)
