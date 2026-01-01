@@ -123,7 +123,11 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
             className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 mb-4 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
             aria-label="Toggle business mode"
           >
-            <Icon name="Heart" size={32} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
+            {isBusinessMode ? (
+              <span className="text-white text-4xl font-bold transition-transform duration-300 scale-110">₽</span>
+            ) : (
+              <Icon name="Heart" size={32} className="text-white transition-transform duration-300" />
+            )}
           </button>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent uppercase">
             {isBusinessMode ? 'LOVE IS BUSINESS' : 'Love Is'}
