@@ -108,15 +108,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   };
   
   return (
-  <div className="container mx-auto px-4 py-16 max-w-2xl animate-fade-in">
-    <Card className="bg-card border-border">
+  <div className={`container mx-auto px-4 py-16 max-w-2xl animate-fade-in transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10 min-h-screen -mx-4 px-8' : ''}`}>
+    <Card className={`transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900 shadow-2xl shadow-pink-500/10' : 'bg-card border-border'}`}>
       <CardHeader className="relative">
         <button
           onClick={() => setIsBusinessMode(!isBusinessMode)}
-          className="absolute top-4 right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10"
+          className={`absolute top-4 right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
           aria-label="Toggle business mode"
         >
-          <Icon name="Heart" size={24} className="text-white" />
+          <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
         </button>
         <CardTitle 
           className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
@@ -133,16 +133,16 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-8 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg border-2 border-primary/20">
+        <div className={`mb-8 p-6 rounded-lg border-2 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 border-pink-300/30 dark:border-pink-700/30' : 'bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-primary/20'}`}>
           <div className="text-center mb-4">
-            <Icon name="Zap" size={32} className="text-primary mx-auto mb-2" />
+            <Icon name="Zap" size={32} className={`mx-auto mb-2 transition-colors duration-500 ${isBusinessMode ? 'text-pink-600 dark:text-pink-400' : 'text-primary'}`} />
             <h3 className="text-xl font-bold text-foreground mb-1">Регистрация в 1 клик</h3>
             <p className="text-sm text-muted-foreground">Быстрый старт без заполнения формы. Профиль можно заполнить позже.</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
-              className="h-14 border-2 border-primary/40 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105"
+              className={`h-14 border-2 hover:text-white transition-all duration-300 hover:scale-105 ${isBusinessMode ? 'border-pink-500/40 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600' : 'border-primary/40 hover:bg-primary'}`}
               onClick={() => handleOneClickRegister('buyer')}
             >
               <Icon name="ShoppingBag" size={20} className="mr-2" />
@@ -150,7 +150,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             </Button>
             <Button
               variant="outline"
-              className="h-14 border-2 border-primary/40 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105"
+              className={`h-14 border-2 hover:text-white transition-all duration-300 hover:scale-105 ${isBusinessMode ? 'border-pink-500/40 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600' : 'border-primary/40 hover:bg-primary'}`}
               onClick={() => handleOneClickRegister('seller')}
             >
               <Icon name="Briefcase" size={20} className="mr-2" />
@@ -263,7 +263,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               <p className="text-xs text-muted-foreground">Если у вас есть приглашение от партнёра, вставьте ссылку сюда</p>
             </div>
             <Button 
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
+              className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('buyer')}
             >
               Зарегистрироваться как мужчина
@@ -372,7 +372,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               <p className="text-xs text-muted-foreground">Присоединитесь к партнёрской сети и зарабатывайте на рефералах</p>
             </div>
             <Button 
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-6"
+              className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('seller')}
             >
               Зарегистрироваться как девушка

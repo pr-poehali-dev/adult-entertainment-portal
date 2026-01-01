@@ -60,23 +60,33 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-br from-background via-muted/30 to-background">
+    <div className={`min-h-screen flex items-center justify-center px-4 py-16 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-pink-950/20' : 'bg-gradient-to-br from-background via-muted/30 to-background'}`}>
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        {isBusinessMode ? (
+          <>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/40 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-pink-400/30 to-purple-400/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+          </>
+        ) : (
+          <>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          </>
+        )}
       </div>
 
-      <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm border-border shadow-2xl animate-fade-in relative z-10">
+      <Card className={`w-full max-w-md backdrop-blur-sm shadow-2xl animate-fade-in relative z-10 transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900' : 'bg-card/80 border-border'}`}>
         <CardHeader className="space-y-4">
           <div className="flex justify-center relative">
             <button
               onClick={() => setIsBusinessMode(!isBusinessMode)}
-              className="absolute -top-2 -right-2 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10"
+              className={`absolute -top-2 -right-2 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
               aria-label="Toggle business mode"
             >
-              <Icon name="Heart" size={24} className="text-white" />
+              <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
             </button>
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg">
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-500 to-purple-600' : 'bg-gradient-to-br from-primary to-primary/60'}`}>
               <Icon name="LogIn" size={36} className="text-white" />
             </div>
           </div>
@@ -172,7 +182,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
           </div>
 
           <Button
-            className="w-full bg-gradient-to-r from-primary to-primary/90 text-white hover:shadow-2xl hover:shadow-primary/50 text-base py-6 transition-all duration-300 hover:scale-105 font-semibold"
+            className={`w-full text-white hover:shadow-2xl text-base py-6 transition-all duration-300 hover:scale-105 font-semibold ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-pink-500/50' : 'bg-gradient-to-r from-primary to-primary/90 hover:shadow-primary/50'}`}
             onClick={handleLogin}
             disabled={isLoading}
           >
@@ -197,7 +207,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
 
           <Button
             variant="outline"
-            className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white text-base py-6 transition-all duration-300 hover:scale-105 font-semibold"
+            className={`w-full border-2 text-base py-6 transition-all duration-300 hover:scale-105 font-semibold ${isBusinessMode ? 'border-pink-500 text-pink-600 hover:bg-pink-500 dark:text-pink-400 dark:border-pink-600 dark:hover:bg-pink-600 hover:text-white' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
             onClick={() => setCurrentPage('register')}
             disabled={isLoading}
           >
