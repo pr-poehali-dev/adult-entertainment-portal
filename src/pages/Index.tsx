@@ -175,6 +175,12 @@ const Index = () => {
               profileCompleted: true,
               kycCompleted: true,
             });
+          } else {
+            state.setProfile({ 
+              ...state.profile, 
+              role: 'buyer',
+              businessType: undefined,
+            });
           }
         }} />
       </div>
@@ -190,6 +196,11 @@ const Index = () => {
           localStorage.removeItem('isAuthenticated');
           localStorage.removeItem('userRole');
           localStorage.removeItem('businessType');
+          state.setProfile({ 
+            ...state.profile, 
+            role: 'buyer',
+            businessType: undefined,
+          });
           state.setIsAuthenticated(false);
         }}
       />
