@@ -21,6 +21,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isBusinessMode, setIsBusinessMode] = useState(false);
 
   const handleLogin = async () => {
     const loginValue = loginMethod === 'email' ? email : username;
@@ -67,14 +68,30 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
 
       <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm border-border shadow-2xl animate-fade-in relative z-10">
         <CardHeader className="space-y-4">
-          <div className="flex justify-center">
+          <div className="flex justify-center relative">
+            <button
+              onClick={() => setIsBusinessMode(!isBusinessMode)}
+              className="absolute -top-2 -right-2 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10"
+              aria-label="Toggle business mode"
+            >
+              <Icon name="Heart" size={24} className="text-white" />
+            </button>
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg">
               <Icon name="LogIn" size={36} className="text-white" />
             </div>
           </div>
-          <CardTitle className="text-4xl text-center text-primary">Вход</CardTitle>
+          <CardTitle 
+            className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
+            style={isBusinessMode ? { 
+              background: 'linear-gradient(to right, #ec4899, #a855f7)', 
+              WebkitBackgroundClip: 'text', 
+              WebkitTextFillColor: 'transparent' 
+            } : {}}
+          >
+            {isBusinessMode ? 'LOVE IS BUSINESS' : 'Вход'}
+          </CardTitle>
           <CardDescription className="text-center text-lg">
-            Войдите в свой аккаунт для продолжения
+            {isBusinessMode ? 'Войдите для управления своим бизнесом' : 'Войдите в свой аккаунт для продолжения'}
           </CardDescription>
         </CardHeader>
 

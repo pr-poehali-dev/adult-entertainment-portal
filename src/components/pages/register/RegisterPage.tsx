@@ -23,6 +23,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [contactValue, setContactValue] = useState('');
   const [showVerification, setShowVerification] = useState(false);
   const [pendingRole, setPendingRole] = useState<UserRole>(null);
+  const [isBusinessMode, setIsBusinessMode] = useState(false);
   
   const handleOneClickRegister = (role: UserRole) => {
     setUserRole(role);
@@ -109,9 +110,27 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   return (
   <div className="container mx-auto px-4 py-16 max-w-2xl animate-fade-in">
     <Card className="bg-card border-border">
-      <CardHeader>
-        <CardTitle className="text-4xl text-center text-primary">Регистрация</CardTitle>
-        <CardDescription className="text-center text-lg">Выберите тип аккаунта для продолжения</CardDescription>
+      <CardHeader className="relative">
+        <button
+          onClick={() => setIsBusinessMode(!isBusinessMode)}
+          className="absolute top-4 right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10"
+          aria-label="Toggle business mode"
+        >
+          <Icon name="Heart" size={24} className="text-white" />
+        </button>
+        <CardTitle 
+          className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
+          style={isBusinessMode ? { 
+            background: 'linear-gradient(to right, #ec4899, #a855f7)', 
+            WebkitBackgroundClip: 'text', 
+            WebkitTextFillColor: 'transparent' 
+          } : {}}
+        >
+          {isBusinessMode ? 'LOVE IS BUSINESS' : 'Регистрация'}
+        </CardTitle>
+        <CardDescription className="text-center text-lg">
+          {isBusinessMode ? 'Зарегистрируйтесь для управления своим бизнесом' : 'Выберите тип аккаунта для продолжения'}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="mb-8 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg border-2 border-primary/20">
