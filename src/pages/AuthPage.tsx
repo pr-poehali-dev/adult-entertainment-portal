@@ -287,21 +287,19 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
                 </div>
               </div>
 
-              {!isBusinessMode && (
-                <div className="space-y-2">
-                  <Label htmlFor="referral" className="text-sm text-gray-500">
-                    Промокод или реферальный код (необязательно)
-                  </Label>
-                  <Input
-                    id="referral"
-                    type="text"
-                    placeholder="Введите код"
-                    value={formData.referralCode}
-                    onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
-                    className="h-11"
-                  />
-                </div>
-              )}
+              <div className="space-y-2">
+                <Label htmlFor="referral" className="text-sm text-gray-500">
+                  {isBusinessMode ? 'Реферальная ссылка или промокод (необязательно)' : 'Промокод или реферальный код (необязательно)'}
+                </Label>
+                <Input
+                  id="referral"
+                  type="text"
+                  placeholder="Введите код"
+                  value={formData.referralCode}
+                  onChange={(e) => setFormData({ ...formData, referralCode: e.target.value })}
+                  className="h-11"
+                />
+              </div>
 
               <Button 
                 type="submit" 
