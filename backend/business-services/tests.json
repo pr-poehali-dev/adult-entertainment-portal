@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Get active services",
+      "method": "GET",
+      "path": "/?status=active",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "services": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

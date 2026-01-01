@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Get catalog items",
+      "method": "GET",
+      "path": "/?active=true",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "items": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
