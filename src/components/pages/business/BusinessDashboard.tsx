@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,7 @@ import { BusinessVerification, BusinessVerificationData } from './BusinessVerifi
 import { BusinessBottomNav } from './BusinessBottomNav';
 import { ServiceProgramForm } from './ServiceProgramForm';
 import { businessServiceCategories } from '@/data/businessServiceCategories';
+import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 
 type BusinessNavTab = 'services' | 'profile' | 'messages' | 'ads' | 'balance' | 'settings' | 'notifications';
 
@@ -20,10 +21,10 @@ interface BusinessDashboardProps {
 
 export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardProps) => {
   const { toast } = useToast();
+  const { businessServices, addBusinessService, updateBusinessService, deleteBusinessService } = useBusinessServices();
   const [isVerified, setIsVerified] = useState(false);
   const [verificationData, setVerificationData] = useState<BusinessVerificationData | null>(null);
   const [activeTab, setActiveTab] = useState<BusinessNavTab>('ads');
-  const [services, setServices] = useState<BusinessService[]>([]);
   const [showServiceForm, setShowServiceForm] = useState(false);
   const [editingService, setEditingService] = useState<BusinessService | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
@@ -110,13 +111,14 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
     };
 
     if (editingService) {
-      setServices(services.map(s => s.id === editingService.id ? { ...newService, id: editingService.id, status: s.status } : s));
+      const updatedService = { ...newService, id: editingService.id, status: editingService.status };
+      updateBusinessService(editingService.id, updatedService);
       toast({
         title: "Объявление обновлено",
         description: "Изменения успешно сохранены",
       });
     } else {
-      setServices([...services, newService]);
+      addBusinessService(newService);
       toast({
         title: "Объявление создано",
         description: "Новое объявление добавлено в черновики",
@@ -138,22 +140,20 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
   };
 
   const handleToggleStatus = (id: string) => {
-    setServices(services.map(s => {
-      if (s.id === id) {
-        const newStatus = s.status === 'active' ? 'paused' : 'active';
-        toast({
-          title: newStatus === 'active' ? "Объявление активировано" : "Объявление приостановлено",
-          description: newStatus === 'active' ? "Объявление опубликовано" : "Объявление скрыто из каталога",
-        });
-        return { ...s, status: newStatus };
-      }
-      return s;
-    }));
+    const service = businessServices.find(s => s.id === id);
+    if (service) {
+      const newStatus = service.status === 'active' ? 'paused' : 'active';
+      updateBusinessService(id, { ...service, status: newStatus });
+      toast({
+        title: newStatus === 'active' ? "Объявление активировано" : "Объявление приостановлено",
+        description: newStatus === 'active' ? "Объявление опубликовано" : "Объявление скрыто из каталога",
+      });
+    }
   };
 
   const handleDeleteService = (id: string) => {
     if (confirm('Вы уверены, что хотите удалить это объявление?')) {
-      setServices(services.filter(s => s.id !== id));
+      deleteBusinessService(id);
       toast({
         title: "Объявление удалено",
         description: "Объявление успешно удалено",
@@ -169,7 +169,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Всего объявлений</p>
-                <p className="text-3xl font-bold">{services.length}</p>
+                <p className="text-3xl font-bold">{businessServices.length}</p>
               </div>
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-full flex items-center justify-center">
                 <Icon name="Megaphone" size={24} className="text-blue-600 dark:text-blue-400" />
@@ -183,7 +183,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Активные</p>
-                <p className="text-3xl font-bold">{services.filter(s => s.status === 'active').length}</p>
+                <p className="text-3xl font-bold">{businessServices.filter(s => s.status === 'active').length}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 dark:bg-green-950 rounded-full flex items-center justify-center">
                 <Icon name="CheckCircle" size={24} className="text-green-600 dark:text-green-400" />
@@ -197,7 +197,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Черновики</p>
-                <p className="text-3xl font-bold">{services.filter(s => s.status === 'draft').length}</p>
+                <p className="text-3xl font-bold">{businessServices.filter(s => s.status === 'draft').length}</p>
               </div>
               <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950 rounded-full flex items-center justify-center">
                 <Icon name="FileText" size={24} className="text-orange-600 dark:text-orange-400" />
@@ -293,7 +293,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
       )}
 
       <div className="space-y-4">
-        {services.length === 0 ? (
+        {businessServices.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
               <Icon name="Megaphone" size={48} className="mx-auto text-muted-foreground mb-4" />
@@ -302,7 +302,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
             </CardContent>
           </Card>
         ) : (
-          services.map((service) => (
+          businessServices.map((service) => (
             <Card key={service.id} className={service.status === 'active' ? 'border-green-200 dark:border-green-800' : ''}>
               <CardContent className="pt-6">
                 <div className="flex items-start justify-between mb-4">

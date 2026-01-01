@@ -29,3 +29,4 @@ export const MyOrdersPage = lazy(() => import('@/components/pages/MyOrdersPage')
 export const OrderChatPage = lazy(() => import('@/components/pages/order-chat/OrderChatPage').then(m => ({ default: m.OrderChatPage })));
 export const SwipePage = lazy(() => import('@/components/pages/SwipePage'));
 export const MatchesPage = lazy(() => import('@/components/pages/MatchesPage'));
+export const BusinessServicesPage = lazy(() => import('@/components/pages/BusinessServicesPage').then(m => ({ default: m.BusinessServicesPage })));
