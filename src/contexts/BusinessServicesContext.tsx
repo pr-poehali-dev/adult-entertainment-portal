@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { BusinessService } from '@/types';
 import { businessServicesApi } from '@/lib/api';
+import { useAuth } from './AuthContext';
 
 interface BusinessServicesContextType {
   businessServices: BusinessService[];
@@ -25,6 +26,7 @@ interface BusinessServicesProviderProps {
 }
 
 export const BusinessServicesProvider = ({ children }: BusinessServicesProviderProps) => {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [businessServices, setBusinessServices] = useState<BusinessService[]>([]);
 
   useEffect(() => {
@@ -47,8 +49,10 @@ export const BusinessServicesProvider = ({ children }: BusinessServicesProviderP
       }
     };
 
-    loadServices();
-  }, []);
+    if (!authLoading && isAuthenticated) {
+      loadServices();
+    }
+  }, [isAuthenticated, authLoading]);
 
   const addBusinessService = async (service: BusinessService) => {
     try {

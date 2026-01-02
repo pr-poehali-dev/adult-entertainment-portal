@@ -7,7 +7,7 @@ import { Page, UserRole } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 import { ForgotPasswordModal } from '@/components/auth/ForgotPasswordModal';
-import { authApi } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
@@ -16,6 +16,7 @@ interface LoginPageProps {
 
 export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   const { toast } = useToast();
+  const { login } = useAuth();
   const [loginMethod, setLoginMethod] = useState<'email' | 'username'>('email');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -39,21 +40,17 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
     setIsLoading(true);
 
     try {
-      const response = await authApi.login(loginValue, password);
+      await login(loginValue, password);
       
-      if (response.success) {
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        
-        const role: UserRole = response.user.role === 'seller' ? 'seller' : 'buyer';
-        setUserRole(role);
-        setCurrentPage('home');
-        
-        toast({
-          title: "Успешный вход!",
-          description: `Добро пожаловать, ${response.user.username}`,
-        });
-      }
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const role: UserRole = userData.role === 'seller' ? 'seller' : 'buyer';
+      setUserRole(role);
+      setCurrentPage('home');
+      
+      toast({
+        title: "Успешный вход!",
+        description: `Добро пожаловать, ${userData.username}`,
+      });
     } catch (error) {
       toast({
         title: "Ошибка входа",

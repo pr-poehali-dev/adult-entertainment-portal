@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CatalogItem } from '@/types';
 import { catalogApi } from '@/lib/api';
+import { useAuth } from './AuthContext';
 
 interface CatalogContextType {
   catalogItems: CatalogItem[];
@@ -26,6 +27,7 @@ interface CatalogProviderProps {
 }
 
 export const CatalogProvider = ({ children }: CatalogProviderProps) => {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,8 +58,10 @@ export const CatalogProvider = ({ children }: CatalogProviderProps) => {
   };
 
   useEffect(() => {
-    refreshCatalog({ active: true });
-  }, []);
+    if (!authLoading && isAuthenticated) {
+      refreshCatalog({ active: true });
+    }
+  }, [isAuthenticated, authLoading]);
 
   const addCatalogItem = async (item: Omit<CatalogItem, 'id' | 'createdAt' | 'isActive' | 'viewCount' | 'responses'>) => {
     try {

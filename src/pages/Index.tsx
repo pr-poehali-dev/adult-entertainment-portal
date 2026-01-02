@@ -33,12 +33,24 @@ import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
   const loading = useLoadingState();
   const { catalogItems } = useCatalog();
+  const { user, isAuthenticated, refreshUser } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = user.role === 'seller' ? 'seller' : user.role === 'buyer' ? 'buyer' : null;
+      if (role) {
+        state.setUserRole(role);
+        state.setIsAuthenticated(true);
+      }
+    }
+  }, [isAuthenticated, user, state]);
 
   useEffect(() => {
     const handleNavigate = (e: CustomEvent) => {

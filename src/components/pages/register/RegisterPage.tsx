@@ -10,7 +10,7 @@ import { Page, UserRole, RegistrationMethod } from '@/types';
 import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
 import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
-import { authApi } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface RegisterPageProps {
   setUserRole: (role: UserRole) => void;
@@ -19,6 +19,7 @@ interface RegisterPageProps {
 
 export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
   const { toast } = useToast();
+  const { register } = useAuth();
   const [referralInput, setReferralInput] = useState('');
   const [registrationMethod, setRegistrationMethod] = useState<RegistrationMethod>('email');
   const [contactValue, setContactValue] = useState('');
@@ -63,7 +64,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
     setIsLoading(true);
     
     try {
-      const response = await authApi.register(
+      await register(
         contactValue,
         password,
         username,
@@ -71,18 +72,13 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         role === 'seller' ? businessType : undefined
       );
       
-      if (response.success) {
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        
-        setUserRole(role);
-        setCurrentPage('home');
-        
-        toast({
-          title: "Регистрация завершена!",
-          description: `Добро пожаловать, ${response.user.username}!`,
-        });
-      }
+      setUserRole(role);
+      setCurrentPage('home');
+      
+      toast({
+        title: "Регистрация завершена!",
+        description: `Добро пожаловать, ${username}!`,
+      });
     } catch (error) {
       toast({
         title: "Ошибка регистрации",
