@@ -262,7 +262,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
                 placeholder={getContactPlaceholder()}
                 value={contactValue}
                 onChange={(e) => setContactValue(e.target.value)}
-                className="bg-background border-border" 
+                className="bg-background border-border"
+                disabled={isLoading} 
               />
             </div>
             
@@ -274,7 +275,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-background border-border" 
+                className="bg-background border-border"
+                disabled={isLoading} 
               />
               <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
             </div>
@@ -326,7 +328,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               <Label htmlFor="seller-nickname">Никнейм</Label>
               <Input 
                 id="seller-nickname" 
-                placeholder="Придумайте никнейм для профиля" 
+                placeholder="Придумайте никнейм для профиля"
+                disabled={isLoading} 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="bg-background border-border" 
@@ -387,7 +390,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-background border-border" 
+                className="bg-background border-border"
+                disabled={isLoading} 
               />
               <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
             </div>

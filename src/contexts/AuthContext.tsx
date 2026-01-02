@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authApi } from '@/lib/api';
+import { authApi, NetworkError } from '@/lib/api';
 import { UserRole } from '@/types';
 
 interface User {
@@ -65,17 +65,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await authApi.login(email, password);
-    localStorage.setItem('authToken', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    setUser(response.user);
+    try {
+      const response = await authApi.login(email, password);
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      setUser(response.user);
+    } catch (error) {
+      if (error instanceof NetworkError) {
+        throw new Error(error.message);
+      }
+      throw error;
+    }
   };
 
   const register = async (email: string, password: string, username: string, role: 'buyer' | 'seller', businessType?: string) => {
-    const response = await authApi.register(email, password, username, role, businessType);
-    localStorage.setItem('authToken', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    setUser(response.user);
+    try {
+      const response = await authApi.register(email, password, username, role, businessType);
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      setUser(response.user);
+    } catch (error) {
+      if (error instanceof NetworkError) {
+        throw new Error(error.message);
+      }
+      throw error;
+    }
   };
 
   const logout = () => {
