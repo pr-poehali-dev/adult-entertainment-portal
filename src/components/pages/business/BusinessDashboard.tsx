@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { BusinessType, BusinessService, ServiceProgram } from '@/types';
 import { BusinessVerification, BusinessVerificationData } from './BusinessVerification';
 import { BusinessBottomNav } from './BusinessBottomNav';
-import { ServiceProgramForm } from './ServiceProgramForm';
-import { DynamicServiceForm } from '@/components/business/DynamicServiceForm';
+import { BusinessAdsTab } from './BusinessAdsTab';
+import { BusinessProfileTab } from './BusinessProfileTab';
+import { BusinessOtherTabs } from './BusinessOtherTabs';
 import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 import { useServiceCategories } from '@/contexts/ServiceCategoriesContext';
-import { getTemplateByCategory } from '@/data/serviceTemplates';
 
 type BusinessNavTab = 'services' | 'profile' | 'messages' | 'ads' | 'balance' | 'settings' | 'notifications';
 
@@ -164,364 +163,138 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
     }
   };
 
-  const renderAdsTab = () => (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Всего объявлений</p>
-                <p className="text-3xl font-bold">{businessServices.length}</p>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-full flex items-center justify-center">
-                <Icon name="Megaphone" size={24} className="text-blue-600 dark:text-blue-400" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+  const handleServiceFormSubmit = (data: Record<string, any>) => {
+    const category = serviceCategories.find(c => c.id === selectedCategoryId);
+    if (!category) return;
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Активные</p>
-                <p className="text-3xl font-bold">{businessServices.filter(s => s.status === 'active').length}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-950 rounded-full flex items-center justify-center">
-                <Icon name="CheckCircle" size={24} className="text-green-600 dark:text-green-400" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    const newService: BusinessService = {
+      id: editingService?.id || Date.now().toString(),
+      categoryId: selectedCategoryId,
+      categoryName: category.name,
+      title: data.title,
+      description: data.description,
+      images: data.images,
+      programs: data.programs,
+      formData: data,
+      status: editingService?.status || 'draft',
+      createdAt: editingService?.createdAt || new Date().toISOString(),
+    };
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Черновики</p>
-                <p className="text-3xl font-bold">{businessServices.filter(s => s.status === 'draft').length}</p>
-              </div>
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950 rounded-full flex items-center justify-center">
-                <Icon name="FileText" size={24} className="text-orange-600 dark:text-orange-400" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {!showServiceForm && (
-        <Button
-          onClick={() => {
-            setShowServiceForm(true);
-            setEditingService(null);
-            setSelectedCategoryId('');
-            setCurrentPrograms([]);
-          }}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 h-12"
-        >
-          <Icon name="Plus" size={20} className="mr-2" />
-          Создать объявление
-        </Button>
-      )}
-
-      {showServiceForm && !selectedCategoryId && (
-        <Card className="border-2 border-pink-200 dark:border-pink-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Icon name="Megaphone" size={24} className="text-pink-600" />
-              {editingService ? 'Редактировать объявление' : 'Новое объявление'}
-            </CardTitle>
-            <CardDescription>
-              Выберите категорию услуги для начала
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="category">Категория услуги *</Label>
-              <Select value={selectedCategoryId} onValueChange={setSelectedCategoryId}>
-                <SelectTrigger id="category">
-                  <SelectValue placeholder="Выберите категорию" />
-                </SelectTrigger>
-                <SelectContent>
-                  {serviceCategories.map(category => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <div className="flex items-center gap-2">
-                        <Icon name={category.icon as any} size={16} />
-                        {category.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowServiceForm(false);
-                setEditingService(null);
-                setSelectedCategoryId('');
-                setCurrentPrograms([]);
-              }}
-            >
-              Отмена
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      {showServiceForm && selectedCategoryId && (() => {
-        const template = getTemplateByCategory(selectedCategoryId);
-        if (template) {
-          return (
-            <DynamicServiceForm
-              template={template}
-              initialData={editingService?.formData || {}}
-              onSubmit={(data) => {
-                const category = serviceCategories.find(c => c.id === selectedCategoryId);
-                if (!category) return;
-
-                const newService: BusinessService = {
-                  id: editingService?.id || Date.now().toString(),
-                  categoryId: selectedCategoryId,
-                  categoryName: category.name,
-                  title: data.title,
-                  description: data.description,
-                  images: data.images,
-                  programs: data.programs,
-                  formData: data,
-                  status: editingService?.status || 'draft',
-                  createdAt: editingService?.createdAt || new Date().toISOString(),
-                };
-
-                if (editingService) {
-                  updateBusinessService(editingService.id, newService);
-                  toast({
-                    title: "Объявление обновлено",
-                    description: "Изменения успешно сохранены",
-                  });
-                } else {
-                  addBusinessService(newService);
-                  toast({
-                    title: "Объявление создано",
-                    description: "Новое объявление добавлено в черновики",
-                  });
-                }
-
-                setShowServiceForm(false);
-                setEditingService(null);
-                setSelectedCategoryId('');
-                setCurrentPrograms([]);
-              }}
-              onCancel={() => {
-                setShowServiceForm(false);
-                setEditingService(null);
-                setSelectedCategoryId('');
-                setCurrentPrograms([]);
-              }}
-            />
-          );
-        }
-
-        return (
-          <Card className="border-2 border-orange-200 dark:border-orange-800">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Icon name="AlertTriangle" size={24} className="text-orange-600" />
-                Шаблон не найден
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Для этой категории пока нет готового шаблона. Обратитесь к администратору.
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowServiceForm(false);
-                  setSelectedCategoryId('');
-                }}
-              >
-                Назад
-              </Button>
-            </CardContent>
-          </Card>
-        );
-      })()}
-
-      <div className="space-y-4">
-        {businessServices.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Icon name="Megaphone" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Пока нет объявлений</p>
-              <p className="text-sm text-muted-foreground mt-2">Создайте первое объявление, чтобы начать получать заказы</p>
-            </CardContent>
-          </Card>
-        ) : (
-          businessServices.map((service) => (
-            <Card key={service.id} className={service.status === 'active' ? 'border-green-200 dark:border-green-800' : ''}>
-              <CardContent className="pt-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Icon name={serviceCategories.find(c => c.id === service.categoryId)?.icon as any} size={24} className="text-pink-600" />
-                      <h3 className="text-lg font-semibold">{service.categoryName}</h3>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        service.status === 'active' ? 'bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-300' :
-                        service.status === 'paused' ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' :
-                        'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
-                      }`}>
-                        {service.status === 'active' ? 'Активно' : service.status === 'paused' ? 'Приостановлено' : 'Черновик'}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {service.programs?.length || 0} {(service.programs?.length || 0) === 1 ? 'программа' : (service.programs?.length || 0) < 5 ? 'программы' : 'программ'}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEditService(service)}>
-                      <Icon name="Edit" size={18} />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleToggleStatus(service.id)}>
-                      <Icon name={service.status === 'active' ? 'Pause' : 'Play'} size={18} />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDeleteService(service.id)}>
-                      <Icon name="Trash2" size={18} />
-                    </Button>
-                  </div>
-                </div>
-
-                {service.programs && service.programs.length > 0 && (
-                  <div className="space-y-2">
-                    {service.programs.map(program => (
-                      <div key={program.id} className="p-3 bg-muted/50 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="font-medium">{program.name}</span>
-                            {program.description && (
-                              <p className="text-sm text-muted-foreground mt-1">{program.description}</p>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <span className="font-bold text-pink-600">{program.price} {program.currency}</span>
-                            <span className="text-sm text-muted-foreground ml-1">
-                              / {program.unit === 'hour' ? 'час' : program.unit === 'minute' ? 'мин' : program.unit === 'time' ? 'раз' : program.unit === 'piece' ? 'шт' : 'ночь'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
-    </>
-  );
-
-  const renderProfileTab = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Icon name="User" size={24} />
-          Мой профиль
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-              <Icon name="Building2" size={32} className="text-white" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg">
-                {businessType === 'organization' ? verificationData?.companyName : 'Частное лицо'}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {verificationData?.responsiblePerson.firstName} {verificationData?.responsiblePerson.lastName}
-              </p>
-            </div>
-          </div>
-          <div className="pt-4 border-t">
-            <Button variant="outline" onClick={onBack} className="w-full">
-              <Icon name="LogOut" size={16} className="mr-2" />
-              Выйти из аккаунта
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'ads':
-        return renderAdsTab();
-      case 'profile':
-        return renderProfileTab();
-      case 'messages':
-        return (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Icon name="MessageSquare" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Сообщения пока не реализованы</p>
-            </CardContent>
-          </Card>
-        );
-      case 'balance':
-        return (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Icon name="Wallet" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Баланс пока не реализован</p>
-            </CardContent>
-          </Card>
-        );
-      case 'settings':
-        return (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Icon name="Settings" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Настройки пока не реализованы</p>
-            </CardContent>
-          </Card>
-        );
-      case 'notifications':
-        return (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Icon name="Bell" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Уведомления пока не реализованы</p>
-            </CardContent>
-          </Card>
-        );
-      default:
-        return renderAdsTab();
+    if (editingService) {
+      updateBusinessService(editingService.id, newService);
+      toast({
+        title: "Объявление обновлено",
+        description: "Изменения успешно сохранены",
+      });
+    } else {
+      addBusinessService(newService);
+      toast({
+        title: "Объявление создано",
+        description: "Новое объявление добавлено в черновики",
+      });
     }
+
+    setShowServiceForm(false);
+    setEditingService(null);
+    setSelectedCategoryId('');
+    setCurrentPrograms([]);
+  };
+
+  const handleServiceFormCancel = () => {
+    setShowServiceForm(false);
+    setEditingService(null);
+    setSelectedCategoryId('');
+    setCurrentPrograms([]);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-gray-950 dark:via-purple-950/20 dark:to-gray-950 pb-24">
-      <div className="max-w-5xl mx-auto p-4 space-y-6">
-        <Card className="bg-gradient-to-r from-pink-500 to-purple-600 text-white border-0">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Icon name="Briefcase" size={28} />
-              Бизнес-кабинет
-            </CardTitle>
-            <CardDescription className="text-white/80">
-              {businessType === 'organization' ? 'Организация' : 'Частное лицо'}
-            </CardDescription>
-          </CardHeader>
-        </Card>
+    <div className="min-h-screen bg-background pb-20">
+      <Card className="border-b rounded-none">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" onClick={onBack}>
+                <Icon name="ArrowLeft" size={20} />
+              </Button>
+              <div>
+                <CardTitle>Бизнес-кабинет</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {businessType === 'organization' ? 'Организация' : 'Частное лицо'}
+                </p>
+              </div>
+            </div>
+            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+              <Icon name="Building2" size={24} className="text-white" />
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
 
-        {renderContent()}
+      <div className="container mx-auto px-4 py-6 space-y-6">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as BusinessNavTab)} className="w-full">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
+            <TabsTrigger value="ads">
+              <Icon name="Megaphone" size={16} className="mr-2" />
+              Объявления
+            </TabsTrigger>
+            <TabsTrigger value="profile">
+              <Icon name="User" size={16} className="mr-2" />
+              Профиль
+            </TabsTrigger>
+            <TabsTrigger value="balance">
+              <Icon name="Wallet" size={16} className="mr-2" />
+              Баланс
+            </TabsTrigger>
+            <TabsTrigger value="messages">
+              <Icon name="MessageSquare" size={16} className="mr-2" />
+              Сообщения
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="ads" className="space-y-6">
+            <BusinessAdsTab
+              businessServices={businessServices}
+              serviceCategories={serviceCategories}
+              showServiceForm={showServiceForm}
+              editingService={editingService}
+              selectedCategoryId={selectedCategoryId}
+              setShowServiceForm={setShowServiceForm}
+              setEditingService={setEditingService}
+              setSelectedCategoryId={setSelectedCategoryId}
+              handleEditService={handleEditService}
+              handleToggleStatus={handleToggleStatus}
+              handleDeleteService={handleDeleteService}
+              onServiceFormSubmit={handleServiceFormSubmit}
+              onServiceFormCancel={handleServiceFormCancel}
+            />
+          </TabsContent>
+
+          <TabsContent value="profile">
+            <BusinessProfileTab
+              businessType={businessType}
+              verificationData={verificationData}
+            />
+          </TabsContent>
+
+          <TabsContent value="balance">
+            <BusinessOtherTabs activeTab={activeTab} />
+          </TabsContent>
+
+          <TabsContent value="messages">
+            <BusinessOtherTabs activeTab={activeTab} />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <BusinessOtherTabs activeTab={activeTab} />
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <BusinessOtherTabs activeTab={activeTab} />
+          </TabsContent>
+        </Tabs>
       </div>
 
-      <BusinessBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <BusinessBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 };
