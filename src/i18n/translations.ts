@@ -228,7 +228,7 @@ export const translations: Record<Language, Translations> = {
   en: {
     nav: {
       home: 'Home',
-      catalog: 'Catalog',
+      catalog: 'Ads',
       favorites: 'Favorites',
       messages: 'Messages',
       profile: 'Profile',
