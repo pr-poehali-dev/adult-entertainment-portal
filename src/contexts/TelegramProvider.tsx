@@ -83,19 +83,23 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
           setInitData(launchParams.initData);
         }
 
-        if (tgThemeParams.isSupported()) {
-          tgThemeParams.mount();
-          const params = tgThemeParams.state();
-          setThemeParams(params);
-          
-          if (params) {
-            document.documentElement.style.setProperty('--tg-theme-bg-color', params.bgColor || '#ffffff');
-            document.documentElement.style.setProperty('--tg-theme-text-color', params.textColor || '#000000');
-            document.documentElement.style.setProperty('--tg-theme-hint-color', params.hintColor || '#999999');
-            document.documentElement.style.setProperty('--tg-theme-link-color', params.linkColor || '#2481cc');
-            document.documentElement.style.setProperty('--tg-theme-button-color', params.buttonColor || '#2481cc');
-            document.documentElement.style.setProperty('--tg-theme-button-text-color', params.buttonTextColor || '#ffffff');
+        try {
+          if (tgThemeParams.isSupported()) {
+            tgThemeParams.mount();
+            const params = tgThemeParams.state();
+            setThemeParams(params);
+            
+            if (params) {
+              document.documentElement.style.setProperty('--tg-theme-bg-color', params.bgColor || '#ffffff');
+              document.documentElement.style.setProperty('--tg-theme-text-color', params.textColor || '#000000');
+              document.documentElement.style.setProperty('--tg-theme-hint-color', params.hintColor || '#999999');
+              document.documentElement.style.setProperty('--tg-theme-link-color', params.linkColor || '#2481cc');
+              document.documentElement.style.setProperty('--tg-theme-button-color', params.buttonColor || '#2481cc');
+              document.documentElement.style.setProperty('--tg-theme-button-text-color', params.buttonTextColor || '#ffffff');
+            }
           }
+        } catch (e) {
+          console.log('Theme params not available:', e);
         }
 
         try {
@@ -104,7 +108,7 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
             viewport.expand();
           }
         } catch (e) {
-          console.log('Viewport not available');
+          console.log('Viewport not available:', e);
         }
 
         setIsReady(true);
