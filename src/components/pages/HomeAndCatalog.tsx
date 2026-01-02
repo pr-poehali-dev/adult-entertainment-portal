@@ -13,9 +13,12 @@ import { MobileHomePage } from './home/MobileHomePage';
 import { CatalogFilters } from './catalog/CatalogFilters';
 import { CatalogGrid } from './catalog/CatalogGrid';
 import { AdRequestCard } from './catalog/AdRequestCard';
+import { BusinessServiceCard } from './catalog/BusinessServiceCard';
 import { getFilteredAndSortedItems } from './catalog/catalogUtils';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { useBusinessServices } from '@/contexts/BusinessServicesContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface HomeAndCatalogProps {
   setCurrentPage: (page: Page) => void;
@@ -181,7 +184,9 @@ export const CatalogPage = ({
 }: HomeAndCatalogProps) => {
   const { t } = useLanguage();
   const { isLoading } = useCatalog();
-  const [showAds, setShowAds] = useState(false);
+  const { businessServices } = useBusinessServices();
+  const { toast } = useToast();
+  const [viewMode, setViewMode] = useState<'profiles' | 'business' | 'requests'>('profiles');
   
   // Моковые данные запросов мужчин
   const [userAds] = useState<UserAd[]>([
@@ -280,6 +285,18 @@ export const CatalogPage = ({
   }, [userAds, selectedCategory, searchQuery, userRole]);
   
   const canRespond = userRole === 'seller';
+
+  // Фильтруем активные бизнес-услуги
+  const activeBusinessServices = useMemo(() => {
+    return businessServices.filter(service => service.status === 'active');
+  }, [businessServices]);
+
+  const handleContactService = (serviceId: string) => {
+    toast({
+      title: 'Функция в разработке',
+      description: 'Скоро вы сможете связаться с поставщиком услуг',
+    });
+  };
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
@@ -312,20 +329,28 @@ export const CatalogPage = ({
         setSelectedBodyType={setSelectedBodyType}
       />
 
-      {/* Переключатель между объявлениями и запросами */}
-      <div className="flex gap-3 mb-8">
+      {/* Переключатель между разными типами объявлений */}
+      <div className="grid grid-cols-3 gap-3 mb-8">
         <Button
-          onClick={() => setShowAds(false)}
-          variant={!showAds ? 'default' : 'outline'}
-          className="flex-1 gap-2"
+          onClick={() => setViewMode('profiles')}
+          variant={viewMode === 'profiles' ? 'default' : 'outline'}
+          className="gap-2"
         >
-          <Icon name="Briefcase" size={18} />
-          Все объявления ({filteredItems.length})
+          <Icon name="Grid3x3" size={18} />
+          Анкеты ({filteredItems.length})
         </Button>
         <Button
-          onClick={() => setShowAds(true)}
-          variant={showAds ? 'default' : 'outline'}
-          className="flex-1 gap-2"
+          onClick={() => setViewMode('business')}
+          variant={viewMode === 'business' ? 'default' : 'outline'}
+          className="gap-2"
+        >
+          <Icon name="Briefcase" size={18} />
+          Услуги бизнеса ({activeBusinessServices.length})
+        </Button>
+        <Button
+          onClick={() => setViewMode('requests')}
+          variant={viewMode === 'requests' ? 'default' : 'outline'}
+          className="gap-2"
         >
           <Icon name="Search" size={18} />
           Запросы ({filteredAds.length})
@@ -333,7 +358,7 @@ export const CatalogPage = ({
       </div>
 
       {/* Контент */}
-      {!showAds ? (
+      {viewMode === 'profiles' && (
         <CatalogGrid
           filteredItems={filteredItems}
           favorites={favorites}
@@ -342,7 +367,32 @@ export const CatalogPage = ({
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
         />
-      ) : (
+      )}
+
+      {viewMode === 'business' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {activeBusinessServices.length === 0 ? (
+            <div className="col-span-full text-center py-20">
+              <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-pink-500/10 to-purple-600/10 flex items-center justify-center">
+                <Icon name="Briefcase" size={48} className="text-pink-500" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-2">Пока нет бизнес-услуг</h3>
+              <p className="text-muted-foreground">Бизнес-пользователи могут добавить свои услуги в каталог</p>
+            </div>
+          ) : (
+            activeBusinessServices.map((service, index) => (
+              <BusinessServiceCard
+                key={service.id}
+                service={service}
+                index={index}
+                onContact={handleContactService}
+              />
+            ))
+          )}
+        </div>
+      )}
+
+      {viewMode === 'requests' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAds.map((ad, index) => (
             <AdRequestCard

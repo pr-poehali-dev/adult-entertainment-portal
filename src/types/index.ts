@@ -82,7 +82,7 @@ export interface ServiceCategory {
 
 export interface BusinessService {
   id: string;
-  categoryId: number;
+  categoryId: string;
   categoryName?: string;
   title: string;
   description: string;

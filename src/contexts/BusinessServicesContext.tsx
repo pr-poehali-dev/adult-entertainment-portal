@@ -27,7 +27,37 @@ interface BusinessServicesProviderProps {
 
 export const BusinessServicesProvider = ({ children }: BusinessServicesProviderProps) => {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const [businessServices, setBusinessServices] = useState<BusinessService[]>([]);
+  const [businessServices, setBusinessServices] = useState<BusinessService[]>([
+    {
+      id: 'demo-1',
+      categoryId: '1',
+      categoryName: 'Массаж',
+      title: 'Профессиональный расслабляющий массаж',
+      description: 'Предлагаю качественный расслабляющий массаж всего тела. Работаю с различными техниками: классический, тайский, спортивный массаж. Помогу снять стресс и усталость.',
+      images: [],
+      programs: [
+        { id: '1', name: 'Классический массаж 60 минут', description: 'Расслабляющий массаж всего тела', unit: 'hour', price: 3000, currency: 'RUB' },
+        { id: '2', name: 'Спортивный массаж 90 минут', description: 'Глубокий массаж для спортсменов', unit: 'hour', price: 4500, currency: 'RUB' },
+        { id: '3', name: 'Антистресс программа', description: 'Массаж головы, шеи и плеч', unit: 'time', price: 2000, currency: 'RUB' },
+      ],
+      status: 'active',
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'demo-2',
+      categoryId: '2',
+      categoryName: 'Косметология',
+      title: 'Косметологические услуги на дому',
+      description: 'Выездной косметолог с опытом работы более 5 лет. Чистка лица, пилинг, маски, массаж лица. Использую только профессиональную косметику.',
+      images: [],
+      programs: [
+        { id: '1', name: 'Чистка лица', description: 'Механическая + ультразвуковая чистка', unit: 'time', price: 2500, currency: 'RUB' },
+        { id: '2', name: 'Пилинг + маска', description: 'Химический пилинг с успокаивающей маской', unit: 'time', price: 3500, currency: 'RUB' },
+      ],
+      status: 'active',
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ]);
 
   useEffect(() => {
     const loadServices = async () => {
