@@ -18,7 +18,7 @@ export const MobileBottomNav = ({ currentPage, setCurrentPage, messageCount = 0 
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
-      <div className="grid grid-cols-7 px-1 py-2">
+      <div className="grid grid-cols-6 px-1 py-2 max-w-md mx-auto">
         {navItems.map((item) => (
           <button
             key={item.page}
