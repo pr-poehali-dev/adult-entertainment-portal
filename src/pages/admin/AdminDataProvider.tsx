@@ -1,4 +1,5 @@
 import { useState, ReactNode } from 'react';
+import { ServiceCategory } from '@/types';
 
 export interface User {
   id: number;
@@ -125,6 +126,8 @@ export interface AdminDataContextValue {
   setPrices: React.Dispatch<React.SetStateAction<PriceSettings>>;
   platformBalances: PlatformBalance[];
   balanceTransactions: BalanceTransaction[];
+  serviceCategories: ServiceCategory[];
+  setServiceCategories: React.Dispatch<React.SetStateAction<ServiceCategory[]>>;
 }
 
 interface AdminDataProviderProps {
@@ -220,6 +223,14 @@ export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
     { id: 7, type: 'commission', amount: 250, currency: 'USDT', user: 'Alice → Bob', date: '2024-11-25 20:15', description: 'Platform fee 5%' },
   ]);
 
+  const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>([
+    { id: '1', name: 'Массаж', icon: 'Hand' },
+    { id: '2', name: 'Косметология', icon: 'Sparkles' },
+    { id: '3', name: 'Парикмахерские услуги', icon: 'Scissors' },
+    { id: '4', name: 'Маникюр и педикюр', icon: 'PaintBucket' },
+    { id: '5', name: 'Фитнес и йога', icon: 'Dumbbell' },
+  ]);
+
   return <>{children({
     users,
     setUsers,
@@ -234,6 +245,8 @@ export const AdminDataProvider = ({ children }: AdminDataProviderProps) => {
     setAdminMessages,
     transactions,
     stats,
+    serviceCategories,
+    setServiceCategories,
     prices,
     setPrices,
     platformBalances,

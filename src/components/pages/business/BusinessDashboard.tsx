@@ -9,8 +9,8 @@ import { BusinessType, BusinessService, ServiceProgram } from '@/types';
 import { BusinessVerification, BusinessVerificationData } from './BusinessVerification';
 import { BusinessBottomNav } from './BusinessBottomNav';
 import { ServiceProgramForm } from './ServiceProgramForm';
-import { businessServiceCategories } from '@/data/businessServiceCategories';
 import { useBusinessServices } from '@/contexts/BusinessServicesContext';
+import { useServiceCategories } from '@/contexts/ServiceCategoriesContext';
 
 type BusinessNavTab = 'services' | 'profile' | 'messages' | 'ads' | 'balance' | 'settings' | 'notifications';
 
@@ -22,6 +22,7 @@ interface BusinessDashboardProps {
 export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardProps) => {
   const { toast } = useToast();
   const { businessServices, addBusinessService, updateBusinessService, deleteBusinessService } = useBusinessServices();
+  const { serviceCategories } = useServiceCategories();
   const [isVerified, setIsVerified] = useState(false);
   const [verificationData, setVerificationData] = useState<BusinessVerificationData | null>(null);
   const [activeTab, setActiveTab] = useState<BusinessNavTab>('ads');
@@ -98,7 +99,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
       return;
     }
 
-    const category = businessServiceCategories.find(c => c.id === selectedCategoryId);
+    const category = serviceCategories.find(c => c.id === selectedCategoryId);
     if (!category) return;
 
     const newService: BusinessService = {
@@ -241,7 +242,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
                   <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
                 <SelectContent>
-                  {businessServiceCategories.map(category => (
+                  {serviceCategories.map(category => (
                     <SelectItem key={category.id} value={category.id}>
                       <div className="flex items-center gap-2">
                         <Icon name={category.icon as any} size={16} />
@@ -308,7 +309,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Icon name={businessServiceCategories.find(c => c.id === service.categoryId)?.icon as any} size={24} className="text-pink-600" />
+                      <Icon name={serviceCategories.find(c => c.id === service.categoryId)?.icon as any} size={24} className="text-pink-600" />
                       <h3 className="text-lg font-semibold">{service.categoryName}</h3>
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         service.status === 'active' ? 'bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-300' :

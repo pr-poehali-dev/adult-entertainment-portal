@@ -12,6 +12,7 @@ import { AdminClientsTab } from '@/components/admin/AdminClientsTab';
 import { AdminAdsManagement } from '@/components/admin/AdminAdsManagement';
 import { AdminMessaging } from '@/components/admin/AdminMessaging';
 import { AdminPricingSettings } from '@/components/admin/AdminPricingSettings';
+import { AdminServicesManager } from '@/components/admin/AdminServicesManager';
 import { AdminAuthWrapper } from './admin/AdminAuthWrapper';
 import { AdminDataProvider } from './admin/AdminDataProvider';
 import { AdminHandlers } from './admin/AdminHandlers';
@@ -55,10 +56,14 @@ const AdminPanel = () => {
                     <AdminStats stats={data.stats} />
 
                     <Tabs defaultValue="clients" className="w-full">
-                      <TabsList className="grid w-full grid-cols-7">
+                      <TabsList className="grid w-full grid-cols-8">
                         <TabsTrigger value="clients">
                           <Icon name="Users" size={16} className="mr-2" />
                           Клиенты
+                        </TabsTrigger>
+                        <TabsTrigger value="services">
+                          <Icon name="Briefcase" size={16} className="mr-2" />
+                          Услуги
                         </TabsTrigger>
                         <TabsTrigger value="ads">
                           <Icon name="Package" size={16} className="mr-2" />
@@ -93,6 +98,18 @@ const AdminPanel = () => {
                             clients={data.clients} 
                             onBlockClient={handlers.blockClient}
                             onUpdateBalance={handlers.updateClientBalance}
+                          />
+                        </div>
+                      </TabsContent>
+
+                      <TabsContent value="services" className="mt-6">
+                        <div className="space-y-6">
+                          <h2 className="text-2xl font-bold">Управление категориями услуг</h2>
+                          <AdminServicesManager
+                            categories={data.serviceCategories}
+                            onAddCategory={handlers.addServiceCategory}
+                            onEditCategory={handlers.editServiceCategory}
+                            onDeleteCategory={handlers.deleteServiceCategory}
                           />
                         </div>
                       </TabsContent>

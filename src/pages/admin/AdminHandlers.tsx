@@ -1,5 +1,6 @@
 import { useToast } from '@/hooks/use-toast';
 import type { AdminDataContextValue, Ad, PriceSettings } from './AdminDataProvider';
+import { ServiceCategory } from '@/types';
 
 interface AdminHandlersProps {
   data: AdminDataContextValue;
@@ -14,6 +15,9 @@ interface AdminHandlersProps {
     deleteAd: (adId: number) => void;
     sendMessageToUser: (userId: number, message: string) => void;
     updatePrices: (newPrices: PriceSettings) => void;
+    addServiceCategory: (category: Omit<ServiceCategory, 'id'>) => void;
+    editServiceCategory: (id: string, category: Omit<ServiceCategory, 'id'>) => void;
+    deleteServiceCategory: (id: string) => void;
   }) => React.ReactNode;
 }
 
@@ -108,6 +112,21 @@ export const AdminHandlers = ({ data, children }: AdminHandlersProps) => {
     });
   };
 
+  const addServiceCategory = (category: Omit<ServiceCategory, 'id'>) => {
+    const newId = (Math.max(...data.serviceCategories.map(c => parseInt(c.id)), 0) + 1).toString();
+    data.setServiceCategories(prev => [...prev, { ...category, id: newId }]);
+  };
+
+  const editServiceCategory = (id: string, category: Omit<ServiceCategory, 'id'>) => {
+    data.setServiceCategories(prev => prev.map(c => 
+      c.id === id ? { ...category, id } : c
+    ));
+  };
+
+  const deleteServiceCategory = (id: string) => {
+    data.setServiceCategories(prev => prev.filter(c => c.id !== id));
+  };
+
   return <>{children({
     blockUser,
     blockSeller,
@@ -119,5 +138,8 @@ export const AdminHandlers = ({ data, children }: AdminHandlersProps) => {
     deleteAd,
     sendMessageToUser,
     updatePrices,
+    addServiceCategory,
+    editServiceCategory,
+    deleteServiceCategory,
   })}</>;
 };
