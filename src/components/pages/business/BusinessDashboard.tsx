@@ -9,8 +9,10 @@ import { BusinessType, BusinessService, ServiceProgram } from '@/types';
 import { BusinessVerification, BusinessVerificationData } from './BusinessVerification';
 import { BusinessBottomNav } from './BusinessBottomNav';
 import { ServiceProgramForm } from './ServiceProgramForm';
+import { DynamicServiceForm } from '@/components/business/DynamicServiceForm';
 import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 import { useServiceCategories } from '@/contexts/ServiceCategoriesContext';
+import { getTemplateByCategory } from '@/data/serviceTemplates';
 
 type BusinessNavTab = 'services' | 'profile' | 'messages' | 'ads' | 'balance' | 'settings' | 'notifications';
 
@@ -135,7 +137,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
   const handleEditService = (service: BusinessService) => {
     setEditingService(service);
     setSelectedCategoryId(service.categoryId);
-    setCurrentPrograms(service.programs);
+    setCurrentPrograms(service.programs || []);
     setShowServiceForm(true);
     setActiveTab('ads');
   };
@@ -223,7 +225,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
         </Button>
       )}
 
-      {showServiceForm && (
+      {showServiceForm && !selectedCategoryId && (
         <Card className="border-2 border-pink-200 dark:border-pink-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -231,7 +233,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
               {editingService ? 'Редактировать объявление' : 'Новое объявление'}
             </CardTitle>
             <CardDescription>
-              Выберите категорию услуги и добавьте программы с ценами
+              Выберите категорию услуги для начала
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -253,45 +255,99 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
                 </SelectContent>
               </Select>
             </div>
-
-            {selectedCategoryId && (
-              <>
-                <div className="border-t pt-4">
-                  <ServiceProgramForm
-                    programs={currentPrograms}
-                    onAddProgram={handleAddProgram}
-                    onEditProgram={handleEditProgram}
-                    onDeleteProgram={handleDeleteProgram}
-                    maxPrograms={10}
-                  />
-                </div>
-
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={handleSaveService}
-                    className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600"
-                    disabled={currentPrograms.length === 0}
-                  >
-                    <Icon name="Save" size={16} className="mr-2" />
-                    {editingService ? 'Сохранить изменения' : 'Создать объявление'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowServiceForm(false);
-                      setEditingService(null);
-                      setSelectedCategoryId('');
-                      setCurrentPrograms([]);
-                    }}
-                  >
-                    Отмена
-                  </Button>
-                </div>
-              </>
-            )}
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowServiceForm(false);
+                setEditingService(null);
+                setSelectedCategoryId('');
+                setCurrentPrograms([]);
+              }}
+            >
+              Отмена
+            </Button>
           </CardContent>
         </Card>
       )}
+
+      {showServiceForm && selectedCategoryId && (() => {
+        const template = getTemplateByCategory(selectedCategoryId);
+        if (template) {
+          return (
+            <DynamicServiceForm
+              template={template}
+              initialData={editingService?.formData || {}}
+              onSubmit={(data) => {
+                const category = serviceCategories.find(c => c.id === selectedCategoryId);
+                if (!category) return;
+
+                const newService: BusinessService = {
+                  id: editingService?.id || Date.now().toString(),
+                  categoryId: selectedCategoryId,
+                  categoryName: category.name,
+                  title: data.title,
+                  description: data.description,
+                  images: data.images,
+                  programs: data.programs,
+                  formData: data,
+                  status: editingService?.status || 'draft',
+                  createdAt: editingService?.createdAt || new Date().toISOString(),
+                };
+
+                if (editingService) {
+                  updateBusinessService(editingService.id, newService);
+                  toast({
+                    title: "Объявление обновлено",
+                    description: "Изменения успешно сохранены",
+                  });
+                } else {
+                  addBusinessService(newService);
+                  toast({
+                    title: "Объявление создано",
+                    description: "Новое объявление добавлено в черновики",
+                  });
+                }
+
+                setShowServiceForm(false);
+                setEditingService(null);
+                setSelectedCategoryId('');
+                setCurrentPrograms([]);
+              }}
+              onCancel={() => {
+                setShowServiceForm(false);
+                setEditingService(null);
+                setSelectedCategoryId('');
+                setCurrentPrograms([]);
+              }}
+            />
+          );
+        }
+
+        return (
+          <Card className="border-2 border-orange-200 dark:border-orange-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Icon name="AlertTriangle" size={24} className="text-orange-600" />
+                Шаблон не найден
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Для этой категории пока нет готового шаблона. Обратитесь к администратору.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowServiceForm(false);
+                  setSelectedCategoryId('');
+                }}
+              >
+                Назад
+              </Button>
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       <div className="space-y-4">
         {businessServices.length === 0 ? (
@@ -320,7 +376,7 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">
-                      {service.programs.length} {service.programs.length === 1 ? 'программа' : service.programs.length < 5 ? 'программы' : 'программ'}
+                      {service.programs?.length || 0} {(service.programs?.length || 0) === 1 ? 'программа' : (service.programs?.length || 0) < 5 ? 'программы' : 'программ'}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -336,26 +392,28 @@ export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardPro
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  {service.programs.map(program => (
-                    <div key={program.id} className="p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="font-medium">{program.name}</span>
-                          {program.description && (
-                            <p className="text-sm text-muted-foreground mt-1">{program.description}</p>
-                          )}
-                        </div>
-                        <div className="text-right">
-                          <span className="font-bold text-pink-600">{program.price} {program.currency}</span>
-                          <span className="text-sm text-muted-foreground ml-1">
-                            / {program.unit === 'hour' ? 'час' : program.unit === 'minute' ? 'мин' : program.unit === 'time' ? 'раз' : program.unit === 'piece' ? 'шт' : 'ночь'}
-                          </span>
+                {service.programs && service.programs.length > 0 && (
+                  <div className="space-y-2">
+                    {service.programs.map(program => (
+                      <div key={program.id} className="p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-medium">{program.name}</span>
+                            {program.description && (
+                              <p className="text-sm text-muted-foreground mt-1">{program.description}</p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className="font-bold text-pink-600">{program.price} {program.currency}</span>
+                            <span className="text-sm text-muted-foreground ml-1">
+                              / {program.unit === 'hour' ? 'час' : program.unit === 'minute' ? 'мин' : program.unit === 'time' ? 'раз' : program.unit === 'piece' ? 'шт' : 'ночь'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))

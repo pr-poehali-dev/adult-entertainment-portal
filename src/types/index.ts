@@ -80,6 +80,51 @@ export interface ServiceCategory {
   icon: string;
 }
 
+export type FormFieldType = 
+  | 'text' 
+  | 'textarea' 
+  | 'number' 
+  | 'select' 
+  | 'multiselect'
+  | 'date'
+  | 'time'
+  | 'datetime'
+  | 'price'
+  | 'duration'
+  | 'phone'
+  | 'address'
+  | 'images'
+  | 'checkbox'
+  | 'radio'
+  | 'programs';
+
+export interface FormFieldOption {
+  value: string;
+  label: string;
+}
+
+export interface ServiceFormField {
+  id: string;
+  type: FormFieldType;
+  label: string;
+  placeholder?: string;
+  required: boolean;
+  options?: FormFieldOption[];
+  min?: number;
+  max?: number;
+  step?: number;
+  defaultValue?: any;
+  helpText?: string;
+}
+
+export interface ServiceTemplate {
+  id: string;
+  categoryId: string;
+  fields: ServiceFormField[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BusinessService {
   id: string;
   categoryId: string;
@@ -88,6 +133,7 @@ export interface BusinessService {
   description: string;
   images?: string[];
   programs?: ServiceProgram[];
+  formData?: Record<string, any>;
   status: 'active' | 'draft' | 'paused' | 'pending';
   createdAt: string;
   publishedAt?: string;
