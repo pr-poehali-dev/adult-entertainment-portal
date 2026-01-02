@@ -88,23 +88,36 @@ export const authApi = {
       API_URLS.auth,
       {
         method: 'POST',
-        body: JSON.stringify({ email, password, username, role, businessType })
+        body: JSON.stringify({ 
+          action: 'register',
+          email, 
+          password, 
+          username, 
+          isBusinessMode: role === 'seller',
+          businessType 
+        })
       }
     );
   },
 
   async login(email: string, password: string) {
     return fetchApi<{ success: boolean; token: string; user: any }>(
-      API_URLS.auth + '?action=login',
+      API_URLS.auth,
       {
         method: 'POST',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ action: 'login', email, password })
       }
     );
   },
 
   async getProfile() {
-    return fetchApi<{ user: any }>(API_URLS.auth + '?action=profile');
+    return fetchApi<{ user: any }>(
+      API_URLS.auth,
+      {
+        method: 'POST',
+        body: JSON.stringify({ action: 'profile' })
+      }
+    );
   }
 };
 

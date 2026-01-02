@@ -6,6 +6,9 @@ import string
 from datetime import datetime, timedelta
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def generate_referral_code():
     """Генерация уникального реферального кода"""
@@ -19,6 +22,83 @@ def generate_token(user_id: int) -> str:
     """Генерация токена для сессии"""
     token_data = f"{user_id}:{datetime.utcnow().isoformat()}:{secrets.token_hex(16)}"
     return hashlib.sha256(token_data.encode()).hexdigest()
+
+def send_credentials_email(email: str, username: str, password: str):
+    """Отправка письма с данными для входа"""
+    smtp_host = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+    smtp_port = int(os.environ.get('SMTP_PORT', '587'))
+    smtp_user = os.environ.get('SMTP_USER', '')
+    smtp_password = os.environ.get('SMTP_PASSWORD', '')
+    
+    if not smtp_user or not smtp_password:
+        print('SMTP not configured')
+        return
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }}
+            .container {{ max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; padding: 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+            .header {{ text-align: center; margin-bottom: 30px; }}
+            .header h1 {{ color: #4CAF50; margin: 0; }}
+            .credentials {{ background-color: #f9f9f9; border-left: 4px solid #4CAF50; padding: 20px; margin: 20px 0; }}
+            .credential-item {{ margin: 15px 0; }}
+            .credential-label {{ font-weight: bold; color: #555; display: block; margin-bottom: 5px; }}
+            .credential-value {{ font-size: 18px; color: #000; background-color: #e8f5e9; padding: 10px; border-radius: 5px; font-family: monospace; }}
+            .warning {{ background-color: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin-top: 20px; }}
+            .footer {{ text-align: center; color: #888; margin-top: 30px; font-size: 12px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🎉 Регистрация завершена!</h1>
+                <p>Добро пожаловать в наш сервис</p>
+            </div>
+            
+            <div class="credentials">
+                <div class="credential-item">
+                    <span class="credential-label">Ваш email:</span>
+                    <div class="credential-value">{email}</div>
+                </div>
+                
+                <div class="credential-item">
+                    <span class="credential-label">Ваше имя:</span>
+                    <div class="credential-value">{username}</div>
+                </div>
+                
+                <div class="credential-item">
+                    <span class="credential-label">Ваш пароль:</span>
+                    <div class="credential-value">{password}</div>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ Важно!</strong> Сохраните эти данные в надёжном месте.
+            </div>
+            
+            <div class="footer">
+                <p>Это автоматическое письмо. Пожалуйста, не отвечайте на него.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = '🎉 Добро пожаловать!'
+    msg['From'] = smtp_user
+    msg['To'] = email
+    
+    html_part = MIMEText(html_content, 'html')
+    msg.attach(html_part)
+    
+    with smtplib.SMTP(smtp_host, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.send_message(msg)
 
 def handler(event: dict, context) -> dict:
     """API для регистрации и авторизации пользователей"""
@@ -134,6 +214,12 @@ def handler(event: dict, context) -> dict:
                     ))
                 
                 conn.commit()
+                
+                # Отправка письма с данными для входа
+                try:
+                    send_credentials_email(email, username, password)
+                except Exception as e:
+                    print(f'Email send error: {e}')
                 
                 token = generate_token(user['id'])
                 
