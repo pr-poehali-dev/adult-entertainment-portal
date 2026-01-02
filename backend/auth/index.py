@@ -100,6 +100,38 @@ def send_credentials_email(email: str, username: str, password: str):
         server.login(smtp_user, smtp_password)
         server.send_message(msg)
 
+def ensure_admin_exists(cur):
+    """Создаёт администратора если его нет в базе"""
+    admin_email = os.environ.get('ADMIN_EMAIL')
+    admin_password = os.environ.get('ADMIN_PASSWORD')
+    
+    if not admin_email or not admin_password:
+        return
+    
+    cur.execute("SELECT id FROM users WHERE LOWER(email) = LOWER(%s)", (admin_email,))
+    if cur.fetchone():
+        return
+    
+    password_hash = hash_password(admin_password)
+    referral_code = generate_referral_code()
+    
+    cur.execute("""
+        INSERT INTO users (
+            email, password_hash, username, role, 
+            referral_code, profile_completed, kyc_completed
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        RETURNING id
+    """, (admin_email, password_hash, 'Администратор', 'admin', referral_code, True, True))
+    
+    admin = cur.fetchone()
+    
+    for currency in ['RUB', 'USD', 'EUR', 'LOVE']:
+        initial_amount = 10000 if currency == 'LOVE' else 1000000
+        cur.execute("""
+            INSERT INTO wallets (user_id, currency, amount)
+            VALUES (%s, %s, %s)
+        """, (admin['id'], currency, initial_amount))
+
 def handler(event: dict, context) -> dict:
     """API для регистрации и авторизации пользователей"""
     method = event.get('httpMethod', 'GET')
@@ -137,6 +169,7 @@ def handler(event: dict, context) -> dict:
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
         try:
+            ensure_admin_exists(cur)
             
             if action == 'register':
                 email = data.get('email')
