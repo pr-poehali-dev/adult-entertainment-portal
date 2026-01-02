@@ -345,7 +345,7 @@ export const CatalogPage = ({
           className="gap-2"
         >
           <Icon name="Briefcase" size={18} />
-          Услуги бизнеса ({activeBusinessServices.length})
+          Услуги ({activeBusinessServices.length})
         </Button>
         <Button
           onClick={() => setViewMode('requests')}
