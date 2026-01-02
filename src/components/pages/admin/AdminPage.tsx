@@ -9,6 +9,7 @@ import { AdminSettings } from './AdminSettings';
 import { AdminEmojis } from './AdminEmojis';
 import { AdminAudioGreetings } from './AdminAudioGreetings';
 import { AdminPhotoModeration } from './AdminPhotoModeration';
+import { AdminPartnerProgram } from './AdminPartnerProgram';
 import Icon from '@/components/ui/icon';
 import { Page, Notification } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -45,7 +46,7 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-9 mb-8 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-10 mb-8 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
@@ -79,6 +80,10 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
             <TabsTrigger value="applications" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Briefcase" size={20} />
               <span className="text-xs">Отклики</span>
+            </TabsTrigger>
+            <TabsTrigger value="partner" className="flex flex-col items-center gap-1 py-3">
+              <Icon name="Network" size={20} />
+              <span className="text-xs">MLM</span>
             </TabsTrigger>
             <TabsTrigger value="emojis" className="flex flex-col items-center gap-1 py-3">
               <Icon name="Smile" size={20} />
@@ -116,6 +121,10 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
           <TabsContent value="applications">
             <AdminWorkApplications />
+          </TabsContent>
+
+          <TabsContent value="partner">
+            <AdminPartnerProgram />
           </TabsContent>
 
           <TabsContent value="emojis">
