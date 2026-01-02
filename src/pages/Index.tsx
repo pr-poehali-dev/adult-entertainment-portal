@@ -50,7 +50,7 @@ const Index = () => {
         state.setIsAuthenticated(true);
       }
     }
-  }, [isAuthenticated, user, state]);
+  }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
 
   useEffect(() => {
     const handleNavigate = (e: CustomEvent) => {
