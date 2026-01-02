@@ -25,6 +25,9 @@ export const CatalogGrid = ({
 }: CatalogGridProps) => {
   const { t } = useLanguage();
 
+  // Защита от undefined
+  const items = filteredItems || [];
+
   return (
     <>
       {isLoading ? (
@@ -48,7 +51,7 @@ export const CatalogGrid = ({
             </Card>
           ))}
         </div>
-      ) : filteredItems.length === 0 ? (
+      ) : items.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
             <Icon name="Search" size={48} className="text-primary/50" />
@@ -58,7 +61,7 @@ export const CatalogGrid = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item, index) => {
+          {items.map((item, index) => {
             const isActive = isCurrentlyActive(item.workSchedule);
             const isFavorite = favorites.includes(item.id);
 
