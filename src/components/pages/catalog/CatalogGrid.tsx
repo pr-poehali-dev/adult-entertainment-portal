@@ -68,7 +68,7 @@ export const CatalogGrid = ({
                 >
                   <div className="relative h-80 overflow-hidden">
                     <img 
-                      src={item.image} 
+                      src={item.images && item.images[0] ? item.images[0] : item.image || '/placeholder-service.jpg'} 
                       alt={item.title}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"

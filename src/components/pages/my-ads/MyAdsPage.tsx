@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +10,8 @@ import { AdResponseModal } from './AdResponseModal';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 import { AudioPlayer } from '@/components/audio/AudioPlayer';
+import { useCatalog } from '@/contexts/CatalogContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface MyAdsPageProps {
   profile: Profile;
@@ -17,64 +19,38 @@ interface MyAdsPageProps {
 }
 
 const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
+  const { catalogItems, deleteCatalogItem, updateCatalogItem, refreshCatalog } = useCatalog();
+  const { toast } = useToast();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAd, setSelectedAd] = useState<UserAd | null>(null);
   const [selectedResponse, setSelectedResponse] = useState<AdResponse | null>(null);
   const [showResponseModal, setShowResponseModal] = useState(false);
   
-  // Моковые данные для примера
-  const [ads, setAds] = useState<UserAd[]>([
-    {
-      id: 1,
-      authorId: 1,
-      authorName: profile.name,
-      authorAvatar: profile.avatar,
-      authorRole: profile.role!,
-      type: profile.role === 'seller' ? 'service_offer' : 'service_request',
-      category: 'Классика',
-      title: profile.role === 'seller' ? 'Классический массаж' : 'Ищу девушку для классического свидания',
-      description: profile.role === 'seller' 
-        ? 'Профессиональный массаж с выездом' 
-        : 'Хочу встретиться с девушкой для приятного вечера. Возраст 20-30 лет, стройная.',
-      price: 5000,
-      currency: 'RUB',
-      duration: 2,
-      lookingFor: profile.role === 'buyer' ? 'Девушка 20-30 лет, стройная, для классического свидания' : undefined,
-      status: 'active',
-      createdAt: new Date().toISOString(),
-      viewCount: 127,
-      isBoosted: false,
-      boostedUntil: undefined,
-      responses: profile.role === 'buyer' ? [
-        {
-          id: 1,
-          adId: 1,
-          responderId: 2,
-          responderName: 'Анна',
-          responderAvatar: '/avatars/anna.jpg',
-          responderRole: 'seller',
-          message: 'Привет! Мне интересно ваше предложение. Готова обсудить детали.',
-          status: 'pending',
-          createdAt: new Date().toISOString(),
-        }
-      ] : []
-    }
-  ]);
+  const [ads, setAds] = useState<UserAd[]>([]);
 
-  // Симуляция увеличения просмотров
-  useState(() => {
-    const interval = setInterval(() => {
-      setAds(currentAds => 
-        currentAds.map(ad => 
-          ad.status === 'active' && Math.random() > 0.7
-            ? { ...ad, viewCount: ad.viewCount + 1 }
-            : ad
-        )
-      );
-    }, 8000); // Обновление каждые 8 секунд
-
-    return () => clearInterval(interval);
-  });
+  useEffect(() => {
+    const userAds = catalogItems
+      .filter(item => item.userId === profile.id)
+      .map(item => ({
+        id: item.id,
+        authorId: item.userId,
+        authorName: profile.name,
+        authorAvatar: profile.avatar,
+        authorRole: profile.role!,
+        type: profile.role === 'seller' ? 'service_offer' as const : 'service_request' as const,
+        category: item.category,
+        title: item.title,
+        description: item.description,
+        price: item.price,
+        currency: 'RUB' as const,
+        status: item.isActive ? 'active' as const : 'completed' as const,
+        createdAt: item.createdAt,
+        viewCount: item.viewCount,
+        isBoosted: false,
+        responses: item.responses || []
+      }));
+    setAds(userAds);
+  }, [catalogItems, profile]);
 
   const activeAds = ads.filter(ad => ad.status === 'active');
   const completedAds = ads.filter(ad => ad.status === 'completed' || ad.status === 'cancelled');
@@ -111,27 +87,58 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     }));
   };
 
-  const handleDeleteAd = (adId: number) => {
+  const handleDeleteAd = async (adId: number) => {
     if (confirm('Вы уверены, что хотите удалить это объявление?')) {
-      setAds(ads.filter(ad => ad.id !== adId));
+      try {
+        await deleteCatalogItem(adId);
+        toast({
+          title: 'Успех',
+          description: 'Объявление удалено'
+        });
+        await refreshCatalog();
+      } catch (error) {
+        toast({
+          title: 'Ошибка',
+          description: 'Не удалось удалить объявление',
+          variant: 'destructive'
+        });
+      }
     }
   };
 
-  const handleRenewAd = (adId: number) => {
-    setAds(ads.map(ad => 
-      ad.id === adId 
-        ? { ...ad, status: 'active', createdAt: new Date().toISOString() }
-        : ad
-    ));
+  const handleRenewAd = async (adId: number) => {
+    try {
+      await updateCatalogItem(adId, { isActive: true });
+      toast({
+        title: 'Успех',
+        description: 'Объявление обновлено'
+      });
+      await refreshCatalog();
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось обновить объявление',
+        variant: 'destructive'
+      });
+    }
   };
 
-  const handleCompleteAd = (adId: number) => {
+  const handleCompleteAd = async (adId: number) => {
     if (confirm('Вы уверены, что хотите завершить это объявление?')) {
-      setAds(ads.map(ad => 
-        ad.id === adId 
-          ? { ...ad, status: 'completed' }
-          : ad
-      ));
+      try {
+        await updateCatalogItem(adId, { isActive: false });
+        toast({
+          title: 'Успех',
+          description: 'Объявление завершено'
+        });
+        await refreshCatalog();
+      } catch (error) {
+        toast({
+          title: 'Ошибка',
+          description: 'Не удалось завершить объявление',
+          variant: 'destructive'
+        });
+      }
     }
   };
 

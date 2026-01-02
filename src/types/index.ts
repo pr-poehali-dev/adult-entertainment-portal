@@ -82,14 +82,19 @@ export interface ServiceCategory {
 
 export interface BusinessService {
   id: string;
-  categoryId: string;
-  categoryName: string;
-  programs: ServiceProgram[];
-  status: 'active' | 'draft' | 'paused';
+  categoryId: number;
+  categoryName?: string;
+  title: string;
+  description: string;
+  images?: string[];
+  programs?: ServiceProgram[];
+  status: 'active' | 'draft' | 'paused' | 'pending';
   createdAt: string;
+  publishedAt?: string;
 }
 
 export interface Profile {
+  id?: number;
   name: string;
   nickname: string;
   role: UserRole;
@@ -137,13 +142,15 @@ export interface WorkSchedule {
 
 export interface CatalogItem {
   id: number;
+  userId: number;
   title: string;
-  seller: string;
-  rating: number;
-  price: string;
+  seller?: string;
+  rating?: number;
+  price: number | string;
   category: string;
-  image: string;
-  verified: boolean;
+  image?: string;
+  images?: string[];
+  verified?: boolean;
   description?: string;
   features?: string[];
   duration?: string;
@@ -158,6 +165,9 @@ export interface CatalogItem {
   isAdminModerated?: boolean;
   agencyId?: number;
   agencyName?: string;
+  createdAt: string;
+  viewCount: number;
+  responses?: any[];
   stats?: {
     views: number;
     bookings: number;
