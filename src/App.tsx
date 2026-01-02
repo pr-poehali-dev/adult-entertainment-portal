@@ -8,6 +8,7 @@ import { BusinessServicesProvider } from "@/contexts/BusinessServicesContext";
 import { CatalogProvider } from "@/contexts/CatalogContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ServiceCategoriesProvider } from "@/contexts/ServiceCategoriesContext";
+import { PartnerProgramProvider } from "@/contexts/PartnerProgramContext";
 import Index from "./pages/Index";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
@@ -31,18 +32,20 @@ const App = () => (
         <AuthProvider>
           <ServiceCategoriesProvider>
             <BusinessServicesProvider>
-              <CatalogProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/admin" element={<AdminPanel />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </BrowserRouter>
-              </CatalogProvider>
+              <PartnerProgramProvider>
+                <CatalogProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/admin" element={<AdminPanel />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </CatalogProvider>
+              </PartnerProgramProvider>
             </BusinessServicesProvider>
           </ServiceCategoriesProvider>
         </AuthProvider>
