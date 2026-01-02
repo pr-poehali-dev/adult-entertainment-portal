@@ -1,4 +1,5 @@
 {
+  "crypto-webhook": "https://functions.poehali.dev/fe9d56a2-eaf2-4ee3-9283-0238b84ca2f3",
   "crypto-deposit": "https://functions.poehali.dev/fb625acc-8bc2-474b-8baa-a6daac0341dd",
   "auth": "https://functions.poehali.dev/99ebaa3c-bb0a-4cea-ab8e-701587c5845a",
   "password-reset": "https://functions.poehali.dev/68346723-f447-4a62-b865-c3c4302045ac",

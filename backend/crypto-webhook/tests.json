@@ -1,0 +1,37 @@
+{
+  "tests": [
+    {
+      "name": "Test webhook signature validation",
+      "method": "POST",
+      "headers": {
+        "X-Webhook-Signature": "invalid_signature"
+      },
+      "body": {
+        "uuid": "test-invoice-123",
+        "amount_crypto": 0.001,
+        "currency": "BTC",
+        "status": "success"
+      },
+      "expectedStatus": 403,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test missing required fields",
+      "method": "POST",
+      "headers": {
+        "X-Webhook-Signature": "test_signature"
+      },
+      "body": {
+        "uuid": "test-invoice-123"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
