@@ -94,7 +94,7 @@ interface MatchesPageProps {
   setCurrentPage?: (page: string) => void;
 }
 
-export default function MatchesPage({ setCurrentPage }: MatchesPageProps) {
+function MatchesPage({ setCurrentPage }: MatchesPageProps) {
   const [matches] = useState<Match[]>(mockMatches);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -329,3 +329,5 @@ export default function MatchesPage({ setCurrentPage }: MatchesPageProps) {
     </div>
   );
 }
+
+export default MatchesPage;
