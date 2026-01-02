@@ -47,7 +47,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
 
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
+      <div className="min-h-screen w-full bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center p-4">
         <Card className="w-full max-w-md p-8 shadow-2xl border-0 animate-scale-in">
           <button
             onClick={() => setShowForgotPassword(false)}
@@ -113,7 +113,7 @@ export default function AuthPage({ onAuth }: AuthPageProps) {
   }
 
   return (
-    <div className={`min-h-screen w-full flex items-center justify-center p-4 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-pink-950/20' : 'bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50'}`}>
+    <div className={`min-h-screen w-full flex items-center justify-center p-4 transition-all duration-500 bg-gradient-to-br from-pink-600 to-purple-600`}>
       {isBusinessMode && (
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/40 rounded-full blur-3xl animate-pulse" />
