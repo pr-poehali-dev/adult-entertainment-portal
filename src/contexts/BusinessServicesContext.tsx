@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { BusinessService } from '@/types';
+import { businessServicesApi } from '@/lib/api';
 
 interface BusinessServicesContextType {
   businessServices: BusinessService[];
@@ -26,16 +27,77 @@ interface BusinessServicesProviderProps {
 export const BusinessServicesProvider = ({ children }: BusinessServicesProviderProps) => {
   const [businessServices, setBusinessServices] = useState<BusinessService[]>([]);
 
-  const addBusinessService = (service: BusinessService) => {
-    setBusinessServices(prev => [...prev, service]);
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        const response = await businessServicesApi.getServices('active');
+        const mappedServices: BusinessService[] = response.services.map((s: any) => ({
+          id: s.id.toString(),
+          title: s.title,
+          description: s.description,
+          categoryId: s.category_id,
+          images: s.images || [],
+          status: s.status,
+          createdAt: s.created_at,
+          publishedAt: s.published_at
+        }));
+        setBusinessServices(mappedServices);
+      } catch (error) {
+        console.error('Failed to load services:', error);
+      }
+    };
+
+    loadServices();
+  }, []);
+
+  const addBusinessService = async (service: BusinessService) => {
+    try {
+      const response = await businessServicesApi.createService({
+        categoryId: service.categoryId,
+        title: service.title,
+        description: service.description,
+        images: service.images
+      });
+      const newService: BusinessService = {
+        id: response.service.id.toString(),
+        title: response.service.title,
+        description: response.service.description,
+        categoryId: response.service.category_id,
+        images: response.service.images || [],
+        status: response.service.status,
+        createdAt: response.service.created_at,
+        publishedAt: response.service.published_at
+      };
+      setBusinessServices(prev => [...prev, newService]);
+    } catch (error) {
+      console.error('Failed to add service:', error);
+      throw error;
+    }
   };
 
-  const updateBusinessService = (id: string, service: BusinessService) => {
-    setBusinessServices(prev => prev.map(s => s.id === id ? service : s));
+  const updateBusinessService = async (id: string, service: BusinessService) => {
+    try {
+      await businessServicesApi.updateService(parseInt(id), {
+        title: service.title,
+        description: service.description,
+        images: service.images,
+        status: service.status
+      });
+      setBusinessServices(prev => prev.map(s => s.id === id ? service : s));
+    } catch (error) {
+      console.error('Failed to update service:', error);
+      throw error;
+    }
   };
 
-  const deleteBusinessService = (id: string) => {
-    setBusinessServices(prev => prev.filter(s => s.id !== id));
+  const deleteBusinessService = async (id: string) => {
+    try {
+      await businessServicesApi.deleteService(parseInt(id));
+      setBusinessServices(prev => prev.filter(s => s.id !== id));
+    } catch (error) {
+      console.error('Failed to delete service:', error);
+      throw error;
+    }
   };
 
   const getActiveBusinessServices = () => {

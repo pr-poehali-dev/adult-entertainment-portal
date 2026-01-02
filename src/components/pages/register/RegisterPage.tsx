@@ -10,6 +10,7 @@ import { Page, UserRole, RegistrationMethod } from '@/types';
 import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
 import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
+import { authApi } from '@/lib/api';
 
 interface RegisterPageProps {
   setUserRole: (role: UserRole) => void;
@@ -24,6 +25,10 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [showVerification, setShowVerification] = useState(false);
   const [pendingRole, setPendingRole] = useState<UserRole>(null);
   const [isBusinessMode, setIsBusinessMode] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [businessType, setBusinessType] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleOneClickRegister = (role: UserRole) => {
     setUserRole(role);
@@ -36,23 +41,57 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
     });
   };
   
-  const handleRegister = (role: UserRole) => {
-    if (!contactValue) {
+  const handleRegister = async (role: UserRole) => {
+    if (!contactValue || !username || !password) {
       toast({
         title: "Ошибка",
-        description: "Заполните контактные данные",
+        description: "Заполните все обязательные поля",
         variant: "destructive",
       });
       return;
     }
     
-    setPendingRole(role);
-    setShowVerification(true);
+    if (password.length < 6) {
+      toast({
+        title: "Ошибка",
+        description: "Пароль должен быть минимум 6 символов",
+        variant: "destructive",
+      });
+      return;
+    }
     
-    toast({
-      title: "Код отправлен!",
-      description: getVerificationMessage(),
-    });
+    setIsLoading(true);
+    
+    try {
+      const response = await authApi.register(
+        contactValue,
+        password,
+        username,
+        role,
+        role === 'seller' ? businessType : undefined
+      );
+      
+      if (response.success) {
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        
+        setUserRole(role);
+        setCurrentPage('home');
+        
+        toast({
+          title: "Регистрация завершена!",
+          description: `Добро пожаловать, ${response.user.username}!`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка регистрации",
+        description: error instanceof Error ? error.message : "Попробуйте позже",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const handleVerificationSuccess = (code: string) => {
@@ -175,13 +214,14 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
           </TabsList>
           <TabsContent value="buyer" className="space-y-4 mt-6">
             <div className="space-y-2">
-              <Label htmlFor="buyer-name">Имя</Label>
-              <Input id="buyer-name" placeholder="Введите ваше имя" className="bg-background border-border" />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="buyer-nickname">Никнейм</Label>
-              <Input id="buyer-nickname" placeholder="Придумайте никнейм для профиля" className="bg-background border-border" />
+              <Input 
+                id="buyer-nickname" 
+                placeholder="Придумайте никнейм для профиля" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-background border-border" 
+              />
               <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
             </div>
             
@@ -232,7 +272,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             
             <div className="space-y-2">
               <Label htmlFor="buyer-password">Пароль</Label>
-              <Input id="buyer-password" type="password" placeholder="••••••••" className="bg-background border-border" />
+              <Input 
+                id="buyer-password" 
+                type="password" 
+                placeholder="••••••••" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-background border-border" 
+              />
+              <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="buyer-gender">Гендер</Label>
@@ -265,19 +313,28 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             <Button 
               className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('buyer')}
+              disabled={isLoading}
             >
-              Зарегистрироваться как мужчина
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Icon name="Loader2" size={20} className="animate-spin" />
+                  Регистрируем...
+                </span>
+              ) : (
+                'Зарегистрироваться как мужчина'
+              )}
             </Button>
           </TabsContent>
           <TabsContent value="seller" className="space-y-4 mt-6">
             <div className="space-y-2">
-              <Label htmlFor="seller-name">Имя</Label>
-              <Input id="seller-name" placeholder="Введите ваше имя" className="bg-background border-border" />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="seller-nickname">Никнейм</Label>
-              <Input id="seller-nickname" placeholder="Придумайте никнейм для профиля" className="bg-background border-border" />
+              <Input 
+                id="seller-nickname" 
+                placeholder="Придумайте никнейм для профиля" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-background border-border" 
+              />
               <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
             </div>
             
@@ -328,7 +385,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             
             <div className="space-y-2">
               <Label htmlFor="seller-password">Пароль</Label>
-              <Input id="seller-password" type="password" placeholder="••••••••" className="bg-background border-border" />
+              <Input 
+                id="seller-password" 
+                type="password" 
+                placeholder="••••••••" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-background border-border" 
+              />
+              <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="seller-gender">Гендер</Label>
@@ -349,7 +414,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             </div>
             <div className="space-y-2">
               <Label htmlFor="seller-category">Категория услуг</Label>
-              <Select>
+              <Select value={businessType} onValueChange={setBusinessType}>
                 <SelectTrigger id="seller-category" className="bg-background border-border">
                   <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
@@ -374,8 +439,16 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             <Button 
               className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('seller')}
+              disabled={isLoading}
             >
-              Зарегистрироваться как девушка
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Icon name="Loader2" size={20} className="animate-spin" />
+                  Регистрируем...
+                </span>
+              ) : (
+                'Зарегистрироваться как девушка'
+              )}
             </Button>
           </TabsContent>
         </Tabs>

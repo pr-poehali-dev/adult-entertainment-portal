@@ -7,6 +7,7 @@ import { Page, UserRole } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 import { ForgotPasswordModal } from '@/components/auth/ForgotPasswordModal';
+import { authApi } from '@/lib/api';
 
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
@@ -37,20 +38,31 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      const isSeller = loginValue.includes('seller') || loginValue.includes('девушк');
-      const role: UserRole = isSeller ? 'seller' : 'buyer';
+    try {
+      const response = await authApi.login(loginValue, password);
       
-      setUserRole(role);
-      setCurrentPage('home');
-      
+      if (response.success) {
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        
+        const role: UserRole = response.user.role === 'seller' ? 'seller' : 'buyer';
+        setUserRole(role);
+        setCurrentPage('home');
+        
+        toast({
+          title: "Успешный вход!",
+          description: `Добро пожаловать, ${response.user.username}`,
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Успешный вход!",
-        description: `Добро пожаловать, ${isSeller ? 'девушка' : 'мужчина'}`,
+        title: "Ошибка входа",
+        description: error instanceof Error ? error.message : "Проверьте данные и попробуйте снова",
+        variant: "destructive",
       });
-      
+    } finally {
       setIsLoading(false);
-    }, 800);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
