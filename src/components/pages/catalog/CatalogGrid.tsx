@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import Icon from '@/components/ui/icon';
 import { CatalogItem, Page } from '@/types';
 import { isCurrentlyActive, getNextAvailableTime } from '@/utils/scheduleChecker';
@@ -11,6 +12,7 @@ interface CatalogGridProps {
   toggleFavorite: (id: number) => void;
   setSelectedServiceId: (id: number | null) => void;
   setCurrentPage: (page: Page) => void;
+  isLoading?: boolean;
 }
 
 export const CatalogGrid = ({
@@ -19,12 +21,34 @@ export const CatalogGrid = ({
   toggleFavorite,
   setSelectedServiceId,
   setCurrentPage,
+  isLoading = false
 }: CatalogGridProps) => {
   const { t } = useLanguage();
 
   return (
     <>
-      {filteredItems.length === 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i} className="overflow-hidden">
+              <Skeleton className="h-80 w-full" />
+              <CardHeader className="pb-4">
+                <Skeleton className="h-6 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-8 w-24 mt-3" />
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  <Skeleton className="h-16" />
+                  <Skeleton className="h-16" />
+                  <Skeleton className="h-16" />
+                </div>
+                <Skeleton className="h-10 w-32" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : filteredItems.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
             <Icon name="Search" size={48} className="text-primary/50" />

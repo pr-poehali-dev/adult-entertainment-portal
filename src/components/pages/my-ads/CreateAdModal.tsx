@@ -83,11 +83,6 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
         images: []
       });
 
-      toast({
-        title: 'Успех!',
-        description: 'Объявление создано'
-      });
-
       const ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'> = {
         type: isServiceOffer ? 'service_offer' : 'service_request',
         category,

@@ -91,17 +91,9 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     if (confirm('Вы уверены, что хотите удалить это объявление?')) {
       try {
         await deleteCatalogItem(adId);
-        toast({
-          title: 'Успех',
-          description: 'Объявление удалено'
-        });
         await refreshCatalog();
       } catch (error) {
-        toast({
-          title: 'Ошибка',
-          description: 'Не удалось удалить объявление',
-          variant: 'destructive'
-        });
+        
       }
     }
   };
@@ -109,17 +101,9 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
   const handleRenewAd = async (adId: number) => {
     try {
       await updateCatalogItem(adId, { isActive: true });
-      toast({
-        title: 'Успех',
-        description: 'Объявление обновлено'
-      });
       await refreshCatalog();
     } catch (error) {
-      toast({
-        title: 'Ошибка',
-        description: 'Не удалось обновить объявление',
-        variant: 'destructive'
-      });
+      
     }
   };
 
@@ -127,17 +111,9 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     if (confirm('Вы уверены, что хотите завершить это объявление?')) {
       try {
         await updateCatalogItem(adId, { isActive: false });
-        toast({
-          title: 'Успех',
-          description: 'Объявление завершено'
-        });
         await refreshCatalog();
       } catch (error) {
-        toast({
-          title: 'Ошибка',
-          description: 'Не удалось завершить объявление',
-          variant: 'destructive'
-        });
+        
       }
     }
   };

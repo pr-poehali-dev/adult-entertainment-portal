@@ -180,6 +180,7 @@ export const CatalogPage = ({
   userRole,
 }: HomeAndCatalogProps) => {
   const { t } = useLanguage();
+  const { isLoading } = useCatalog();
   const [showAds, setShowAds] = useState(false);
   
   // Моковые данные запросов мужчин
@@ -339,6 +340,7 @@ export const CatalogPage = ({
           toggleFavorite={toggleFavorite}
           setSelectedServiceId={setSelectedServiceId}
           setCurrentPage={setCurrentPage}
+          isLoading={isLoading}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

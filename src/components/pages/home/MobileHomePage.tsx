@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { serviceCategories, getCategoryName } from '@/data/serviceCategories';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useCatalog } from '@/contexts/CatalogContext';
 import { Page, CatalogItem } from '@/types';
 import { CatalogGrid } from '../catalog/CatalogGrid';
 import { CatalogFilters } from '../catalog/CatalogFilters';
@@ -61,6 +62,7 @@ export const MobileHomePage = ({
   setSelectedBodyType,
 }: MobileHomePageProps) => {
   const { language } = useLanguage();
+  const { isLoading } = useCatalog();
   const [showFilters, setShowFilters] = useState(false);
 
   // Проверяем, используются ли фильтры
@@ -179,6 +181,7 @@ export const MobileHomePage = ({
               setSelectedServiceId(id);
               setCurrentPage('service');
             }}
+            isLoading={isLoading}
           />
 
           {filteredItems.length === 0 && (

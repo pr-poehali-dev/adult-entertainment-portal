@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CatalogItem } from '@/types';
-import { catalogApi } from '@/lib/api';
+import { catalogApi, NetworkError } from '@/lib/api';
 import { useAuth } from './AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface CatalogContextType {
   catalogItems: CatalogItem[];
@@ -28,6 +29,7 @@ interface CatalogProviderProps {
 
 export const CatalogProvider = ({ children }: CatalogProviderProps) => {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { toast } = useToast();
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,6 +54,19 @@ export const CatalogProvider = ({ children }: CatalogProviderProps) => {
       setCatalogItems(mappedItems);
     } catch (error) {
       console.error('Failed to load catalog:', error);
+      if (error instanceof NetworkError) {
+        toast({
+          title: 'Проблемы с сетью',
+          description: error.message,
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Ошибка загрузки',
+          description: 'Не удалось загрузить каталог',
+          variant: 'destructive'
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -90,8 +105,26 @@ export const CatalogProvider = ({ children }: CatalogProviderProps) => {
       };
       
       setCatalogItems(prev => [newItem, ...prev]);
+      
+      toast({
+        title: 'Успех',
+        description: 'Объявление создано'
+      });
     } catch (error) {
       console.error('Failed to add catalog item:', error);
+      if (error instanceof NetworkError) {
+        toast({
+          title: 'Проблемы с сетью',
+          description: error.message,
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Ошибка',
+          description: 'Не удалось создать объявление',
+          variant: 'destructive'
+        });
+      }
       throw error;
     }
   };
@@ -109,8 +142,26 @@ export const CatalogProvider = ({ children }: CatalogProviderProps) => {
       setCatalogItems(prev => 
         prev.map(item => item.id === id ? { ...item, ...updates } : item)
       );
+      
+      toast({
+        title: 'Успех',
+        description: 'Объявление обновлено'
+      });
     } catch (error) {
       console.error('Failed to update catalog item:', error);
+      if (error instanceof NetworkError) {
+        toast({
+          title: 'Проблемы с сетью',
+          description: error.message,
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Ошибка',
+          description: 'Не удалось обновить объявление',
+          variant: 'destructive'
+        });
+      }
       throw error;
     }
   };
@@ -119,8 +170,26 @@ export const CatalogProvider = ({ children }: CatalogProviderProps) => {
     try {
       await catalogApi.deleteItem(id);
       setCatalogItems(prev => prev.filter(item => item.id !== id));
+      
+      toast({
+        title: 'Успех',
+        description: 'Объявление удалено'
+      });
     } catch (error) {
       console.error('Failed to delete catalog item:', error);
+      if (error instanceof NetworkError) {
+        toast({
+          title: 'Проблемы с сетью',
+          description: error.message,
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Ошибка',
+          description: 'Не удалось удалить объявление',
+          variant: 'destructive'
+        });
+      }
       throw error;
     }
   };

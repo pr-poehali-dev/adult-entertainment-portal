@@ -12,9 +12,17 @@ interface ApiResponse<T = any> {
   [key: string]: any;
 }
 
+class NetworkError extends Error {
+  constructor(message: string, public isNetworkError: boolean = true) {
+    super(message);
+    this.name = 'NetworkError';
+  }
+}
+
 async function fetchApi<T = any>(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  retries: number = 2
 ): Promise<T> {
   const token = localStorage.getItem('authToken');
   
@@ -27,19 +35,51 @@ async function fetchApi<T = any>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  const data = await response.json();
+      const response = await fetch(url, {
+        ...options,
+        headers,
+        signal: controller.signal,
+      });
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Ошибка запроса');
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({ error: 'Ошибка сервера' }));
+        throw new Error(data.error || `Ошибка ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        if (attempt < retries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+          continue;
+        }
+        throw new NetworkError('Превышено время ожидания. Проверьте подключение к интернету.');
+      }
+      
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        if (attempt < retries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+          continue;
+        }
+        throw new NetworkError('Нет подключения к интернету. Проверьте соединение.');
+      }
+      
+      throw error;
+    }
   }
-
-  return data;
+  
+  throw new NetworkError('Не удалось выполнить запрос после нескольких попыток');
 }
+
+export { NetworkError };
 
 export const authApi = {
   async register(email: string, password: string, username: string, role: 'buyer' | 'seller', businessType?: string) {
