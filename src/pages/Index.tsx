@@ -5,7 +5,8 @@ import PageTransition from '@/components/PageTransition';
 import { Toaster } from '@/components/ui/toaster';
 import Icon from '@/components/ui/icon';
 import { useAppPages } from '@/components/AppPages';
-import { catalogItems, reviews } from '@/data/mockData';
+import { reviews } from '@/data/mockData';
+import { useCatalog } from '@/contexts/CatalogContext';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { SplashScreen } from '@/components/SplashScreen';
 import { notificationService } from '@/utils/notificationService';
@@ -37,6 +38,7 @@ const Index = () => {
   // Состояние
   const state = useIndexState();
   const loading = useLoadingState();
+  const { catalogItems } = useCatalog();
 
   useEffect(() => {
     const handleNavigate = (e: CustomEvent) => {

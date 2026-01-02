@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { UserAd, Profile, Currency } from '@/types';
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
+import { useCatalog } from '@/contexts/CatalogContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface CreateAdModalProps {
   profile: Profile;
@@ -25,16 +27,20 @@ const CATEGORIES = [
 ];
 
 export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps) => {
+  const { addCatalogItem } = useCatalog();
+  const { toast } = useToast();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [duration, setDuration] = useState('');
   const [lookingFor, setLookingFor] = useState('');
+  const [location, setLocation] = useState('');
   const [currency] = useState<Currency>('RUB');
   const [audioGreeting, setAudioGreeting] = useState<Blob | null>(null);
   const [audioGreetingDuration, setAudioGreetingDuration] = useState<number>(0);
   const [isPaidAd, setIsPaidAd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isServiceOffer = profile.role === 'seller';
 
@@ -43,40 +49,70 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
     setAudioGreetingDuration(duration);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title.trim() || !description.trim() || !category || !price) {
-      alert('Заполните все обязательные поля');
+    if (!title.trim() || !description.trim() || !category || !price || !location.trim()) {
+      toast({
+        title: 'Ошибка',
+        description: 'Заполните все обязательные поля',
+        variant: 'destructive'
+      });
       return;
     }
 
     if (!isServiceOffer && !lookingFor.trim()) {
-      alert('Укажите какую девушку ищете');
+      toast({
+        title: 'Ошибка',
+        description: 'Укажите какую девушку ищете',
+        variant: 'destructive'
+      });
       return;
     }
 
-    const audioUrl = audioGreeting && audioGreeting.size > 0 
-      ? URL.createObjectURL(audioGreeting) 
-      : null;
+    setIsLoading(true);
 
-    const ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'> = {
-      type: isServiceOffer ? 'service_offer' : 'service_request',
-      category,
-      title: title.trim(),
-      description: description.trim(),
-      price: parseFloat(price),
-      currency,
-      duration: duration ? parseFloat(duration) : undefined,
-      lookingFor: !isServiceOffer ? lookingFor.trim() : undefined,
-      status: 'active',
-      audioGreeting: audioUrl,
-      audioGreetingDuration: audioGreetingDuration || undefined,
-      isBoosted: false,
-      boostedUntil: undefined
-    };
+    try {
+      await addCatalogItem({
+        userId: profile.id!,
+        title: title.trim(),
+        description: description.trim(),
+        category,
+        location: location.trim(),
+        price: parseFloat(price),
+        images: []
+      });
 
-    onCreate(ad);
+      toast({
+        title: 'Успех!',
+        description: 'Объявление создано'
+      });
+
+      const ad: Omit<UserAd, 'id' | 'authorId' | 'authorName' | 'authorAvatar' | 'authorRole' | 'createdAt' | 'responses' | 'viewCount'> = {
+        type: isServiceOffer ? 'service_offer' : 'service_request',
+        category,
+        title: title.trim(),
+        description: description.trim(),
+        price: parseFloat(price),
+        currency,
+        duration: duration ? parseFloat(duration) : undefined,
+        lookingFor: !isServiceOffer ? lookingFor.trim() : undefined,
+        status: 'active',
+        isBoosted: false,
+        boostedUntil: undefined
+      };
+
+      onCreate(ad);
+      onClose();
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось создать объявление',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -159,6 +195,19 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
               <p className="text-xs text-muted-foreground">{lookingFor.length}/500</p>
             </div>
           )}
+
+          <div className="space-y-2">
+            <Label htmlFor="location">
+              Местоположение <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="location"
+              placeholder="Например: Москва, Центр"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              maxLength={100}
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -266,12 +315,21 @@ export const CreateAdModal = ({ profile, onClose, onCreate }: CreateAdModalProps
           </div>
 
           <div className="flex gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1" disabled={isLoading}>
               Отмена
             </Button>
-            <Button type="submit" className="flex-1 gap-2">
-              <Icon name="Check" size={18} />
-              Опубликовать
+            <Button type="submit" className="flex-1 gap-2" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Icon name="Loader2" size={18} className="animate-spin" />
+                  Создаем...
+                </>
+              ) : (
+                <>
+                  <Icon name="Check" size={18} />
+                  Опубликовать
+                </>
+              )}
             </Button>
           </div>
         </form>

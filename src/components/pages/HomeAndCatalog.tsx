@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Page, CatalogItem, UserRole, UserAd, Profile } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useCatalog } from '@/contexts/CatalogContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeSolutionsSection } from './home/HomeSolutionsSection';
