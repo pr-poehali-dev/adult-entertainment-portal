@@ -312,7 +312,7 @@ export const CatalogPage = ({
         setSelectedBodyType={setSelectedBodyType}
       />
 
-      {/* Переключатель между услугами и запросами */}
+      {/* Переключатель между объявлениями и запросами */}
       <div className="flex gap-3 mb-8">
         <Button
           onClick={() => setShowAds(false)}
@@ -320,7 +320,7 @@ export const CatalogPage = ({
           className="flex-1 gap-2"
         >
           <Icon name="Briefcase" size={18} />
-          Услуги девушек ({filteredItems.length})
+          Все объявления ({filteredItems.length})
         </Button>
         <Button
           onClick={() => setShowAds(true)}
@@ -328,7 +328,7 @@ export const CatalogPage = ({
           className="flex-1 gap-2"
         >
           <Icon name="Search" size={18} />
-          Запросы мужчин ({filteredAds.length})
+          Запросы ({filteredAds.length})
         </Button>
       </div>
 

@@ -16,11 +16,11 @@ export const BusinessBottomNav = ({
   unreadNotifications = 0,
 }: BusinessBottomNavProps) => {
   const navItems = [
-    { id: 'profile' as BusinessNavTab, icon: 'User', label: 'Профиль' },
-    { id: 'messages' as BusinessNavTab, icon: 'MessageSquare', label: 'Сообщения', badge: unreadMessages },
+    { id: 'services' as BusinessNavTab, icon: 'Briefcase', label: 'Услуги' },
     { id: 'ads' as BusinessNavTab, icon: 'Megaphone', label: 'Объявления' },
+    { id: 'messages' as BusinessNavTab, icon: 'MessageSquare', label: 'Сообщения', badge: unreadMessages },
     { id: 'balance' as BusinessNavTab, icon: 'Wallet', label: 'Баланс' },
-    { id: 'settings' as BusinessNavTab, icon: 'Settings', label: 'Настройки' },
+    { id: 'profile' as BusinessNavTab, icon: 'User', label: 'Профиль' },
     { id: 'notifications' as BusinessNavTab, icon: 'Bell', label: 'Уведомления', badge: unreadNotifications },
   ];
 

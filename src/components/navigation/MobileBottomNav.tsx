@@ -10,8 +10,7 @@ interface MobileBottomNavProps {
 export const MobileBottomNav = ({ currentPage, setCurrentPage, messageCount = 0 }: MobileBottomNavProps) => {
   const navItems = [
     { page: 'online-search' as Page, icon: 'Search', label: 'Поиск' },
-    { page: 'catalog' as Page, icon: 'Grid3x3', label: 'Девушки' },
-    { page: 'business-services' as Page, icon: 'Briefcase', label: 'Услуги' },
+    { page: 'catalog' as Page, icon: 'Grid3x3', label: 'Объявления' },
     { page: 'swipe' as Page, icon: 'Heart', label: 'Свайп' },
     { page: 'matches' as Page, icon: 'MessageCircle', label: 'Чаты', badge: messageCount },
     { page: 'profile' as Page, icon: 'User', label: 'Профиль' },
