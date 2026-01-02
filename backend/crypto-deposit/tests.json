@@ -1,0 +1,48 @@
+{
+  "tests": [
+    {
+      "name": "Get BTC deposit address",
+      "method": "GET",
+      "path": "/?currency=BTC",
+      "headers": {
+        "X-Authorization": "Bearer 1:test_token"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "deposit": {
+          "address": "string",
+          "currency": "BTC"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all deposit addresses",
+      "method": "POST",
+      "path": "/",
+      "headers": {
+        "X-Authorization": "Bearer 1:test_token"
+      },
+      "body": {
+        "action": "get_all_addresses"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "addresses": {}
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Unauthorized access",
+      "method": "GET",
+      "path": "/?currency=BTC",
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "Unauthorized"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

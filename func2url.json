@@ -1,5 +1,6 @@
 {
   "auth": "https://functions.poehali.dev/99ebaa3c-bb0a-4cea-ab8e-701587c5845a",
   "catalog": "https://functions.poehali.dev/593f858c-dd12-48ed-b25f-1d3eb82bc0e0",
-  "business-services": "https://functions.poehali.dev/b9773d80-7a1d-4d4d-a208-09438f267261"
+  "business-services": "https://functions.poehali.dev/b9773d80-7a1d-4d4d-a208-09438f267261",
+  "crypto-deposit": "https://functions.poehali.dev/fb625acc-8bc2-474b-8baa-a6daac0341dd"
 }

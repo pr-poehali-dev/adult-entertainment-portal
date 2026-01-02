@@ -3,7 +3,8 @@ import funcUrls from '../../func2url.json';
 const API_URLS = {
   auth: funcUrls.auth,
   catalog: funcUrls.catalog,
-  businessServices: funcUrls['business-services']
+  businessServices: funcUrls['business-services'],
+  cryptoDeposit: funcUrls['crypto-deposit']
 };
 
 interface ApiResponse<T = any> {
@@ -152,6 +153,24 @@ export const catalogApi = {
       {
         method: 'DELETE',
         body: JSON.stringify({ id })
+      }
+    );
+  }
+};
+
+export const cryptoDepositApi = {
+  async getDepositAddress(currency: string = 'BTC') {
+    return fetchApi<{ success: boolean; deposit: any }>(
+      API_URLS.cryptoDeposit + `?currency=${currency}`
+    );
+  },
+
+  async getAllDepositAddresses() {
+    return fetchApi<{ success: boolean; addresses: Record<string, any> }>(
+      API_URLS.cryptoDeposit,
+      {
+        method: 'POST',
+        body: JSON.stringify({ action: 'get_all_addresses' })
       }
     );
   }

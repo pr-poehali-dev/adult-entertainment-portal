@@ -6,6 +6,7 @@ import Icon from '@/components/ui/icon';
 import { Page, Wallet, Currency } from '@/types';
 import { TransactionHistory } from './wallet/TransactionHistory';
 import { DepositForm } from './wallet/DepositForm';
+import { CryptoDepositForm } from './wallet/CryptoDepositForm';
 import { WithdrawForm } from './wallet/WithdrawForm';
 import { mockTransactions } from './wallet/mockTransactions';
 import { WalletCard } from '@/components/wallet/WalletCard';
@@ -18,7 +19,7 @@ interface WalletPageProps {
 }
 
 export const WalletPage = ({ setCurrentPage, wallet, onOpenLovePurchase }: WalletPageProps) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'deposit' | 'withdraw' | 'balances'>('balances');
+  const [activeTab, setActiveTab] = useState<'overview' | 'deposit' | 'crypto-deposit' | 'withdraw' | 'balances'>('balances');
   const [transactions] = useState(mockTransactions);
 
   const rubBalance = wallet.balances.find(b => b.currency === 'RUB')?.amount || 0;
@@ -123,8 +124,16 @@ export const WalletPage = ({ setCurrentPage, wallet, onOpenLovePurchase }: Walle
               onClick={() => setActiveTab('deposit')}
               className="rounded-lg"
             >
-              <Icon name="ArrowDownToLine" size={18} className="mr-2" />
-              Пополнить
+              <Icon name="CreditCard" size={18} className="mr-2" />
+              Карта
+            </Button>
+            <Button
+              variant={activeTab === 'crypto-deposit' ? 'default' : 'ghost'}
+              onClick={() => setActiveTab('crypto-deposit')}
+              className="rounded-lg"
+            >
+              <Icon name="Bitcoin" size={18} className="mr-2" />
+              Крипта
             </Button>
             <Button
               variant={activeTab === 'withdraw' ? 'default' : 'ghost'}
@@ -147,6 +156,10 @@ export const WalletPage = ({ setCurrentPage, wallet, onOpenLovePurchase }: Walle
 
         {activeTab === 'deposit' && (
           <DepositForm onSuccess={handleFormSuccess} />
+        )}
+
+        {activeTab === 'crypto-deposit' && (
+          <CryptoDepositForm onSuccess={handleFormSuccess} />
         )}
 
         {activeTab === 'withdraw' && (
