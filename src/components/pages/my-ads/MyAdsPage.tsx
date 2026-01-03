@@ -12,6 +12,7 @@ import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 import { AudioPlayer } from '@/components/audio/AudioPlayer';
 import { useCatalog } from '@/contexts/CatalogContext';
 import { useToast } from '@/hooks/use-toast';
+import { AdPromotionModal } from '@/components/ads/AdPromotionModal';
 
 interface MyAdsPageProps {
   profile: Profile;
@@ -25,6 +26,8 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
   const [selectedAd, setSelectedAd] = useState<UserAd | null>(null);
   const [selectedResponse, setSelectedResponse] = useState<AdResponse | null>(null);
   const [showResponseModal, setShowResponseModal] = useState(false);
+  const [showPromotionModal, setShowPromotionModal] = useState(false);
+  const [adToPromote, setAdToPromote] = useState<UserAd | null>(null);
   
   const [ads, setAds] = useState<UserAd[]>([]);
 
@@ -119,25 +122,56 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
   };
 
   const handleBoostAd = (adId: number) => {
-    const boostCost = 50; // 50 монет
-    const boostDuration = 24; // 24 часа
-    
-    if (confirm(`Поднять объявление в топ на ${boostDuration} часов за ${boostCost} 💗?`)) {
-      // TODO: Проверка баланса и списание монет
-      const boostedUntil = new Date();
-      boostedUntil.setHours(boostedUntil.getHours() + boostDuration);
-      
-      setAds(ads.map(ad => 
-        ad.id === adId 
-          ? { 
-              ...ad, 
-              isBoosted: true, 
-              boostedUntil: boostedUntil.toISOString(),
-              createdAt: new Date().toISOString() // Обновляем дату для сортировки
-            }
-          : ad
-      ));
+    const ad = ads.find(a => a.id === adId);
+    if (ad) {
+      setAdToPromote(ad);
+      setShowPromotionModal(true);
     }
+  };
+
+  const handlePromotionPurchase = (serviceId: string, price: number) => {
+    if (!adToPromote) return;
+
+    let duration = 24; // часы
+    const promotionType = serviceId;
+
+    switch (serviceId) {
+      case 'raise':
+        duration = 24;
+        break;
+      case 'highlight':
+        duration = 24 * 7;
+        break;
+      case 'pin':
+        duration = 24 * 3;
+        break;
+      case 'premium':
+        duration = 24 * 7;
+        break;
+    }
+
+    const boostedUntil = new Date();
+    boostedUntil.setHours(boostedUntil.getHours() + duration);
+
+    setAds(ads.map(ad => 
+      ad.id === adToPromote.id 
+        ? { 
+            ...ad, 
+            isBoosted: true, 
+            boostedUntil: boostedUntil.toISOString(),
+            promotionType: promotionType,
+            createdAt: new Date().toISOString()
+          }
+        : ad
+    ));
+
+    toast({
+      title: "Продвижение активировано!",
+      description: `Объявление "${adToPromote.title}" успешно продвинуто`,
+    });
+
+    setShowPromotionModal(false);
+    setAdToPromote(null);
   };
 
   const handleViewResponse = (ad: UserAd, response: AdResponse) => {
@@ -152,11 +186,20 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
     const boostedTimeLeft = isBoostedActive && ad.boostedUntil 
       ? Math.max(0, Math.floor((new Date(ad.boostedUntil).getTime() - new Date().getTime()) / (1000 * 60 * 60)))
       : 0;
+
+    const promotionConfig = {
+      raise: { color: 'border-blue-500', gradient: 'from-blue-500 via-cyan-500 to-blue-500' },
+      highlight: { color: 'border-purple-500', gradient: 'from-purple-500 via-pink-500 to-purple-500' },
+      pin: { color: 'border-orange-500', gradient: 'from-orange-500 via-red-500 to-orange-500' },
+      premium: { color: 'border-yellow-500', gradient: 'from-yellow-500 via-amber-500 to-yellow-500' }
+    };
+
+    const promotion = isBoostedActive && ad.promotionType ? promotionConfig[ad.promotionType] : null;
     
     return (
-      <Card key={ad.id} className={`hover:shadow-lg transition-shadow relative overflow-hidden ${isBoostedActive ? 'border-2 border-primary shadow-xl' : ''}`}>
-        {isBoostedActive && (
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-pink-500 to-primary animate-pulse" />
+      <Card key={ad.id} className={`hover:shadow-lg transition-shadow relative overflow-hidden ${isBoostedActive && promotion ? `border-2 ${promotion.color} shadow-xl` : ''}`}>
+        {isBoostedActive && promotion && (
+          <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${promotion.gradient} animate-pulse`} />
         )}
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
@@ -166,10 +209,28 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
                   {ad.type === 'service_offer' ? 'Предложение услуги' : 'Запрос услуги'}
                 </Badge>
                 <Badge variant="outline">{ad.category}</Badge>
-                {isBoostedActive && (
-                  <Badge variant="default" className="bg-gradient-to-r from-primary to-pink-500 text-white">
+                {isBoostedActive && ad.promotionType === 'raise' && (
+                  <Badge variant="default" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
                     <Icon name="TrendingUp" size={12} className="mr-1" />
-                    В топе {boostedTimeLeft}ч
+                    Поднято {boostedTimeLeft}ч
+                  </Badge>
+                )}
+                {isBoostedActive && ad.promotionType === 'highlight' && (
+                  <Badge variant="default" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                    <Icon name="Palette" size={12} className="mr-1" />
+                    Выделено {Math.floor(boostedTimeLeft / 24)}д
+                  </Badge>
+                )}
+                {isBoostedActive && ad.promotionType === 'pin' && (
+                  <Badge variant="default" className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                    <Icon name="Pin" size={12} className="mr-1" />
+                    Закреплено {Math.floor(boostedTimeLeft / 24)}д
+                  </Badge>
+                )}
+                {isBoostedActive && ad.promotionType === 'premium' && (
+                  <Badge variant="default" className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white">
+                    <Icon name="Crown" size={12} className="mr-1" />
+                    VIP {Math.floor(boostedTimeLeft / 24)}д
                   </Badge>
                 )}
                 {ad.audioGreeting && (
@@ -230,8 +291,8 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
                 className="w-full bg-gradient-to-r from-primary/10 to-pink-500/10 hover:from-primary/20 hover:to-pink-500/20 border-primary/30"
                 onClick={() => handleBoostAd(ad.id)}
               >
-                <Icon name="TrendingUp" size={16} className="mr-2" />
-                Поднять в топ за 50 💗
+                <Icon name="Sparkles" size={16} className="mr-2" />
+                Продвинуть объявление
               </Button>
             )}
             
@@ -398,6 +459,16 @@ const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
           onCreate={handleCreateAd}
         />
       )}
+
+      <AdPromotionModal
+        isOpen={showPromotionModal}
+        onClose={() => {
+          setShowPromotionModal(false);
+          setAdToPromote(null);
+        }}
+        adTitle={adToPromote?.title || ''}
+        onPurchase={handlePromotionPurchase}
+      />
 
       {showResponseModal && selectedAd && selectedResponse && (
         <AdResponseModal

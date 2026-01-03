@@ -600,6 +600,8 @@ export type AdStatus = 'active' | 'completed' | 'cancelled';
 
 export type AdType = 'service_offer' | 'service_request';
 
+export type AdPromotionType = 'raise' | 'highlight' | 'pin' | 'premium';
+
 export interface UserAd {
   id: number;
   authorId: number;
@@ -623,6 +625,7 @@ export interface UserAd {
   viewCount: number;
   isBoosted: boolean;
   boostedUntil?: string;
+  promotionType?: AdPromotionType;
 }
 
 export interface AdResponse {
