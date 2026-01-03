@@ -46,50 +46,50 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-10 mb-8 h-auto p-1">
-            <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 py-3">
+          <TabsList className="flex flex-col sm:grid sm:grid-cols-4 lg:grid-cols-10 w-full mb-8 h-auto p-1 gap-1">
+            <TabsTrigger value="dashboard" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
             </TabsTrigger>
-            <TabsTrigger value="users" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="users" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Users" size={20} />
               <span className="text-xs">Пользователи</span>
             </TabsTrigger>
-            <TabsTrigger value="bookings" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="bookings" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Calendar" size={20} />
               <span className="text-xs">Бронирования</span>
             </TabsTrigger>
-            <TabsTrigger value="ads" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="ads" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Megaphone" size={20} />
               <span className="text-xs">Объявления</span>
             </TabsTrigger>
-            <TabsTrigger value="audio" className="flex flex-col items-center gap-1 py-3 relative">
+            <TabsTrigger value="audio" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center relative">
               <Icon name="Volume2" size={20} />
               <span className="text-xs">Аудио</span>
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-2 right-2 sm:-top-1 sm:-right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                 2
               </span>
             </TabsTrigger>
-            <TabsTrigger value="photos" className="flex flex-col items-center gap-1 py-3 relative">
+            <TabsTrigger value="photos" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center relative">
               <Icon name="Image" size={20} />
               <span className="text-xs">Фото</span>
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-2 right-2 sm:-top-1 sm:-right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                 3
               </span>
             </TabsTrigger>
-            <TabsTrigger value="applications" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="applications" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Briefcase" size={20} />
               <span className="text-xs">Отклики</span>
             </TabsTrigger>
-            <TabsTrigger value="partner" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="partner" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Network" size={20} />
               <span className="text-xs">MLM</span>
             </TabsTrigger>
-            <TabsTrigger value="emojis" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="emojis" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Smile" size={20} />
               <span className="text-xs">Эмодзи</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex flex-col items-center gap-1 py-3">
+            <TabsTrigger value="settings" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Settings" size={20} />
               <span className="text-xs">Настройки</span>
             </TabsTrigger>
