@@ -40,14 +40,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshUser = async () => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      setUser(null);
-      setIsLoading(false);
-      return;
-    }
-
     try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
       const response = await authApi.getProfile();
       setUser(response.user);
     } catch (error) {
