@@ -131,9 +131,8 @@ export const ProfilePage = ({
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
           <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-9 lg:grid-cols-10 min-w-max md:min-w-0">
             <TabsTrigger value="profile" className="whitespace-nowrap">Профиль</TabsTrigger>
-            <TabsTrigger value="vip" className="whitespace-nowrap flex items-center gap-1">
-              <Icon name="Crown" size={14} className="text-yellow-500" />
-              VIP
+            <TabsTrigger value="vip" className="whitespace-nowrap">
+              👑 VIP
             </TabsTrigger>
             <TabsTrigger value="folders" className="whitespace-nowrap">Папки</TabsTrigger>
             <TabsTrigger value="contacts" className="whitespace-nowrap">Контакты</TabsTrigger>
