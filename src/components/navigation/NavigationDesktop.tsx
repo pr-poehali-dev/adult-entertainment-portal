@@ -150,6 +150,17 @@ export const NavigationDesktop = ({
                     <span>История бронирований</span>
                   </button>
                   
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('wallet');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Wallet" size={16} />
+                    <span>Кошелек</span>
+                  </button>
+                  
                   {profile.isAgencyOwner ? (
                     <button
                       onClick={() => {
