@@ -12,10 +12,14 @@ interface AgencyBannerProps {
 
 export const AgencyBanner = ({ setCurrentPage, profile, onPremiumRequired }: AgencyBannerProps) => {
   const handleAgencyClick = () => {
-    if (profile.subscriptionType === 'free' && onPremiumRequired) {
+    // Проверка Premium только для бизнес-пользователей
+    if (profile.role === 'business' && profile.subscriptionType === 'free' && onPremiumRequired) {
       onPremiumRequired();
-    } else {
+    } else if (profile.role === 'business') {
       setCurrentPage('agency-register');
+    } else {
+      // Для обычных пользователей (buyer/seller) агентство недоступно
+      alert('Открытие агентства доступно только для бизнес-аккаунтов. Переключитесь на бизнес-аккаунт для доступа к этой функции.');
     }
   };
   const [isVisible, setIsVisible] = useState(false);

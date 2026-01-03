@@ -46,13 +46,70 @@ export const VIPUpgradeModal = ({ isOpen, onClose, currentVipExpiry, onPurchase 
         </DialogHeader>
         
         <div className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {Object.entries(t.vip.features).map(([key, value]) => (
-              <div key={key} className="flex items-start gap-2 p-3 bg-card rounded-lg border">
-                <Icon name="Check" size={18} className="text-green-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm">{value}</span>
+          <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-6 space-y-4">
+            <h3 className="font-semibold text-lg mb-4">Преимущества VIP-статуса:</h3>
+            
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Приоритет в поиске</p>
+                  <p className="text-sm text-gray-600">Ваша анкета показывается первой в результатах</p>
+                </div>
               </div>
-            ))}
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">VIP-значок в профиле</p>
+                  <p className="text-sm text-gray-600">Выделяйтесь среди других пользователей золотым значком</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Увеличенная видимость</p>
+                  <p className="text-sm text-gray-600">На 300% больше просмотров вашей анкеты</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Подробная статистика</p>
+                  <p className="text-sm text-gray-600">Просмотры, лайки и аналитика вашего профиля</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Приоритетная поддержка</p>
+                  <p className="text-sm text-gray-600">Ваши обращения обрабатываются в первую очередь</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Без рекламы</p>
+                  <p className="text-sm text-gray-600">Пользуйтесь платформой без отвлечений</p>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div>

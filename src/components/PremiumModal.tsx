@@ -23,15 +23,18 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
             <span className="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Премиум подписка
+              Премиум подписка для бизнеса
             </span>
           </DialogTitle>
+          <p className="text-sm text-muted-foreground text-center mt-2">
+            Только для бизнес-аккаунтов
+          </p>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Преимущества */}
           <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-6 space-y-4">
-            <h3 className="font-semibold text-lg mb-4">Что входит в Premium:</h3>
+            <h3 className="font-semibold text-lg mb-4">Что входит в Premium для бизнеса:</h3>
             
             <div className="space-y-3">
               <div className="flex items-start gap-3">
@@ -39,8 +42,8 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
                   <Icon name="Check" size={18} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium">Создание объявлений</p>
-                  <p className="text-sm text-gray-600">Размещайте неограниченное количество объявлений в любых категориях</p>
+                  <p className="font-medium">Неограниченные объявления</p>
+                  <p className="text-sm text-gray-600">Создавайте сколько угодно коммерческих объявлений в любых категориях</p>
                 </div>
               </div>
 
@@ -50,7 +53,7 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
                 </div>
                 <div>
                   <p className="font-medium">Открытие агентства</p>
-                  <p className="text-sm text-gray-600">Создайте своё агентство и управляйте командой</p>
+                  <p className="text-sm text-gray-600">Создавайте и управляйте своим агентством с неограниченным количеством сотрудников</p>
                 </div>
               </div>
 
@@ -60,7 +63,7 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
                 </div>
                 <div>
                   <p className="font-medium">Приоритет в поиске</p>
-                  <p className="text-sm text-gray-600">Ваши объявления показываются выше в результатах</p>
+                  <p className="text-sm text-gray-600">Ваши объявления показываются в топе результатов поиска</p>
                 </div>
               </div>
 
@@ -69,8 +72,8 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
                   <Icon name="Check" size={18} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium">Расширенная статистика</p>
-                  <p className="text-sm text-gray-600">Подробная аналитика просмотров и откликов</p>
+                  <p className="font-medium">Бизнес-аналитика</p>
+                  <p className="text-sm text-gray-600">Детальная статистика по объявлениям, конверсиям и доходам</p>
                 </div>
               </div>
 
@@ -79,8 +82,18 @@ export default function PremiumModal({ isOpen, onClose, onPurchase }: PremiumMod
                   <Icon name="Check" size={18} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-medium">Значок Premium</p>
-                  <p className="text-sm text-gray-600">Выделяйтесь среди других пользователей</p>
+                  <p className="font-medium">Значок Premium Business</p>
+                  <p className="text-sm text-gray-600">Подтвержденный бизнес-аккаунт с особым значком доверия</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <Icon name="Check" size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="font-medium">Приоритетная поддержка</p>
+                  <p className="text-sm text-gray-600">Персональный менеджер и техподдержка 24/7</p>
                 </div>
               </div>
             </div>

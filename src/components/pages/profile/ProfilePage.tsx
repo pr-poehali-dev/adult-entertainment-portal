@@ -15,6 +15,7 @@ import { ProfileEditTab } from './ProfileEditTab';
 import { PrivateFoldersTab } from './PrivateFoldersTab';
 import { ProfileContactsTab } from './ProfileContactsTab';
 import { ProfileNotificationsTab } from './ProfileNotificationsTab';
+import { ProfileVIPTab } from './ProfileVIPTab';
 
 interface ProfilePageProps {
   profile: Profile;
@@ -128,8 +129,12 @@ export const ProfilePage = ({
 
       <Tabs defaultValue="profile" className="space-y-6">
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-          <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-8 lg:grid-cols-9 min-w-max md:min-w-0">
+          <TabsList className="inline-flex md:grid w-auto md:w-full md:grid-cols-9 lg:grid-cols-10 min-w-max md:min-w-0">
             <TabsTrigger value="profile" className="whitespace-nowrap">Профиль</TabsTrigger>
+            <TabsTrigger value="vip" className="whitespace-nowrap flex items-center gap-1">
+              <Icon name="Crown" size={14} className="text-yellow-500" />
+              VIP
+            </TabsTrigger>
             <TabsTrigger value="folders" className="whitespace-nowrap">Папки</TabsTrigger>
             <TabsTrigger value="contacts" className="whitespace-nowrap">Контакты</TabsTrigger>
             <TabsTrigger value="wallet" className="whitespace-nowrap">Кошелек</TabsTrigger>
@@ -145,6 +150,10 @@ export const ProfilePage = ({
         
         <TabsContent value="profile">
           <ProfileEditTab profile={profile} onProfileUpdate={onProfileUpdate} />
+        </TabsContent>
+
+        <TabsContent value="vip">
+          <ProfileVIPTab profile={profile} onProfileUpdate={onProfileUpdate} />
         </TabsContent>
 
         <TabsContent value="folders">
