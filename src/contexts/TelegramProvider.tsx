@@ -58,6 +58,8 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
   const [themeParams, setThemeParams] = useState<ThemeParams | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+    
     const initTelegram = async () => {
       try {
         let launchParams;
@@ -65,29 +67,37 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
           launchParams = retrieveLaunchParams();
         } catch (e) {
           console.log('Not running in Telegram environment (failed to retrieve params)');
-          setIsTelegramEnv(false);
-          setIsReady(true);
+          if (mounted) {
+            setIsTelegramEnv(false);
+            setIsReady(true);
+          }
           return;
         }
         
         if (!launchParams || launchParams.platform === 'unknown') {
           console.log('Not running in Telegram environment');
-          setIsTelegramEnv(false);
-          setIsReady(true);
+          if (mounted) {
+            setIsTelegramEnv(false);
+            setIsReady(true);
+          }
           return;
         }
 
-        setIsTelegramEnv(true);
+        if (mounted) {
+          setIsTelegramEnv(true);
 
-        if (launchParams.initData) {
-          setInitData(launchParams.initData);
+          if (launchParams.initData) {
+            setInitData(launchParams.initData);
+          }
         }
 
         try {
           if (tgThemeParams.isSupported()) {
             tgThemeParams.mount();
             const params = tgThemeParams.state();
-            setThemeParams(params);
+            if (mounted) {
+              setThemeParams(params);
+            }
             
             if (params) {
               document.documentElement.style.setProperty('--tg-theme-bg-color', params.bgColor || '#ffffff');
@@ -111,15 +121,23 @@ export const TelegramProvider = ({ children }: TelegramProviderProps) => {
           console.log('Viewport not available:', e);
         }
 
-        setIsReady(true);
+        if (mounted) {
+          setIsReady(true);
+        }
       } catch (error) {
         console.error('Failed to initialize Telegram SDK:', error);
-        setIsTelegramEnv(false);
-        setIsReady(true);
+        if (mounted) {
+          setIsTelegramEnv(false);
+          setIsReady(true);
+        }
       }
     };
 
     initTelegram();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const showBackButton = () => {
