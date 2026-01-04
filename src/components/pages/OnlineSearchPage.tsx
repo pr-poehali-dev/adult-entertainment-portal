@@ -352,8 +352,8 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                   }}
                   onClick={() => handleCardClick(user.id)}
                 >
-                  {/* Top section - Name, Age, City (same position as front) */}
-                  <div className="absolute top-3 left-3 right-3">
+                  {/* Top section - Name, Age, City (left side) */}
+                  <div className="absolute top-3 left-3">
                     <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-1.5">
                       <h3 
                         className="text-white font-bold text-lg leading-tight hover:text-white/80 cursor-pointer transition-colors"
@@ -364,9 +364,11 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                         {user.city}
                       </p>
                     </div>
-                    
-                    {/* Online status badge */}
-                    <div className="mt-2 inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2.5 py-1">
+                  </div>
+                  
+                  {/* Online status badge - top right corner */}
+                  <div className="absolute top-3 right-3">
+                    <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2.5 py-1">
                       <div className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`} />
                       <span className="text-white text-xs font-medium">{user.lastSeen}</span>
                     </div>
