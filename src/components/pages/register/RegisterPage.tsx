@@ -18,7 +18,6 @@ interface RegisterPageProps {
 }
 
 const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
-  console.log('RegisterPage mounted');
   const { toast } = useToast();
   const { register } = useAuth();
   const [referralInput, setReferralInput] = useState('');
