@@ -192,12 +192,18 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
 
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
+                <div className="bg-muted/50 p-3 rounded-lg mb-4 border border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Тестовый вход:</p>
+                  <p className="text-sm font-mono">test@example.com</p>
+                  <p className="text-sm font-mono">password123</p>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="test@example.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     disabled={loginLoading}
@@ -244,6 +250,11 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
 
             <TabsContent value="register">
               <form onSubmit={handleRegister} className="space-y-4">
+                <div className="bg-muted/50 p-3 rounded-lg mb-4 border border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Для тестирования создайте новый аккаунт</p>
+                  <p className="text-xs text-muted-foreground">Пароль минимум 6 символов</p>
+                </div>
+
                 <div className="space-y-2">
                   <Label>Тип аккаунта</Label>
                   <div className="grid grid-cols-2 gap-2">

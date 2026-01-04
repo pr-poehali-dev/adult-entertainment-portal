@@ -49,6 +49,8 @@ const Index = () => {
         state.setUserRole(role);
         state.setIsAuthenticated(true);
       }
+    } else if (!isAuthenticated) {
+      state.setIsAuthenticated(false);
     }
   }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
 
