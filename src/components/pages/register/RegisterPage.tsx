@@ -17,7 +17,7 @@ interface RegisterPageProps {
   setCurrentPage: (page: Page) => void;
 }
 
-export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
+const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
   console.log('RegisterPage mounted');
   const { toast } = useToast();
   const { register } = useAuth();
@@ -284,3 +284,5 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   </div>
   );
 };
+
+export default RegisterPage;
