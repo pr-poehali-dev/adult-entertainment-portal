@@ -36,7 +36,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [age, setAge] = useState('');
   
   const handleRegister = async (role: UserRole) => {
-    if (!contactValue || !username || !password || !gender || !age) {
+    if (!contactValue || !username || !password) {
       toast({
         title: "Ошибка",
         description: "Заполните все обязательные поля",
@@ -45,14 +45,25 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
       return;
     }
     
-    const ageNum = parseInt(age);
-    if (isNaN(ageNum) || ageNum < 18 || ageNum > 100) {
-      toast({
-        title: "Ошибка",
-        description: "Возраст должен быть от 18 до 100 лет",
-        variant: "destructive",
-      });
-      return;
+    if (role === 'buyer') {
+      if (!gender || !age) {
+        toast({
+          title: "Ошибка",
+          description: "Заполните гендер и возраст",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const ageNum = parseInt(age);
+      if (isNaN(ageNum) || ageNum < 18 || ageNum > 100) {
+        toast({
+          title: "Ошибка",
+          description: "Возраст должен быть от 18 до 100 лет",
+          variant: "destructive",
+        });
+        return;
+      }
     }
     
     if (!agreedToTerms) {
@@ -229,10 +240,6 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               onShowTermsModal={() => setShowTermsModal(true)}
               getContactLabel={getContactLabel}
               getContactPlaceholder={getContactPlaceholder}
-              gender={gender}
-              setGender={setGender}
-              age={age}
-              setAge={setAge}
             />
           </TabsContent>
         </Tabs>

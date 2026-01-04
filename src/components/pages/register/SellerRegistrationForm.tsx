@@ -27,10 +27,6 @@ interface SellerRegistrationFormProps {
   onShowTermsModal: () => void;
   getContactLabel: () => string;
   getContactPlaceholder: () => string;
-  gender: string;
-  setGender: (value: string) => void;
-  age: string;
-  setAge: (value: string) => void;
 }
 
 export const SellerRegistrationForm = ({
@@ -54,10 +50,6 @@ export const SellerRegistrationForm = ({
   onShowTermsModal,
   getContactLabel,
   getContactPlaceholder,
-  gender,
-  setGender,
-  age,
-  setAge,
 }: SellerRegistrationFormProps) => {
   return (
     <div className="space-y-4 mt-6">
@@ -131,32 +123,6 @@ export const SellerRegistrationForm = ({
           disabled={isLoading} 
         />
         <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="seller-gender">Гендер</Label>
-        <Select value={gender} onValueChange={setGender}>
-          <SelectTrigger id="seller-gender" className="bg-background border-border">
-            <SelectValue placeholder="Выберите гендер" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="male">Мужской</SelectItem>
-            <SelectItem value="female">Женский</SelectItem>
-            <SelectItem value="other">Другое</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="seller-age">Возраст</Label>
-        <Input 
-          id="seller-age" 
-          type="number" 
-          placeholder="18" 
-          min="18" 
-          max="100" 
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          className="bg-background border-border" 
-        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="seller-category">Категория услуг</Label>
