@@ -17,7 +17,7 @@ interface RegisterPageProps {
   setCurrentPage: (page: Page) => void;
 }
 
-const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
+export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
   const { toast } = useToast();
   const { register } = useAuth();
   const [referralInput, setReferralInput] = useState('');
@@ -32,8 +32,6 @@ const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
-  const [gender, setGender] = useState('');
-  const [age, setAge] = useState('');
   
   const handleRegister = async (role: UserRole) => {
     if (!contactValue || !username || !password) {
@@ -43,27 +41,6 @@ const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
         variant: "destructive",
       });
       return;
-    }
-    
-    if (role === 'buyer') {
-      if (!gender || !age) {
-        toast({
-          title: "Ошибка",
-          description: "Заполните гендер и возраст",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      const ageNum = parseInt(age);
-      if (isNaN(ageNum) || ageNum < 18 || ageNum > 100) {
-        toast({
-          title: "Ошибка",
-          description: "Возраст должен быть от 18 до 100 лет",
-          variant: "destructive",
-        });
-        return;
-      }
     }
     
     if (!agreedToTerms) {
@@ -192,10 +169,6 @@ const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="buyer" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="buyer">Покупатель</TabsTrigger>
-            <TabsTrigger value="seller">Продавец</TabsTrigger>
-          </TabsList>
           <TabsContent value="buyer">
             <BuyerRegistrationForm
               username={username}
@@ -216,10 +189,6 @@ const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
               onShowTermsModal={() => setShowTermsModal(true)}
               getContactLabel={getContactLabel}
               getContactPlaceholder={getContactPlaceholder}
-              gender={gender}
-              setGender={setGender}
-              age={age}
-              setAge={setAge}
             />
           </TabsContent>
           <TabsContent value="seller">
@@ -283,5 +252,3 @@ const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps) => {
   </div>
   );
 };
-
-export default RegisterPage;

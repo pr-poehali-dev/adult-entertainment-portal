@@ -16,11 +16,7 @@ try {
   );
 } catch (error) {
   console.error('Failed to render app:', error);
-  document.body.innerHTML = `<div style="padding:20px;color:red;font-size:18px;font-family:monospace;">
-    <h1>Ошибка загрузки приложения</h1>
-    <p>Error: ${error}</p>
-    <p>Попробуйте очистить кэш браузера (Ctrl+Shift+R)</p>
-  </div>`;
+  document.body.innerHTML = `<div style="padding:20px;color:red;">Error: ${error}</div>`;
 }
 
 if ('serviceWorker' in navigator) {
