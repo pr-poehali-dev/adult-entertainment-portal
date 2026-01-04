@@ -345,41 +345,78 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                 </div>
                 
                 <div 
-                  className="absolute inset-0 bg-black/90 p-4 flex flex-col justify-center overflow-auto"
+                  className="absolute inset-0 bg-gradient-to-br from-primary/95 to-purple-600/95 p-4"
                   style={{ 
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)'
                   }}
                   onClick={() => handleCardClick(user.id)}
                 >
-                  <div className="text-white space-y-3">
-                    <div>
-                      <h4 className="text-xs font-medium text-white/70 mb-1">О себе:</h4>
-                      <p className="text-sm">{user.aboutMe}</p>
+                  {/* Top section - Name, Age, City (same position as front) */}
+                  <div className="absolute top-3 left-3 right-3">
+                    <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-1.5">
+                      <h3 
+                        className="text-white font-bold text-lg leading-tight hover:text-white/80 cursor-pointer transition-colors"
+                        onClick={(e) => handleNameClick(user.id, e)}
+                      >{user.name}, {user.age}</h3>
+                      <p className="text-white/90 text-sm flex items-center gap-1 mt-0.5">
+                        <Icon name="MapPin" size={12} />
+                        {user.city}
+                      </p>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-medium text-white/70 mb-1">Ищет:</h4>
-                      <p className="text-sm">{user.lookingFor}</p>
+                    
+                    {/* Online status badge */}
+                    <div className="mt-2 inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2.5 py-1">
+                      <div className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`} />
+                      <span className="text-white text-xs font-medium">{user.lastSeen}</span>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-medium text-white/70 mb-1">Предпочтения:</h4>
-                      <div className="flex flex-wrap gap-1">
-                        {user.sexualPreferences.map((pref, idx) => (
-                          <span key={idx} className="px-2 py-0.5 bg-white/20 rounded text-xs">
-                            {pref === 'classic' && 'Классика'}
-                            {pref === 'oral' && 'Оральные ласки'}
-                            {pref === 'anal' && 'Анальный секс'}
-                            {pref === 'group' && 'Групповой секс'}
-                            {pref === 'toys' && 'Игрушки'}
-                            {pref === 'bdsm' && 'БДСМ'}
-                            {pref === 'dirty' && 'Грязные игры'}
-                            {pref === 'cuckold' && 'Куколд'}
-                            {pref === 'extreme' && 'Экстрим'}
-                            {pref === 'other' && 'Другое'}
-                          </span>
-                        ))}
+                  </div>
+
+                  {/* Middle section - Details */}
+                  <div className="absolute top-24 left-4 right-4 bottom-20 overflow-auto">
+                    <div className="text-white space-y-3">
+                      <div>
+                        <h4 className="text-xs font-medium text-white/70 mb-1">О себе:</h4>
+                        <p className="text-sm">{user.aboutMe}</p>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-medium text-white/70 mb-1">Ищет:</h4>
+                        <p className="text-sm">{user.lookingFor}</p>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-medium text-white/70 mb-1">Предпочтения:</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {user.sexualPreferences.map((pref, idx) => (
+                            <span key={idx} className="px-2 py-0.5 bg-white/20 rounded text-xs">
+                              {pref === 'classic' && 'Классика'}
+                              {pref === 'oral' && 'Оральные ласки'}
+                              {pref === 'anal' && 'Анальный секс'}
+                              {pref === 'group' && 'Групповой секс'}
+                              {pref === 'toys' && 'Игрушки'}
+                              {pref === 'bdsm' && 'БДСМ'}
+                              {pref === 'dirty' && 'Грязные игры'}
+                              {pref === 'cuckold' && 'Куколд'}
+                              {pref === 'extreme' && 'Экстрим'}
+                              {pref === 'other' && 'Другое'}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Bottom section - Button (same position as front) */}
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <Button 
+                      className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/30 shadow-lg"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMessageClick(user.id);
+                      }}
+                    >
+                      <Icon name="MessageCircle" size={18} className="mr-2" />
+                      Написать сообщение
+                    </Button>
                   </div>
                 </div>
               </div>
