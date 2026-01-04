@@ -10,7 +10,9 @@ import { Page, UserRole, RegistrationMethod } from '@/types';
 import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
 import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
+import { TermsModal } from '@/components/auth/TermsModal';
 import { useAuth } from '@/contexts/AuthContext';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface RegisterPageProps {
   setUserRole: (role: UserRole) => void;
@@ -30,6 +32,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [password, setPassword] = useState('');
   const [businessType, setBusinessType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   
   const handleOneClickRegister = (role: UserRole) => {
     setUserRole(role);
@@ -47,6 +51,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
       toast({
         title: "Ошибка",
         description: "Заполните все обязательные поля",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!agreedToTerms) {
+      toast({
+        title: "Ошибка",
+        description: "Необходимо принять пользовательское соглашение",
         variant: "destructive",
       });
       return;
@@ -308,6 +321,25 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               />
               <p className="text-xs text-muted-foreground">Если у вас есть приглашение от партнёра, вставьте ссылку сюда</p>
             </div>
+            
+            <div className="flex items-start space-x-2 pt-2">
+              <Checkbox 
+                id="buyer-terms" 
+                checked={agreedToTerms}
+                onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+                className="mt-1"
+              />
+              <Label htmlFor="buyer-terms" className="text-sm leading-relaxed cursor-pointer">
+                Я принимаю{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Пользовательское соглашение и политику конфиденциальности
+                </button>
+              </Label>
+            </div>
             <Button 
               className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('buyer')}
@@ -436,6 +468,25 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               />
               <p className="text-xs text-muted-foreground">Присоединитесь к партнёрской сети и зарабатывайте на рефералах</p>
             </div>
+            
+            <div className="flex items-start space-x-2 pt-2">
+              <Checkbox 
+                id="seller-terms" 
+                checked={agreedToTerms}
+                onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+                className="mt-1"
+              />
+              <Label htmlFor="seller-terms" className="text-sm leading-relaxed cursor-pointer">
+                Я принимаю{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Пользовательское соглашение и политику конфиденциальности
+                </button>
+              </Label>
+            </div>
             <Button 
               className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
               onClick={() => handleRegister('seller')}
@@ -475,6 +526,15 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
       method={registrationMethod}
       contact={contactValue}
       onResend={handleResendCode}
+    />
+    
+    <TermsModal
+      isOpen={showTermsModal}
+      onClose={() => setShowTermsModal(false)}
+      onAccept={() => {
+        setAgreedToTerms(true);
+        setShowTermsModal(false);
+      }}
     />
   </div>
   );
