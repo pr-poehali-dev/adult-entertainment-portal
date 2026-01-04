@@ -192,6 +192,10 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="buyer" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="buyer">Покупатель</TabsTrigger>
+            <TabsTrigger value="seller">Продавец</TabsTrigger>
+          </TabsList>
           <TabsContent value="buyer">
             <BuyerRegistrationForm
               username={username}
