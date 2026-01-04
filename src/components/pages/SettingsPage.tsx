@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n/translations';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NotificationSettings {
   messages: boolean;
@@ -27,6 +28,7 @@ export const SettingsPage = ({
   setSoundEnabled,
 }: SettingsPageProps) => {
   const { language, setLanguage } = useLanguage();
+  const { logout } = useAuth();
   
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
     messages: true,
@@ -42,6 +44,13 @@ export const SettingsPage = ({
       ...prev,
       [key]: !prev[key],
     }));
+  };
+
+  const handleLogout = () => {
+    if (window.confirm('Вы уверены, что хотите выйти?')) {
+      logout();
+      window.location.reload();
+    }
   };
 
   return (
@@ -322,6 +331,28 @@ export const SettingsPage = ({
                 <span className="font-medium">Love is...</span>
               </div>
             </div>
+          </div>
+
+          <div className="glass-card p-6 rounded-2xl border border-red-500/50 shadow-xl bg-red-50/5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-red-500/10 rounded-lg">
+                <Icon name="LogOut" size={24} className="text-red-500" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-red-500">Выход из аккаунта</h2>
+                <p className="text-sm text-muted-foreground">Завершить текущий сеанс</p>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleLogout}
+              variant="destructive"
+              className="w-full"
+              size="lg"
+            >
+              <Icon name="LogOut" size={20} className="mr-2" />
+              Выйти из аккаунта
+            </Button>
           </div>
         </div>
       </div>

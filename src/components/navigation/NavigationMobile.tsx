@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import { Page, Profile, Notification, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavigationMobileProps {
   showMobileMenu: boolean;
@@ -44,6 +45,16 @@ export const NavigationMobile = ({
   rubInBtc,
 }: NavigationMobileProps) => {
   const { language, setLanguage, t } = useLanguage();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+      logout();
+      localStorage.removeItem('userProfile');
+      setShowMobileMenu(false);
+      window.location.reload();
+    }
+  };
 
   if (!showMobileMenu) return null;
 
@@ -222,15 +233,11 @@ export const NavigationMobile = ({
             )}
             
             <button 
-              onClick={() => { 
-                setUserRole(null); 
-                setCurrentPage('home'); 
-                setShowMobileMenu(false); 
-              }}
+              onClick={handleLogout}
               className="w-full py-2.5 px-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors flex items-center gap-3 justify-center font-semibold"
             >
               <Icon name="LogOut" size={18} />
-              <span className="text-sm">Выйти</span>
+              <span className="text-sm">Выйти из аккаунта</span>
             </button>
           </div>
         ) : (

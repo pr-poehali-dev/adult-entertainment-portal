@@ -15,6 +15,7 @@ import { HealthCertificateBadge } from '@/components/health/HealthCertificateBad
 import { HealthCertificateStatus } from '@/components/health/HealthCertificateStatus';
 import { HealthCertificateUploadModal } from '@/components/health/HealthCertificateUploadModal';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ProfileSettingsTabProps {
   profile: Profile;
@@ -38,6 +39,7 @@ export const ProfileSettingsTab = ({
   onProfileUpdate,
 }: ProfileSettingsTabProps) => {
   const { toast } = useToast();
+  const { logout } = useAuth();
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showVIPModal, setShowVIPModal] = useState(false);
   const [showHealthCertModal, setShowHealthCertModal] = useState(false);
@@ -136,22 +138,14 @@ export const ProfileSettingsTab = ({
   };
 
   const handleLogout = () => {
-    if (confirm('Вы уверены, что хотите выйти из профиля?')) {
+    if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+      logout();
+      localStorage.removeItem('userProfile');
       toast({
-        title: "Вы вышли из профиля",
+        title: "Вы вышли из аккаунта",
         description: "До скорой встречи!",
       });
-      
-      // Очищаем хранилище
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userProfile');
-      sessionStorage.clear();
-      
-      // Отправляем событие навигации
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('navigate', { detail: 'login' }));
-        window.location.reload();
-      }, 500);
+      window.location.reload();
     }
   };
 
@@ -363,6 +357,28 @@ export const ProfileSettingsTab = ({
             Сохранить вручную
           </Button>
         </div>
+
+        <Card className="border-red-500/50 bg-red-50/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-500">
+              <Icon name="LogOut" size={24} />
+              Выход из аккаунта
+            </CardTitle>
+            <CardDescription>
+              Завершить текущий сеанс и выйти из приложения
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={handleLogout}
+              variant="destructive"
+              className="w-full"
+            >
+              <Icon name="LogOut" size={18} className="mr-2" />
+              Выйти из аккаунта
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       <VerificationModal
