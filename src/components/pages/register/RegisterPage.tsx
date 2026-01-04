@@ -155,9 +155,9 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   };
   
   return (
-  <div className={`min-h-screen w-full flex items-center justify-center animate-fade-in transition-all duration-500 p-4 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10' : 'bg-background'}`}>
-    <Card className={`w-full max-w-md transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900 shadow-2xl shadow-pink-500/10' : 'bg-card border-border'}`}>
-      <CardHeader className="relative pt-8 pb-6 px-4">
+  <div className={`container mx-auto px-4 py-16 max-w-2xl animate-fade-in transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10 min-h-screen -mx-4 px-8' : ''}`}>
+    <Card className={`transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900 shadow-2xl shadow-pink-500/10' : 'bg-card border-border'}`}>
+      <CardHeader className="relative">
         <button
           onClick={() => setIsBusinessMode(!isBusinessMode)}
           className={`absolute top-4 right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-pink-500/50 z-10 ${isBusinessMode ? 'animate-pulse ring-4 ring-pink-300/50 dark:ring-pink-700/50' : ''}`}
@@ -166,7 +166,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
           <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
         </button>
         <CardTitle 
-          className={`text-3xl md:text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
+          className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
           style={isBusinessMode ? { 
             background: 'linear-gradient(to right, #ec4899, #a855f7)', 
             WebkitBackgroundClip: 'text', 
@@ -175,11 +175,11 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         >
           {isBusinessMode ? 'LOVE IS BUSINESS' : 'Регистрация'}
         </CardTitle>
-        <CardDescription className="text-center text-base md:text-lg">
+        <CardDescription className="text-center text-lg">
           {isBusinessMode ? 'Зарегистрируйтесь для управления своим бизнесом' : 'Выберите тип аккаунта для продолжения'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-4 pb-8">
+      <CardContent>
         <OneClickRegister 
           isBusinessMode={isBusinessMode}
           onRegister={handleOneClickRegister}
