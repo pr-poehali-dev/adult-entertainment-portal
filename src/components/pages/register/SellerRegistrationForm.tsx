@@ -195,7 +195,7 @@ export const SellerRegistrationForm = ({
             Регистрируем...
           </span>
         ) : (
-          'Зарегистрироваться'
+          'Зарегистрироваться как девушка'
         )}
       </Button>
     </div>
