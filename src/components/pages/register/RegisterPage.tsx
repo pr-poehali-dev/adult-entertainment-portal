@@ -164,15 +164,11 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
           {isBusinessMode ? 'LOVE IS BUSINESS' : 'Регистрация'}
         </CardTitle>
         <CardDescription className="text-center text-lg">
-          {isBusinessMode ? 'Зарегистрируйтесь для управления своим бизнесом' : 'Выберите тип аккаунта для продолжения'}
+          {isBusinessMode ? 'Зарегистрируйтесь для управления своим бизнесом' : 'Заполните форму для создания аккаунта'}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="buyer" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="buyer">Мужчина</TabsTrigger>
-            <TabsTrigger value="seller">Девушка</TabsTrigger>
-          </TabsList>
           <TabsContent value="buyer">
             <BuyerRegistrationForm
               username={username}
