@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { Page, UserRole, RegistrationMethod } from '@/types';
 import { parseReferralCode, validateReferralCode } from '@/utils/referralUtils';
@@ -12,7 +9,9 @@ import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
 import { TermsModal } from '@/components/auth/TermsModal';
 import { useAuth } from '@/contexts/AuthContext';
-import { Checkbox } from '@/components/ui/checkbox';
+import { OneClickRegister } from './OneClickRegister';
+import { BuyerRegistrationForm } from './BuyerRegistrationForm';
+import { SellerRegistrationForm } from './SellerRegistrationForm';
 
 interface RegisterPageProps {
   setUserRole: (role: UserRole) => void;
@@ -181,31 +180,10 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className={`mb-8 p-6 rounded-lg border-2 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 border-pink-300/30 dark:border-pink-700/30' : 'bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-primary/20'}`}>
-          <div className="text-center mb-4">
-            <Icon name="Zap" size={32} className={`mx-auto mb-2 transition-colors duration-500 ${isBusinessMode ? 'text-pink-600 dark:text-pink-400' : 'text-primary'}`} />
-            <h3 className="text-xl font-bold text-foreground mb-1">Регистрация в 1 клик</h3>
-            <p className="text-sm text-muted-foreground">Быстрый старт без заполнения формы. Профиль можно заполнить позже.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              className={`h-14 border-2 hover:text-white transition-all duration-300 hover:scale-105 ${isBusinessMode ? 'border-pink-500/40 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600' : 'border-primary/40 hover:bg-primary'}`}
-              onClick={() => handleOneClickRegister('buyer')}
-            >
-              <Icon name="ShoppingBag" size={20} className="mr-2" />
-              Мужчина
-            </Button>
-            <Button
-              variant="outline"
-              className={`h-14 border-2 hover:text-white transition-all duration-300 hover:scale-105 ${isBusinessMode ? 'border-pink-500/40 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600' : 'border-primary/40 hover:bg-primary'}`}
-              onClick={() => handleOneClickRegister('seller')}
-            >
-              <Icon name="Briefcase" size={20} className="mr-2" />
-              Девушка
-            </Button>
-          </div>
-        </div>
+        <OneClickRegister 
+          isBusinessMode={isBusinessMode}
+          onRegister={handleOneClickRegister}
+        />
 
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
@@ -221,286 +199,51 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
             <TabsTrigger value="buyer">Мужчина</TabsTrigger>
             <TabsTrigger value="seller">Девушка</TabsTrigger>
           </TabsList>
-          <TabsContent value="buyer" className="space-y-4 mt-6">
-            <div className="space-y-2">
-              <Label htmlFor="buyer-nickname">Никнейм</Label>
-              <Input 
-                id="buyer-nickname" 
-                placeholder="Придумайте никнейм для профиля" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="bg-background border-border" 
-              />
-              <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Способ регистрации</Label>
-              <div className="grid grid-cols-3 gap-2">
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'email' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('email'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="Mail" size={16} />
-                  Email
-                </Button>
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'phone' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('phone'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="Phone" size={16} />
-                  Телефон
-                </Button>
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'telegram' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('telegram'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="MessageCircle" size={16} />
-                  Telegram
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="buyer-contact">{getContactLabel()}</Label>
-              <Input 
-                id="buyer-contact" 
-                type={registrationMethod === 'email' ? 'email' : registrationMethod === 'phone' ? 'tel' : 'text'}
-                placeholder={getContactPlaceholder()}
-                value={contactValue}
-                onChange={(e) => setContactValue(e.target.value)}
-                className="bg-background border-border"
-                disabled={isLoading} 
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="buyer-password">Пароль</Label>
-              <Input 
-                id="buyer-password" 
-                type="password" 
-                placeholder="••••••••" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-background border-border"
-                disabled={isLoading} 
-              />
-              <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="buyer-gender">Гендер</Label>
-              <Select>
-                <SelectTrigger id="buyer-gender" className="bg-background border-border">
-                  <SelectValue placeholder="Выберите гендер" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Мужской</SelectItem>
-                  <SelectItem value="female">Женский</SelectItem>
-                  <SelectItem value="other">Другое</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="buyer-age">Возраст</Label>
-              <Input id="buyer-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="buyer-referral">Реферальная ссылка (необязательно)</Label>
-              <Input 
-                id="buyer-referral" 
-                value={referralInput}
-                onChange={(e) => setReferralInput(e.target.value)}
-                placeholder="Вставьте реферальную ссылку" 
-                className="bg-background border-border" 
-              />
-              <p className="text-xs text-muted-foreground">Если у вас есть приглашение от партнёра, вставьте ссылку сюда</p>
-            </div>
-            
-            <div className="flex items-start space-x-2 pt-2">
-              <Checkbox 
-                id="buyer-terms" 
-                checked={agreedToTerms}
-                onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-                className="mt-1"
-              />
-              <Label htmlFor="buyer-terms" className="text-sm leading-relaxed cursor-pointer">
-                Я принимаю{' '}
-                <button
-                  type="button"
-                  onClick={() => setShowTermsModal(true)}
-                  className="text-primary hover:underline font-medium"
-                >
-                  Пользовательское соглашение и политику конфиденциальности
-                </button>
-              </Label>
-            </div>
-            <Button 
-              className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
-              onClick={() => handleRegister('buyer')}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className="flex items-center gap-2">
-                  <Icon name="Loader2" size={20} className="animate-spin" />
-                  Регистрируем...
-                </span>
-              ) : (
-                'Зарегистрироваться как мужчина'
-              )}
-            </Button>
+          <TabsContent value="buyer">
+            <BuyerRegistrationForm
+              username={username}
+              setUsername={setUsername}
+              registrationMethod={registrationMethod}
+              setRegistrationMethod={setRegistrationMethod}
+              contactValue={contactValue}
+              setContactValue={setContactValue}
+              password={password}
+              setPassword={setPassword}
+              referralInput={referralInput}
+              setReferralInput={setReferralInput}
+              agreedToTerms={agreedToTerms}
+              setAgreedToTerms={setAgreedToTerms}
+              isLoading={isLoading}
+              isBusinessMode={isBusinessMode}
+              onRegister={() => handleRegister('buyer')}
+              onShowTermsModal={() => setShowTermsModal(true)}
+              getContactLabel={getContactLabel}
+              getContactPlaceholder={getContactPlaceholder}
+            />
           </TabsContent>
-          <TabsContent value="seller" className="space-y-4 mt-6">
-            <div className="space-y-2">
-              <Label htmlFor="seller-nickname">Никнейм</Label>
-              <Input 
-                id="seller-nickname" 
-                placeholder="Придумайте никнейм для профиля"
-                disabled={isLoading} 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="bg-background border-border" 
-              />
-              <p className="text-xs text-muted-foreground">Будет отображаться в профиле и шапке сайта</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Способ регистрации</Label>
-              <div className="grid grid-cols-3 gap-2">
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'email' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('email'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="Mail" size={16} />
-                  Email
-                </Button>
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'phone' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('phone'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="Phone" size={16} />
-                  Телефон
-                </Button>
-                <Button
-                  type="button"
-                  variant={registrationMethod === 'telegram' ? 'default' : 'outline'}
-                  onClick={() => { setRegistrationMethod('telegram'); setContactValue(''); }}
-                  className="flex items-center gap-2"
-                >
-                  <Icon name="MessageCircle" size={16} />
-                  Telegram
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="seller-contact">{getContactLabel()}</Label>
-              <Input 
-                id="seller-contact" 
-                type={registrationMethod === 'email' ? 'email' : registrationMethod === 'phone' ? 'tel' : 'text'}
-                placeholder={getContactPlaceholder()}
-                value={contactValue}
-                onChange={(e) => setContactValue(e.target.value)}
-                className="bg-background border-border" 
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="seller-password">Пароль</Label>
-              <Input 
-                id="seller-password" 
-                type="password" 
-                placeholder="••••••••" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-background border-border"
-                disabled={isLoading} 
-              />
-              <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="seller-gender">Гендер</Label>
-              <Select>
-                <SelectTrigger id="seller-gender" className="bg-background border-border">
-                  <SelectValue placeholder="Выберите гендер" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Мужской</SelectItem>
-                  <SelectItem value="female">Женский</SelectItem>
-                  <SelectItem value="other">Другое</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="seller-age">Возраст</Label>
-              <Input id="seller-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="seller-category">Категория услуг</Label>
-              <Select value={businessType} onValueChange={setBusinessType}>
-                <SelectTrigger id="seller-category" className="bg-background border-border">
-                  <SelectValue placeholder="Выберите категорию" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="vip">VIP</SelectItem>
-                  <SelectItem value="premium">Премиум</SelectItem>
-                  <SelectItem value="business">Бизнес</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="seller-referral">Реферальная ссылка (необязательно)</Label>
-              <Input 
-                id="seller-referral" 
-                value={referralInput}
-                onChange={(e) => setReferralInput(e.target.value)}
-                placeholder="Вставьте реферальную ссылку" 
-                className="bg-background border-border" 
-              />
-              <p className="text-xs text-muted-foreground">Присоединитесь к партнёрской сети и зарабатывайте на рефералах</p>
-            </div>
-            
-            <div className="flex items-start space-x-2 pt-2">
-              <Checkbox 
-                id="seller-terms" 
-                checked={agreedToTerms}
-                onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-                className="mt-1"
-              />
-              <Label htmlFor="seller-terms" className="text-sm leading-relaxed cursor-pointer">
-                Я принимаю{' '}
-                <button
-                  type="button"
-                  onClick={() => setShowTermsModal(true)}
-                  className="text-primary hover:underline font-medium"
-                >
-                  Пользовательское соглашение и политику конфиденциальности
-                </button>
-              </Label>
-            </div>
-            <Button 
-              className={`w-full text-white mt-6 transition-all duration-300 ${isBusinessMode ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:shadow-xl hover:shadow-pink-500/50' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}
-              onClick={() => handleRegister('seller')}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className="flex items-center gap-2">
-                  <Icon name="Loader2" size={20} className="animate-spin" />
-                  Регистрируем...
-                </span>
-              ) : (
-                'Зарегистрироваться как девушка'
-              )}
-            </Button>
+          <TabsContent value="seller">
+            <SellerRegistrationForm
+              username={username}
+              setUsername={setUsername}
+              registrationMethod={registrationMethod}
+              setRegistrationMethod={setRegistrationMethod}
+              contactValue={contactValue}
+              setContactValue={setContactValue}
+              password={password}
+              setPassword={setPassword}
+              businessType={businessType}
+              setBusinessType={setBusinessType}
+              referralInput={referralInput}
+              setReferralInput={setReferralInput}
+              agreedToTerms={agreedToTerms}
+              setAgreedToTerms={setAgreedToTerms}
+              isLoading={isLoading}
+              isBusinessMode={isBusinessMode}
+              onRegister={() => handleRegister('seller')}
+              onShowTermsModal={() => setShowTermsModal(true)}
+              getContactLabel={getContactLabel}
+              getContactPlaceholder={getContactPlaceholder}
+            />
           </TabsContent>
         </Tabs>
         
