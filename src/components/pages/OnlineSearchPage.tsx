@@ -345,7 +345,7 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                 </div>
                 
                 <div 
-                  className="absolute inset-0 bg-gradient-to-br from-primary/95 to-purple-600/95 p-4"
+                  className="absolute inset-0 bg-black/90 p-4"
                   style={{ 
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)'
