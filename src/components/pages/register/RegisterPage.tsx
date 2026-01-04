@@ -180,17 +180,19 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <OneClickRegister 
-          isBusinessMode={isBusinessMode}
-          onRegister={handleOneClickRegister}
-        />
+        <div className="md:hidden">
+          <OneClickRegister 
+            isBusinessMode={isBusinessMode}
+            onRegister={handleOneClickRegister}
+          />
 
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-          <div className="relative flex justify-center text-sm uppercase">
-            <span className="bg-card px-4 text-muted-foreground font-medium">или полная регистрация</span>
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-sm uppercase">
+              <span className="bg-card px-4 text-muted-foreground font-medium">или полная регистрация</span>
+            </div>
           </div>
         </div>
 
