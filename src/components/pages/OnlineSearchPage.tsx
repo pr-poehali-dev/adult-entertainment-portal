@@ -354,21 +354,19 @@ export const OnlineSearchPage = ({ setCurrentPage }: OnlineSearchPageProps) => {
                 >
                   {/* Top section - Name, Age, City (left side) */}
                   <div className="absolute top-3 left-3">
-                    <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 py-1.5">
-                      <h3 
-                        className="text-white font-bold text-lg leading-tight hover:text-white/80 cursor-pointer transition-colors"
-                        onClick={(e) => handleNameClick(user.id, e)}
-                      >{user.name}, {user.age}</h3>
-                      <p className="text-white/90 text-sm flex items-center gap-1 mt-0.5">
-                        <Icon name="MapPin" size={12} />
-                        {user.city}
-                      </p>
-                    </div>
+                    <h3 
+                      className="text-white font-bold text-lg leading-tight hover:text-white/80 cursor-pointer transition-colors"
+                      onClick={(e) => handleNameClick(user.id, e)}
+                    >{user.name}, {user.age}</h3>
+                    <p className="text-white/90 text-sm flex items-center gap-1 mt-0.5">
+                      <Icon name="MapPin" size={12} />
+                      {user.city}
+                    </p>
                   </div>
                   
                   {/* Online status badge - top right corner */}
                   <div className="absolute top-3 right-3">
-                    <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2.5 py-1">
+                    <div className="inline-flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${user.isOnline ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`} />
                       <span className="text-white text-xs font-medium">{user.lastSeen}</span>
                     </div>
