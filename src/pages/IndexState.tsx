@@ -4,10 +4,17 @@ import { useToast } from '@/hooks/use-toast';
 import { useNotificationSound } from '@/hooks/useNotificationSound';
 
 export const useIndexState = () => {
-  const [isAuthenticated, setIsAuthenticatedState] = useState(false);
+  const [isAuthenticated, setIsAuthenticatedState] = useState(() => {
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
 
   const setIsAuthenticated = (value: boolean) => {
     setIsAuthenticatedState(value);
+    if (value) {
+      localStorage.setItem('isAuthenticated', 'true');
+    } else {
+      localStorage.removeItem('isAuthenticated');
+    }
   };
   const [currentPage, setCurrentPage] = useState<Page>('online-search');
   const [userRole, setUserRole] = useState<UserRole>('buyer');

@@ -158,21 +158,21 @@ export const renderPage = (props: AppPagesProps) => {
         </Suspense>
       ) : (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.UnifiedAuthPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
         </Suspense>
       );
     
     case 'register':
       return (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.UnifiedAuthPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
         </Suspense>
       );
     
     case 'login':
       return (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.UnifiedAuthPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
         </Suspense>
       );
     

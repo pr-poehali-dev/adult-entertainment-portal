@@ -21,6 +21,7 @@ import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
+import AuthPage from './AuthPage';
 import PremiumModal from '@/components/PremiumModal';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
@@ -33,7 +34,6 @@ import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
 import { useAuth } from '@/contexts/AuthContext';
-import * as Pages from '@/components/AppPagesImports';
 
 const Index = () => {
   // Состояние
@@ -49,8 +49,6 @@ const Index = () => {
         state.setUserRole(role);
         state.setIsAuthenticated(true);
       }
-    } else if (!isAuthenticated) {
-      state.setIsAuthenticated(false);
     }
   }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
 
@@ -180,10 +178,27 @@ const Index = () => {
 
   if (!state.isAuthenticated) {
     return (
-      <>
-        <Toaster />
-        <Pages.UnifiedAuthPage setUserRole={state.setUserRole} setCurrentPage={state.setCurrentPage} />
-      </>
+      <div className="animate-fade-in">
+        <AuthPage onAuth={() => {
+          state.setIsAuthenticated(true);
+          const userRole = localStorage.getItem('userRole');
+          if (userRole === 'business') {
+            state.setProfile({ 
+              ...state.profile, 
+              role: 'business',
+              businessType: localStorage.getItem('businessType') as 'organization' | 'individual',
+              profileCompleted: true,
+              kycCompleted: true,
+            });
+          } else {
+            state.setProfile({ 
+              ...state.profile, 
+              role: 'buyer',
+              businessType: undefined,
+            });
+          }
+        }} />
+      </div>
     );
   }
 
