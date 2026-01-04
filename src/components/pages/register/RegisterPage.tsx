@@ -229,6 +229,10 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
               onShowTermsModal={() => setShowTermsModal(true)}
               getContactLabel={getContactLabel}
               getContactPlaceholder={getContactPlaceholder}
+              gender={gender}
+              setGender={setGender}
+              age={age}
+              setAge={setAge}
             />
           </TabsContent>
         </Tabs>
