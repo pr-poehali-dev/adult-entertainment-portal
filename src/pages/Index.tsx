@@ -33,6 +33,7 @@ import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
 import { useAuth } from '@/contexts/AuthContext';
+import * as Pages from '@/components/AppPagesImports';
 
 const Index = () => {
   // Состояние
@@ -176,7 +177,12 @@ const Index = () => {
   });
 
   if (!state.isAuthenticated) {
-    return null;
+    return (
+      <>
+        <Toaster />
+        <Pages.UnifiedAuthPage setUserRole={state.setUserRole} setCurrentPage={state.setCurrentPage} />
+      </>
+    );
   }
 
   // Проверка бизнес-аккаунта
