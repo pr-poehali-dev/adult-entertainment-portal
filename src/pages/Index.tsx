@@ -21,8 +21,8 @@ import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
-import AuthPage from './AuthPage';
 import PremiumModal from '@/components/PremiumModal';
+import { UnifiedAuthPage } from '@/components/auth/UnifiedAuthPage';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
@@ -176,29 +176,24 @@ const Index = () => {
     setSelectedOrderChatId: state.setSelectedOrderChatId,
   });
 
-  if (!state.isAuthenticated) {
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = user.role === 'seller' ? 'seller' : user.role === 'buyer' ? 'buyer' : null;
+      if (role) {
+        state.setUserRole(role);
+        state.setIsAuthenticated(true);
+      }
+    } else if (!isAuthenticated) {
+      state.setIsAuthenticated(false);
+    }
+  }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
+
+  if (!state.isAuthenticated && !isAuthenticated) {
     return (
-      <div className="animate-fade-in">
-        <AuthPage onAuth={() => {
-          state.setIsAuthenticated(true);
-          const userRole = localStorage.getItem('userRole');
-          if (userRole === 'business') {
-            state.setProfile({ 
-              ...state.profile, 
-              role: 'business',
-              businessType: localStorage.getItem('businessType') as 'organization' | 'individual',
-              profileCompleted: true,
-              kycCompleted: true,
-            });
-          } else {
-            state.setProfile({ 
-              ...state.profile, 
-              role: 'buyer',
-              businessType: undefined,
-            });
-          }
-        }} />
-      </div>
+      <>
+        <Toaster />
+        <UnifiedAuthPage setUserRole={state.setUserRole} setCurrentPage={state.setCurrentPage} />
+      </>
     );
   }
 
