@@ -21,7 +21,6 @@ import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
-import AuthPage from './AuthPage';
 import PremiumModal from '@/components/PremiumModal';
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
@@ -177,29 +176,7 @@ const Index = () => {
   });
 
   if (!state.isAuthenticated) {
-    return (
-      <div className="animate-fade-in">
-        <AuthPage onAuth={() => {
-          state.setIsAuthenticated(true);
-          const userRole = localStorage.getItem('userRole');
-          if (userRole === 'business') {
-            state.setProfile({ 
-              ...state.profile, 
-              role: 'business',
-              businessType: localStorage.getItem('businessType') as 'organization' | 'individual',
-              profileCompleted: true,
-              kycCompleted: true,
-            });
-          } else {
-            state.setProfile({ 
-              ...state.profile, 
-              role: 'buyer',
-              businessType: undefined,
-            });
-          }
-        }} />
-      </div>
-    );
+    return null;
   }
 
   // Проверка бизнес-аккаунта
