@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
 import { TermsModal } from '@/components/auth/TermsModal';
 import { useAuth } from '@/contexts/AuthContext';
-import { OneClickRegister } from './OneClickRegister';
 import { BuyerRegistrationForm } from './BuyerRegistrationForm';
 import { SellerRegistrationForm } from './SellerRegistrationForm';
 
@@ -33,17 +32,6 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
-  
-  const handleOneClickRegister = (role: UserRole) => {
-    setUserRole(role);
-    setCurrentPage('home');
-    
-    toast({
-      title: "Регистрация завершена!",
-      description: `Вы зарегистрированы как ${role === 'buyer' ? 'мужчина' : 'девушка'}. Заполните профиль для полного доступа.`,
-      duration: 5000,
-    });
-  };
   
   const handleRegister = async (role: UserRole) => {
     if (!contactValue || !username || !password) {
@@ -180,22 +168,6 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="md:hidden">
-          <OneClickRegister 
-            isBusinessMode={isBusinessMode}
-            onRegister={handleOneClickRegister}
-          />
-
-          <div className="relative my-8">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-sm uppercase">
-              <span className="bg-card px-4 text-muted-foreground font-medium">или полная регистрация</span>
-            </div>
-          </div>
-        </div>
-
         <Tabs defaultValue="buyer" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="buyer">Мужчина</TabsTrigger>
