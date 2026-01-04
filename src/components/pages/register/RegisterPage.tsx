@@ -155,8 +155,8 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   };
   
   return (
-  <div className={`min-h-screen w-full animate-fade-in transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10' : 'bg-background'}`}>
-    <Card className={`h-full border-0 rounded-none transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 shadow-2xl shadow-pink-500/10' : 'bg-card'}`}>
+  <div className={`min-h-screen w-full flex items-center justify-center animate-fade-in transition-all duration-500 p-4 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10' : 'bg-background'}`}>
+    <Card className={`w-full max-w-md transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900 shadow-2xl shadow-pink-500/10' : 'bg-card border-border'}`}>
       <CardHeader className="relative pt-8 pb-6 px-4">
         <button
           onClick={() => setIsBusinessMode(!isBusinessMode)}
