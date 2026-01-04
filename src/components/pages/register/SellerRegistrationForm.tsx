@@ -125,23 +125,6 @@ export const SellerRegistrationForm = ({
         <p className="text-xs text-muted-foreground">Минимум 6 символов</p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="seller-gender">Гендер</Label>
-        <Select>
-          <SelectTrigger id="seller-gender" className="bg-background border-border">
-            <SelectValue placeholder="Выберите гендер" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="male">Мужской</SelectItem>
-            <SelectItem value="female">Женский</SelectItem>
-            <SelectItem value="other">Другое</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="seller-age">Возраст</Label>
-        <Input id="seller-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
-      </div>
-      <div className="space-y-2">
         <Label htmlFor="seller-category">Категория услуг</Label>
         <Select value={businessType} onValueChange={setBusinessType}>
           <SelectTrigger id="seller-category" className="bg-background border-border">
@@ -195,7 +178,7 @@ export const SellerRegistrationForm = ({
             Регистрируем...
           </span>
         ) : (
-          'Зарегистрироваться как девушка'
+          'Зарегистрироваться'
         )}
       </Button>
     </div>

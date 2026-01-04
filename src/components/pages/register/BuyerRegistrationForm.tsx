@@ -25,6 +25,10 @@ interface BuyerRegistrationFormProps {
   onShowTermsModal: () => void;
   getContactLabel: () => string;
   getContactPlaceholder: () => string;
+  gender: string;
+  setGender: (value: string) => void;
+  age: string;
+  setAge: (value: string) => void;
 }
 
 export const BuyerRegistrationForm = ({
@@ -46,6 +50,10 @@ export const BuyerRegistrationForm = ({
   onShowTermsModal,
   getContactLabel,
   getContactPlaceholder,
+  gender,
+  setGender,
+  age,
+  setAge,
 }: BuyerRegistrationFormProps) => {
   return (
     <div className="space-y-4 mt-6">
@@ -122,7 +130,7 @@ export const BuyerRegistrationForm = ({
       </div>
       <div className="space-y-2">
         <Label htmlFor="buyer-gender">Гендер</Label>
-        <Select>
+        <Select value={gender} onValueChange={setGender}>
           <SelectTrigger id="buyer-gender" className="bg-background border-border">
             <SelectValue placeholder="Выберите гендер" />
           </SelectTrigger>
@@ -135,7 +143,16 @@ export const BuyerRegistrationForm = ({
       </div>
       <div className="space-y-2">
         <Label htmlFor="buyer-age">Возраст</Label>
-        <Input id="buyer-age" type="number" placeholder="18" min="18" max="100" className="bg-background border-border" />
+        <Input 
+          id="buyer-age" 
+          type="number" 
+          placeholder="18" 
+          min="18" 
+          max="100" 
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          className="bg-background border-border" 
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="buyer-referral">Реферальная ссылка (необязательно)</Label>
@@ -178,7 +195,7 @@ export const BuyerRegistrationForm = ({
             Регистрируем...
           </span>
         ) : (
-          'Зарегистрироваться как мужчина'
+          'Зарегистрироваться'
         )}
       </Button>
     </div>
