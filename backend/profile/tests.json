@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Get profile without token",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "Токен не предоставлен"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

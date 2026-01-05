@@ -2,6 +2,7 @@ import funcUrls from '../../func2url.json';
 
 const API_URLS = {
   auth: funcUrls.auth,
+  profile: funcUrls.profile || 'https://functions.poehali.dev/47e1c970-cd2d-4600-a09d-d8037c1c15d9',
   catalog: funcUrls.catalog,
   businessServices: funcUrls['business-services'],
   cryptoDeposit: funcUrls['crypto-deposit']
@@ -112,10 +113,9 @@ export const authApi = {
 
   async getProfile() {
     return fetchApi<{ user: any }>(
-      API_URLS.auth,
+      API_URLS.profile,
       {
-        method: 'POST',
-        body: JSON.stringify({ action: 'profile' })
+        method: 'GET'
       }
     );
   }

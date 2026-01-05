@@ -1,6 +1,5 @@
 import json
 import os
-import hashlib
 import secrets
 import string
 from datetime import datetime, timedelta
@@ -9,6 +8,8 @@ from psycopg2.extras import RealDictCursor
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import bcrypt
+import jwt
 
 def generate_referral_code():
     """Генерация уникального реферального кода"""
@@ -16,12 +17,29 @@ def generate_referral_code():
 
 def hash_password(password: str) -> str:
     """Хеширование пароля"""
-    return hashlib.sha256(password.encode()).hexdigest()
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-def generate_token(user_id: int) -> str:
-    """Генерация токена для сессии"""
-    token_data = f"{user_id}:{datetime.utcnow().isoformat()}:{secrets.token_hex(16)}"
-    return hashlib.sha256(token_data.encode()).hexdigest()
+def verify_password(password: str, password_hash: str) -> bool:
+    """Проверка пароля"""
+    return bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
+
+def generate_token(user_id: int, email: str) -> str:
+    """Генерация JWT токена для сессии"""
+    jwt_secret = os.environ.get('JWT_SECRET')
+    payload = {
+        'user_id': user_id,
+        'email': email,
+        'exp': datetime.utcnow() + timedelta(days=30)
+    }
+    return jwt.encode(payload, jwt_secret, algorithm='HS256')
+
+def verify_token(token: str):
+    """Проверка JWT токена"""
+    try:
+        jwt_secret = os.environ.get('JWT_SECRET')
+        return jwt.decode(token, jwt_secret, algorithms=['HS256'])
+    except:
+        return None
 
 def send_credentials_email(email: str, username: str, password: str):
     """Отправка письма с данными для входа"""
@@ -254,7 +272,7 @@ def handler(event: dict, context) -> dict:
                 except Exception as e:
                     print(f'Email send error: {e}')
                 
-                token = generate_token(user['id'])
+                token = generate_token(user['id'], user['email'])
                 
                 return {
                     'statusCode': 201,
@@ -286,18 +304,16 @@ def handler(event: dict, context) -> dict:
                         'isBase64Encoded': False
                     }
                 
-                password_hash = hash_password(password)
-                
                 cur.execute("""
                     SELECT id, email, username, role, business_type, referral_code,
-                           profile_completed, kyc_completed, verified, is_premium
+                           profile_completed, kyc_completed, verified, is_premium, password_hash
                     FROM users 
-                    WHERE LOWER(email) = LOWER(%s) AND password_hash = %s
-                """, (email, password_hash))
+                    WHERE LOWER(email) = LOWER(%s)
+                """, (email,))
                 
                 user = cur.fetchone()
                 
-                if not user:
+                if not user or not verify_password(password, user['password_hash']):
                     return {
                         'statusCode': 401,
                         'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -308,7 +324,7 @@ def handler(event: dict, context) -> dict:
                 cur.execute("UPDATE users SET last_login_at = %s WHERE id = %s", (datetime.utcnow(), user['id']))
                 conn.commit()
                 
-                token = generate_token(user['id'])
+                token = generate_token(user['id'], user['email'])
                 
                 return {
                     'statusCode': 200,
