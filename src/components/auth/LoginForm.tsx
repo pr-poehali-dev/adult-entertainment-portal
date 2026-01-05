@@ -6,14 +6,14 @@ import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole, Page } from '@/types';
+import { TelegramLoginButton } from './TelegramLoginButton';
 
 interface LoginFormProps {
   setUserRole: (role: UserRole) => void;
   setCurrentPage: (page: Page) => void;
-  telegramWidgetRef: React.RefObject<HTMLDivElement>;
 }
 
-export const LoginForm = ({ setUserRole, setCurrentPage, telegramWidgetRef }: LoginFormProps) => {
+export const LoginForm = ({ setUserRole, setCurrentPage }: LoginFormProps) => {
   const { toast } = useToast();
   const { login } = useAuth();
   
@@ -117,9 +117,13 @@ export const LoginForm = ({ setUserRole, setCurrentPage, telegramWidgetRef }: Lo
         </div>
       </div>
 
-      <div className="flex justify-center">
-        <div ref={telegramWidgetRef} />
-      </div>
+      <TelegramLoginButton
+        setUserRole={setUserRole}
+        setCurrentPage={setCurrentPage}
+        botUsername="love_is_city_bot"
+        isLoading={loginLoading}
+        setIsLoading={setLoginLoading}
+      />
     </form>
   );
 };

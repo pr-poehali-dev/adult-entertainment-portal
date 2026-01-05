@@ -1,10 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Page, UserRole } from '@/types';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
-import { TelegramAuthWidget } from './TelegramAuthWidget';
 
 interface UnifiedAuthPageProps {
   setUserRole: (role: UserRole) => void;
@@ -12,9 +11,7 @@ interface UnifiedAuthPageProps {
 }
 
 export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPageProps) => {
-  const telegramWidgetRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
-  const [loginLoading, setLoginLoading] = useState(false);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center p-4">
@@ -38,7 +35,6 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
               <LoginForm 
                 setUserRole={setUserRole}
                 setCurrentPage={setCurrentPage}
-                telegramWidgetRef={telegramWidgetRef}
               />
             </TabsContent>
 
@@ -51,14 +47,6 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
           </Tabs>
         </CardContent>
       </Card>
-
-      <TelegramAuthWidget
-        telegramWidgetRef={telegramWidgetRef}
-        activeTab={activeTab}
-        setUserRole={setUserRole}
-        setCurrentPage={setCurrentPage}
-        setLoginLoading={setLoginLoading}
-      />
     </div>
   );
 };
