@@ -1,4 +1,5 @@
 {
+  "telegram-auth": "https://functions.poehali.dev/feeaca13-737c-4005-8c44-2909244b3c97",
   "profile": "https://functions.poehali.dev/47e1c970-cd2d-4600-a09d-d8037c1c15d9",
   "crypto-webhook": "https://functions.poehali.dev/fe9d56a2-eaf2-4ee3-9283-0238b84ca2f3",
   "crypto-deposit": "https://functions.poehali.dev/fb625acc-8bc2-474b-8baa-a6daac0341dd",

@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 import { ForgotPasswordModal } from '@/components/auth/ForgotPasswordModal';
 import { useAuth } from '@/contexts/AuthContext';
+import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
@@ -211,6 +212,22 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-card px-2 text-muted-foreground">или</span>
+            </div>
+          </div>
+
+          <TelegramLoginButton
+            setUserRole={setUserRole}
+            setCurrentPage={setCurrentPage}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">нет аккаунта?</span>
             </div>
           </div>
 
