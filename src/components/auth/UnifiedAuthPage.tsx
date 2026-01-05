@@ -205,7 +205,7 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
 
   useEffect(() => {
     if (telegramWidgetRef.current && activeTab === 'login' && !(window as any).TelegramLoginWidget) {
-      const botUsername = 'lovender_bot'; // Замените на username вашего бота
+      const botUsername = 'love_is_city_bot';
       
       const script = document.createElement('script');
       script.src = 'https://telegram.org/js/telegram-widget.js?22';
