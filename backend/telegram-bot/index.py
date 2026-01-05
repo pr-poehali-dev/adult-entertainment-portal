@@ -53,7 +53,91 @@ def handler(event: dict, context) -> dict:
             text = message.get('text', '')
             user = message.get('from', {})
             
-            if text == '/start':
+            if text.startswith('/start'):
+                params = text.split(' ', 1)
+                is_web_auth = len(params) > 1 and params[1] == 'web_auth'
+                
+                if is_web_auth:
+                    import time
+                    import secrets
+                    
+                    telegram_id = user.get('id')
+                    first_name = user.get('first_name', '')
+                    last_name = user.get('last_name', '')
+                    username = user.get('username', f'user{telegram_id}')
+                    auth_date = int(time.time())
+                    
+                    auth_data = {
+                        'id': telegram_id,
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'username': username,
+                        'auth_date': auth_date
+                    }
+                    
+                    data_check_arr = [f"{k}={v}" for k, v in sorted(auth_data.items()) if v]
+                    data_check_string = '\n'.join(data_check_arr)
+                    secret_key = hashlib.sha256(bot_token.encode()).digest()
+                    hash_value = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+                    
+                    import psycopg2
+                    from psycopg2.extras import RealDictCursor
+                    
+                    try:
+                        dsn = os.environ.get('DATABASE_URL')
+                        conn = psycopg2.connect(dsn)
+                        cur = conn.cursor(cursor_factory=RealDictCursor)
+                        schema = os.environ.get('MAIN_DB_SCHEMA', 'public')
+                        
+                        cur.execute(f"""
+                            SELECT id, username FROM {schema}.users WHERE telegram_id = %s
+                        """, (telegram_id,))
+                        
+                        user_exists = cur.fetchone()
+                        cur.close()
+                        conn.close()
+                        
+                        if user_exists:
+                            status_msg = f"✅ Вход выполнен!\n\nДобро пожаловать, {user_exists['username']}!"
+                        else:
+                            status_msg = f"✅ Аккаунт создан автоматически!\n\nВаш профиль готов к использованию."
+                        
+                        web_app_url = os.environ.get('WEB_APP_URL', 'https://loveis.city')
+                        auth_params = f"tg_id={telegram_id}&tg_first_name={first_name}&tg_username={username}&tg_auth_date={auth_date}&tg_hash={hash_value}"
+                        login_url = f"{web_app_url}?{auth_params}"
+                        
+                        response_text = f"🔐 Авторизация через Telegram\n\n{status_msg}\n\nНажмите кнопку ниже, чтобы открыть сайт:"
+                        
+                        return {
+                            'statusCode': 200,
+                            'headers': {'Content-Type': 'application/json'},
+                            'body': json.dumps({
+                                'method': 'sendMessage',
+                                'chat_id': chat_id,
+                                'text': response_text,
+                                'reply_markup': {
+                                    'inline_keyboard': [[
+                                        {
+                                            'text': '🚀 Войти на сайт',
+                                            'url': login_url
+                                        }
+                                    ]]
+                                }
+                            })
+                        }
+                    except Exception as e:
+                        print(f"Database error: {e}")
+                        response_text = f"⚠️ Ошибка при создании авторизации.\n\nПопробуйте позже."
+                        return {
+                            'statusCode': 200,
+                            'headers': {'Content-Type': 'application/json'},
+                            'body': json.dumps({
+                                'method': 'sendMessage',
+                                'chat_id': chat_id,
+                                'text': response_text
+                            })
+                        }
+                
                 response_text = f"👋 Привет, {user.get('first_name', 'друг')}!\n\n" \
                                f"Добро пожаловать в наш сервис знакомств!\n\n" \
                                f"Нажми на кнопку ниже, чтобы открыть приложение:"
