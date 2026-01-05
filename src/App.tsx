@@ -4,9 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { TelegramProvider } from "@/contexts/TelegramProvider";
-import { BusinessServicesProvider } from "@/contexts/BusinessServicesContext";
-import { CatalogProvider } from "@/contexts/CatalogContext";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { ServiceCategoriesProvider } from "@/contexts/ServiceCategoriesContext";
 import { PartnerProgramProvider } from "@/contexts/PartnerProgramContext";
 import Index from "./pages/Index";
@@ -31,26 +28,20 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TelegramProvider>
         <LanguageProvider>
-          <AuthProvider>
-            <ServiceCategoriesProvider>
-              <BusinessServicesProvider>
-                <PartnerProgramProvider>
-                  <CatalogProvider>
-                    <Toaster />
-                    <Sonner />
-                    <BrowserRouter>
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/admin" element={<AdminPanel />} />
-                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </BrowserRouter>
-                  </CatalogProvider>
-                </PartnerProgramProvider>
-              </BusinessServicesProvider>
-            </ServiceCategoriesProvider>
-          </AuthProvider>
+          <ServiceCategoriesProvider>
+            <PartnerProgramProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/admin" element={<AdminPanel />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </PartnerProgramProvider>
+          </ServiceCategoriesProvider>
         </LanguageProvider>
       </TelegramProvider>
     </QueryClientProvider>

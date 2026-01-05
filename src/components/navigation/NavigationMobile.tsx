@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import { Page, Profile, Notification, UserRole } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useAuth } from '@/contexts/AuthContext';
 
 interface NavigationMobileProps {
   showMobileMenu: boolean;
@@ -45,12 +44,12 @@ export const NavigationMobile = ({
   rubInBtc,
 }: NavigationMobileProps) => {
   const { language, setLanguage, t } = useLanguage();
-  const { logout } = useAuth();
 
   const handleLogout = () => {
     if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
-      logout();
       localStorage.removeItem('userProfile');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
       setShowMobileMenu(false);
       window.location.reload();
     }

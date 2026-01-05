@@ -6,7 +6,6 @@ import { Toaster } from '@/components/ui/toaster';
 import Icon from '@/components/ui/icon';
 import { useAppPages } from '@/components/AppPages';
 import { reviews } from '@/data/mockData';
-import { useCatalog } from '@/contexts/CatalogContext';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { SplashScreen } from '@/components/SplashScreen';
 import { notificationService } from '@/utils/notificationService';
@@ -15,14 +14,14 @@ import { useIndexState } from './IndexState';
 import { useIndexHandlers } from './IndexHandlers';
 import { useIndexEffects } from './IndexEffects';
 import { isCurrentlyActive } from '@/utils/scheduleChecker';
-import AgencyRegister from '@/components/pages/AgencyRegister';
+
 import AgencyDashboard from '@/components/pages/AgencyDashboard';
 import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
 import { SettingsPage } from '@/components/pages/SettingsPage';
 import PremiumModal from '@/components/PremiumModal';
-import { UnifiedAuthPage } from '@/components/auth/UnifiedAuthPage';
+
 import ProfileSetup from '@/components/onboarding/ProfileSetup';
 import KYCVerification from '@/components/onboarding/KYCVerification';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
@@ -33,37 +32,13 @@ import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
-import { useAuth } from '@/contexts/AuthContext';
+
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
   const loading = useLoadingState();
-  const { catalogItems } = useCatalog();
-  const { user, isAuthenticated, refreshUser } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      const role = user.role === 'seller' ? 'seller' : user.role === 'buyer' ? 'buyer' : null;
-      if (role) {
-        state.setUserRole(role);
-        state.setIsAuthenticated(true);
-      }
-    }
-  }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
-
-  useEffect(() => {
-    const handleNavigate = (e: CustomEvent) => {
-      const page = e.detail;
-      if (page === 'login') {
-        state.setIsAuthenticated(false);
-      } else {
-        state.setCurrentPage(page);
-      }
-    };
-    window.addEventListener('navigate', handleNavigate as EventListener);
-    return () => window.removeEventListener('navigate', handleNavigate as EventListener);
-  }, [state.setIsAuthenticated, state.setCurrentPage]);
 
   // Обработчики
   const handlers = useIndexHandlers({
@@ -118,7 +93,7 @@ const Index = () => {
     isAuthenticated: state.isAuthenticated,
   });
 
-  const allCatalogItems = [...catalogItems, ...state.agencyGirls];
+  const allCatalogItems = [...state.agencyGirls];
   
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
 
@@ -176,26 +151,7 @@ const Index = () => {
     setSelectedOrderChatId: state.setSelectedOrderChatId,
   });
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      const role = user.role === 'seller' ? 'seller' : user.role === 'buyer' ? 'buyer' : null;
-      if (role) {
-        state.setUserRole(role);
-        state.setIsAuthenticated(true);
-      }
-    } else if (!isAuthenticated) {
-      state.setIsAuthenticated(false);
-    }
-  }, [isAuthenticated, user, state.setUserRole, state.setIsAuthenticated]);
 
-  if (!state.isAuthenticated && !isAuthenticated) {
-    return (
-      <>
-        <Toaster />
-        <UnifiedAuthPage setUserRole={state.setUserRole} setCurrentPage={state.setCurrentPage} />
-      </>
-    );
-  }
 
   // Проверка бизнес-аккаунта
   if (state.profile.role === 'business') {
