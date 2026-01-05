@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { VerificationCodeModal } from '@/components/auth/VerificationCodeModal';
 import { TermsModal } from '@/components/auth/TermsModal';
 import { useAuth } from '@/contexts/AuthContext';
-import { QuickRegistrationSection } from './QuickRegistrationSection';
 import { BuyerRegistrationForm } from './BuyerRegistrationForm';
 import { SellerRegistrationForm } from './SellerRegistrationForm';
 
@@ -33,17 +32,6 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
-  
-  const handleOneClickRegister = (role: UserRole) => {
-    setUserRole(role);
-    setCurrentPage('home');
-    
-    toast({
-      title: "Регистрация завершена!",
-      description: `Вы зарегистрированы как ${role === 'buyer' ? 'мужчина' : 'девушка'}. Заполните профиль для полного доступа.`,
-      duration: 5000,
-    });
-  };
   
   const handleRegister = async (role: UserRole) => {
     if (!contactValue || !username || !password) {
@@ -155,7 +143,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
   };
   
   return (
-  <div className={`container mx-auto px-4 py-16 max-w-2xl animate-fade-in transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10 min-h-screen -mx-4 px-8' : ''}`}>
+  <div className={`container mx-auto px-4 py-8 sm:py-16 max-w-2xl animate-fade-in transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/10 dark:via-purple-950/10 dark:to-pink-950/10 min-h-screen -mx-4 px-4 sm:px-8' : ''}`}>
     <Card className={`transition-all duration-500 ${isBusinessMode ? 'bg-white/90 dark:bg-gray-900/90 border-pink-200 dark:border-pink-900 shadow-2xl shadow-pink-500/10' : 'bg-card border-border'}`}>
       <CardHeader className="relative">
         <button
@@ -166,7 +154,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
           <Icon name="Heart" size={24} className={`text-white transition-transform duration-300 ${isBusinessMode ? 'scale-110' : ''}`} />
         </button>
         <CardTitle 
-          className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
+          className={`text-2xl sm:text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
           style={isBusinessMode ? { 
             background: 'linear-gradient(to right, #ec4899, #a855f7)', 
             WebkitBackgroundClip: 'text', 
@@ -175,25 +163,11 @@ export const RegisterPage = ({ setUserRole, setCurrentPage }: RegisterPageProps)
         >
           {isBusinessMode ? 'LOVE IS BUSINESS' : 'Регистрация'}
         </CardTitle>
-        <CardDescription className="text-center text-lg">
+        <CardDescription className="text-center text-sm sm:text-lg">
           {isBusinessMode ? 'Зарегистрируйтесь для управления своим бизнесом' : 'Выберите тип аккаунта для продолжения'}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <QuickRegistrationSection 
-          isBusinessMode={isBusinessMode}
-          onQuickRegister={handleOneClickRegister}
-        />
-
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
-          </div>
-          <div className="relative flex justify-center text-sm uppercase">
-            <span className="bg-card px-4 text-muted-foreground font-medium">или полная регистрация</span>
-          </div>
-        </div>
-
         <Tabs defaultValue="buyer" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="buyer">Мужчина</TabsTrigger>

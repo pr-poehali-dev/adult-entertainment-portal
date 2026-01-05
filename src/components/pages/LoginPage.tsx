@@ -70,7 +70,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center px-4 py-16 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-pink-950/20' : 'bg-gradient-to-br from-background via-muted/30 to-background'}`}>
+    <div className={`min-h-screen flex items-center justify-center px-4 py-8 sm:py-16 transition-all duration-500 ${isBusinessMode ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 dark:from-pink-950/20 dark:via-purple-950/20 dark:to-pink-950/20' : 'bg-gradient-to-br from-background via-muted/30 to-background'}`}>
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         {isBusinessMode ? (
           <>
@@ -101,7 +101,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
             </div>
           </div>
           <CardTitle 
-            className={`text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
+            className={`text-2xl sm:text-4xl text-center ${!isBusinessMode ? 'text-primary' : ''}`}
             style={isBusinessMode ? { 
               background: 'linear-gradient(to right, #ec4899, #a855f7)', 
               WebkitBackgroundClip: 'text', 
@@ -110,7 +110,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
           >
             {isBusinessMode ? 'LOVE IS BUSINESS' : 'Вход'}
           </CardTitle>
-          <CardDescription className="text-center text-lg">
+          <CardDescription className="text-center text-sm sm:text-lg">
             {isBusinessMode ? 'Войдите для управления своим бизнесом' : 'Войдите в свой аккаунт для продолжения'}
           </CardDescription>
         </CardHeader>
