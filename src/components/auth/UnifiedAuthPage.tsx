@@ -192,12 +192,6 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
 
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
-                <div className="bg-muted/50 p-3 rounded-lg mb-4 border border-border">
-                  <p className="text-xs text-muted-foreground mb-1">Тестовый вход:</p>
-                  <p className="text-sm font-mono">test@example.com</p>
-                  <p className="text-sm font-mono">password123</p>
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
                   <Input
