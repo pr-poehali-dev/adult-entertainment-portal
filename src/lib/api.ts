@@ -3,6 +3,7 @@ import funcUrls from '../../func2url.json';
 const API_URLS = {
   auth: funcUrls.auth,
   profile: funcUrls.profile || 'https://functions.poehali.dev/47e1c970-cd2d-4600-a09d-d8037c1c15d9',
+  passwordReset: funcUrls['password-reset'] || 'https://functions.poehali.dev/68346723-f447-4a62-b865-c3c4302045ac',
   catalog: funcUrls.catalog,
   businessServices: funcUrls['business-services'],
   cryptoDeposit: funcUrls['crypto-deposit']
@@ -227,6 +228,28 @@ export const businessServicesApi = {
       {
         method: 'DELETE',
         body: JSON.stringify({ id })
+      }
+    );
+  }
+};
+
+export const passwordResetApi = {
+  async requestReset(email: string) {
+    return fetchApi<{ success: boolean; message: string }>(
+      API_URLS.passwordReset,
+      {
+        method: 'POST',
+        body: JSON.stringify({ action: 'request_reset', email })
+      }
+    );
+  },
+
+  async verifyAndReset(email: string, code: string, newPassword: string) {
+    return fetchApi<{ success: boolean; message: string }>(
+      API_URLS.passwordReset,
+      {
+        method: 'POST',
+        body: JSON.stringify({ action: 'verify_and_reset', email, code, newPassword })
       }
     );
   }
