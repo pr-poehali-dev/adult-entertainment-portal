@@ -197,7 +197,7 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="test@example.com"
+                    placeholder="your@email.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     disabled={loginLoading}
