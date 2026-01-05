@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Page, CatalogItem, UserRole, UserAd, Profile } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useCatalog } from '@/contexts/CatalogContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeSolutionsSection } from './home/HomeSolutionsSection';
@@ -17,7 +16,6 @@ import { BusinessServiceCard } from './catalog/BusinessServiceCard';
 import { getFilteredAndSortedItems } from './catalog/catalogUtils';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 import { useToast } from '@/hooks/use-toast';
 
 interface HomeAndCatalogProps {

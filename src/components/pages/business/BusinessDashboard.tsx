@@ -10,7 +10,6 @@ import { BusinessBottomNav } from './BusinessBottomNav';
 import { BusinessAdsTab } from './BusinessAdsTab';
 import { BusinessProfileTab } from './BusinessProfileTab';
 import { BusinessOtherTabs } from './BusinessOtherTabs';
-import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 import { useServiceCategories } from '@/contexts/ServiceCategoriesContext';
 
 type BusinessNavTab = 'services' | 'profile' | 'messages' | 'ads' | 'balance' | 'settings' | 'notifications';
@@ -22,8 +21,13 @@ interface BusinessDashboardProps {
 
 export const BusinessDashboard = ({ businessType, onBack }: BusinessDashboardProps) => {
   const { toast } = useToast();
-  const { businessServices, addBusinessService, updateBusinessService, deleteBusinessService } = useBusinessServices();
   const { serviceCategories } = useServiceCategories();
+  
+  // Temporary stub for businessServices
+  const businessServices: BusinessService[] = [];
+  const addBusinessService = (_service: BusinessService) => {};
+  const updateBusinessService = (_id: string, _service: Partial<BusinessService>) => {};
+  const deleteBusinessService = (_id: string) => {};
   const [isVerified, setIsVerified] = useState(false);
   const [verificationData, setVerificationData] = useState<BusinessVerificationData | null>(null);
   const [activeTab, setActiveTab] = useState<BusinessNavTab>('ads');

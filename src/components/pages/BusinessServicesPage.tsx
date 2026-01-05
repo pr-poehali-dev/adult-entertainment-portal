@@ -4,16 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { useBusinessServices } from '@/contexts/BusinessServicesContext';
 import { businessServiceCategories } from '@/data/businessServiceCategories';
 import { Badge } from '@/components/ui/badge';
 
 export const BusinessServicesPage = () => {
-  const { getActiveBusinessServices } = useBusinessServices();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const activeServices = getActiveBusinessServices();
+  // Temporary stub
+  const activeServices: any[] = [];
 
   const filteredServices = activeServices.filter(service => {
     const matchesCategory = selectedCategory === 'all' || service.categoryId === selectedCategory;

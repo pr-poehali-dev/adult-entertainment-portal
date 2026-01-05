@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n/translations';
-import { useAuth } from '@/contexts/AuthContext';
 
 interface NotificationSettings {
   messages: boolean;
@@ -28,7 +27,6 @@ export const SettingsPage = ({
   setSoundEnabled,
 }: SettingsPageProps) => {
   const { language, setLanguage } = useLanguage();
-  const { logout } = useAuth();
   
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
     messages: true,
