@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,7 @@ import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { Page, UserRole } from '@/types';
+import { telegramAuthApi } from '@/lib/api';
 
 interface UnifiedAuthPageProps {
   setUserRole: (role: UserRole) => void;
@@ -21,6 +22,7 @@ type RegistrationMethod = 'email' | 'phone' | 'telegram';
 export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPageProps) => {
   const { toast } = useToast();
   const { login, register } = useAuth();
+  const telegramWidgetRef = useRef<HTMLDivElement>(null);
   
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   
@@ -172,6 +174,60 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
     }
   };
 
+  const handleTelegramAuth = async (user: any) => {
+    setLoginLoading(true);
+    try {
+      const response = await telegramAuthApi.authenticate(user);
+      
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      const role: UserRole = response.user.role === 'seller' ? 'seller' : 'buyer';
+      setUserRole(role);
+      setCurrentPage('home');
+      
+      toast({
+        title: response.new_user ? "Добро пожаловать!" : "Вход выполнен!",
+        description: response.new_user 
+          ? `Аккаунт создан автоматически через Telegram` 
+          : `Добро пожаловать, ${response.user.username}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Ошибка авторизации",
+        description: error instanceof Error ? error.message : "Не удалось войти через Telegram",
+        variant: "destructive",
+      });
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (telegramWidgetRef.current && activeTab === 'login' && !(window as any).TelegramLoginWidget) {
+      const botUsername = 'lovender_bot'; // Замените на username вашего бота
+      
+      const script = document.createElement('script');
+      script.src = 'https://telegram.org/js/telegram-widget.js?22';
+      script.async = true;
+      script.setAttribute('data-telegram-login', botUsername);
+      script.setAttribute('data-size', 'large');
+      script.setAttribute('data-radius', '8');
+      script.setAttribute('data-request-access', 'write');
+      script.setAttribute('data-userpic', 'false');
+      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      
+      (window as any).onTelegramAuth = handleTelegramAuth;
+      (window as any).TelegramLoginWidget = true;
+      
+      telegramWidgetRef.current.appendChild(script);
+    }
+
+    return () => {
+      delete (window as any).onTelegramAuth;
+    };
+  }, [activeTab]);
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-2xl border-0 animate-scale-in">
@@ -197,7 +253,7 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
                   <Input
                     id="login-email"
                     type="email"
-                    placeholder="test@example.com"
+                    placeholder="your@email.com"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     disabled={loginLoading}
@@ -239,6 +295,19 @@ export const UnifiedAuthPage = ({ setUserRole, setCurrentPage }: UnifiedAuthPage
                     'Войти'
                   )}
                 </Button>
+
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">или</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <div ref={telegramWidgetRef} />
+                </div>
               </form>
             </TabsContent>
 
