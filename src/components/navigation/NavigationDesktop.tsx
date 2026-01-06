@@ -199,6 +199,17 @@ export const NavigationDesktop = ({
                   
                   <button
                     onClick={() => {
+                      setShowProfileMenu(false);
+                      setCurrentPage('settings');
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 border-t border-border"
+                  >
+                    <Icon name="Settings" size={16} />
+                    <span>Настройки</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
                       if (confirm('Вы уверены, что хотите выйти?')) {
                         setShowProfileMenu(false);
                         localStorage.removeItem('userProfile');
@@ -240,14 +251,6 @@ export const NavigationDesktop = ({
                 />
               )}
             </div>
-            
-            <button
-              onClick={() => setCurrentPage('settings')}
-              className="p-2 hover:bg-muted rounded-lg transition-colors"
-              title="Настройки"
-            >
-              <Icon name="Settings" size={18} className="text-foreground" />
-            </button>
             
             <button
               onClick={() => setCurrentPage('wallet')}
