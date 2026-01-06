@@ -64,11 +64,11 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('online-search')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Поиск
         </button>
-        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
+        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Объявления
         </button>
-        <button onClick={() => setCurrentPage('work')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-          Работа
+        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
+          Каталог
         </button>
         {userRole && (
           <>
