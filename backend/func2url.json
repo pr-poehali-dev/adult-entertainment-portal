@@ -1,4 +1,5 @@
 {
+  "vk-auth-vk-auth": "https://functions.poehali.dev/90d6f042-6609-4331-82eb-c8b4e6db1527",
   "telegram-auth-telegram-auth": "https://functions.poehali.dev/954dff68-bf1f-4746-805c-88eb7b314138",
   "telegram-auth-telegram-bot": "https://functions.poehali.dev/51e6cc0c-a1dd-4068-a4c9-0a95ce174a67",
   "auth-email-auth": "https://functions.poehali.dev/f966a25c-d30a-44e4-913d-adfe2d90229d",
