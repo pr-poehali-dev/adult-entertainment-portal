@@ -317,6 +317,59 @@ export const SettingsPage = ({
 
           <div className="glass-card p-6 rounded-2xl border border-border/50 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-orange-500/10 rounded-lg">
+                <Icon name="Trash2" size={24} className="text-orange-500" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">Очистка данных</h2>
+                <p className="text-sm text-muted-foreground">Решение технических проблем</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="p-4 bg-orange-500/5 border border-orange-500/20 rounded-lg">
+                <div className="flex items-start gap-3 mb-3">
+                  <Icon name="AlertCircle" size={20} className="text-orange-500 mt-0.5" />
+                  <div>
+                    <p className="font-medium text-foreground">Очистить кеш приложения</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Используйте это если:
+                    </p>
+                    <ul className="text-sm text-muted-foreground mt-2 space-y-1 list-disc list-inside">
+                      <li>Редактор не отображается справа</li>
+                      <li>Страницы не загружаются</li>
+                      <li>Появляются белые экраны</li>
+                      <li>Приложение работает нестабильно</li>
+                    </ul>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => {
+                    if (window.confirm('Очистить кеш и перезагрузить страницу?\n\nЭто не удалит ваши данные авторизации.')) {
+                      if ('caches' in window) {
+                        caches.keys().then((names) => {
+                          names.forEach((name) => {
+                            caches.delete(name);
+                          });
+                        });
+                      }
+                      localStorage.removeItem('vite-plugin-pwa:workbox:precache:url-manifest');
+                      sessionStorage.clear();
+                      window.location.reload();
+                    }
+                  }}
+                  variant="outline"
+                  className="w-full border-orange-500/50 hover:bg-orange-500/10"
+                >
+                  <Icon name="RefreshCw" size={16} className="mr-2" />
+                  Очистить кеш и перезагрузить
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card p-6 rounded-2xl border border-border/50 shadow-xl">
+            <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-primary/10 rounded-lg">
                 <Icon name="Info" size={24} className="text-primary" />
               </div>
