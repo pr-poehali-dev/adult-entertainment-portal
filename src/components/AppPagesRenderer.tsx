@@ -433,6 +433,17 @@ export const renderPage = (props: AppPagesProps) => {
         </Suspense>
       );
     
+    case 'all-ads':
+      return (
+        <Suspense fallback={<LoadingFallback />}>
+          <Pages.AllAdsPage 
+            setCurrentPage={setCurrentPage}
+            profile={profile}
+            userAds={props.userAds || []}
+          />
+        </Suspense>
+      );
+    
     default:
       return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />;
   }

@@ -160,6 +160,7 @@ const Index = () => {
     setOrderChats: state.setOrderChats,
     selectedOrderChatId: state.selectedOrderChatId,
     setSelectedOrderChatId: state.setSelectedOrderChatId,
+    userAds: state.userAds,
   });
 
 

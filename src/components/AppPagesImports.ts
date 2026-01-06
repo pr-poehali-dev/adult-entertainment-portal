@@ -28,5 +28,6 @@ export const OrderChatPage = lazy(() => import('@/components/pages/order-chat/Or
 export const SwipePage = lazy(() => import('@/components/pages/SwipePage'));
 export const MatchesPage = lazy(() => import('@/components/pages/MatchesPage'));
 export const BusinessServicesPage = lazy(() => import('@/components/pages/BusinessServicesPage').then(m => ({ default: m.BusinessServicesPage })));
+export const AllAdsPage = lazy(() => import('@/components/pages/AllAdsPage').then(m => ({ default: m.AllAdsPage })));
 export const LoginPage = lazy(() => import('@/components/pages/auth/LoginPage').then(m => ({ default: m.LoginPage })));
 export const RegisterPage = lazy(() => import('@/components/pages/auth/RegisterPage').then(m => ({ default: m.RegisterPage })));
