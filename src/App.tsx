@@ -9,6 +9,7 @@ import { PartnerProgramProvider } from "@/contexts/PartnerProgramContext";
 import Index from "./pages/Index";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { useState } from "react";
 
 const App = () => {
@@ -25,26 +26,28 @@ const App = () => {
   }));
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TelegramProvider>
-        <LanguageProvider>
-          <ServiceCategoriesProvider>
-            <PartnerProgramProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/admin" element={<AdminPanel />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </PartnerProgramProvider>
-          </ServiceCategoriesProvider>
-        </LanguageProvider>
-      </TelegramProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TelegramProvider>
+          <LanguageProvider>
+            <ServiceCategoriesProvider>
+              <PartnerProgramProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/admin" element={<AdminPanel />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </PartnerProgramProvider>
+            </ServiceCategoriesProvider>
+          </LanguageProvider>
+        </TelegramProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

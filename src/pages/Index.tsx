@@ -16,6 +16,7 @@ import { useIndexEffects } from './IndexEffects';
 import { isCurrentlyActive } from '@/utils/scheduleChecker';
 
 import AgencyDashboard from '@/components/pages/AgencyDashboard';
+import AgencyRegister from '@/components/AgencyRegister';
 import AgencyPaymentModal from '@/components/AgencyPaymentModal';
 import AgencyGirlForm from '@/components/AgencyGirlForm';
 import { LovePurchaseModal } from '@/components/wallet/LovePurchaseModal';
@@ -94,14 +95,13 @@ const Index = () => {
   });
 
   // Проверка авторизации - показываем login/register только неавторизованным
-  if (!state.isAuthenticated) {
-    if (state.currentPage === 'login' || state.currentPage === 'register') {
-      // Позволяем отрисовать страницы login/register через renderPage ниже
-    } else {
-      // Если не авторизован и пытается зайти на другие страницы - редирект на login
-      state.setCurrentPage('login');
+  useEffect(() => {
+    if (!state.isAuthenticated) {
+      if (state.currentPage !== 'login' && state.currentPage !== 'register') {
+        state.setCurrentPage('login');
+      }
     }
-  }
+  }, [state.isAuthenticated, state.currentPage]);
 
   const allCatalogItems = [...state.agencyGirls];
   
