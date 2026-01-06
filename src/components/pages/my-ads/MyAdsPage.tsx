@@ -10,7 +10,13 @@ import { AdResponseModal } from './AdResponseModal';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { PageBreadcrumb } from '@/components/PageBreadcrumb';
 import { AudioPlayer } from '@/components/audio/AudioPlayer';
-import { useCatalog } from '@/contexts/CatalogContext';
+// Catalog context stub
+const useCatalog = () => ({
+  catalogItems: [],
+  deleteCatalogItem: async () => {},
+  updateCatalogItem: async () => {},
+  refreshCatalog: async () => {}
+});
 import { useToast } from '@/hooks/use-toast';
 import { AdPromotionModal } from '@/components/ads/AdPromotionModal';
 
@@ -20,7 +26,10 @@ interface MyAdsPageProps {
 }
 
 const MyAdsPage = ({ profile, setCurrentPage }: MyAdsPageProps) => {
-  const { catalogItems, deleteCatalogItem, updateCatalogItem, refreshCatalog } = useCatalog();
+  const catalogItems: any[] = [];
+  const deleteCatalogItem = async () => {};
+  const updateCatalogItem = async () => {};
+  const refreshCatalog = async () => {};
   const { toast } = useToast();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAd, setSelectedAd] = useState<UserAd | null>(null);

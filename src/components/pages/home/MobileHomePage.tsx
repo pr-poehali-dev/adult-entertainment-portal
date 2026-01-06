@@ -3,7 +3,8 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { serviceCategories, getCategoryName } from '@/data/serviceCategories';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useCatalog } from '@/contexts/CatalogContext';
+// Catalog context stub
+const useCatalog = () => ({ catalogItems: [] });
 import { Page, CatalogItem } from '@/types';
 import { CatalogGrid } from '../catalog/CatalogGrid';
 import { CatalogFilters } from '../catalog/CatalogFilters';

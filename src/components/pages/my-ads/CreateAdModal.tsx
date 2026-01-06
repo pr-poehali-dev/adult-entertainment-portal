@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import { UserAd, Profile, Currency } from '@/types';
 import { AudioRecorder } from '@/components/audio/AudioRecorder';
-import { useCatalog } from '@/contexts/CatalogContext';
+// Catalog context stub
+const useCatalog = () => ({ addCatalogItem: async () => {} });
 import { useToast } from '@/hooks/use-toast';
 
 interface CreateAdModalProps {

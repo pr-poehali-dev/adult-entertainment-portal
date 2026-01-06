@@ -15,7 +15,8 @@ import { HealthCertificateBadge } from '@/components/health/HealthCertificateBad
 import { HealthCertificateStatus } from '@/components/health/HealthCertificateStatus';
 import { HealthCertificateUploadModal } from '@/components/health/HealthCertificateUploadModal';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+// Auth context stub
+const useAuth = () => ({ user: null, logout: async () => {} });
 
 interface ProfileSettingsTabProps {
   profile: Profile;

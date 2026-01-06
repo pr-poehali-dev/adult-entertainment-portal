@@ -6,7 +6,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Icon from '@/components/ui/icon';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { cryptoDepositApi } from '@/lib/api';
+// Crypto deposit API stub
+const cryptoDepositApi = {
+  getOrCreateAddress: async (currency: string) => {
+    throw new Error('Crypto deposit API not implemented');
+  }
+};
 
 interface CryptoDepositFormProps {
   onSuccess: () => void;
