@@ -9,7 +9,7 @@ export const useIndexState = () => {
   const setIsAuthenticated = (value: boolean) => {
     setIsAuthenticatedState(value);
   };
-  const [currentPage, setCurrentPage] = useState<Page>('online-search');
+  const [currentPage, setCurrentPage] = useState<Page>('login');
   const [userRole, setUserRole] = useState<UserRole>('buyer');
   const [agencyGirls, setAgencyGirls] = useState<CatalogItem[]>([]);
   const [userAds, setUserAds] = useState<UserAd[]>([
