@@ -297,23 +297,26 @@ const Index = () => {
     <LoadingOverlay isLoading={loading.isLoading} message={loading.message} />
     <SplashScreen />
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
-      <Navigation 
-        currentPage={state.currentPage}
-        setCurrentPage={state.setCurrentPage}
-        userRole={state.userRole}
-        setUserRole={state.setUserRole}
-        profile={state.profile}
-        notifications={state.notifications}
-        setNotifications={state.setNotifications}
-        showNotifications={state.showNotifications}
-        setShowNotifications={state.setShowNotifications}
-        isDarkTheme={state.isDarkTheme}
-        setIsDarkTheme={state.setIsDarkTheme}
-        wallet={state.wallet}
-        soundEnabled={state.soundEnabled}
-        setSoundEnabled={state.setSoundEnabled}
-        activeAdsCount={activeAdsCount}
-      />
+      {/* Скрываем навигацию на страницах входа и регистрации */}
+      {state.currentPage !== 'login' && state.currentPage !== 'register' && (
+        <Navigation 
+          currentPage={state.currentPage}
+          setCurrentPage={state.setCurrentPage}
+          userRole={state.userRole}
+          setUserRole={state.setUserRole}
+          profile={state.profile}
+          notifications={state.notifications}
+          setNotifications={state.setNotifications}
+          showNotifications={state.showNotifications}
+          setShowNotifications={state.setShowNotifications}
+          isDarkTheme={state.isDarkTheme}
+          setIsDarkTheme={state.setIsDarkTheme}
+          wallet={state.wallet}
+          soundEnabled={state.soundEnabled}
+          setSoundEnabled={state.setSoundEnabled}
+          activeAdsCount={activeAdsCount}
+        />
+      )}
       
       <main>
         <PageTransition pageKey={state.currentPage}>
