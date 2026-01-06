@@ -22,6 +22,7 @@ interface NavigationProps {
   setSoundEnabled: (enabled: boolean) => void;
   activeAdsCount?: number;
   setIsAuthenticated?: (value: boolean) => void;
+  setSelectedServiceCategory?: (category: { id: string; name: string } | null) => void;
 }
 
 const Navigation = ({
@@ -41,6 +42,7 @@ const Navigation = ({
   setSoundEnabled,
   activeAdsCount = 0,
   setIsAuthenticated,
+  setSelectedServiceCategory,
 }: NavigationProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [balanceAnimation, setBalanceAnimation] = useState(false);
@@ -178,6 +180,7 @@ const Navigation = ({
           setShowProfileMenu={setShowProfileMenu}
           activeAdsCount={activeAdsCount}
           setIsAuthenticated={setIsAuthenticated}
+          setSelectedServiceCategory={setSelectedServiceCategory}
           isSecondRow={true}
         />
       </div>

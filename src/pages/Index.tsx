@@ -161,6 +161,7 @@ const Index = () => {
     selectedOrderChatId: state.selectedOrderChatId,
     setSelectedOrderChatId: state.setSelectedOrderChatId,
     userAds: state.userAds,
+    selectedServiceCategory: state.selectedServiceCategory,
   });
 
 
@@ -317,6 +318,7 @@ const Index = () => {
           setSoundEnabled={state.setSoundEnabled}
           activeAdsCount={activeAdsCount}
           setIsAuthenticated={state.setIsAuthenticated}
+          setSelectedServiceCategory={state.setSelectedServiceCategory}
         />
       )}
       

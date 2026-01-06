@@ -5,6 +5,8 @@ import { Page, Profile, Notification, UserRole, Wallet } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/i18n/translations';
 import { NotificationPanel } from './NotificationPanel';
+import { useServiceCategories } from '@/contexts/ServiceCategoriesContext';
+import { useState, useEffect, useRef } from 'react';
 
 interface NavigationDesktopProps {
   currentPage: Page;
@@ -29,6 +31,7 @@ interface NavigationDesktopProps {
   activeAdsCount?: number;
   isSecondRow?: boolean;
   setIsAuthenticated?: (value: boolean) => void;
+  setSelectedServiceCategory?: (category: { id: string; name: string } | null) => void;
 }
 
 export const NavigationDesktop = ({
@@ -52,8 +55,28 @@ export const NavigationDesktop = ({
   setShowProfileMenu,
   activeAdsCount = 0,
   isSecondRow = false,
+  setSelectedServiceCategory,
 }: NavigationDesktopProps) => {
   const { language, setLanguage, t } = useLanguage();
+  const { serviceCategories } = useServiceCategories();
+  const [showServicesMenu, setShowServicesMenu] = useState(false);
+  const servicesMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (servicesMenuRef.current && !servicesMenuRef.current.contains(event.target as Node)) {
+        setShowServicesMenu(false);
+      }
+    };
+
+    if (showServicesMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showServicesMenu]);
 
   if (isSecondRow) {
     return (
@@ -67,9 +90,36 @@ export const NavigationDesktop = ({
         <button onClick={() => setCurrentPage('all-ads')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
           Объявления
         </button>
-        <button onClick={() => setCurrentPage('catalog')} className="text-foreground font-medium hover:text-primary transition-colors py-2">
-          Каталог
-        </button>
+        <div className="relative" ref={servicesMenuRef}>
+          <button 
+            onClick={() => setShowServicesMenu(!showServicesMenu)}
+            className="text-foreground font-medium hover:text-primary transition-colors py-2 flex items-center gap-1"
+          >
+            Услуги
+            <Icon name="ChevronDown" size={14} />
+          </button>
+          
+          {showServicesMenu && (
+            <div className="absolute top-full left-0 mt-2 w-64 bg-card border border-border rounded-lg shadow-xl overflow-hidden z-50">
+              <div className="max-h-96 overflow-y-auto">
+                {serviceCategories.map(category => (
+                  <button
+                    key={category.id}
+                    onClick={() => {
+                      setSelectedServiceCategory?.({ id: category.id, name: category.name });
+                      setCurrentPage('agency-services');
+                      setShowServicesMenu(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-3 border-b border-border last:border-0"
+                  >
+                    <Icon name={category.icon} size={20} className="text-primary" />
+                    <span className="font-medium">{category.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
         {userRole && (
           <>
             <button onClick={() => setCurrentPage('favorites')} className="text-foreground font-medium hover:text-primary transition-colors py-2">

@@ -62,6 +62,7 @@ export const useIndexState = () => {
   const [selectedSellerId, setSelectedSellerId] = useState<number | null>(null);
   const [selectedPartyId, setSelectedPartyId] = useState<number | null>(null);
   const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
+  const [selectedServiceCategory, setSelectedServiceCategory] = useState<{ id: string; name: string } | null>(null);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewServiceName, setReviewServiceName] = useState('');
@@ -287,5 +288,7 @@ export const useIndexState = () => {
     setOrderChats,
     selectedOrderChatId,
     setSelectedOrderChatId,
+    selectedServiceCategory,
+    setSelectedServiceCategory,
   };
 };

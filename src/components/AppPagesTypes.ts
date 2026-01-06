@@ -54,4 +54,5 @@ export interface AppPagesProps {
   selectedOrderChatId: number | null;
   setSelectedOrderChatId: (id: number | null) => void;
   userAds?: any[];
+  selectedServiceCategory?: { id: string; name: string } | null;
 }
