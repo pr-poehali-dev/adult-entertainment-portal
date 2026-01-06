@@ -407,6 +407,7 @@ const Index = () => {
         currentPage={state.currentPage}
         setCurrentPage={state.setCurrentPage}
         messageCount={state.notifications.filter(n => !n.read && n.type === 'message').length}
+        isAuthenticated={state.isAuthenticated}
       />
 
       <NotificationPermissionPrompt 

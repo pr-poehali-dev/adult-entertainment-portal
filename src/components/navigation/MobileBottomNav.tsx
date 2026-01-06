@@ -5,9 +5,14 @@ interface MobileBottomNavProps {
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
   messageCount?: number;
+  isAuthenticated?: boolean;
 }
 
-export const MobileBottomNav = ({ currentPage, setCurrentPage, messageCount = 0 }: MobileBottomNavProps) => {
+export const MobileBottomNav = ({ currentPage, setCurrentPage, messageCount = 0, isAuthenticated = false }: MobileBottomNavProps) => {
+  if (!isAuthenticated || currentPage === 'login' || currentPage === 'register') {
+    return null;
+  }
+
   const navItems = [
     { page: 'online-search' as Page, icon: 'Search', label: 'Поиск' },
     { page: 'catalog' as Page, icon: 'Grid3x3', label: 'Объявления' },
