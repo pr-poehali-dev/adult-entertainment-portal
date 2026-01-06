@@ -326,28 +326,6 @@ export const ProfileSettingsTab = ({
           </>
         )}
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-500">
-              <Icon name="LogOut" size={24} />
-              Выход из профиля
-            </CardTitle>
-            <CardDescription>
-              Выйти из текущего аккаунта и вернуться на страницу входа
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={handleLogout}
-              variant="destructive"
-              className="w-full"
-            >
-              <Icon name="LogOut" size={18} />
-              Выйти из профиля
-            </Button>
-          </CardContent>
-        </Card>
-        
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Icon name="CheckCircle" size={16} className="text-green-500" />
@@ -363,27 +341,7 @@ export const ProfileSettingsTab = ({
           </Button>
         </div>
 
-        <Card className="border-red-500/50 bg-red-50/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-500">
-              <Icon name="LogOut" size={24} />
-              Выход из аккаунта
-            </CardTitle>
-            <CardDescription>
-              Завершить текущий сеанс и выйти из приложения
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={handleLogout}
-              variant="destructive"
-              className="w-full"
-            >
-              <Icon name="LogOut" size={18} className="mr-2" />
-              Выйти из аккаунта
-            </Button>
-          </CardContent>
-        </Card>
+
       </div>
 
       <VerificationModal

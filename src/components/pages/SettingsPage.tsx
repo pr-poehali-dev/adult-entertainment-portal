@@ -338,27 +338,7 @@ export const SettingsPage = ({
             </div>
           </div>
 
-          <div className="glass-card p-6 rounded-2xl border border-red-500/50 shadow-xl bg-red-50/5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-red-500/10 rounded-lg">
-                <Icon name="LogOut" size={24} className="text-red-500" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-red-500">Выход из аккаунта</h2>
-                <p className="text-sm text-muted-foreground">Завершить текущий сеанс</p>
-              </div>
-            </div>
 
-            <Button
-              onClick={handleLogout}
-              variant="destructive"
-              className="w-full"
-              size="lg"
-            >
-              <Icon name="LogOut" size={20} className="mr-2" />
-              Выйти из аккаунта
-            </Button>
-          </div>
         </div>
       </div>
     </div>
