@@ -93,6 +93,16 @@ const Index = () => {
     isAuthenticated: state.isAuthenticated,
   });
 
+  // Проверка авторизации - показываем login/register только неавторизованным
+  if (!state.isAuthenticated) {
+    if (state.currentPage === 'login' || state.currentPage === 'register') {
+      // Позволяем отрисовать страницы login/register через renderPage ниже
+    } else {
+      // Если не авторизован и пытается зайти на другие страницы - редирект на login
+      state.setCurrentPage('login');
+    }
+  }
+
   const allCatalogItems = [...state.agencyGirls];
   
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
@@ -102,6 +112,7 @@ const Index = () => {
     setCurrentPage: state.setCurrentPage,
     userRole: state.userRole,
     setUserRole: state.setUserRole,
+    setIsAuthenticated: state.setIsAuthenticated,
     profile: state.profile,
     catalogItems: allCatalogItems,
     reviews,

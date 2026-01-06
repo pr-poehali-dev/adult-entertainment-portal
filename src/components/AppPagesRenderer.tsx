@@ -16,6 +16,7 @@ export const renderPage = (props: AppPagesProps) => {
     setCurrentPage,
     userRole,
     setUserRole,
+    setIsAuthenticated,
     profile,
     catalogItems,
     reviews,
@@ -165,14 +166,14 @@ export const renderPage = (props: AppPagesProps) => {
     case 'register':
       return (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} setIsAuthenticated={setIsAuthenticated || (() => {})} />
         </Suspense>
       );
     
     case 'login':
       return (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.LoginPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} setIsAuthenticated={setIsAuthenticated || (() => {})} />
         </Suspense>
       );
     

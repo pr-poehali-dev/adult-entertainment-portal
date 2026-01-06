@@ -5,6 +5,7 @@ export interface AppPagesProps {
   setCurrentPage: (page: Page) => void;
   userRole: UserRole;
   setUserRole: (role: UserRole) => void;
+  setIsAuthenticated?: (value: boolean) => void;
   profile: Profile;
   catalogItems: CatalogItem[];
   reviews: Review[];

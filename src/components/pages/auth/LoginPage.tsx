@@ -7,12 +7,13 @@ import { TelegramLoginButton } from '@/components/extensions/telegram-auth/Teleg
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
   setCurrentPage: (page: Page) => void;
+  setIsAuthenticated: (value: boolean) => void;
 }
 
-export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
+export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: LoginPageProps) => {
   const handleTelegramLogin = (userData: any) => {
     console.log('Telegram login:', userData);
-    // Здесь можно обработать данные от Telegram
+    setIsAuthenticated(true);
     setUserRole('buyer');
     setCurrentPage('home');
   };
@@ -57,6 +58,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
               className="w-full"
               onClick={() => {
                 // Временный вход для тестирования
+                setIsAuthenticated(true);
                 setUserRole('buyer');
                 setCurrentPage('home');
               }}
@@ -76,15 +78,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage }: LoginPageProps) => {
               </button>
             </div>
 
-            {/* Кнопка назад */}
-            <Button 
-              variant="ghost" 
-              className="w-full"
-              onClick={() => setCurrentPage('home')}
-            >
-              <Icon name="ArrowLeft" size={18} className="mr-2" />
-              Вернуться на главную
-            </Button>
+
           </CardContent>
         </Card>
       </div>
