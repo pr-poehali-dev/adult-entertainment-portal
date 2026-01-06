@@ -22,6 +22,7 @@ interface NavigationMobileProps {
   balanceAnimation: boolean;
   rubBalance: number;
   rubInBtc: number;
+  setIsAuthenticated?: (value: boolean) => void;
 }
 
 export const NavigationMobile = ({
@@ -42,16 +43,19 @@ export const NavigationMobile = ({
   balanceAnimation,
   rubBalance,
   rubInBtc,
+  setIsAuthenticated,
 }: NavigationMobileProps) => {
   const { language, setLanguage, t } = useLanguage();
 
   const handleLogout = () => {
-    if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
-      localStorage.removeItem('userProfile');
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
+    if (confirm('Вы уверены, что хотите выйти?')) {
       setShowMobileMenu(false);
-      window.location.reload();
+      localStorage.removeItem('userProfile');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userRole');
+      setUserRole(null);
+      setIsAuthenticated?.(false);
+      setCurrentPage('login');
     }
   };
 
@@ -233,15 +237,15 @@ export const NavigationMobile = ({
             
             <button 
               onClick={handleLogout}
-              className="w-full py-2.5 px-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors flex items-center gap-3 justify-center font-semibold"
+              className="w-full py-2.5 px-3 rounded-lg hover:bg-muted transition-colors flex items-center gap-3 text-left text-red-500"
             >
-              <Icon name="LogOut" size={18} />
-              <span className="text-sm">Выйти из аккаунта</span>
+              <Icon name="LogOut" size={18} className="flex-shrink-0" />
+              <span className="text-sm font-medium">Выйти</span>
             </button>
           </div>
         ) : (
           <button 
-            onClick={() => { setCurrentPage('register'); setShowMobileMenu(false); }}
+            onClick={() => { setCurrentPage('login'); setShowMobileMenu(false); }}
             className="w-full py-2.5 px-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-semibold text-sm text-center"
           >
             {t.nav.login}

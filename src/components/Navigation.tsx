@@ -201,6 +201,7 @@ const Navigation = ({
       balanceAnimation={balanceAnimation}
       rubBalance={rubBalance}
       rubInBtc={rubInBtc}
+      setIsAuthenticated={setIsAuthenticated}
     />
   </nav>
   );
