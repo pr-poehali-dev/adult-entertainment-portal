@@ -24,35 +24,26 @@ export const HomeHeroSection = ({ setCurrentPage, userRole }: HomeHeroSectionPro
           {t.home.heroSubtitle}
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in mb-10" style={{ animationDelay: '300ms' }}>
-          <Button 
-            size="lg" 
-            onClick={() => setCurrentPage('catalog')} 
-            className="bg-gradient-to-r from-primary to-primary/90 text-white hover:shadow-2xl hover:shadow-primary/50 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
-          >
-            {t.home.viewCatalog}
-          </Button>
-          {!userRole && (
-            <>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                onClick={() => setCurrentPage('login')} 
-                className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
-              >
-                Войти
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                onClick={() => setCurrentPage('register')} 
-                className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
-              >
-                {t.home.register}
-              </Button>
-            </>
-          )}
-        </div>
+        {!userRole && (
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-in mb-10" style={{ animationDelay: '300ms' }}>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={() => setCurrentPage('login')} 
+              className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
+            >
+              Войти
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={() => setCurrentPage('register')} 
+              className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 font-semibold tracking-wide w-full sm:w-auto"
+            >
+              {t.home.register}
+            </Button>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
           <div className="group bg-gradient-to-br from-card/80 to-card/40 hover:from-purple-500/10 hover:to-pink-500/10 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/60 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 hover:scale-[1.02] cursor-pointer flex flex-col">
