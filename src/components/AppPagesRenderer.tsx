@@ -155,11 +155,12 @@ export const renderPage = (props: AppPagesProps) => {
             setWallet={setWallet}
             transactions={walletTransactions}
             setTransactions={setWalletTransactions}
+            setIsAuthenticated={setIsAuthenticated}
           />
         </Suspense>
       ) : (
         <Suspense fallback={<LoadingFallback />}>
-          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} />
+          <Pages.RegisterPage setUserRole={setUserRole} setCurrentPage={setCurrentPage} setIsAuthenticated={setIsAuthenticated || (() => {})} />
         </Suspense>
       );
     

@@ -18,6 +18,8 @@ interface SettingsPageProps {
   setIsDarkTheme: (isDark: boolean) => void;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  setIsAuthenticated?: (value: boolean) => void;
+  setCurrentPage?: (page: string) => void;
 }
 
 export const SettingsPage = ({
@@ -25,6 +27,8 @@ export const SettingsPage = ({
   setIsDarkTheme,
   soundEnabled,
   setSoundEnabled,
+  setIsAuthenticated,
+  setCurrentPage,
 }: SettingsPageProps) => {
   const { language, setLanguage } = useLanguage();
   
@@ -46,8 +50,11 @@ export const SettingsPage = ({
 
   const handleLogout = () => {
     if (window.confirm('Вы уверены, что хотите выйти?')) {
-      logout();
-      window.location.reload();
+      localStorage.removeItem('userProfile');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userRole');
+      setIsAuthenticated?.(false);
+      setCurrentPage?.('login');
     }
   };
 

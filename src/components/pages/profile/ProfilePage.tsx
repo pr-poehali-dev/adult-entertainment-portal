@@ -25,6 +25,7 @@ interface ProfilePageProps {
   setWallet?: (wallet: Wallet) => void;
   transactions?: Transaction[];
   setTransactions?: (transactions: Transaction[]) => void;
+  setIsAuthenticated?: (value: boolean) => void;
 }
 
 export const ProfilePage = ({ 
@@ -34,7 +35,8 @@ export const ProfilePage = ({
   wallet: walletProp,
   setWallet: setWalletProp,
   transactions: transactionsProp,
-  setTransactions: setTransactionsProp
+  setTransactions: setTransactionsProp,
+  setIsAuthenticated
 }: ProfilePageProps) => {
   const [isVerified, setIsVerified] = useState(profile.verified);
   const [workSchedule, setWorkSchedule] = useState<WorkSchedule>({ type: '24/7' });
@@ -292,6 +294,8 @@ export const ProfilePage = ({
             isActive={isActive}
             setIsActive={setIsActive}
             onProfileUpdate={onProfileUpdate}
+            setIsAuthenticated={setIsAuthenticated}
+            setCurrentPage={setCurrentPage}
           />
         </TabsContent>
       </Tabs>

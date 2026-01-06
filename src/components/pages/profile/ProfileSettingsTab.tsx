@@ -15,8 +15,7 @@ import { HealthCertificateBadge } from '@/components/health/HealthCertificateBad
 import { HealthCertificateStatus } from '@/components/health/HealthCertificateStatus';
 import { HealthCertificateUploadModal } from '@/components/health/HealthCertificateUploadModal';
 import { useToast } from '@/hooks/use-toast';
-// Auth context stub
-const useAuth = () => ({ user: null, logout: async () => {} });
+
 
 interface ProfileSettingsTabProps {
   profile: Profile;
@@ -27,6 +26,8 @@ interface ProfileSettingsTabProps {
   isActive: boolean;
   setIsActive: (active: boolean) => void;
   onProfileUpdate?: (updatedProfile: Partial<Profile>) => void;
+  setIsAuthenticated?: (value: boolean) => void;
+  setCurrentPage?: (page: string) => void;
 }
 
 export const ProfileSettingsTab = ({
@@ -38,9 +39,10 @@ export const ProfileSettingsTab = ({
   isActive,
   setIsActive,
   onProfileUpdate,
+  setIsAuthenticated,
+  setCurrentPage,
 }: ProfileSettingsTabProps) => {
   const { toast } = useToast();
-  const { logout } = useAuth();
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showVIPModal, setShowVIPModal] = useState(false);
   const [showHealthCertModal, setShowHealthCertModal] = useState(false);
@@ -140,13 +142,15 @@ export const ProfileSettingsTab = ({
 
   const handleLogout = () => {
     if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
-      logout();
       localStorage.removeItem('userProfile');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userRole');
       toast({
         title: "Вы вышли из аккаунта",
         description: "До скорой встречи!",
       });
-      window.location.reload();
+      setIsAuthenticated?.(false);
+      setCurrentPage?.('login');
     }
   };
 
