@@ -28,6 +28,7 @@ interface NavigationDesktopProps {
   setShowProfileMenu: (show: boolean) => void;
   activeAdsCount?: number;
   isSecondRow?: boolean;
+  setIsAuthenticated?: (value: boolean) => void;
 }
 
 export const NavigationDesktop = ({
@@ -198,9 +199,14 @@ export const NavigationDesktop = ({
                   
                   <button
                     onClick={() => {
-                      setShowProfileMenu(false);
-                      setUserRole(null);
-                      setCurrentPage('home');
+                      if (confirm('Вы уверены, что хотите выйти?')) {
+                        setShowProfileMenu(false);
+                        localStorage.removeItem('userProfile');
+                        localStorage.removeItem('isAuthenticated');
+                        localStorage.removeItem('userRole');
+                        setUserRole(null);
+                        setCurrentPage('login');
+                      }
                     }}
                     className="w-full px-4 py-3 text-left hover:bg-muted transition-colors flex items-center gap-2 text-red-500 border-t border-border"
                   >

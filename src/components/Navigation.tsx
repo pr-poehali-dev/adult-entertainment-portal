@@ -21,6 +21,7 @@ interface NavigationProps {
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
   activeAdsCount?: number;
+  setIsAuthenticated?: (value: boolean) => void;
 }
 
 const Navigation = ({
@@ -39,6 +40,7 @@ const Navigation = ({
   soundEnabled,
   setSoundEnabled,
   activeAdsCount = 0,
+  setIsAuthenticated,
 }: NavigationProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [balanceAnimation, setBalanceAnimation] = useState(false);
@@ -175,6 +177,7 @@ const Navigation = ({
           showProfileMenu={showProfileMenu}
           setShowProfileMenu={setShowProfileMenu}
           activeAdsCount={activeAdsCount}
+          setIsAuthenticated={setIsAuthenticated}
           isSecondRow={true}
         />
       </div>

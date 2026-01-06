@@ -315,6 +315,7 @@ const Index = () => {
           soundEnabled={state.soundEnabled}
           setSoundEnabled={state.setSoundEnabled}
           activeAdsCount={activeAdsCount}
+          setIsAuthenticated={state.setIsAuthenticated}
         />
       )}
       
