@@ -6,56 +6,23 @@ export const useUserDataState = () => {
   const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
   
   const [profile, setProfile] = useState<Profile>(() => {
-    const authUser = localStorage.getItem('user');
-    if (authUser) {
-      try {
-        const userData = JSON.parse(authUser);
-        return {
-          name: userData.username || 'Пользователь',
-          nickname: userData.username || 'User',
-          role: userData.role || 'buyer',
-          avatar: '',
-          rating: 0,
-          verified: userData.email_verified || false,
-          vipStatus: 'none',
-          vipExpiry: null,
-          subscriptionType: 'free',
-          subscriptionExpiry: null,
-          profileCompleted: false,
-          kycCompleted: false,
-          contacts: {
-            instagram: { value: '', forSale: false },
-            telegram: { value: '', forSale: false },
-            phone: { value: '', forSale: false },
-          }
-        };
-      } catch (e) {
-        console.error('Failed to parse user data:', e);
-      }
-    }
-    
     const saved = localStorage.getItem('userProfile');
     if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to parse userProfile:', e);
-      }
+      return JSON.parse(saved);
     }
-    
     return {
-      name: '',
-      nickname: '',
+      name: 'Елена Романова',
+      nickname: 'LenaRom',
       role: 'buyer',
       avatar: '',
-      rating: 0,
-      verified: false,
+      rating: 4.8,
+      verified: true,
       vipStatus: 'none',
       vipExpiry: null,
       subscriptionType: 'free',
       subscriptionExpiry: null,
-      profileCompleted: false,
-      kycCompleted: false,
+      profileCompleted: true,
+      kycCompleted: true,
       contacts: {
         instagram: { value: '', forSale: false },
         telegram: { value: '', forSale: false },
@@ -74,12 +41,12 @@ export const useUserDataState = () => {
 
   const [wallet, setWallet] = useState<Wallet>({
     balances: [
-      { currency: 'RUB', amount: 0, symbol: '₽' },
-      { currency: 'USD', amount: 0, symbol: '$' },
-      { currency: 'EUR', amount: 0, symbol: '€' },
-      { currency: 'BTC', amount: 0, symbol: '₿' },
-      { currency: 'ETH', amount: 0, symbol: 'Ξ' },
-      { currency: 'USDT', amount: 0, symbol: '₮' },
+      { currency: 'RUB', amount: 150000, symbol: '₽' },
+      { currency: 'USD', amount: 5000, symbol: '$' },
+      { currency: 'EUR', amount: 3000, symbol: '€' },
+      { currency: 'BTC', amount: 0.5, symbol: '₿' },
+      { currency: 'ETH', amount: 2, symbol: 'Ξ' },
+      { currency: 'USDT', amount: 10000, symbol: '₮' },
       { currency: 'LOVE', amount: 0, symbol: '💗' },
     ]
   });
