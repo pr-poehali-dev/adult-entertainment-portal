@@ -5,7 +5,6 @@ import PageTransition from '@/components/PageTransition';
 import { Toaster } from '@/components/ui/toaster';
 import Icon from '@/components/ui/icon';
 import { useAppPages } from '@/components/AppPages';
-import { reviews } from '@/data/mockData';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { SplashScreen } from '@/components/SplashScreen';
 import { notificationService } from '@/utils/notificationService';
@@ -119,7 +118,7 @@ const Index = () => {
     setIsAuthenticated: state.setIsAuthenticated,
     profile: state.profile,
     catalogItems: allCatalogItems,
-    reviews,
+    reviews: [],
     favorites: state.favorites,
     toggleFavorite: handlers.toggleFavorite,
     selectedServiceId: state.selectedServiceId,

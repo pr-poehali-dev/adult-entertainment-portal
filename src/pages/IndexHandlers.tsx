@@ -1,4 +1,3 @@
-import { catalogItems } from '@/data/mockData';
 import { Profile, Notification, CatalogItem, WalletBalance, Transaction, AgencyType } from '@/types';
 import { notificationService } from '@/utils/notificationService';
 import { sendTelegramNotification, getTelegramChatId, checkTelegramAvailability } from '@/utils/telegramNotifications';
@@ -165,7 +164,7 @@ export const useIndexHandlers = (props: HandlersProps) => {
     setShowBookingModal(false);
     
     setTimeout(() => {
-      const service = catalogItems.find(item => item.id === selectedServiceId);
+      const service = agencyGirls.find(item => item.id === selectedServiceId);
       if (service) {
         setReviewServiceName(service.title);
         setShowReviewModal(true);

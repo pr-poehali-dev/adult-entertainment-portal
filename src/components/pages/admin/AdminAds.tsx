@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { catalogItems } from '@/data/mockData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -19,7 +18,7 @@ import {
 
 export const AdminAds = () => {
   const { toast } = useToast();
-  const [items, setItems] = useState<CatalogItem[]>(catalogItems);
+  const [items, setItems] = useState<CatalogItem[]>([]);
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
