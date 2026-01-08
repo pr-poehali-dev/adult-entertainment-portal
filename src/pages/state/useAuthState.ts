@@ -47,7 +47,18 @@ const getPageFromUrl = (): Page => {
 
 export const useAuthState = () => {
   const [isAuthenticated, setIsAuthenticatedState] = useState(() => {
-    return localStorage.getItem('isAuthenticated') === 'true';
+    const authFlag = localStorage.getItem('isAuthenticated') === 'true';
+    const hasUserData = localStorage.getItem('userProfile') !== null || 
+                        localStorage.getItem('user') !== null ||
+                        localStorage.getItem('access_token') !== null;
+    
+    // Если флаг авторизации установлен, но нет данных пользователя - очищаем
+    if (authFlag && !hasUserData) {
+      localStorage.clear();
+      return false;
+    }
+    
+    return authFlag && hasUserData;
   });
 
   const setIsAuthenticated = (value: boolean) => {

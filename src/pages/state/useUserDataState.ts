@@ -12,8 +12,8 @@ const getEmptyProfile = (): Profile => ({
   vipExpiry: null,
   subscriptionType: 'free',
   subscriptionExpiry: null,
-  profileCompleted: false,
-  kycCompleted: false,
+  profileCompleted: true,
+  kycCompleted: true,
   contacts: {
     instagram: { value: '', forSale: false },
     telegram: { value: '', forSale: false },
