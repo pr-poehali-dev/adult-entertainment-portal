@@ -27,6 +27,33 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
 
   const handleTelegramLogin = (userData: any) => {
     console.log('Telegram login:', userData);
+    
+    localStorage.clear();
+    
+    const userProfile = {
+      name: `${userData.first_name || ''} ${userData.last_name || ''}`.trim(),
+      nickname: userData.username || `user${userData.id}`,
+      role: 'buyer',
+      avatar: userData.photo_url || '',
+      rating: 0,
+      verified: false,
+      vipStatus: 'none',
+      vipExpiry: null,
+      subscriptionType: 'free',
+      subscriptionExpiry: null,
+      profileCompleted: false,
+      kycCompleted: false,
+      contacts: {
+        instagram: { value: '', forSale: false },
+        telegram: { value: userData.username || '', forSale: false },
+        phone: { value: '', forSale: false },
+      }
+    };
+    
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('user', JSON.stringify(userData));
+    
     setIsAuthenticated(true);
     setUserRole('buyer');
     setCurrentPage('home');
@@ -57,6 +84,8 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.clear();
+        
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
         localStorage.setItem('user', JSON.stringify(data.user));
