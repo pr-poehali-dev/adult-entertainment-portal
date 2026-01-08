@@ -104,7 +104,7 @@ const Index = () => {
         state.setCurrentPage('login');
       }
     }
-  }, [state.isAuthenticated, state.currentPage]);
+  }, [state.isAuthenticated]);
 
   const allCatalogItems = [...state.agencyGirls];
   
