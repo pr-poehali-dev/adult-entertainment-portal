@@ -204,7 +204,7 @@ export const NavigationMobile = ({
               className="w-full py-2.5 px-3 rounded-lg bg-muted hover:bg-muted/70 transition-colors flex items-center gap-3 font-semibold"
             >
               <Avatar className="h-5 w-5">
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs">{profile.nickname[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs">{profile.nickname?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
               </Avatar>
               <span className="text-sm">{profile.nickname}</span>
             </button>

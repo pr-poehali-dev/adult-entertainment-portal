@@ -143,7 +143,7 @@ export const NavigationDesktop = ({
               >
                 <Avatar className="h-5 w-5">
                   <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-medium">
-                    {profile.nickname[0].toUpperCase()}
+                    {profile.nickname?.[0]?.toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
                 <span>{profile.nickname}</span>
