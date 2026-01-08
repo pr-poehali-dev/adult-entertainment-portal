@@ -62,6 +62,27 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('isAuthenticated', 'true');
         
+        const userProfile = {
+          name: data.user.name || '',
+          nickname: data.user.nickname || data.user.email?.split('@')[0] || '',
+          role: data.user.role || 'buyer',
+          avatar: data.user.avatar || '',
+          rating: data.user.rating || 0,
+          verified: data.user.verified || false,
+          vipStatus: 'none',
+          vipExpiry: null,
+          subscriptionType: 'free',
+          subscriptionExpiry: null,
+          profileCompleted: data.user.profileCompleted || false,
+          kycCompleted: data.user.kycCompleted || false,
+          contacts: {
+            instagram: { value: '', forSale: false },
+            telegram: { value: '', forSale: false },
+            phone: { value: '', forSale: false },
+          }
+        };
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        
         setIsAuthenticated(true);
         setUserRole(data.user.role as UserRole);
         setCurrentPage('home');

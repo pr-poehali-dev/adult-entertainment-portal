@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Profile, Notification, Wallet } from '@/types';
-import { MOCK_NOTIFICATIONS } from './mockData';
 
 export const useUserDataState = () => {
-  const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   
   const [profile, setProfile] = useState<Profile>(() => {
     const saved = localStorage.getItem('userProfile');
@@ -11,18 +10,18 @@ export const useUserDataState = () => {
       return JSON.parse(saved);
     }
     return {
-      name: 'Елена Романова',
-      nickname: 'LenaRom',
+      name: '',
+      nickname: '',
       role: 'buyer',
       avatar: '',
-      rating: 4.8,
-      verified: true,
+      rating: 0,
+      verified: false,
       vipStatus: 'none',
       vipExpiry: null,
       subscriptionType: 'free',
       subscriptionExpiry: null,
-      profileCompleted: true,
-      kycCompleted: true,
+      profileCompleted: false,
+      kycCompleted: false,
       contacts: {
         instagram: { value: '', forSale: false },
         telegram: { value: '', forSale: false },
@@ -39,19 +38,33 @@ export const useUserDataState = () => {
     });
   };
 
-  const [wallet, setWallet] = useState<Wallet>({
-    balances: [
-      { currency: 'RUB', amount: 150000, symbol: '₽' },
-      { currency: 'USD', amount: 5000, symbol: '$' },
-      { currency: 'EUR', amount: 3000, symbol: '€' },
-      { currency: 'BTC', amount: 0.5, symbol: '₿' },
-      { currency: 'ETH', amount: 2, symbol: 'Ξ' },
-      { currency: 'USDT', amount: 10000, symbol: '₮' },
-      { currency: 'LOVE', amount: 0, symbol: '💗' },
-    ]
+  const [wallet, setWallet] = useState<Wallet>(() => {
+    const saved = localStorage.getItem('userWallet');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    return {
+      balances: [
+        { currency: 'RUB', amount: 0, symbol: '₽' },
+        { currency: 'USD', amount: 0, symbol: '$' },
+        { currency: 'EUR', amount: 0, symbol: '€' },
+        { currency: 'BTC', amount: 0, symbol: '₿' },
+        { currency: 'ETH', amount: 0, symbol: 'Ξ' },
+        { currency: 'USDT', amount: 0, symbol: '₮' },
+        { currency: 'LOVE', amount: 0, symbol: '💗' },
+      ]
+    };
   });
 
   const [walletTransactions, setWalletTransactions] = useState<any[]>([]);
+
+  const setWalletWithSave = (updater: Wallet | ((prev: Wallet) => Wallet)) => {
+    setWallet((prev) => {
+      const newWallet = typeof updater === 'function' ? updater(prev) : updater;
+      localStorage.setItem('userWallet', JSON.stringify(newWallet));
+      return newWallet;
+    });
+  };
 
   return {
     notifications,
@@ -59,7 +72,7 @@ export const useUserDataState = () => {
     profile,
     setProfile: setProfileWithSave,
     wallet,
-    setWallet,
+    setWallet: setWalletWithSave,
     walletTransactions,
     setWalletTransactions,
   };

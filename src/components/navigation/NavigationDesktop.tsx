@@ -262,10 +262,10 @@ export const NavigationDesktop = ({
                     onClick={() => {
                       if (confirm('Вы уверены, что хотите выйти?')) {
                         setShowProfileMenu(false);
-                        localStorage.removeItem('userProfile');
-                        localStorage.removeItem('isAuthenticated');
-                        localStorage.removeItem('userRole');
-                        setUserRole(null);
+                        localStorage.clear();
+                        if (setIsAuthenticated) {
+                          setIsAuthenticated(false);
+                        }
                         setCurrentPage('login');
                       }
                     }}
