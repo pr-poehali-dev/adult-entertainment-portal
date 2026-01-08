@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Icon from '@/components/ui/icon';
 import { Page, UserRole } from '@/types';
 import { TelegramLoginButton } from '@/components/extensions/telegram-auth/TelegramLoginButton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 interface LoginPageProps {
   setUserRole: (role: UserRole) => void;
@@ -11,11 +14,50 @@ interface LoginPageProps {
 }
 
 export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: LoginPageProps) => {
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleTelegramLogin = (userData: any) => {
     console.log('Telegram login:', userData);
     setIsAuthenticated(true);
     setUserRole('buyer');
     setCurrentPage('home');
+  };
+
+  const handleEmailLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!email || !password) {
+      setError('Заполните все поля');
+      return;
+    }
+
+    setIsAuthenticated(true);
+    setUserRole('buyer');
+    setCurrentPage('home');
+  };
+
+  const handleForgotPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!resetEmail) {
+      setError('Введите email');
+      return;
+    }
+
+    setSuccessMessage('Ссылка для восстановления пароля отправлена на ' + resetEmail);
+    setTimeout(() => {
+      setShowForgotPassword(false);
+      setShowEmailForm(false);
+      setSuccessMessage('');
+    }, 3000);
   };
 
   return (
@@ -52,20 +94,116 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
               </div>
             </div>
 
-            {/* Email вход (можно добавить позже) */}
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => {
-                // Временный вход для тестирования
-                setIsAuthenticated(true);
-                setUserRole('buyer');
-                setCurrentPage('home');
-              }}
-            >
-              <Icon name="Mail" size={18} className="mr-2" />
-              Войти через Email
-            </Button>
+            {/* Email вход */}
+            {!showEmailForm ? (
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setShowEmailForm(true)}
+              >
+                <Icon name="Mail" size={18} className="mr-2" />
+                Войти через Email
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                {!showForgotPassword ? (
+                  <form onSubmit={handleEmailLogin} className="space-y-4">
+                    {successMessage && (
+                      <div className="text-sm text-green-600 bg-green-50 p-3 rounded-md">
+                        {successMessage}
+                      </div>
+                    )}
+                    {error && (
+                      <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+                        {error}
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="mail@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="email"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="password">Пароль</Label>
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+                        >
+                          Забыли пароль?
+                        </button>
+                      </div>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setShowEmailForm(false)}
+                      >
+                        Назад
+                      </Button>
+                      <Button type="submit" className="flex-1">
+                        Войти
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={handleForgotPassword} className="space-y-4">
+                    <div className="text-center space-y-2 mb-4">
+                      <h3 className="font-semibold">Восстановление пароля</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Введите email для получения ссылки восстановления
+                      </p>
+                    </div>
+                    {error && (
+                      <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+                        {error}
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <Label htmlFor="reset-email">Email</Label>
+                      <Input
+                        id="reset-email"
+                        type="email"
+                        placeholder="mail@example.com"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        autoComplete="email"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setShowForgotPassword(false)}
+                      >
+                        Назад
+                      </Button>
+                      <Button type="submit" className="flex-1">
+                        Отправить
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
 
             {/* Разделитель */}
             <div className="pt-4 text-center text-sm text-muted-foreground">
