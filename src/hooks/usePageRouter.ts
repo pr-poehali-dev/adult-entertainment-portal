@@ -52,18 +52,21 @@ export const usePageRouter = (currentPage: Page, setCurrentPage: (page: Page) =>
   const location = useLocation();
 
   useEffect(() => {
-    const route = pageToRoute[currentPage];
-    if (route && location.pathname !== route) {
-      navigate(route, { replace: true });
+    const pageFromUrl = routeToPage[location.pathname];
+    if (pageFromUrl && pageFromUrl !== currentPage) {
+      setCurrentPage(pageFromUrl);
+      return;
     }
-  }, [currentPage, navigate, location.pathname]);
+  }, [location.pathname, setCurrentPage]);
 
   useEffect(() => {
-    const page = routeToPage[location.pathname];
-    if (page && page !== currentPage) {
-      setCurrentPage(page);
+    const route = pageToRoute[currentPage];
+    const currentRoute = location.pathname;
+    
+    if (route && currentRoute !== route) {
+      navigate(route, { replace: false });
     }
-  }, [location.pathname, currentPage, setCurrentPage]);
+  }, [currentPage, navigate]);
 
   return {
     navigateToPage: (page: Page) => {
