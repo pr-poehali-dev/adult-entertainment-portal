@@ -169,8 +169,8 @@ const Index = () => {
 
 
 
-  // Проверка бизнес-аккаунта
-  if (state.profile.role === 'business') {
+  // Проверка бизнес-аккаунта (только для авторизованных)
+  if (state.isAuthenticated && state.profile.role === 'business') {
     return (
       <BusinessDashboard 
         businessType={state.profile.businessType || 'individual'}
@@ -189,8 +189,8 @@ const Index = () => {
     );
   }
 
-  // Проверка заполнения профиля
-  if (!state.profile.profileCompleted) {
+  // Проверка заполнения профиля (только для авторизованных)
+  if (state.isAuthenticated && !state.profile.profileCompleted) {
     return (
       <ProfileSetup
         onComplete={(profileData) => {
@@ -208,8 +208,8 @@ const Index = () => {
     );
   }
 
-  // Проверка KYC-верификации
-  if (!state.profile.kycCompleted) {
+  // Проверка KYC-верификации (только для авторизованных)
+  if (state.isAuthenticated && !state.profile.kycCompleted) {
     return (
       <KYCVerification
         onComplete={() => {
