@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const AUTH_URL = 'https://functions.poehali.dev/174bbb92-9c03-4c5c-811f-7e5ce4beb2e3';
+const EMAIL_VERIFY_URL = 'https://functions.poehali.dev/b28004ac-e099-490f-9a6b-e46f494fdc84';
 
 interface RegisterPageProps {
   setUserRole: (role: UserRole) => void;
@@ -18,13 +19,16 @@ interface RegisterPageProps {
 
 export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: RegisterPageProps) => {
   const [showEmailForm, setShowEmailForm] = useState(false);
+  const [step, setStep] = useState<'form' | 'verify'>('form');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
   const [role, setRole] = useState<UserRole>('buyer');
+  const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
 
   const handleTelegramLogin = (userData: any) => {
     console.log('Telegram registration:', userData);
@@ -33,7 +37,7 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
     setCurrentPage('home');
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -57,7 +61,60 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
     }
 
     try {
-      const response = await fetch(AUTH_URL, {
+      const response = await fetch(EMAIL_VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'send_code',
+          email
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setCodeSent(true);
+        setStep('verify');
+      } else {
+        setError(data.error || 'Ошибка отправки кода');
+      }
+    } catch (err) {
+      setError('Ошибка подключения к серверу');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyAndRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    if (!verificationCode) {
+      setError('Введите код');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const verifyResponse = await fetch(EMAIL_VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify_code',
+          code: verificationCode
+        })
+      });
+
+      const verifyData = await verifyResponse.json();
+
+      if (!verifyResponse.ok) {
+        setError(verifyData.error || 'Неверный код');
+        setIsLoading(false);
+        return;
+      }
+
+      const registerResponse = await fetch(AUTH_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,19 +126,19 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
         })
       });
 
-      const data = await response.json();
+      const registerData = await registerResponse.json();
 
-      if (response.ok) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+      if (registerResponse.ok) {
+        localStorage.setItem('access_token', registerData.access_token);
+        localStorage.setItem('refresh_token', registerData.refresh_token);
+        localStorage.setItem('user', JSON.stringify(registerData.user));
         localStorage.setItem('isAuthenticated', 'true');
         
         setIsAuthenticated(true);
-        setUserRole(data.user.role as UserRole);
+        setUserRole(registerData.user.role as UserRole);
         setCurrentPage('home');
       } else {
-        setError(data.error || 'Ошибка регистрации');
+        setError(registerData.error || 'Ошибка регистрации');
       }
     } catch (err) {
       setError('Ошибка подключения к серверу');
@@ -135,12 +192,14 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
                 Зарегистрироваться через Email
               </Button>
             ) : (
-              <form onSubmit={handleRegister} className="space-y-4">
-                {error && (
-                  <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
-                    {error}
-                  </div>
-                )}
+              <div className="space-y-4">
+                {step === 'form' ? (
+                  <form onSubmit={handleSendCode} className="space-y-4">
+                    {error && (
+                      <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+                        {error}
+                      </div>
+                    )}
 
                 <div className="space-y-2">
                   <Label htmlFor="username">Имя пользователя</Label>
@@ -208,21 +267,98 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
                   />
                 </div>
 
-                <div className="flex gap-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => setShowEmailForm(false)}
-                    disabled={isLoading}
-                  >
-                    Назад
-                  </Button>
-                  <Button type="submit" className="flex-1" disabled={isLoading}>
-                    {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
-                  </Button>
-                </div>
-              </form>
+                    <div className="flex gap-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setShowEmailForm(false)}
+                        disabled={isLoading}
+                      >
+                        Назад
+                      </Button>
+                      <Button type="submit" className="flex-1" disabled={isLoading}>
+                        {isLoading ? 'Отправка...' : 'Получить код'}
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={handleVerifyAndRegister} className="space-y-4">
+                    <div className="text-center space-y-2 mb-4">
+                      <Icon name="Mail" size={48} className="mx-auto text-primary" />
+                      <h3 className="font-semibold">Проверьте почту</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Код отправлен на {email}
+                      </p>
+                    </div>
+                    
+                    {error && (
+                      <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+                        {error}
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label htmlFor="code">Код подтверждения</Label>
+                      <Input
+                        id="code"
+                        type="text"
+                        placeholder="000000"
+                        value={verificationCode}
+                        onChange={(e) => setVerificationCode(e.target.value)}
+                        disabled={isLoading}
+                        maxLength={6}
+                        className="text-center text-2xl tracking-widest"
+                      />
+                      <p className="text-xs text-muted-foreground text-center">
+                        Код действителен 10 минут
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => setStep('form')}
+                        disabled={isLoading}
+                      >
+                        Назад
+                      </Button>
+                      <Button type="submit" className="flex-1" disabled={isLoading}>
+                        {isLoading ? 'Проверка...' : 'Подтвердить'}
+                      </Button>
+                    </div>
+
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="w-full"
+                      onClick={async () => {
+                        setError('');
+                        setIsLoading(true);
+                        try {
+                          const response = await fetch(EMAIL_VERIFY_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'send_code', email })
+                          });
+                          if (response.ok) {
+                            setError('');
+                          }
+                        } catch (err) {
+                          setError('Ошибка отправки');
+                        } finally {
+                          setIsLoading(false);
+                        }
+                      }}
+                      disabled={isLoading}
+                    >
+                      Отправить код повторно
+                    </Button>
+                  </form>
+                )}
+              </div>
             )}
 
             {/* Информация */}

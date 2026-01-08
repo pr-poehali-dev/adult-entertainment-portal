@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "name": "Send verification code",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "send_code",
+        "email": "test@example.com"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "message": "string",
+        "expires_in": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
