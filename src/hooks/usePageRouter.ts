@@ -53,20 +53,19 @@ export const usePageRouter = (currentPage: Page, setCurrentPage: (page: Page) =>
 
   useEffect(() => {
     const pageFromUrl = routeToPage[location.pathname];
+    
     if (pageFromUrl && pageFromUrl !== currentPage) {
       setCurrentPage(pageFromUrl);
-      return;
     }
-  }, [location.pathname, setCurrentPage]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const route = pageToRoute[currentPage];
-    const currentRoute = location.pathname;
     
-    if (route && currentRoute !== route) {
+    if (route && location.pathname !== route) {
       navigate(route, { replace: false });
     }
-  }, [currentPage, navigate]);
+  }, [currentPage]);
 
   return {
     navigateToPage: (page: Page) => {

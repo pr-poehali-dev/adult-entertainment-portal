@@ -56,13 +56,7 @@ export const useAuthState = () => {
   };
 
   const [currentPage, setCurrentPage] = useState<Page>(() => {
-    const isAuth = localStorage.getItem('isAuthenticated') === 'true';
     const pageFromUrl = getPageFromUrl();
-    
-    if (!isAuth && pageFromUrl !== 'login' && pageFromUrl !== 'register') {
-      return 'login';
-    }
-    
     return pageFromUrl;
   });
 
