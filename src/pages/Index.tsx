@@ -99,12 +99,12 @@ const Index = () => {
 
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
 
-  // Проверка авторизации - редирект на login если не авторизован
-  if (!state.isAuthenticated) {
-    if (state.currentPage !== 'login' && state.currentPage !== 'register') {
+  // Проверка авторизации с защитой от циклов
+  useEffect(() => {
+    if (!state.isAuthenticated && state.currentPage !== 'login' && state.currentPage !== 'register') {
       state.setCurrentPage('login');
     }
-  }
+  }, [state.isAuthenticated, state.currentPage]);
 
   const { renderPage } = useAppPages({
     currentPage: state.currentPage,
