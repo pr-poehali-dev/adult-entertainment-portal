@@ -6,52 +6,23 @@ export const useUserDataState = () => {
   const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
   
   const [profile, setProfile] = useState<Profile>(() => {
-    const authUser = localStorage.getItem('user');
-    if (authUser) {
-      try {
-        const userData = JSON.parse(authUser);
-        return {
-          name: userData.username || 'Пользователь',
-          nickname: userData.username || 'User',
-          role: userData.role || 'buyer',
-          avatar: '',
-          rating: 4.8,
-          verified: userData.email_verified || false,
-          vipStatus: 'none',
-          vipExpiry: null,
-          subscriptionType: 'free',
-          subscriptionExpiry: null,
-          profileCompleted: true,
-          kycCompleted: false,
-          contacts: {
-            instagram: { value: '', forSale: false },
-            telegram: { value: '', forSale: false },
-            phone: { value: '', forSale: false },
-          }
-        };
-      } catch (e) {
-        console.error('Failed to parse user data:', e);
-      }
-    }
-    
     const saved = localStorage.getItem('userProfile');
     if (saved) {
       return JSON.parse(saved);
     }
-    
     return {
-      name: 'Гость',
-      nickname: 'Guest',
+      name: 'Елена Романова',
+      nickname: 'LenaRom',
       role: 'buyer',
       avatar: '',
-      rating: 0,
-      verified: false,
+      rating: 4.8,
+      verified: true,
       vipStatus: 'none',
       vipExpiry: null,
       subscriptionType: 'free',
       subscriptionExpiry: null,
-      profileCompleted: false,
-      kycCompleted: false,
+      profileCompleted: true,
+      kycCompleted: true,
       contacts: {
         instagram: { value: '', forSale: false },
         telegram: { value: '', forSale: false },
