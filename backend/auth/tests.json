@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "Login with invalid credentials",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "login",
+        "email": "test@example.com",
+        "password": "wrongpassword"
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Forgot password request",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "forgot_password",
+        "email": "test@example.com"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "message": "string",
+        "reset_token": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

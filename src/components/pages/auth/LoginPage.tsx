@@ -13,6 +13,8 @@ interface LoginPageProps {
   setIsAuthenticated: (value: boolean) => void;
 }
 
+const AUTH_URL = 'https://functions.poehali.dev/174bbb92-9c03-4c5c-811f-7e5ce4beb2e3';
+
 export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: LoginPageProps) => {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
@@ -21,6 +23,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
   const [resetEmail, setResetEmail] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleTelegramLogin = (userData: any) => {
     console.log('Telegram login:', userData);
@@ -29,35 +32,87 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
     setCurrentPage('home');
   };
 
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     if (!email || !password) {
       setError('Заполните все поля');
+      setIsLoading(false);
       return;
     }
 
-    setIsAuthenticated(true);
-    setUserRole('buyer');
-    setCurrentPage('home');
+    try {
+      const response = await fetch(AUTH_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'login',
+          email,
+          password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('isAuthenticated', 'true');
+        
+        setIsAuthenticated(true);
+        setUserRole(data.user.role as UserRole);
+        setCurrentPage('home');
+      } else {
+        setError(data.error || 'Ошибка входа');
+      }
+    } catch (err) {
+      setError('Ошибка подключения к серверу');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     if (!resetEmail) {
       setError('Введите email');
+      setIsLoading(false);
       return;
     }
 
-    setSuccessMessage('Ссылка для восстановления пароля отправлена на ' + resetEmail);
-    setTimeout(() => {
-      setShowForgotPassword(false);
-      setShowEmailForm(false);
-      setSuccessMessage('');
-    }, 3000);
+    try {
+      const response = await fetch(AUTH_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'forgot_password',
+          email: resetEmail
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage('Ссылка для восстановления пароля отправлена на ' + resetEmail);
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setShowEmailForm(false);
+          setSuccessMessage('');
+        }, 3000);
+      } else {
+        setError(data.error || 'Ошибка отправки');
+      }
+    } catch (err) {
+      setError('Ошибка подключения к серверу');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -127,6 +182,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         autoComplete="email"
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -147,6 +203,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="flex gap-2">
@@ -155,11 +212,12 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                         variant="outline" 
                         className="flex-1"
                         onClick={() => setShowEmailForm(false)}
+                        disabled={isLoading}
                       >
                         Назад
                       </Button>
-                      <Button type="submit" className="flex-1">
-                        Войти
+                      <Button type="submit" className="flex-1" disabled={isLoading}>
+                        {isLoading ? 'Вход...' : 'Войти'}
                       </Button>
                     </div>
                   </form>
@@ -185,6 +243,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                         value={resetEmail}
                         onChange={(e) => setResetEmail(e.target.value)}
                         autoComplete="email"
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="flex gap-2">
@@ -193,11 +252,12 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                         variant="outline" 
                         className="flex-1"
                         onClick={() => setShowForgotPassword(false)}
+                        disabled={isLoading}
                       >
                         Назад
                       </Button>
-                      <Button type="submit" className="flex-1">
-                        Отправить
+                      <Button type="submit" className="flex-1" disabled={isLoading}>
+                        {isLoading ? 'Отправка...' : 'Отправить'}
                       </Button>
                     </div>
                   </form>
