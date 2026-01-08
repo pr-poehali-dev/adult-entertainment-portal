@@ -100,12 +100,12 @@ const Index = () => {
   const allCatalogItems = [...state.agencyGirls];
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
 
-  // Проверка авторизации с защитой от циклов
+  // Проверка авторизации - только при изменении статуса авторизации
   useEffect(() => {
     if (!state.isAuthenticated && state.currentPage !== 'login' && state.currentPage !== 'register') {
       state.setCurrentPage('login');
     }
-  }, [state.isAuthenticated, state.currentPage]);
+  }, [state.isAuthenticated]);
 
   const { renderPage } = useAppPages({
     currentPage: state.currentPage,
