@@ -67,7 +67,19 @@ export const useAuthState = () => {
   };
 
   const [currentPage, setCurrentPage] = useState<Page>(() => {
+    const authFlag = localStorage.getItem('isAuthenticated') === 'true';
+    const hasUserData = localStorage.getItem('userProfile') !== null || 
+                        localStorage.getItem('user') !== null ||
+                        localStorage.getItem('access_token') !== null;
+    
+    const isActuallyAuthenticated = authFlag && hasUserData;
     const pageFromUrl = getPageFromUrl();
+    
+    // Если не авторизован и пытается зайти не на login/register - редирект на login
+    if (!isActuallyAuthenticated && pageFromUrl !== 'login' && pageFromUrl !== 'register') {
+      return 'login';
+    }
+    
     return pageFromUrl;
   });
 
