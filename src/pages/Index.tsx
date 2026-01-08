@@ -33,12 +33,16 @@ import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useEffect } from 'react';
 import { BusinessDashboard } from '@/components/pages/business/BusinessDashboard';
+import { usePageRouter } from '@/hooks/usePageRouter';
 
 
 const Index = () => {
   // Состояние
   const state = useIndexState();
   const loading = useLoadingState();
+  
+  // Роутинг с синхронизацией URL
+  usePageRouter(state.currentPage, state.setCurrentPage);
 
 
   // Обработчики
