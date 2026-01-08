@@ -97,6 +97,7 @@ const Index = () => {
     isAuthenticated: state.isAuthenticated,
   });
 
+  const allCatalogItems = [...state.agencyGirls];
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
 
   // Проверка авторизации с защитой от циклов
