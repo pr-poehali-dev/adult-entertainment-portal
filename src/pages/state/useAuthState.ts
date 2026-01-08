@@ -16,7 +16,18 @@ export const useAuthState = () => {
     return isAuth ? 'home' : 'login';
   });
 
-  const [userRole, setUserRole] = useState<UserRole>('buyer');
+  const [userRole, setUserRole] = useState<UserRole>(() => {
+    const authUser = localStorage.getItem('user');
+    if (authUser) {
+      try {
+        const userData = JSON.parse(authUser);
+        return (userData.role as UserRole) || 'buyer';
+      } catch (e) {
+        console.error('Failed to parse user role:', e);
+      }
+    }
+    return 'buyer';
+  });
 
   return {
     isAuthenticated,
