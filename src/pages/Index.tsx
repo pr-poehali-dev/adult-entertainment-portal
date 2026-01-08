@@ -97,18 +97,14 @@ const Index = () => {
     isAuthenticated: state.isAuthenticated,
   });
 
-  // Проверка авторизации - показываем login/register только неавторизованным
-  useEffect(() => {
-    if (!state.isAuthenticated) {
-      if (state.currentPage !== 'login' && state.currentPage !== 'register') {
-        state.setCurrentPage('login');
-      }
-    }
-  }, [state.isAuthenticated]);
-
-  const allCatalogItems = [...state.agencyGirls];
-  
   const activeAdsCount = state.userAds.filter(ad => ad.status === 'active').length;
+
+  // Проверка авторизации - редирект на login если не авторизован
+  if (!state.isAuthenticated) {
+    if (state.currentPage !== 'login' && state.currentPage !== 'register') {
+      state.setCurrentPage('login');
+    }
+  }
 
   const { renderPage } = useAppPages({
     currentPage: state.currentPage,
