@@ -79,15 +79,35 @@ const Index = () => {
 
   // Восстановление авторизации при загрузке
   useEffect(() => {
-    const savedAuth = localStorage.getItem('isAuthenticated');
-    const savedProfile = localStorage.getItem('userProfile');
-    const savedRole = localStorage.getItem('userRole');
+    const checkAuth = () => {
+      const savedAuth = localStorage.getItem('isAuthenticated');
+      const savedProfile = localStorage.getItem('userProfile');
+      const savedRole = localStorage.getItem('userRole');
 
-    if (savedAuth === 'true' && savedProfile) {
-      setIsAuthenticated(true);
-      setProfile(JSON.parse(savedProfile));
-      setUserRole((savedRole as UserRole) || 'buyer');
-    }
+      if (savedAuth === 'true' && savedProfile) {
+        setIsAuthenticated(true);
+        setProfile(JSON.parse(savedProfile));
+        setUserRole((savedRole as UserRole) || 'buyer');
+      } else {
+        setIsAuthenticated(false);
+        setUserRole(null);
+      }
+    };
+
+    // Проверяем при загрузке
+    checkAuth();
+
+    // Слушаем изменения в других вкладках
+    window.addEventListener('storage', checkAuth);
+    
+    // Слушаем изменения в текущей вкладке (custom event)
+    const handleAuthChange = () => checkAuth();
+    window.addEventListener('authChange', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
 
   // Синхронизация currentPage с URL

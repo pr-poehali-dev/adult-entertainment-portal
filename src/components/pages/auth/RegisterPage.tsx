@@ -59,9 +59,14 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('user', JSON.stringify(userData));
     
+    // Триггерим событие для обновления состояния в Index
+    window.dispatchEvent(new Event('authChange'));
+    
     setIsAuthenticated(true);
     setUserRole('buyer');
-    setCurrentPage('home');
+    
+    // Перенаправляем на главную
+    window.location.href = '/';
   };
 
   const handleSendCode = async (e: React.FormEvent) => {
@@ -184,9 +189,14 @@ export const RegisterPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }
         };
         localStorage.setItem('userProfile', JSON.stringify(userProfile));
         
+        // Триггерим событие для обновления состояния в Index
+        window.dispatchEvent(new Event('authChange'));
+        
         setIsAuthenticated(true);
         setUserRole(registerData.user.role as UserRole);
-        setCurrentPage('home');
+        
+        // Перенаправляем на главную
+        window.location.href = '/';
       } else {
         setError(registerData.error || 'Ошибка регистрации');
       }
