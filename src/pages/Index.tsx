@@ -128,7 +128,7 @@ const Index = () => {
     }
     
     // Если не авторизован и пытается попасть на защищенную страницу
-    if (!isAuthenticated && path !== 'login' && path !== 'register') {
+    if (!isAuthenticated && path !== 'login' && path !== 'register' && path !== 'agency-register') {
       setCurrentPage('login');
     } else {
       setCurrentPage(path as Page);

@@ -31,5 +31,6 @@ export const BusinessServicesPage = lazy(() => import('@/components/pages/Busine
 export const AllAdsPage = lazy(() => import('@/components/pages/AllAdsPage').then(m => ({ default: m.AllAdsPage })));
 export const AgencyServicesPage = lazy(() => import('@/components/pages/AgencyServicesPage').then(m => ({ default: m.AgencyServicesPage })));
 export const AgencyPublicPage = lazy(() => import('@/components/pages/agency/AgencyPublicPage').then(m => ({ default: m.AgencyPublicPage })));
+export const AgencyRegister = lazy(() => import('@/components/AgencyRegister'));
 export const LoginPage = lazy(() => import('@/components/pages/auth/LoginPage').then(m => ({ default: m.LoginPage })));
 export const RegisterPage = lazy(() => import('@/components/pages/auth/RegisterPage').then(m => ({ default: m.RegisterPage })));

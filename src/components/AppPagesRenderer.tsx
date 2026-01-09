@@ -473,6 +473,29 @@ export const renderPage = (props: AppPagesProps) => {
         <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />
       );
     
+    case 'agency-register':
+      return (
+        <Suspense fallback={<LoadingFallback />}>
+          <Pages.AgencyRegister 
+            onBack={() => setCurrentPage('home')}
+            onPayment={(name, type) => {
+              console.log('Agency payment:', name, type);
+              setCurrentPage('home');
+            }}
+          />
+        </Suspense>
+      );
+    
+    case 'agency-dashboard':
+      return (
+        <Suspense fallback={<LoadingFallback />}>
+          <div className="container mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold mb-6">Панель управления агентством</h1>
+            <p className="text-muted-foreground">Здесь будет полная панель управления вашим агентством</p>
+          </div>
+        </Suspense>
+      );
+    
     default:
       return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />;
   }
