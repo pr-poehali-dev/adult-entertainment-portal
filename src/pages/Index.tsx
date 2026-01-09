@@ -38,9 +38,9 @@ const Index = () => {
   const location = useLocation();
   const [showSplash, setShowSplash] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState<Page>('login');
-  const [userRole, setUserRole] = useState<UserRole>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [userRole, setUserRole] = useState<UserRole>('buyer');
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [profile, setProfile] = useState<Profile>(defaultProfile);
   const [catalogItems] = useState<CatalogItem[]>([]);
   const [reviews] = useState<Review[]>([]);
@@ -76,6 +76,9 @@ const Index = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 2000);
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'buyer');
+    localStorage.setItem('userProfile', JSON.stringify(defaultProfile));
     return () => clearTimeout(timer);
   }, []);
 
