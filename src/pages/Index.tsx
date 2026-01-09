@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { NavigationDesktop } from '@/components/navigation/NavigationDesktop';
 import { NavigationMobile } from '@/components/navigation/NavigationMobile';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
@@ -33,6 +34,7 @@ const defaultProfile: Profile = {
 };
 
 const Index = () => {
+  const location = useLocation();
   const [showSplash, setShowSplash] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>('login');
@@ -84,9 +86,14 @@ const Index = () => {
       setIsAuthenticated(true);
       setProfile(JSON.parse(savedProfile));
       setUserRole((savedRole as UserRole) || 'buyer');
-      setCurrentPage('home');
+      
+      // Синхронизируем currentPage с URL
+      const path = location.pathname.slice(1) || 'home';
+      setCurrentPage(path as Page);
+    } else {
+      setCurrentPage(location.pathname === '/register' ? 'register' : 'login');
     }
-  }, []);
+  }, [location.pathname]);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => 
