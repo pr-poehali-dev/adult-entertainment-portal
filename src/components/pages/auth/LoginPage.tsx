@@ -176,8 +176,19 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4">
-      <div className="w-full max-w-md">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 relative"
+      style={{
+        backgroundImage: 'url(https://cdn.poehali.dev/files/love-is-sayt.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Полупрозрачный оверлей для читаемости */}
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+      
+      <div className="w-full max-w-md relative z-10">
         <Card>
           <CardHeader className="space-y-2 text-center">
             <div className="flex justify-center mb-4">
