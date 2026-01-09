@@ -179,25 +179,23 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
     <div 
       className="min-h-screen flex items-center justify-center p-4 relative"
       style={{
-        backgroundImage: 'url(https://cdn.poehali.dev/files/love-is-sayt.jpg)',
+        backgroundImage: 'url(https://cdn.poehali.dev/files/Image.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Полупрозрачный оверлей для читаемости */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
       
       <div className="w-full max-w-md relative z-10">
-        <Card>
+        <Card className="bg-white/85 backdrop-blur-md border-white/30 shadow-2xl">
           <CardHeader className="space-y-2 text-center">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center">
-                <Icon name="LogIn" size={32} className="text-white" />
+              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-yellow-400 rounded-2xl flex items-center justify-center shadow-lg">
+                <Icon name="Heart" size={32} className="text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl">Вход</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-3xl text-gray-800">Вход</CardTitle>
+            <CardDescription className="text-gray-600">
               Войдите в аккаунт для продолжения
             </CardDescription>
           </CardHeader>
@@ -215,7 +213,7 @@ export const LoginPage = ({ setUserRole, setCurrentPage, setIsAuthenticated }: L
                   <div className="w-full border-t border-muted"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-card px-2 text-muted-foreground">или</span>
+                  <span className="bg-white/80 px-2 text-gray-600">или</span>
                 </div>
               </div>
             </div>
