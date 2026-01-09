@@ -5,7 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { HomeHeroSection } from './home/HomeHeroSection';
 import { HomeCategoriesSection } from './home/HomeCategoriesSection';
 import { HomeSolutionsSection } from './home/HomeSolutionsSection';
-import { WeeklyRaffleBanner } from './home/WeeklyRaffleBanner';
+
 import { DatingBanner } from './home/DatingBanner';
 import { AgencyBanner } from './home/AgencyBanner';
 import { MobileHomePage } from './home/MobileHomePage';
@@ -147,7 +147,7 @@ export const HomePage = ({
       <HomeHeroSection setCurrentPage={setCurrentPage} userRole={userRole} />
       <HomeCategoriesSection setCurrentPage={setCurrentPage} setSelectedCategory={setSelectedCategory} />
       <HomeSolutionsSection />
-      <WeeklyRaffleBanner setCurrentPage={setCurrentPage} />
+
       <DatingBanner setCurrentPage={setCurrentPage} />
       <AgencyBanner setCurrentPage={setCurrentPage} profile={profile} onPremiumRequired={onPremiumRequired} />
     </div>
