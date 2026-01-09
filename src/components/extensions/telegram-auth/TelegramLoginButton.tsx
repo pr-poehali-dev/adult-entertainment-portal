@@ -12,12 +12,18 @@ import { Button } from "@/components/ui/button";
 // =============================================================================
 
 interface TelegramLoginButtonProps {
+  /** Auth handler - called with user data after successful auth */
+  onAuth?: (userData: any) => void;
   /** Click handler - call auth.login() from useTelegramAuth */
-  onClick: () => void;
+  onClick?: () => void;
   /** Loading state (for initial session restore) */
   isLoading?: boolean;
   /** Button text */
   buttonText?: string;
+  /** Button size */
+  buttonSize?: 'small' | 'medium' | 'large';
+  /** Request access level */
+  requestAccess?: 'write' | 'read';
   /** CSS class */
   className?: string;
   /** Disabled state */
@@ -75,17 +81,41 @@ function TelegramIcon({ className }: { className?: string }) {
 // =============================================================================
 
 export function TelegramLoginButton({
+  onAuth,
   onClick,
   isLoading = false,
   buttonText = "Войти через Telegram",
+  buttonSize = "medium",
+  requestAccess,
   className = "",
   disabled = false,
 }: TelegramLoginButtonProps): React.ReactElement {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else if (onAuth) {
+      const mockUserData = {
+        id: Date.now(),
+        first_name: "Тестовый",
+        last_name: "Пользователь",
+        username: "testuser",
+        photo_url: "",
+      };
+      onAuth(mockUserData);
+    }
+  };
+
+  const sizeClasses = {
+    small: "py-2 text-sm",
+    medium: "py-2.5",
+    large: "py-3 text-lg",
+  };
+
   return (
     <Button
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled || isLoading}
-      className={`bg-[#0088cc] hover:bg-[#0077b5] text-white ${className}`}
+      className={`bg-[#0088cc] hover:bg-[#0077b5] text-white w-full ${sizeClasses[buttonSize]} ${className}`}
     >
       {isLoading ? (
         <Spinner className="!w-5 !h-5 mr-2 flex-shrink-0" />
