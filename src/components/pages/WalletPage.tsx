@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { Page, Wallet, Currency } from '@/types';
-import { TransactionHistory } from './wallet/TransactionHistory';
+import { TransactionHistory } from '@/components/wallet/TransactionHistory';
 import { DepositForm } from './wallet/DepositForm';
 import { CryptoDepositForm } from './wallet/CryptoDepositForm';
 import { WithdrawForm } from './wallet/WithdrawForm';

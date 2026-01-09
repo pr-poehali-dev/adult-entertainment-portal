@@ -4,7 +4,6 @@ import { NavigationMobile } from '@/components/navigation/NavigationMobile';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { renderPage } from '@/components/AppPagesRenderer';
 import { Page, UserRole, Profile, CatalogItem, Review, Notification, Wallet, Booking, OrderChat } from '@/types';
-import { catalogItems as initialCatalogItems } from '@/data/catalogItems';
 import { sellerProfiles } from '@/data/sellerProfiles';
 import { SplashScreen } from '@/components/SplashScreen';
 import { InstallPrompt } from '@/components/InstallPrompt';
@@ -40,7 +39,7 @@ const Index = () => {
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profile, setProfile] = useState<Profile>(defaultProfile);
-  const [catalogItems] = useState<CatalogItem[]>(initialCatalogItems);
+  const [catalogItems] = useState<CatalogItem[]>([]);
   const [reviews] = useState<Review[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
