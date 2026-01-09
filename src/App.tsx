@@ -8,7 +8,7 @@ import { ServiceCategoriesProvider } from "@/contexts/ServiceCategoriesContext";
 import { PartnerProgramProvider } from "@/contexts/PartnerProgramContext";
 import Index from "./pages/Index";
 import AdminPanel from "./pages/AdminPanel";
-import NotFound from "./pages/NotFound";
+import NotFound from "./components/pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useState } from "react";
 
