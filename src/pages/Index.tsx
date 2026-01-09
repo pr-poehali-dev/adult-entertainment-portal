@@ -143,7 +143,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen ${isAuthenticated ? 'bg-background' : ''}`}>
       <InstallPrompt />
       <OfflineIndicator />
       <NotificationPermissionPrompt />
