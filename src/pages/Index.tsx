@@ -77,6 +77,7 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Восстановление авторизации при загрузке
   useEffect(() => {
     const savedAuth = localStorage.getItem('isAuthenticated');
     const savedProfile = localStorage.getItem('userProfile');
@@ -86,14 +87,20 @@ const Index = () => {
       setIsAuthenticated(true);
       setProfile(JSON.parse(savedProfile));
       setUserRole((savedRole as UserRole) || 'buyer');
-      
-      // Синхронизируем currentPage с URL
-      const path = location.pathname.slice(1) || 'home';
-      setCurrentPage(path as Page);
-    } else {
-      setCurrentPage(location.pathname === '/register' ? 'register' : 'login');
     }
-  }, [location.pathname]);
+  }, []);
+
+  // Синхронизация currentPage с URL
+  useEffect(() => {
+    const path = location.pathname.slice(1) || 'home';
+    
+    // Если не авторизован и пытается попасть на защищенную страницу
+    if (!isAuthenticated && path !== 'login' && path !== 'register') {
+      setCurrentPage('login');
+    } else {
+      setCurrentPage(path as Page);
+    }
+  }, [location.pathname, isAuthenticated]);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => 
