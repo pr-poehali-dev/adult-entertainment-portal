@@ -73,6 +73,7 @@ const App = () => {
                     <Route path="/business-services" element={<Index />} />
                     <Route path="/all-ads" element={<Index />} />
                     <Route path="/agency-services" element={<Index />} />
+                    <Route path="/agency/:agencySlug" element={<Index />} />
                     <Route path="/admin" element={<AdminPanel />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />

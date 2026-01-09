@@ -461,6 +461,18 @@ export const renderPage = (props: AppPagesProps) => {
         <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />
       );
     
+    case 'agency-public':
+      return props.agencySlug ? (
+        <Suspense fallback={<LoadingFallback />}>
+          <Pages.AgencyPublicPage 
+            agencySlug={props.agencySlug}
+            setCurrentPage={setCurrentPage}
+          />
+        </Suspense>
+      ) : (
+        <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />
+      );
+    
     default:
       return <HomePage setCurrentPage={setCurrentPage} userRole={userRole} setSelectedCategory={setSelectedCategory} profile={profile} onPremiumRequired={onPremiumRequired} catalogItems={catalogItems} favorites={favorites} toggleFavorite={toggleFavorite} setSelectedServiceId={setSelectedServiceId} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedCategory={selectedCategory} priceRange={priceRange} setPriceRange={setPriceRange} sortBy={sortBy} setSortBy={setSortBy} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} selectedAge={selectedAge} setSelectedAge={setSelectedAge} selectedHeight={selectedHeight} setSelectedHeight={setSelectedHeight} selectedBodyType={selectedBodyType} setSelectedBodyType={setSelectedBodyType} />;
   }

@@ -25,7 +25,8 @@ const defaultProfile: Profile = {
   subscriptionExpiry: null,
   profileCompleted: false,
   kycCompleted: false,
-  isAgencyOwner: false,
+  isAgencyOwner: true,
+  agencyName: 'Luxury Escort',
   contacts: {
     instagram: { value: '', forSale: false },
     telegram: { value: '', forSale: false },
@@ -71,6 +72,7 @@ const Index = () => {
   const [rubBalance] = useState(0);
   const [rubInBtc] = useState(0);
   const [balanceAnimation] = useState(false);
+  const [agencySlug, setAgencySlug] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 2000);
@@ -113,6 +115,14 @@ const Index = () => {
   // Синхронизация currentPage с URL
   useEffect(() => {
     const path = location.pathname.slice(1) || 'home';
+    
+    // Проверяем динамический роут агентства
+    if (path.startsWith('agency/')) {
+      const slug = path.replace('agency/', '');
+      setAgencySlug(slug);
+      setCurrentPage('agency-public' as Page);
+      return;
+    }
     
     // Если не авторизован и пытается попасть на защищенную страницу
     if (!isAuthenticated && path !== 'login' && path !== 'register') {
@@ -249,6 +259,7 @@ const Index = () => {
           setOrderChats,
           selectedOrderChatId,
           setSelectedOrderChatId,
+          agencySlug,
         })}
       </main>
       

@@ -113,18 +113,32 @@ export const ProfilePage = ({
                 )}
               </div>
             </div>
-            {profile.role === 'seller' && setCurrentPage && (
-              <button
-                onClick={() => setCurrentPage('invitations')}
-                className="relative bg-gradient-to-r from-primary to-primary/90 text-white px-3 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 flex-shrink-0"
-              >
-                <Icon name="Mail" size={18} />
-                <span className="font-medium hidden sm:inline">Приглашения</span>
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  5
-                </span>
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {profile.role === 'seller' && setCurrentPage && (
+                <button
+                  onClick={() => setCurrentPage('invitations')}
+                  className="relative bg-gradient-to-r from-primary to-primary/90 text-white px-3 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 flex-shrink-0"
+                >
+                  <Icon name="Mail" size={18} />
+                  <span className="font-medium hidden sm:inline">Приглашения</span>
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    5
+                  </span>
+                </button>
+              )}
+              {profile.isAgencyOwner && profile.agencyName && (
+                <button
+                  onClick={() => {
+                    const slug = profile.agencyName?.toLowerCase().replace(/\s+/g, '-') || '';
+                    window.location.href = `/agency/${slug}`;
+                  }}
+                  className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-3 py-2 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 flex-shrink-0"
+                >
+                  <Icon name="Building2" size={18} />
+                  <span className="font-medium hidden sm:inline">{profile.agencyName}</span>
+                </button>
+              )}
+            </div>
           </div>
         </CardHeader>
       </Card>
@@ -136,6 +150,12 @@ export const ProfilePage = ({
             <TabsTrigger value="vip" className="whitespace-nowrap">
               👑 VIP
             </TabsTrigger>
+            {profile.isAgencyOwner && profile.agencyName && (
+              <TabsTrigger value="agency" className="whitespace-nowrap flex items-center gap-1">
+                <Icon name="Building2" size={16} />
+                {profile.agencyName}
+              </TabsTrigger>
+            )}
             <TabsTrigger value="folders" className="whitespace-nowrap">Папки</TabsTrigger>
             <TabsTrigger value="contacts" className="whitespace-nowrap">Контакты</TabsTrigger>
             <TabsTrigger value="wallet" className="whitespace-nowrap">Кошелек</TabsTrigger>
@@ -156,6 +176,42 @@ export const ProfilePage = ({
         <TabsContent value="vip">
           <ProfileVIPTab profile={profile} onProfileUpdate={onProfileUpdate} />
         </TabsContent>
+
+        {profile.isAgencyOwner && profile.agencyName && (
+          <TabsContent value="agency">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Icon name="Building2" size={24} className="text-purple-600" />
+                  {profile.agencyName}
+                </CardTitle>
+                <CardDescription>
+                  Управление вашим агентством
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12 space-y-4">
+                  <Icon name="Building2" size={64} className="mx-auto text-purple-600 opacity-50" />
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Добро пожаловать в панель управления агентством</h3>
+                    <p className="text-muted-foreground max-w-md mx-auto">
+                      Здесь будет полная информация о вашем агентстве, статистика, управление сотрудниками и услугами
+                    </p>
+                  </div>
+                  {setCurrentPage && (
+                    <button
+                      onClick={() => setCurrentPage('agency-dashboard')}
+                      className="mt-4 bg-gradient-to-r from-purple-600 to-purple-500 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 mx-auto"
+                    >
+                      <Icon name="ExternalLink" size={20} />
+                      Перейти в полную панель управления
+                    </button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        )}
 
         <TabsContent value="folders">
           <PrivateFoldersTab 
