@@ -10,6 +10,10 @@ import { AdminEmojis } from './AdminEmojis';
 import { AdminAudioGreetings } from './AdminAudioGreetings';
 import { AdminPhotoModeration } from './AdminPhotoModeration';
 import { AdminPartnerProgram } from './AdminPartnerProgram';
+import { AdminServices } from './AdminServices';
+import { AdminCategories } from './AdminCategories';
+import { AdminAgencies } from './AdminAgencies';
+import { AdminParties } from './AdminParties';
 import Icon from '@/components/ui/icon';
 import { Page, Notification } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -46,10 +50,26 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
       <div className="max-w-wide mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="flex flex-col sm:grid sm:grid-cols-4 lg:grid-cols-10 w-full mb-8 h-auto p-1 gap-1">
+          <TabsList className="flex flex-col sm:grid sm:grid-cols-4 lg:grid-cols-7 w-full mb-8 h-auto p-1 gap-1">
             <TabsTrigger value="dashboard" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="LayoutDashboard" size={20} />
               <span className="text-xs">Дашборд</span>
+            </TabsTrigger>
+            <TabsTrigger value="services" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
+              <Icon name="Layers" size={20} />
+              <span className="text-xs">Услуги</span>
+            </TabsTrigger>
+            <TabsTrigger value="categories" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
+              <Icon name="FolderTree" size={20} />
+              <span className="text-xs">Категории</span>
+            </TabsTrigger>
+            <TabsTrigger value="agencies" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
+              <Icon name="Building2" size={20} />
+              <span className="text-xs">Агентства</span>
+            </TabsTrigger>
+            <TabsTrigger value="parties" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
+              <Icon name="PartyPopper" size={20} />
+              <span className="text-xs">Вечеринки</span>
             </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center justify-start gap-3 py-3 px-4 w-full sm:flex-col sm:justify-center">
               <Icon name="Users" size={20} />
@@ -97,6 +117,22 @@ export const AdminPage = ({ setCurrentPage, onAddNotification }: AdminPageProps)
 
           <TabsContent value="dashboard">
             <AdminDashboard />
+          </TabsContent>
+
+          <TabsContent value="services">
+            <AdminServices />
+          </TabsContent>
+
+          <TabsContent value="categories">
+            <AdminCategories />
+          </TabsContent>
+
+          <TabsContent value="agencies">
+            <AdminAgencies />
+          </TabsContent>
+
+          <TabsContent value="parties">
+            <AdminParties />
           </TabsContent>
 
           <TabsContent value="users">
